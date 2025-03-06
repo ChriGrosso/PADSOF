@@ -1,13 +1,15 @@
 package elementos;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-public abstract class Terminal {
+public abstract class Terminal extends ElementoEstructural {
 	private int numeroPuertas;
 	private String prefijoPuerta;
 	private List <Puerta> puertas;
 	
-	public Terminal(int numeroPuertas,  String prefijoPuerta) {
+	public Terminal(String id, double costeph,LocalDateTime fchRegistro, int numeroPuertas,  String prefijoPuerta) {
+		super(id,costeph,fchRegistro);
 		this.setNumeroPuertas(numeroPuertas);
 		this.setPrefijoPuerta(prefijoPuerta);
 	}

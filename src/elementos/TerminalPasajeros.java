@@ -3,14 +3,16 @@
  */
 package elementos;
 
+import java.time.LocalDateTime;
+
 /**
  * 
  */
 public class TerminalPasajeros extends Terminal{
 	private int capacidadPersonas;
 	
-	public TerminalPasajeros(int numeroPuertas,  String prefijoPuerta, int capacidadPersonas){
-		super(numeroPuertas, prefijoPuerta);
+	public TerminalPasajeros(String id, double costeph,LocalDateTime fchRegistro,int numeroPuertas,  String prefijoPuerta, int capacidadPersonas){
+		super(id, costeph, fchRegistro, numeroPuertas, prefijoPuerta);
 		this.setCapacidadPersonas(capacidadPersonas);
 	}
 
