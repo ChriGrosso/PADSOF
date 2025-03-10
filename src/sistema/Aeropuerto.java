@@ -19,4 +19,50 @@ public class Aeropuerto {
 		this.horarioOperativo = horarioOperativo;
 	}
 	
+	public String getNombre() {
+		return this.nombre;
+	}
+	public String getCodigo() {
+		return this.codigo;
+	}
+	public String getCiudadMasCercana() {
+		return this.ciudadMasCercana;
+	}
+	public String getPais() {
+		return this.pais;
+	}
+	public double getDistancia() {
+		return this.distancia;
+	}
+	public int getZonaHorario() {
+		return this.zonaHorario;
+	}
+	public String getHorarioOperativo() {
+		return this.horarioOperativo;
+	}
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+		return;
+	}
+	public void setCiudadMasCercana(String ciudad) {
+		this.ciudadMasCercana = ciudad;
+		return;
+	}
+	public void setPais(String pais) {
+		this.pais = pais;
+		return;
+	}
+	public void setDistancia(double distancia) {
+		this.distancia = distancia;
+		return;
+	}
+	public void setZonaHorario(int zonaHorario) {
+		this.zonaHorario = zonaHorario;
+		return;
+	}
+	public void setHorarioOperativo(String horarioOperativo) {
+		this.horarioOperativo = horarioOperativo;
+		return;
+	}
+	
 }
