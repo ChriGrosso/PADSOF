@@ -8,8 +8,9 @@ public class Aeropuerto {
 	private double distancia;
 	private int zonaHorario;
 	private String horarioOperativo;
+	private Direccion direccion;
 	
-	public Aeropuerto(String nombre, String codigo, String ciudad, String pais, double distancia, int zonaHorario, String horarioOperativo) {
+	public Aeropuerto(String nombre, String codigo, String ciudad, String pais, double distancia, int zonaHorario, String horarioOperativo, Direccion direccion) {
 		this.nombre= nombre;
 		this.codigo = codigo;
 		this.ciudadMasCercana = ciudad;
@@ -17,6 +18,7 @@ public class Aeropuerto {
 		this.distancia = distancia;
 		this.zonaHorario = zonaHorario;
 		this.horarioOperativo = horarioOperativo;
+		this.direccion = direccion;
 	}
 	
 	public String getNombre() {
@@ -39,6 +41,9 @@ public class Aeropuerto {
 	}
 	public String getHorarioOperativo() {
 		return this.horarioOperativo;
+	}
+	public Direccion getDireccion() {
+		return this.direccion;
 	}
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
@@ -64,5 +69,8 @@ public class Aeropuerto {
 		this.horarioOperativo = horarioOperativo;
 		return;
 	}
-	
+	public void setDireccion(Direccion direccion) {
+		this.direccion = direccion;
+		return;
+	}
 }
