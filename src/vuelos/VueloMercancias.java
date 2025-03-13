@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import aerolineas.Aerolinea;
 import aviones.Avion;
 import aviones.AvionMercancias;
-import elementos.Terminal;
+import elementos.TerminalMercancias;
 
 public class VueloMercancias extends Vuelo{
+	private TerminalMercancias terminal;
 	private double carga;
 	private boolean mercanciasPeligrosas;
 
@@ -30,10 +31,17 @@ public class VueloMercancias extends Vuelo{
 	public boolean getMercanciasPeligrosas() {
 		return this.mercanciasPeligrosas;
 	}
+	
+	public TerminalMercancias getTerminal() {
+		return this.terminal;
+	}
+	
 
-	@Override
-	public boolean asignarTerminal(Terminal terminal) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean asignarTerminal(TerminalMercancias terminal) {
+		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getCargaTotal()+this.carga > terminal.getCapacidadToneladas()) {
+			return false;
+		}
+		this.terminal = terminal;
+		return true;
 	}
 }

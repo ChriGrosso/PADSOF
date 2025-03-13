@@ -6,12 +6,9 @@ import java.util.ArrayList;
 
 import aerolineas.Aerolinea;
 import aviones.Avion;
-import aviones.AvionMercancias;
 import elementos.Finger;
 import elementos.LocalizacionAterrizaje;
 import elementos.Pista;
-import elementos.Puerta;
-import elementos.Terminal;
 import elementos.ZonaParking;
 
 public abstract class Vuelo {
@@ -30,7 +27,6 @@ public abstract class Vuelo {
 	private EstadoTemporal estTemporal;
 	private LocalizacionAterrizaje locAterrizaje;
 	private Pista pista;
-	private Terminal terminal;
 	
 	public Vuelo(String id, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolineas, boolean llegada, Periodicidad periodicidad, 
@@ -98,6 +94,14 @@ public abstract class Vuelo {
 	
 	public EstadoTemporal getEstTemporal() {
 		return this.estTemporal;
+	}
+	
+	public LocalizacionAterrizaje getLocAterrizaje() {
+		return this.locAterrizaje;
+	}
+	
+	public Pista getPista() {
+		return this.pista;
 	}
 	
 	
@@ -185,7 +189,4 @@ public abstract class Vuelo {
 		pista.addVuelo(this);
 		return true;
 	}
-	
-	
-	public abstract boolean asignarTerminal(Terminal terminal);
 }

@@ -42,6 +42,10 @@ public class Pista extends ElementoEstructural{
 	public int getLongitud() {
 		return longitud;
 	}
+	
+	public Vuelo getUsando() {
+		return this.usando;
+	}
 
 	/**
 	 * @param longitud the longitud to set
@@ -55,7 +59,7 @@ public class Pista extends ElementoEstructural{
 	}
 	
 	public void addVuelo(Vuelo v) {
-		this.vuelosQueSirve.add(v);
+		this.vuelosQueSirve.addLast(v);
 		return;
 	}
 	

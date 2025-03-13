@@ -3,18 +3,24 @@
  */
 package elementos;
 
+import vuelos.Vuelo;
+
 /**
  * 
  */
 public class Puerta {
 	private String cod;
+	private Vuelo vueloAsig = null;
 	
 	public Puerta(String cod) {
 		this.setCod(cod);
 	}
 	
 	public boolean enUso() {
-		return false;
+		if(this.vueloAsig == null) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -29,5 +35,13 @@ public class Puerta {
 	 */
 	public void setCod(String cod) {
 		this.cod = cod;
+	}
+	
+	public void setVuelo(Vuelo v) {
+		this.vueloAsig = v;
+	}
+	
+	public void liberarPuerta() {
+		this.vueloAsig = null;
 	}
 }
