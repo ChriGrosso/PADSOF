@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import aerolineas.Aerolinea;
 import aviones.Avion;
 import aviones.AvionMercancias;
+import elementos.Puerta;
 import elementos.TerminalMercancias;
 
 public class VueloMercancias extends Vuelo{
 	private TerminalMercancias terminal;
+	private Puerta puerta;
 	private double carga;
 	private boolean mercanciasPeligrosas;
 
@@ -36,12 +38,23 @@ public class VueloMercancias extends Vuelo{
 		return this.terminal;
 	}
 	
+	public Puerta getPuerta() {
+		return this.puerta;
+	}
+	
 
 	public boolean asignarTerminal(TerminalMercancias terminal) {
 		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getCargaTotal()+this.carga > terminal.getCapacidadToneladas()) {
 			return false;
 		}
 		this.terminal = terminal;
+		return true;
+	}
+	
+	public boolean asignarPuerta(Puerta puerta) {
+		if(this.terminal.getPuertas().containsKey(puerta.getCod()) == false || puerta.enUso() == true) {
+			return false;
+		}
 		return true;
 	}
 }

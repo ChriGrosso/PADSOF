@@ -17,6 +17,7 @@ public abstract class Terminal extends ElementoEstructural {
 			String cod = prefijoPuerta + i+1;
 			puertas.put(cod, new Puerta(cod));
 		}
+		this.puertas = puertas;
 	}
 	
 	public int numPuertasOcupadasTerm() {

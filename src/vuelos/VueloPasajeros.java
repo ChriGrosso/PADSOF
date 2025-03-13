@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import aerolineas.Aerolinea;
 import aviones.Avion;
 import aviones.AvionPasajeros;
+import elementos.Puerta;
 import elementos.TerminalPasajeros;
 
 public class VueloPasajeros extends Vuelo{
 	private TerminalPasajeros terminal;
+	private Puerta puerta;
 	private int numPasajeros;
 
 	public VueloPasajeros(String id, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
@@ -29,12 +31,23 @@ public class VueloPasajeros extends Vuelo{
 	public TerminalPasajeros getTerminal() {
 		return this.terminal;
 	}
+	
+	public Puerta getPuerta() {
+		return this.puerta;
+	}
 
 	public boolean asignarTerminal(TerminalPasajeros terminal) {
 		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getPasajerosTotal()+this.numPasajeros > terminal.getCapacidadPersonas()) {
 			return false;
 		}
 		this.terminal = terminal;
+		return true;
+	}
+	
+	public boolean asignarPuerta(Puerta puerta) {
+		if(this.terminal.getPuertas().containsKey(puerta.getCod()) == false || puerta.enUso() == true) {
+			return false;
+		}
 		return true;
 	}
 }
