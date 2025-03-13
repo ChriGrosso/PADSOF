@@ -5,7 +5,7 @@ package elementos;
 
 import java.time.LocalDateTime;
 
-import aviones.Avion;
+import aviones.*;
 
 /**
  * 
@@ -28,8 +28,12 @@ public class ZonaParking extends LocalizacionAterrizaje{
 		return 0;
 	}
 	
-	public boolean comprobarCompatibilidad(Avion a) {
-		return false;
+	public boolean comprobarCompatibilidad(AvionPasajeros a) {
+		if(a.getAltura()<=this.alturaPlaza && a.getAnchura()<= this.anchuraPlaza && a.getLargo() <= this.largoPlaza)
+			return true;
+		else
+			return false;
+			
 	}
 	/**
 	 * @return the numPlazas
