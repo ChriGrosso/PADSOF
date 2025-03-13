@@ -1,5 +1,9 @@
 package aerolineas;
 
-public class Aerolinea {
+import java.util.List;
 
+import vuelos.Vuelo;
+
+public class Aerolinea {
+	private List<Vuelo> vuelos;
 }

@@ -2,7 +2,7 @@ package elementos;
 
 
 import java.time.LocalDateTime;
-import aerolineas.Avion;
+import aviones.Avion;
 
 public abstract class Hangar extends ElementoEstructural {
 	private int numPlazas;

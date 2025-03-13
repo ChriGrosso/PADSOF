@@ -5,7 +5,7 @@ package elementos;
 
 import java.time.LocalDateTime;
 
-import aerolineas.Avion;
+import aviones.Avion;
 
 /**
  * 
