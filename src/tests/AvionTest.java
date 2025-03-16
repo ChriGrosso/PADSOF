@@ -1,4 +1,4 @@
-package aviones.test;
+package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,6 +42,7 @@ class AvionTest {
 	@Test
 	void testGetTipoAvion() {
 		AvionMercancias av1 = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
+		// Comparar todos los atributos de TipoAvion
 		assertEquals(av1.getMarca(), a1.getTipoAvion().getMarca());
 		assertEquals(av1.getModelo(), a1.getTipoAvion().getModelo());
 		assertEquals(av1.getAutonomia(), a1.getTipoAvion().getAutonomia());
@@ -54,6 +55,11 @@ class AvionTest {
 	void testGetFechaUltimaRevision() {
 		LocalDate date2 = LocalDate.of(2024, 6, 20);
 		assertEquals(date2, a1.getFechaUltimaRevision());
+	}
+	
+	@Test
+	void testGetFechaUltimaRevisionNotInit() {
+		assertNull(a2.getFechaUltimaRevision());
 	}
 
 	@Test

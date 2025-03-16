@@ -9,7 +9,7 @@ public class Avion {
 	private TipoAvion tipoAvion;
 	private EstadoAvion estadoAvion;
 	
-	public Avion(String matricula, LocalDate fechaCompra, TipoAvion tipoAvion, LocalDate fechaUltimaRevision, EstadoAvion estadoAvion) {     
+	public Avion(String matricula, LocalDate fechaCompra, TipoAvion tipoAvion, LocalDate fechaUltimaRevision, EstadoAvion estadoAvion) { 
 		this.matricula = matricula;
 		this.fechaCompra = fechaCompra;
 		this.tipoAvion = tipoAvion;
@@ -19,6 +19,7 @@ public class Avion {
 	
 	public Avion(String matricula, LocalDate fechaCompra, TipoAvion tipoAvion, EstadoAvion estadoAvion) {
 		this(matricula, fechaCompra, tipoAvion, fechaCompra, estadoAvion);
+		this.fechaUltimaRevision = null;
 	}
 	
 	public String getMatricula() {

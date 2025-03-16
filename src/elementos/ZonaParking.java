@@ -28,8 +28,8 @@ public class ZonaParking extends LocalizacionAterrizaje{
 		return 0;
 	}
 	
-	public boolean comprobarCompatibilidad(AvionPasajeros a) {
-		if(a.getAltura()<=this.alturaPlaza && a.getAnchura()<= this.anchuraPlaza && a.getLargo() <= this.largoPlaza)
+	public boolean comprobarCompatibilidad(Avion avion) {
+		if(avion.getTipoAvion().getAltura()<=this.alturaPlaza && avion.getTipoAvion().getAnchura()<= this.anchuraPlaza && avion.getTipoAvion().getLargo() <= this.largoPlaza)
 			return true;
 		else
 			return false;
