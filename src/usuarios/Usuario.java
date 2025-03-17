@@ -1,15 +1,22 @@
 package usuarios;
 
-public abstract class Usuario {
+import java.util.ArrayList;
+
+import notificaciones.Observable;
+import notificaciones.Observer;
+
+public abstract class Usuario implements Observer{
 	private String dni;
 	private String nombre;
 	private String password;
 	private String tipo;
+	private ArrayList<String> notificaciones;
 	
 	public Usuario(String dni, String nombre, String password) {
 		this.dni = dni;
 		this.nombre = nombre;
 		this.password = password;
+		notificaciones = new ArrayList<String>();		
 	}
 	
 	public String getDni() {
@@ -34,6 +41,11 @@ public abstract class Usuario {
 	public String toString() {
 		return ""+ this.nombre + " dni: "+this.dni+" , contraseña: "+ this.password + " ("+ this.tipo+")\n";
 	}
+	
+	@Override
+    public void update(Observable o, String mensage) {
+        this.notificaciones.add(mensage);
+    }
 	
 	public void enviarNotificacion(String mensaje, Usuario u) {
 		

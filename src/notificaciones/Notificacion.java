@@ -1,5 +1,7 @@
-package usuarios;
+package notificaciones;
 import java.time.LocalDate;
+
+import usuarios.Usuario;
 
 public class Notificacion {
 	private String mensaje;

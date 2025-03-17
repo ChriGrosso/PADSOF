@@ -1,10 +1,8 @@
 package sistema;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import aerolineas.Aerolinea;
-import elementos.ElementoEstructural;
 import elementos.Finger;
 import elementos.Hangar;
 import elementos.Pista;
@@ -15,6 +13,8 @@ import usuarios.Usuario;
 import vuelos.Vuelo;
 
 public class SkyManager {
+	private static SkyManager INSTANCE = null;
+
 	private double costeBaseSalida;
 	private double costeBaseLlegada;
 	private double costeExtraMercancias;
@@ -31,8 +31,8 @@ public class SkyManager {
 	private HashMap<String, Hangar> hangares;
 	private HashMap<String, Factura> facturas;
 	
-	
-	public SkyManager() {
+	// Private constructor suppresses
+	private SkyManager() {
 		this.costeBaseLlegada = 10;
 		this.costeBaseSalida = 10;
 		this.costeExtraMercancias = 10;
@@ -48,6 +48,17 @@ public class SkyManager {
 		this.zonasParking = new HashMap<String, ZonaParking>();
 		this.hangares = new HashMap<String, Hangar>();
 		this.facturas = new HashMap<String, Factura>();
+	}
+	
+    public static SkyManager getInstance() {
+        if (INSTANCE == null) {
+        	INSTANCE = new SkyManager();
+        }
+        return INSTANCE;
+    }
+	//El método "clone" sobreescrito que arroja una excepción, para evitar que se pueda clonar el objeto
+	public Object clone() throws CloneNotSupportedException {
+	    	throw new CloneNotSupportedException(); 
 	}
 	
 	public double getCosteBaseLlegada() {
@@ -161,10 +172,6 @@ public class SkyManager {
 		this.hangares.put(h.getId(), h);
 		return true;
 	}
-	
-	
-	
-	
 	
 	
 	public void cargarDatos() {
