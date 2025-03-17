@@ -12,11 +12,11 @@ public class Factura {
 	private boolean pagado;
 	
 
-	public Factura(String id,double total,Date fchEmision,boolean pagado) {
+	public Factura(String id,double total,Date fchEmision) {
 		this.setId(id);
 		this.setTotal(total);
 		this.setFchEmision(fchEmision);
-		this.pagar(pagado);
+		this.pagar(false);
 	}
 	
 	public double calcularFactura(Aerolinea a) {
