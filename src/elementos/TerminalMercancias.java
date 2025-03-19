@@ -1,6 +1,6 @@
 package elementos;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import vuelos.VueloMercancias;
@@ -10,7 +10,7 @@ public class TerminalMercancias extends Terminal {
 	private double capacidadToneladas;
 	private ArrayList<VueloMercancias> vuelos; 
 	
-	public TerminalMercancias(String id, double costeph,LocalDateTime fchRegistro,int numeroPuertas,  String prefijoPuerta, double capacidadToneladas) {
+	public TerminalMercancias(String id, double costeph,LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, double capacidadToneladas) {
 		super(id,costeph,fchRegistro,numeroPuertas,prefijoPuerta);
 		this.setCapacidadToneladas(capacidadToneladas);
 	}

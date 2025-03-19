@@ -2,8 +2,7 @@
  * 
  */
 package elementos;
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 import aviones.Avion;
 
 /**
@@ -12,7 +11,7 @@ import aviones.Avion;
 public class Finger extends LocalizacionAterrizaje{
 	private double alturaMax;
 	
-	public Finger(String id, double costeph,LocalDateTime fchRegistro, double alturaMax) {
+	public Finger(String id, double costeph,LocalDate fchRegistro, double alturaMax) {
 		super(id,costeph,fchRegistro);
 		this.setAlturaMax(alturaMax);
 	}

@@ -3,18 +3,14 @@
  */
 package elementos;
 
-import java.time.LocalDateTime;
-
-import vuelos.Vuelo;
+import java.time.LocalDate;
 
 /**
  * 
  */
 public abstract class LocalizacionAterrizaje extends ElementoEstructural{
 	
-	private Vuelo vueloQueSirve;
-	
-	public LocalizacionAterrizaje(String id, double costeph,LocalDateTime fchRegistro) {
+	public LocalizacionAterrizaje(String id, double costeph,LocalDate fchRegistro) {
 		super(id,costeph,fchRegistro);
 		
 	}
