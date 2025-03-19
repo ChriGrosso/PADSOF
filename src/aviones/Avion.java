@@ -2,7 +2,9 @@ package aviones;
 
 import java.time.LocalDate; // import the LocalDate class
 
-public class Avion {
+import notificaciones.Observable;
+
+public class Avion extends Observable {
 	private String matricula;
 	private LocalDate fechaCompra;
 	private LocalDate fechaUltimaRevision;
