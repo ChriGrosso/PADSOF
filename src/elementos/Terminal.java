@@ -1,42 +1,59 @@
 package elementos;
 
-import java.time.LocalDateTime;
-import java.util.Iterator;
-import java.util.List;
-
-import vuelos.Vuelo;
+import java.time.LocalDate;
+import java.util.HashMap;
 
 public abstract class Terminal extends ElementoEstructural {
 	private int numeroPuertas;
 	private String prefijoPuerta;
-	private List <Puerta> puertas;
-	private List <Vuelo> vuelosQueSirve;
+	private HashMap<String, Puerta> puertas;
 	
-	public Terminal(String id, double costeph,LocalDateTime fchRegistro, int numeroPuertas,  String prefijoPuerta) {
+	public Terminal(String id, double costeph,LocalDate fchRegistro, int numeroPuertas,  String prefijoPuerta) {
 		super(id,costeph,fchRegistro);
 		this.setNumeroPuertas(numeroPuertas);
 		this.setPrefijoPuerta(prefijoPuerta);
+		this.puertas = new HashMap<String, Puerta>();
+		
+		for(int i = 1; i<= numeroPuertas; i++) {
+			String nomP = prefijoPuerta + i;
+			Puerta p = new Puerta(nomP);
+			this.puertas.put(nomP, p);
+		}
 	}
 	
 	public int numPuertasOcupadasTerm() {
-		for (Puerta p : puertas){
-			
+		int p_ocupadas = 0;
+		for (Puerta p : puertas.values()){
+			if(p.enUso()) {
+				p_ocupadas += 1;
+			}
 		}
-		return 0;
-		
+		return p_ocupadas;
 	}
 
 	/**
 	 * @return the numeroPuertas
 	 */
 	public int getNumeroPuertas() {
-		return numeroPuertas;
+		return this.numeroPuertas;
 	}
 
 	/**
 	 * @param numeroPuertas the numeroPuertas to set
 	 */
 	public void setNumeroPuertas(int numeroPuertas) {
+		if(numeroPuertas < this.numeroPuertas) {
+			for(int i = this.numeroPuertas; i > numeroPuertas; i--) {
+				String nomP = this.prefijoPuerta + i;
+				this.puertas.remove(nomP);
+			}
+		} else if(numeroPuertas > this.numeroPuertas) {
+			for(int i = this.numeroPuertas; i <= numeroPuertas; i++) {
+				String nomP = this.prefijoPuerta + i;
+				this.puertas.remove(nomP);
+			}
+		} 
+		
 		this.numeroPuertas = numeroPuertas;
 	}
 
@@ -44,28 +61,34 @@ public abstract class Terminal extends ElementoEstructural {
 	 * @return the prefijoPuerta
 	 */
 	public String getPrefijoPuerta() {
-		return prefijoPuerta;
+		return this.prefijoPuerta;
 	}
 
 	/**
 	 * @param prefijoPuerta the prefijoPuerta to set
 	 */
 	public void setPrefijoPuerta(String prefijoPuerta) {
+		// Cambiar el código de las puertas con el perfijo correspondiente
+		for(int i = 1; i<= this.numeroPuertas; i++) {
+			String nomP = prefijoPuerta + i;
+			Puerta p = new Puerta(nomP);
+			this.puertas.put(nomP, p);
+		}
+		
 		this.prefijoPuerta = prefijoPuerta;
 	}
 
 	/**
 	 * @return the puertas
 	 */
-	public List <Puerta> getPuertas() {
+	public HashMap<String, Puerta> getPuertas() {
 		return puertas;
 	}
 
 	/**
-	 * @param puertas the puertas to set
+	 * @return the puerta con código "cod"
 	 */
-	public void setPuertas(List <Puerta> puertas) {
-		this.puertas = puertas;
+	public Puerta buscarPuertaPorCod(String cod) {
+		return this.getPuertas().get(cod);
 	}
-
 }

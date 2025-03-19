@@ -1,12 +1,12 @@
 package elementos;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class HangarMercancias extends Hangar {
 	
 	private boolean materialesPeligrosos;
 
-	public HangarMercancias(String id, double costeph, LocalDateTime fchRegistro, int numPlazas, double alturaPlaza, double anchuraPlaza, double largoPlaza) {
+	public HangarMercancias(String id, double costeph, LocalDate fchRegistro, int numPlazas, double alturaPlaza, double anchuraPlaza, double largoPlaza) {
 		super(id, costeph, fchRegistro, numPlazas, alturaPlaza, anchuraPlaza, largoPlaza);
 		// TODO Auto-generated constructor stub
 		this.setMaterialesPeligrosos(false);

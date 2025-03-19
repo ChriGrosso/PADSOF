@@ -1,7 +1,7 @@
 package elementos;
 
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import aviones.Avion;
 
 public abstract class Hangar extends ElementoEstructural {
@@ -10,7 +10,7 @@ public abstract class Hangar extends ElementoEstructural {
 	private double anchuraPlaza;
 	private double largoPlaza;
 
-	public Hangar(String id, double costeph, LocalDateTime fchRegistro, int numPlazas, double alturaPlaza,double anchuraPlaza,double largoPlaza) {
+	public Hangar(String id, double costeph, LocalDate fchRegistro, int numPlazas, double alturaPlaza,double anchuraPlaza,double largoPlaza) {
 		super(id, costeph, fchRegistro);
 		this.setAlturaPlaza(anchuraPlaza);
 		this.setNumPlazas(numPlazas);

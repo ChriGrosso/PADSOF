@@ -10,46 +10,74 @@ import elementos.Finger;
 import elementos.LocalizacionAterrizaje;
 import elementos.Pista;
 import elementos.ZonaParking;
+import sistema.Aeropuerto;
 
 public abstract class Vuelo {
 	private String id;
+	private Aeropuerto origen;
+	private Aeropuerto destino;
 	private LocalDateTime horaSalida;
 	private LocalDateTime horaLlegada;
-	private LocalDateTime horaSalidaEfectiva;
-	private LocalDateTime horaLlegadaEfectiva;
+	private LocalDateTime horaSalidaEfectiva = null;
+	private LocalDateTime horaLlegadaEfectiva = null;
 	private boolean compartido;
 	private boolean finger;
 	private boolean llegada;
 	private Avion avion;
 	private ArrayList<Aerolinea> aerolinea;
 	private Periodicidad periodicidad;
-	private EstadoFisico estFisico;
-	private EstadoTemporal estTemporal;
-	private LocalizacionAterrizaje locAterrizaje;
-	private Pista pista;
+	private EstadoFisico estFisico = null;
+	private EstadoTemporal estTemporal = null;
+	private LocalizacionAterrizaje locAterrizaje = null;
+	private Pista pista = null;
 	
-	public Vuelo(String id, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
-			ArrayList<Aerolinea> aerolineas, boolean llegada, Periodicidad periodicidad, 
-			Avion avion) {
+	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+			ArrayList<Aerolinea> aerolineas, boolean llegada, Periodicidad periodicidad, Avion avion) {
 		this.id = id;
+		this.origen = origen;
+		this.destino = destino;
 		this.horaSalida = horaSalida;
 		this.horaLlegada = horaLlegada;
+		this.aerolinea = new ArrayList<Aerolinea>();
 		if(aerolineas.size() == 1) {
 			this.compartido = false;
-			this.aerolinea = aerolineas;
+			this.aerolinea.addAll(aerolineas);
 		} else if(aerolineas.size() == 2) {
 			this.compartido = true;
 			this.aerolinea.addAll(aerolineas);
 		} else {
 			throw new IllegalArgumentException("Un vuelo solo puede ser compartido por 2 aerolineas\n");
 		}
+		this.avion = avion;
 		this.llegada = llegada;
 		this.periodicidad = periodicidad;
+	}
+
+	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, Aerolinea aerolinea,
+			boolean llegada, Periodicidad periodicidad, Avion avion) {
+		this.id = id;
+		this.origen = origen;
+		this.destino = destino;
+		this.horaSalida = horaSalida;
+		this.horaLlegada = horaLlegada;
+		this.aerolinea = new ArrayList<Aerolinea>();
+		this.aerolinea.add(aerolinea);
+		this.compartido = false;
 		this.avion = avion;
+		this.llegada = llegada;
+		this.periodicidad = periodicidad;
 	}
 
 	public String getId() {
 		return this.id;
+	}
+	
+	public Aeropuerto getOrigen() {
+		return this.origen;
+	}
+	
+	public Aeropuerto getDestino() {
+		return this.destino;
 	}
 	
 	public LocalDateTime getHoraLlegada() {
@@ -84,6 +112,10 @@ public abstract class Vuelo {
 		return this.aerolinea;
 	}
 	
+	public Aerolinea getAerolinea() {
+		return this.aerolinea.getFirst();
+	}
+	
 	public Periodicidad getPeriodicidad() {
 		return this.periodicidad;
 	}
@@ -105,6 +137,14 @@ public abstract class Vuelo {
 	}
 	
 	
+	public void setFinger(boolean finger) {
+		this.finger = finger;
+	}
+
+	public void setLocAterrizaje(LocalizacionAterrizaje locAterrizaje) {
+		this.locAterrizaje = locAterrizaje;
+	}
+
 	public void setHoraLlegadaEfectiva(LocalDateTime llegada) {
 		this.horaLlegadaEfectiva = llegada;
 		return;

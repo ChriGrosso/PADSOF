@@ -3,8 +3,7 @@
  */
 package elementos;
 
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 import aviones.*;
 
 /**
@@ -16,7 +15,7 @@ public class ZonaParking extends LocalizacionAterrizaje{
 	private double anchuraPlaza;
 	private double largoPlaza;
 	
-	public ZonaParking(String id, double costeph,LocalDateTime fchRegistro,int numPlazas,double alturaPlaza,double anchuraPlaza,double largoPlaza) {
+	public ZonaParking(String id, double costeph,LocalDate fchRegistro,int numPlazas,double alturaPlaza,double anchuraPlaza,double largoPlaza) {
 		super(id,costeph,fchRegistro);
 		this.alturaPlaza=alturaPlaza;
 		this.anchuraPlaza=anchuraPlaza;

@@ -11,7 +11,7 @@ public class Pista extends ElementoEstructural{
 	private ArrayList<Vuelo> vuelosQueSirve; 
 	private Vuelo usando;
 	
-	public Pista(String id, double costePorHora, LocalDateTime fchRegistro, boolean despegue, int longitud) {
+	public Pista(String id, double costePorHora, LocalDate fchRegistro, boolean despegue, int longitud) {
 		super(id,costePorHora,fchRegistro);
 		this.setDespegue(despegue);
 		this.setLongitud(longitud);

@@ -8,17 +8,29 @@ import aviones.Avion;
 import aviones.AvionMercancias;
 import elementos.Puerta;
 import elementos.TerminalMercancias;
+import sistema.Aeropuerto;
 
 public class VueloMercancias extends Vuelo{
-	private TerminalMercancias terminal;
-	private Puerta puerta;
+	private TerminalMercancias terminal = null;
+	private Puerta puertaCarga = null;
 	private double carga;
 	private boolean mercanciasPeligrosas;
 
-	public VueloMercancias(String id, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+	public VueloMercancias(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolinea, boolean llegada, double carga, boolean mercanciasPeligrosas, 
 			Periodicidad periodicidad, Avion avion) {
-		super(id, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
+		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
+		if(avion.getTipoAvion() instanceof AvionMercancias) {
+			throw new IllegalArgumentException("Un vuelo de mercancías debe tener un avión para mercancías\n");
+		}
+		this.carga = carga;
+		this.mercanciasPeligrosas = mercanciasPeligrosas;
+	}
+
+	public VueloMercancias(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, Aerolinea aerolinea,
+			boolean llegada, double carga, boolean mercanciasPeligrosas, Periodicidad periodicidad,
+			Avion avion) {
+		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
 		if(avion.getTipoAvion() instanceof AvionMercancias) {
 			throw new IllegalArgumentException("Un vuelo de mercancías debe tener un avión para mercancías\n");
 		}
@@ -39,7 +51,7 @@ public class VueloMercancias extends Vuelo{
 	}
 	
 	public Puerta getPuerta() {
-		return this.puerta;
+		return this.puertaCarga;
 	}
 	
 
@@ -51,10 +63,15 @@ public class VueloMercancias extends Vuelo{
 		return true;
 	}
 	
-	public boolean asignarPuerta(Puerta puerta) {
-		if(this.terminal.getPuertas().containsKey(puerta.getCod()) == false || puerta.enUso() == true) {
+	public boolean asignarPuerta(String puertaCod) {
+		Puerta puerta = this.terminal.getPuertas().get(puertaCod);
+		if(this.terminal == null) {
+			throw new IllegalArgumentException("No se puede asignar puerta de carga a un vuelo sin terminal");
+		}
+		if(this.terminal.getPuertas().containsKey(puertaCod) == false || puerta.enUso() == true) {
 			return false;
 		}
+		this.puertaCarga = puerta;
 		return true;
 	}
 }

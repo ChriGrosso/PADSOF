@@ -3,7 +3,7 @@
  */
 package elementos;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import vuelos.VueloPasajeros;
@@ -15,7 +15,7 @@ public class TerminalPasajeros extends Terminal{
 	private int capacidadPersonas;
 	private ArrayList<VueloPasajeros> vuelos; 
 	
-	public TerminalPasajeros(String id, double costeph,LocalDateTime fchRegistro,int numeroPuertas,  String prefijoPuerta, int capacidadPersonas){
+	public TerminalPasajeros(String id, double costeph,LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, int capacidadPersonas){
 		super(id, costeph, fchRegistro, numeroPuertas, prefijoPuerta);
 		this.setCapacidadPersonas(capacidadPersonas);
 	}

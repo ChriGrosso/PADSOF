@@ -5,12 +5,12 @@ import java.time.*;
 public abstract class ElementoEstructural {
 	private String id;
 	private double costePorHora;
-	private LocalDateTime fchRegistro;
+	private LocalDate fchRegistro;
 	
-	public ElementoEstructural(String id, double costeph,LocalDateTime fchRegistro) {
+	public ElementoEstructural(String id, double costeph,LocalDate fchRegistro2) {
 		this.setId(id);
 		this.setCostePorHora(costeph);
-		this.setFchRegistro(fchRegistro);
+		this.setFchRegistro(fchRegistro2);
 	}
 	
 	public double horasUsoDiario() {
@@ -24,15 +24,15 @@ public abstract class ElementoEstructural {
 	/**
 	 * @return the fchRegistro
 	 */
-	public LocalDateTime getFchRegistro() {
+	public LocalDate getFchRegistro() {
 		return fchRegistro;
 	}
 
 	/**
-	 * @param fchRegistro the fchRegistro to set
+	 * @param fchRegistro2 the fchRegistro to set
 	 */
-	public void setFchRegistro(LocalDateTime fchRegistro) {
-		this.fchRegistro = fchRegistro;
+	public void setFchRegistro(LocalDate fchRegistro2) {
+		this.fchRegistro = fchRegistro2;
 	}
 
 	/**
