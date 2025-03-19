@@ -26,8 +26,7 @@ public abstract class Vuelo {
 	private Avion avion;
 	private ArrayList<Aerolinea> aerolinea;
 	private Periodicidad periodicidad;
-	private EstadoFisico estFisico = null;
-	private EstadoTemporal estTemporal = null;
+	private EstadoVuelo estVuelo = null;
 	private LocalizacionAterrizaje locAterrizaje = null;
 	private Pista pista = null;
 	
@@ -120,13 +119,10 @@ public abstract class Vuelo {
 		return this.periodicidad;
 	}
 	
-	public EstadoFisico getEstFisico() {
-		return this.estFisico;
+	public EstadoVuelo getEstVuelo() {
+		return this.estVuelo;
 	}
 	
-	public EstadoTemporal getEstTemporal() {
-		return this.estTemporal;
-	}
 	
 	public LocalizacionAterrizaje getLocAterrizaje() {
 		return this.locAterrizaje;
@@ -155,13 +151,8 @@ public abstract class Vuelo {
 		return;
 	}
 	
-	public void setEstFisico(EstadoFisico estFis) {
-		this.estFisico = estFis;
-		return;
-	}
-	
-	public void setEstTemporal(EstadoTemporal estTemp) {
-		this.estTemporal = estTemp;
+	public void setEstFisico(EstadoVuelo estV) {
+		this.estVuelo = estV;
 		return;
 	}
 	

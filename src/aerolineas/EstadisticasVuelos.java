@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 import sistema.Aeropuerto;
-import vuelos.EstadoTemporal;
+import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
 
 public class EstadisticasVuelos {
@@ -31,7 +31,7 @@ public class EstadisticasVuelos {
 	public ArrayList<Vuelo> vuelosRetrasados() {
 		ArrayList<Vuelo> vuelosRetrasados = new ArrayList<>();
 		for(Vuelo v: this.aerolinea.getVuelos()) {
-			if(v.calcularRetraso() > 0 || v.getEstTemporal() == EstadoTemporal.RETRASADO) {
+			if(v.calcularRetraso() > 0 || v.getEstVuelo() == EstadoVuelo.RETRASADO) {
 				vuelosRetrasados.add(v);
 			}
 		}

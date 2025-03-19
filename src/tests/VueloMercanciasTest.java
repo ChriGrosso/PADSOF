@@ -127,13 +127,8 @@ class VueloMercanciasTest {
 	}
 
 	@Test
-	void testGetEstFisicoNotInit() {
-		assertNull(vm1.getEstFisico());
-	}
-
-	@Test
-	void testGetEstTemporalNotInit() {
-		assertNull(vm1.getEstTemporal());
+	void testGetEstVueloNotInit() {
+		assertNull(vm1.getEstVuelo());
 	}
 
 	@Test
@@ -157,12 +152,7 @@ class VueloMercanciasTest {
 	}
 
 	@Test
-	void testSetEstFisico() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testSetEstTemporal() {
+	void testSetEstVuelo() {
 		fail("Not yet implemented");
 	}
 
