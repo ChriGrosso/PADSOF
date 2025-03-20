@@ -1,18 +1,23 @@
 package elementos;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import vuelos.Vuelo;
 
 public abstract class Terminal extends ElementoEstructural {
 	private int numeroPuertas;
 	private String prefijoPuerta;
 	private HashMap<String, Puerta> puertas;
+	private ArrayList<Vuelo> vuelos;
 	
 	public Terminal(String id, double costeph,LocalDate fchRegistro, int numeroPuertas,  String prefijoPuerta) {
 		super(id,costeph,fchRegistro);
 		this.numeroPuertas = numeroPuertas;
 		this.prefijoPuerta = prefijoPuerta;
 		this.puertas = new HashMap<String, Puerta>();
+		this.vuelos = new ArrayList<Vuelo>();
 		
 		for(int i = 1; i<= numeroPuertas; i++) {
 			String nomP = prefijoPuerta + i;
@@ -90,5 +95,9 @@ public abstract class Terminal extends ElementoEstructural {
 	 */
 	public Puerta buscarPuertaPorCod(String cod) {
 		return this.getPuertas().get(cod);
+	}
+	
+	public ArrayList<Vuelo> getVuelos() {
+		return this.vuelos;
 	}
 }

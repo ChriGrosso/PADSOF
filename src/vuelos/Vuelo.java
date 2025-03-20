@@ -10,7 +10,7 @@ import elementos.Finger;
 import elementos.LocalizacionAterrizaje;
 import elementos.Pista;
 import elementos.ZonaParking;
-import sistema.Aeropuerto;
+import aeropuertos.Aeropuerto;
 
 public abstract class Vuelo {
 	private String id;
@@ -18,8 +18,8 @@ public abstract class Vuelo {
 	private Aeropuerto destino;
 	private LocalDateTime horaSalida;
 	private LocalDateTime horaLlegada;
-	private LocalDateTime horaSalidaEfectiva = null;
-	private LocalDateTime horaLlegadaEfectiva = null;
+	private LocalDateTime horaSalidaEfectiva;
+	private LocalDateTime horaLlegadaEfectiva;
 	private boolean compartido;
 	private boolean finger;
 	private boolean llegada;
@@ -27,8 +27,8 @@ public abstract class Vuelo {
 	private ArrayList<Aerolinea> aerolinea;
 	private Periodicidad periodicidad;
 	private EstadoVuelo estVuelo = null;
-	private LocalizacionAterrizaje locAterrizaje = null;
-	private Pista pista = null;
+	private LocalizacionAterrizaje locAterrizaje;
+	private Pista pista;
 	
 	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolineas, boolean llegada, Periodicidad periodicidad, Avion avion) {

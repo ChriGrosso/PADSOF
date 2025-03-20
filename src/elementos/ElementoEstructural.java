@@ -73,6 +73,10 @@ public abstract class ElementoEstructural {
 	}
 
 	
+	public ArrayList<Uso> getHistorailUsos() {
+		return this.historialUsos;
+	}
+	
 	public boolean addUso(LocalDateTime horaUso) {
 		Uso u = new Uso(horaUso, this);
 		if(this.historialUsos.getLast().getHoraDesuso() == null) {

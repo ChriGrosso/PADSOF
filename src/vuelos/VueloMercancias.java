@@ -8,11 +8,11 @@ import aviones.Avion;
 import aviones.AvionMercancias;
 import elementos.Puerta;
 import elementos.TerminalMercancias;
-import sistema.Aeropuerto;
+import aeropuertos.Aeropuerto;
 
 public class VueloMercancias extends Vuelo{
-	private TerminalMercancias terminal = null;
-	private Puerta puertaCarga = null;
+	private TerminalMercancias terminal;
+	private Puerta puertaCarga;
 	private double carga;
 	private boolean mercanciasPeligrosas;
 

@@ -4,8 +4,7 @@
 package elementos;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-
+import vuelos.Vuelo;
 import vuelos.VueloPasajeros;
 
 /**
@@ -13,12 +12,10 @@ import vuelos.VueloPasajeros;
  */
 public class TerminalPasajeros extends Terminal{
 	private int capacidadPersonas;
-	private ArrayList<VueloPasajeros> vuelos; 
 	
 	public TerminalPasajeros(String id, double costeph,LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, int capacidadPersonas){
 		super(id, costeph, fchRegistro, numeroPuertas, prefijoPuerta);
 		this.setCapacidadPersonas(capacidadPersonas);
-		this.vuelos = new ArrayList<VueloPasajeros>();
 	}
 
 	/**
@@ -36,12 +33,12 @@ public class TerminalPasajeros extends Terminal{
 	}
 	
 	public int getPasajerosTotal() {
-		if(this.vuelos.isEmpty()) {
+		if(this.getVuelos().isEmpty()) {
 			return 0;
 		}
 		int total = 0;
-		for(VueloPasajeros v: this.vuelos) {
-			total = v.getNumPasajeros();
+		for(Vuelo v: this.getVuelos()) {
+			total = ((VueloPasajeros) v).getNumPasajeros();
 		}
 		return total;
 	}

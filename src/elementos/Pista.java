@@ -59,11 +59,19 @@ public class Pista extends ElementoEstructural{
 	}
 	
 	public void addVuelo(Vuelo v) {
-		this.vuelosQueSirve.addLast(v);
+		if(this.usando == null) {
+			this.usando = v;
+			this.addUso(LocalDateTime.now());
+		} else {
+			this.vuelosQueSirve.addLast(v);
+		}
 		return;
 	}
 	
 	public void actualizarColaVuelos() {
+		if(this.vuelosQueSirve.isEmpty()) {
+			return;
+		}
 		Vuelo siguiente = this.vuelosQueSirve.getFirst();
 		this.usando = siguiente;
 		this.vuelosQueSirve.removeFirst();
