@@ -13,7 +13,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/Servicio para generación de facturas en PDF [ jar y javadoc ]-20250318/invoiceSystem.jar">
+	<classpathentry kind="lib" path="lib/Servicio para generación de facturas en PDF [ jar y javadoc ]-20250318/invoiceSystem.jar" sourcepath="lib/Servicio para generación de facturas en PDF [ jar y javadoc ]-20250318/invoiceSystem.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/C:/Users/Chris/GIT/PADSOF/lib/Servicio%20para%20generación%20de%20facturas%20en%20PDF%20%5B%20jar%20y%20javadoc%20%5D-20250318/invoicesystem_doc/"/>
 			<attribute name="module" value="true"/>
