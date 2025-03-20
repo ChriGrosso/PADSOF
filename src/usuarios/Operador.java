@@ -14,4 +14,15 @@ public class Operador extends Usuario{
 	public Aerolinea getAerolinea() {
 		return this.aerolinea;
 	}
+	
+
+	public Boolean esGestor() {
+		return false;
+	}
+	public Boolean esControlador() {
+		return false;
+	}
+	public Boolean esOperador() {
+		return true;
+	}
 }

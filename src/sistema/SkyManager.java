@@ -49,6 +49,7 @@ public class SkyManager implements Serializable {
 		File fichero = new File("skyManagerDatos.dat");
 		if (fichero.exists()) {
 			 this.cargarDatos();
+			 return;
 		}
 		this.costeBaseLlegada = 10;
 		this.costeBaseSalida = 10;
@@ -91,7 +92,7 @@ public class SkyManager implements Serializable {
 	//Método para CARGAR los datos desde un archivo
 	//leer de disco la clase sistema
 	// actualizar los atributos de la nueva clase sistema creada a la original
-	public void cargarDatos() {
+	private void cargarDatos() {
 		try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("skyManagerDatos.dat"))) {
 	        SkyManager refDisco = (SkyManager) entrada.readObject();
 	        this.aerolineas = refDisco.aerolineas;
@@ -116,15 +117,9 @@ public class SkyManager implements Serializable {
 	    }
 	}
 	
-	//private void readObject(java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
+	public void cargarDatosAeropuertos(String fichero) {
 		
-	//}
-	//private void writeObject(java.io.ObjectOutputStream stream) throws IOException {
-	//	stream.writeInt(12345);
-	//    stream.writeObject("Today");
-	    
-	//    stream.close();
-	//}
+	}
 	
 	public double getCosteBaseLlegada() {
 		return this.costeBaseLlegada;
@@ -249,18 +244,13 @@ public class SkyManager implements Serializable {
 	}
 	 
 	 
-	public String verEstadisticasGestor() {
-		String estadisticas = "";
-		return estadisticas;
-	}
-	 
 	public Vuelo buscarVueloPorCodigo(String id) {
 		return this.vuelos.get(id);
 	}
 	 
 	public ArrayList<Vuelo> buscarVuelosPorTerminal(Terminal t) {
 		if (this.terminales.containsKey(t.getId())) {
-			return t.get
+			return t;
 		}
 	}
 	public ArrayList<Vuelo> buscarVuelosPorHoraLlegada(LocalDateTime hLlegada) {
@@ -272,7 +262,6 @@ public class SkyManager implements Serializable {
 				vuelosHLlegada.add(v);
 			}
 		}
-		
 		return vuelosHLlegada;		
 	}
 	
@@ -285,8 +274,17 @@ public class SkyManager implements Serializable {
 				vuelosHSalida.add(v);
 			}
 		}
-		
 		return vuelosHSalida;	
+	}
+	
+	private void updateVuelos() {
+		LocalDateTime horaActual;
+	}
+	
+	
+	public String verEstadisticasGestor() {
+		String estadisticas = "";
+		return estadisticas;
 	}
 	
 	

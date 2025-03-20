@@ -32,4 +32,14 @@ public class Controlador extends Usuario{
 		this.vuelosASuCargo.add(v);
 		return true;
 	}
+	
+	public Boolean esGestor() {
+		return false;
+	}
+	public Boolean esControlador() {
+		return true;
+	}
+	public Boolean esOperador() {
+		return false;
+	}
 }
