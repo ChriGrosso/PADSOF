@@ -1,12 +1,14 @@
 package facturas;
 
 import es.uam.eps.padsof.invoices.*;
+import es.uam.eps.padsof.telecard.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
 import aerolineas.*;
+import aviones.*;
 import elementos.*;
 
 
@@ -21,14 +23,16 @@ public class Factura implements IInvoiceInfo {
     private List <IResourceUsageInfo> rUsage;
     private List <Uso> serviciosUsados;
     private double sobrecarga = 0;
+    private String logo;
 
-    public Factura(String id, double precioBase, double total, LocalDate fechaEmision, Aerolinea aerolinea) {
+    public Factura(String id, double precioBase, double total, LocalDate fechaEmision, Aerolinea aerolinea, String logo) {
         this.id = id;
         this.precioBase = precioBase;
         this.total = total;
         this.fechaEmision = fechaEmision;
         this.aerolinea = aerolinea;
         this.serviciosUsados = null;
+        this.logo=logo;
     }
     
     public double calcularFactura(Aerolinea a) {
@@ -39,9 +43,20 @@ public class Factura implements IInvoiceInfo {
     	return somma;
     }
     
-    public boolean pagar() {
+    public boolean pagar(String cardNumber) {
+    	try {
+			TeleChargeAndPaySystem.charge(cardNumber, this.getAirline(), this.getPrice(), true);
+		} catch (InvalidCardNumberException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FailedInternetConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OrderRejectedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	fechaPago = LocalDate.now();
-    	//Pago con carta de credito
     	return true;
     }
 
@@ -96,7 +111,9 @@ public class Factura implements IInvoiceInfo {
 	public double getSurcharge() { return sobrecarga; }
 	
 	@Override
-	public String getCompanyLogo() { return ""; }
+	public String getCompanyLogo() { 
+		return logo;
+	}
 	
 	@Override
 	public List<IResourceUsageInfo> getResourcePrices(){ return rUsage; }
