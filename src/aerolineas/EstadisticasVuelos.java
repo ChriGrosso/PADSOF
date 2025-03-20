@@ -3,7 +3,8 @@ package aerolineas;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
-import sistema.Aeropuerto;
+
+import aeropuertos.Aeropuerto;
 import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
 

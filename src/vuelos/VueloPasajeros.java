@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import aerolineas.Aerolinea;
+import aeropuertos.Aeropuerto;
 import aviones.Avion;
 import aviones.AvionPasajeros;
 import elementos.Puerta;
 import elementos.TerminalPasajeros;
-import sistema.Aeropuerto;
 
 public class VueloPasajeros extends Vuelo{
 	private TerminalPasajeros terminal;

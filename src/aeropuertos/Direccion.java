@@ -1,4 +1,4 @@
-package sistema;
+package aeropuertos;
 
 public enum Direccion {
 	NORTE,
