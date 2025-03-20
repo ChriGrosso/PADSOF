@@ -1,5 +1,6 @@
 package sistema;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,6 +46,10 @@ public class SkyManager implements Serializable {
 	
 	// Private constructor suppresses
 	private SkyManager() {
+		File fichero = new File("skyManagerDatos.dat");
+		if (fichero.exists()) {
+			 this.cargarDatos();
+		}
 		this.costeBaseLlegada = 10;
 		this.costeBaseSalida = 10;
 		this.costeExtraMercancias = 10;
@@ -75,8 +80,8 @@ public class SkyManager implements Serializable {
 	}
 	
 	public void guardarDatos() {
-		try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("skyManagerDatos.txt"))) {
-			salida.writeObject(INSTANCE);
+		try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("skyManagerDatos.dat"))) {
+			salida.writeObject(this);
 	    } catch (IOException e) {
 	        System.err.println("Error al guardar los datos: " + e.getMessage());
 	        e.printStackTrace();
@@ -86,9 +91,25 @@ public class SkyManager implements Serializable {
 	//Método para CARGAR los datos desde un archivo
 	//leer de disco la clase sistema
 	// actualizar los atributos de la nueva clase sistema creada a la original
-	public static void cargarDatos() {
-		try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("skyManagerDatos.txt"))) {
-	        INSTANCE = (SkyManager) entrada.readObject();
+	public void cargarDatos() {
+		try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("skyManagerDatos.dat"))) {
+	        SkyManager refDisco = (SkyManager) entrada.readObject();
+	        this.aerolineas = refDisco.aerolineas;
+	        this.aeropuertosExternos = refDisco.aeropuertosExternos;
+	        this.costeBaseLlegada = refDisco.costeExtraMercancias;
+	        this.costeBaseSalida = refDisco.costeBaseSalida;
+	        this.costeExtraMercancias = refDisco.costeExtraMercancias;
+	        this.costeExtraPasajeros = refDisco.costeExtraPasajeros;
+	        this.facturas = refDisco.facturas;
+	        this.fingers = refDisco.fingers;
+	        this.hangares = refDisco.hangares;
+	        this.informacionPropia = refDisco.informacionPropia;
+	        this.pistas = refDisco.pistas;
+	        this.terminales = refDisco.terminales;
+	        this.usuarios = refDisco.usuarios;
+	        this.vuelos = refDisco.vuelos;
+	        this.zonasParking = refDisco.zonasParking;
+	        
 	    } catch (IOException | ClassNotFoundException e) {
 	    	System.err.println("Error al cargar los datos: " + e.getMessage());
 	        e.printStackTrace();
