@@ -41,6 +41,7 @@ public class Factura implements IInvoiceInfo {
     
     public boolean pagar() {
     	fechaPago = LocalDate.now();
+    	//Pago con carta de credito
     	return true;
     }
 

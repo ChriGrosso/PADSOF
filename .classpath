@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="lib" path="lib/Servicio para pago (simulado) con tarjeta [ jar y javadoc ]-20250318/TeleChargeAndPaySystem8.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/C:/Users/Chris/GIT/PADSOF/lib/Servicio%20para%20pago%20(simulado)%20con%20tarjeta%20%5B%20jar%20y%20javadoc%20%5D-20250318/TeleChargeAndPaySystem8_doc/"/>
