@@ -3,7 +3,6 @@ package elementos;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 
-import aerolineas.Aerolinea;
 import es.uam.eps.padsof.invoices.IResourceUsageInfo;
 
 public class Uso implements IResourceUsageInfo {
@@ -11,25 +10,23 @@ public class Uso implements IResourceUsageInfo {
 	private LocalDateTime horaUso;
 	private LocalDateTime horaDesuso;
 	private ElementoEstructural elem;
-	private Aerolinea aerolinea;
 	
 	
-	public Uso(LocalDateTime horaUso, LocalDateTime horaDesuso) {
-		setHoraUso(horaUso);
-		setHoraDesuso(horaDesuso);
+	public Uso(LocalDateTime horaUso, ElementoEstructural elem) {
+		this.horaUso = horaUso;
+		this.elem = elem;
 	}
 	
 	
-	public double calcularDuraccion() {
+	public double calcularDuracion() {
 		return ChronoUnit.HOURS.between(horaUso, horaDesuso);
 	}
 	
 	public double calcularCosteUso() {
-		return (double)this.calcularDuraccion() * this.elem.getCostePorHora();	
+		return (double)this.calcularDuracion() * this.elem.getCostePorHora();	
 	}
 	
 	public LocalDateTime getHoraUso() {	return horaUso;	}
-	public void setHoraUso(LocalDateTime horaUso) {	this.horaUso = horaUso;	}
 	public LocalDateTime getHoraDesuso() {	return horaDesuso; }
 	public void setHoraDesuso(LocalDateTime horaDesuso) { this.horaDesuso = horaDesuso; }
 
@@ -54,7 +51,7 @@ public class Uso implements IResourceUsageInfo {
 
 	@Override
 	public String getUsageTime() {
-		return Double.toString(calcularDuraccion());
+		return Double.toString(calcularDuracion());
 	}	
 
 }

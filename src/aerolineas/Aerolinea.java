@@ -15,7 +15,7 @@ public class Aerolinea {
 	private ArrayList<Vuelo> vuelos;
 	private HashMap<String, Avion> aviones;
 	private ArrayList<TipoAvion> tiposAviones;
-	private ArrayList<Uso> historialUsos;
+	private HashMap<String, Uso> historialUsos;
 	
 	public Aerolinea(String id, String nombre) {
 		this.id = id;
@@ -23,7 +23,7 @@ public class Aerolinea {
 		this.vuelos = new ArrayList<Vuelo>();
 		this.aviones = new HashMap<String, Avion>();
 		this.tiposAviones = new ArrayList<TipoAvion>();
-		this.historialUsos = new ArrayList<Uso>();
+		this.historialUsos = new HashMap<String, Uso>();
 	}
 	
 	
@@ -77,7 +77,7 @@ public class Aerolinea {
 		if(elem.addUso(horaUso) == false) {
 			return false;
 		}
-		this.historialUsos.addLast(u);
+		this.historialUsos.put(elem.getId(), u);
 		return true;
 	}
 	
