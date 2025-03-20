@@ -10,8 +10,8 @@ public abstract class Terminal extends ElementoEstructural {
 	
 	public Terminal(String id, double costeph,LocalDate fchRegistro, int numeroPuertas,  String prefijoPuerta) {
 		super(id,costeph,fchRegistro);
-		this.setNumeroPuertas(numeroPuertas);
-		this.setPrefijoPuerta(prefijoPuerta);
+		this.numeroPuertas = numeroPuertas;
+		this.prefijoPuerta = prefijoPuerta;
 		this.puertas = new HashMap<String, Puerta>();
 		
 		for(int i = 1; i<= numeroPuertas; i++) {

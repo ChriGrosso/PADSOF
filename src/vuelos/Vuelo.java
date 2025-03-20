@@ -151,7 +151,14 @@ public abstract class Vuelo {
 		return;
 	}
 	
-	public void setEstFisico(EstadoVuelo estV) {
+	public void setEstVuelo(EstadoVuelo estV) {
+		LocalDateTime tiempoAhora = LocalDateTime.now();
+		// Actualizar vuelo llegada
+		if(this.llegada) {
+			
+		} 
+		// Actualizar vuelo salida
+		else {}
 		this.estVuelo = estV;
 		return;
 	}
@@ -205,6 +212,8 @@ public abstract class Vuelo {
 		if(locAt.enUso() == true || locAt.getAlturaMax() < this.avion.getTipoAvion().getAltura()) {
 			return false;
 		}
+		locAt.addUso(LocalDateTime.now());
+		locAt.
 		return true;
 	}
 	private boolean asignarParking(ZonaParking locAt) {
@@ -218,6 +227,7 @@ public abstract class Vuelo {
 	
 	public boolean asignarPista(Pista pista) {
 		pista.addVuelo(this);
+		this.pista = pista;
 		return true;
 	}
 }

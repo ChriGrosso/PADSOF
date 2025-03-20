@@ -1,20 +1,29 @@
 package elementos;
 
 import java.time.*;
+import java.util.ArrayList;
 
 public abstract class ElementoEstructural {
 	private String id;
 	private double costePorHora;
 	private LocalDate fchRegistro;
+	private ArrayList<Uso> historialUsos;
 	
 	public ElementoEstructural(String id, double costeph,LocalDate fchRegistro2) {
 		this.setId(id);
 		this.setCostePorHora(costeph);
 		this.setFchRegistro(fchRegistro2);
+		this.historialUsos = new ArrayList<Uso>();
 	}
 	
 	public double horasUsoDiario() {
-		return 0;
+		LocalDate diaHoy = LocalDate.now();
+		double horasUsoHoy = 0;
+		for(int i = this.historialUsos.size()-1; this.historialUsos.get(i).getHoraUso().getDayOfYear() == diaHoy.getDayOfYear() &&
+			this.historialUsos.get(i).getHoraUso().getYear() == diaHoy.getYear(); i--) {
+			horasUsoHoy += this.historialUsos.get(i).calcularDuracion();
+		}
+		return horasUsoHoy;
 	}
 	
 	public double mediaHorasUsoDiario() {
@@ -63,4 +72,18 @@ public abstract class ElementoEstructural {
 		this.costePorHora = costePorHora;
 	}
 
+	
+	public boolean addUso(LocalDateTime horaUso) {
+		Uso u = new Uso(horaUso, this);
+		if(this.historialUsos.getLast().getHoraDesuso() == null) {
+			return false;
+		}
+		this.historialUsos.addLast(u);
+		return true;
+	}
+	
+	public void LimpiarHistorialUsos() {
+		this.historialUsos.clear();
+		return;
+	}
 }

@@ -20,18 +20,18 @@ public class VueloMercancias extends Vuelo{
 			ArrayList<Aerolinea> aerolinea, boolean llegada, double carga, boolean mercanciasPeligrosas, 
 			Periodicidad periodicidad, Avion avion) {
 		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
-		if(avion.getTipoAvion() instanceof AvionMercancias) {
+		if((avion.getTipoAvion() instanceof AvionMercancias) == false) {
 			throw new IllegalArgumentException("Un vuelo de mercancías debe tener un avión para mercancías\n");
 		}
 		this.carga = carga;
 		this.mercanciasPeligrosas = mercanciasPeligrosas;
 	}
 
-	public VueloMercancias(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, Aerolinea aerolinea,
-			boolean llegada, double carga, boolean mercanciasPeligrosas, Periodicidad periodicidad,
-			Avion avion) {
+	public VueloMercancias(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+			Aerolinea aerolinea, boolean llegada, double carga, boolean mercanciasPeligrosas, 
+			Periodicidad periodicidad, Avion avion) {
 		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
-		if(avion.getTipoAvion() instanceof AvionMercancias) {
+		if((avion.getTipoAvion() instanceof AvionMercancias) == false) {
 			throw new IllegalArgumentException("Un vuelo de mercancías debe tener un avión para mercancías\n");
 		}
 		this.carga = carga;

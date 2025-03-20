@@ -1,9 +1,12 @@
 package aerolineas;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import aviones.Avion;
 import aviones.TipoAvion;
+import elementos.ElementoEstructural;
+import elementos.Uso;
 import vuelos.Vuelo;
 
 public class Aerolinea {
@@ -12,6 +15,7 @@ public class Aerolinea {
 	private ArrayList<Vuelo> vuelos;
 	private HashMap<String, Avion> aviones;
 	private ArrayList<TipoAvion> tiposAviones;
+	private ArrayList<Uso> historialUsos;
 	
 	public Aerolinea(String id, String nombre) {
 		this.id = id;
@@ -19,6 +23,7 @@ public class Aerolinea {
 		this.vuelos = new ArrayList<Vuelo>();
 		this.aviones = new HashMap<String, Avion>();
 		this.tiposAviones = new ArrayList<TipoAvion>();
+		this.historialUsos = new ArrayList<Uso>();
 	}
 	
 	
@@ -65,5 +70,19 @@ public class Aerolinea {
 		}
 		this.tiposAviones.add(ta);
 		return true;
+	}
+	
+	public boolean addUso(LocalDateTime horaUso, ElementoEstructural elem) {
+		Uso u = new Uso(horaUso, elem);
+		if(elem.addUso(horaUso) == false) {
+			return false;
+		}
+		this.historialUsos.addLast(u);
+		return true;
+	}
+	
+	public void LimpiarHistorialUsos() {
+		this.historialUsos.clear();
+		return;
 	}
 }

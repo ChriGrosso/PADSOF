@@ -18,6 +18,7 @@ public class TerminalPasajeros extends Terminal{
 	public TerminalPasajeros(String id, double costeph,LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, int capacidadPersonas){
 		super(id, costeph, fchRegistro, numeroPuertas, prefijoPuerta);
 		this.setCapacidadPersonas(capacidadPersonas);
+		this.vuelos = new ArrayList<VueloPasajeros>();
 	}
 
 	/**
@@ -35,6 +36,9 @@ public class TerminalPasajeros extends Terminal{
 	}
 	
 	public int getPasajerosTotal() {
+		if(this.vuelos.isEmpty()) {
+			return 0;
+		}
 		int total = 0;
 		for(VueloPasajeros v: this.vuelos) {
 			total = v.getNumPasajeros();

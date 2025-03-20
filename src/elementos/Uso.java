@@ -7,10 +7,11 @@ public class Uso {
 	
 	private LocalDateTime horaUso;
 	private LocalDateTime horaDesuso;
+	private ElementoEstructural elemento;
 	
-	public Uso(LocalDateTime horaUso, LocalDateTime horaDesuso) {
-		setHoraUso(horaUso);
-		setHoraDesuso(horaDesuso);
+	public Uso(LocalDateTime horaUso, ElementoEstructural elemento) {
+		this.horaUso = horaUso;
+		this.elemento = elemento;
 	}
 	/**
 	 * @return the horaUso
@@ -37,15 +38,11 @@ public class Uso {
 		this.horaDesuso = horaDesuso;
 	}
 	
-	public double calcularDuraccion() {
+	public double calcularDuracion() {
 		return ChronoUnit.HOURS.between(horaUso, horaDesuso);
 	}
 	
 	public double calcularCosteUso() {
-		return 0;
-		
+		return calcularDuracion()*this.elemento.getCostePorHora();
 	}
-	
-	
-
 }

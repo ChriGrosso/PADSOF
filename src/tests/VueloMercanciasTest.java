@@ -12,9 +12,13 @@ import aerolineas.Aerolinea;
 import aviones.Avion;
 import aviones.AvionMercancias;
 import aviones.EstadoAvion;
+import elementos.Finger;
+import elementos.Pista;
 import elementos.TerminalMercancias;
+import elementos.ZonaParking;
 import sistema.Aeropuerto;
 import sistema.Direccion;
+import vuelos.EstadoVuelo;
 import vuelos.Periodicidad;
 import vuelos.VueloMercancias;
 
@@ -72,7 +76,7 @@ class VueloMercanciasTest {
 		TerminalMercancias t = new TerminalMercancias("T1", 35.67, dateTerm, 60, "AB", 1056);
 		vm1.asignarTerminal(t);
 		vm1.asignarPuerta("AB2");
-		assertEquals("AB2", vm1.getPuerta());
+		assertEquals("AB2", vm1.getPuerta().getCod());
 	}
 
 	@Test
@@ -106,8 +110,10 @@ class VueloMercanciasTest {
 	}
 
 	@Test
-	void testGetFingerNotInit() {
-		assertNull(vm1.getFinger());
+	void testGetFinger() {
+		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
+		vm1.asignarLocAterrizaje(f);
+		assertEquals(true, vm1.getFinger());
 	}
 
 	@Test
@@ -143,32 +149,69 @@ class VueloMercanciasTest {
 
 	@Test
 	void testSetHoraLlegadaEfectiva() {
-		fail("Not yet implemented");
+		LocalDateTime llegadaEfec = LocalDateTime.of(2025, 2, 11, 16, 55);
+		vm1.setHoraLlegadaEfectiva(llegadaEfec);
+		assertEquals(llegadaEfec, vm1.getHoraLlegadaEfectiva());
 	}
 
 	@Test
 	void testSetHoraSalidaEfectiva() {
-		fail("Not yet implemented");
+		LocalDateTime salidaEfec = LocalDateTime.of(2025, 2, 11, 14, 10);
+		vm1.setHoraSalidaEfectiva(salidaEfec);
+		assertEquals(salidaEfec, vm1.getHoraSalidaEfectiva());
 	}
 
 	@Test
 	void testSetEstVuelo() {
-		fail("Not yet implemented");
+		vm1.setEstVuelo(EstadoVuelo.DESCARGA_INI);
+		assertEquals(EstadoVuelo.DESCARGA_INI, vm1.getEstVuelo());
 	}
 
 	@Test
 	void testCalcularRetraso() {
-		fail("Not yet implemented");
+		LocalDateTime llegadaEfec = LocalDateTime.of(2025, 2, 11, 16, 55);
+		vm1.setHoraLlegadaEfectiva(llegadaEfec);
+		LocalDateTime salidaEfec = LocalDateTime.of(2025, 2, 11, 14, 10);
+		vm1.setHoraSalidaEfectiva(salidaEfec);
+		assertEquals(10, vm1.calcularRetraso());
 	}
 
 	@Test
-	void testAsignarLocAterrizaje() {
-		fail("Not yet implemented");
+	void testAsignarLocAterrizajeFingerFail() {
+		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 15.7);
+		assertEquals(false, vm1.asignarLocAterrizaje(f));
+	}
+	
+	@Test
+	void testAsignarLocAterrizajeFingerSuccess() {
+		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
+		assertEquals(true, vm1.asignarLocAterrizaje(f));
+		vm1.asignarLocAterrizaje(f);
+		assertEquals("F001", vm1.getLocAterrizaje().getId());
+		assertEquals(true, vm1.getFinger());
+	}
+	
+	@Test
+	void testAsignarLocAterrizajeZonaParkingFail() {
+		ZonaParking zp = new ZonaParking("ZP001", 6.78, LocalDate.of(2022, 5, 5), 200, 16.77, 56.9, 66.89);
+		assertEquals(false, vm1.asignarLocAterrizaje(zp));
+	}
+	
+	@Test
+	void testAsignarLocAterrizajeZonaParkingSuccess() {
+		ZonaParking zp = new ZonaParking("ZP001", 6.78, LocalDate.of(2022, 5, 5), 200, 18.77, 65.9, 67.89);
+		assertEquals(true, vm1.asignarLocAterrizaje(zp));
+		vm1.asignarLocAterrizaje(zp);
+		assertEquals("ZP001", vm1.getLocAterrizaje().getId());
+		assertEquals(false, vm1.getFinger());
 	}
 
 	@Test
 	void testAsignarPista() {
-		fail("Not yet implemented");
+		Pista p = new Pista("P001", 11.5, LocalDate.of(2022, 5, 5), false, 35);
+		assertEquals(true, vm1.asignarPista(p));
+		vm1.asignarPista(p);
+		assertEquals("P001", vm1.getPista().getId());
 	}
 
 }
