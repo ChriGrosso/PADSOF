@@ -4,6 +4,7 @@ import es.uam.eps.padsof.invoices.*;
 import es.uam.eps.padsof.telecard.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,8 +21,8 @@ public class Factura implements IInvoiceInfo {
     private LocalDate fechaPago = null;
     private boolean pagado = false;
     private Aerolinea aerolinea;
-    private List <IResourceUsageInfo> rUsage;
-    private List <Uso> serviciosUsados;
+    private List <IResourceUsageInfo> rUsage = new ArrayList<>();
+    private List <Uso> serviciosUsados = new ArrayList<>();;
     private double sobrecarga = 0;
     private String logo;
 
@@ -44,20 +45,21 @@ public class Factura implements IInvoiceInfo {
     }
     
     public boolean pagar(String cardNumber) {
-    	try {
-			TeleChargeAndPaySystem.charge(cardNumber, this.getAirline(), this.getPrice(), true);
-		} catch (InvalidCardNumberException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FailedInternetConnectionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OrderRejectedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	fechaPago = LocalDate.now();
-    	return true;
+		try {
+	        TeleChargeAndPaySystem.charge(cardNumber, this.getAirline(), this.getPrice(), true);
+	        this.pagado = true;
+	        this.fechaPago = LocalDate.now();
+	        return true;
+	    } catch (OrderRejectedException e) {
+	        if (e instanceof InvalidCardNumberException) {
+	            System.err.println("Carta non valida: " + e.getMessage());
+	        } else if (e instanceof FailedInternetConnectionException) {
+	            System.err.println("Connessione fallita: " + e.getMessage());
+	        } else {
+	            System.err.println("Ordine rifiutato: " + e.getMessage());
+	        }
+	        return false;
+	    }
     }
 
     
@@ -99,8 +101,10 @@ public class Factura implements IInvoiceInfo {
 	@Override
 	public double getPrice() {
 		double rTotPrice = 0;
-		for (IResourceUsageInfo ru : rUsage) {
-			rTotPrice += ru.getPrice() * Double.parseDouble(ru.getUsageTime());		
+		if (rUsage != null) {
+		    for (IResourceUsageInfo ru : rUsage) {
+		        rTotPrice += ru.getPrice() * Double.parseDouble(ru.getUsageTime());
+		    }
 		}
 		rTotPrice += this.getBasePrice();
 		rTotPrice += this.getSurcharge();
