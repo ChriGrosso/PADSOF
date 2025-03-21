@@ -51,4 +51,8 @@ public abstract class Usuario implements Observer{
 		
 		return;
 	}
+	
+	public abstract Boolean esGestor();
+	public abstract Boolean esControlador();
+	public abstract Boolean esOperador();
 }

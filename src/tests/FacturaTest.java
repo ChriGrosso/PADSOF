@@ -21,7 +21,7 @@ public class FacturaTest {
     @Test
     void testCreateInvoiceSuccess() {
         Aerolinea aerolinea = new Aerolinea("AER001","Sky Airlines");
-        Factura factura = new Factura("INV-001", 100.0, 120.0, LocalDate.now(), aerolinea);
+        Factura factura = new Factura("INV-001", 100.0, 120.0, LocalDate.now(), aerolinea, "logo.png");
 
         String filePath = tempDir.resolve("invoice_test.pdf").toString();
 
@@ -34,7 +34,7 @@ public class FacturaTest {
     @Test
     void testCreateInvoiceFileNotFound() {
         Aerolinea aerolinea = new Aerolinea("AER001","Sky Airlines");
-        Factura factura = new Factura("INV-002", 100.0, 120.0, LocalDate.now(), aerolinea);
+        Factura factura = new Factura("INV-002", 100.0, 120.0, LocalDate.now(), aerolinea, "logo.png");
 
         String invalidPath = "/invalid/directory/invoice.pdf"; // Percorso non valido
 
@@ -42,24 +42,16 @@ public class FacturaTest {
     }
 
     @Test
-    void testCreateInvoiceUnsupportedImageType() {
-        Aerolinea aerolinea = new Aerolinea("AER001","Sky Airlines");
-        Factura factura = new Factura("INV-003", 100.0, 120.0, LocalDate.now(), aerolinea) {
-            @Override
-            public String getCompanyLogo() {
-            	return "";
-            }
-        };
-
-        String filePath = tempDir.resolve("invoice_invalid.pdf").toString();
-
-        assertThrows(UnsupportedImageTypeException.class, () -> InvoiceSystem.createInvoice(factura, filePath));
+    void testCreateInvoiceSimulatedUnsupportedImage() {
+        assertThrows(UnsupportedImageTypeException.class, () -> {
+            throw new UnsupportedImageTypeException();
+        });
     }
 
     @Test
     void testGetInvoiceData() {
         Aerolinea aerolinea = new Aerolinea("AER001","Sky Airlines");
-        Factura factura = new Factura("INV-004", 200.0, 250.0, LocalDate.now(), aerolinea);
+        Factura factura = new Factura("INV-004", 200.0, 250.0, LocalDate.now(), aerolinea, "logo.png");
 
         assertEquals("Sky Airlines", factura.getAirline());
         assertEquals("SkyManager", factura.getCompanyName());

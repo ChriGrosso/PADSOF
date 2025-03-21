@@ -1,12 +1,15 @@
 package facturas;
 
 import es.uam.eps.padsof.invoices.*;
+import es.uam.eps.padsof.telecard.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 
 import aerolineas.*;
+import aviones.*;
 import elementos.*;
 
 
@@ -18,17 +21,19 @@ public class Factura implements IInvoiceInfo {
     private LocalDate fechaPago = null;
     private boolean pagado = false;
     private Aerolinea aerolinea;
-    private List <IResourceUsageInfo> rUsage;
-    private List <Uso> serviciosUsados;
+    private List <IResourceUsageInfo> rUsage = new ArrayList<>();
+    private List <Uso> serviciosUsados = new ArrayList<>();;
     private double sobrecarga = 0;
+    private String logo;
 
-    public Factura(String id, double precioBase, double total, LocalDate fechaEmision, Aerolinea aerolinea) {
+    public Factura(String id, double precioBase, double total, LocalDate fechaEmision, Aerolinea aerolinea, String logo) {
         this.id = id;
         this.precioBase = precioBase;
         this.total = total;
         this.fechaEmision = fechaEmision;
         this.aerolinea = aerolinea;
         this.serviciosUsados = null;
+        this.logo=logo;
     }
     
     public double calcularFactura(Aerolinea a) {
@@ -39,10 +44,22 @@ public class Factura implements IInvoiceInfo {
     	return somma;
     }
     
-    public boolean pagar() {
-    	fechaPago = LocalDate.now();
-    	//Pago con carta de credito
-    	return true;
+    public boolean pagar(String cardNumber) {
+		try {
+	        TeleChargeAndPaySystem.charge(cardNumber, this.getAirline(), this.getPrice(), true);
+	        this.pagado = true;
+	        this.fechaPago = LocalDate.now();
+	        return true;
+	    } catch (OrderRejectedException e) {
+	        if (e instanceof InvalidCardNumberException) {
+	            System.err.println("Carta non valida: " + e.getMessage());
+	        } else if (e instanceof FailedInternetConnectionException) {
+	            System.err.println("Connessione fallita: " + e.getMessage());
+	        } else {
+	            System.err.println("Ordine rifiutato: " + e.getMessage());
+	        }
+	        return false;
+	    }
     }
 
     
@@ -84,8 +101,10 @@ public class Factura implements IInvoiceInfo {
 	@Override
 	public double getPrice() {
 		double rTotPrice = 0;
-		for (IResourceUsageInfo ru : rUsage) {
-			rTotPrice += ru.getPrice() * Double.parseDouble(ru.getUsageTime());		
+		if (rUsage != null) {
+		    for (IResourceUsageInfo ru : rUsage) {
+		        rTotPrice += ru.getPrice() * Double.parseDouble(ru.getUsageTime());
+		    }
 		}
 		rTotPrice += this.getBasePrice();
 		rTotPrice += this.getSurcharge();
@@ -96,7 +115,9 @@ public class Factura implements IInvoiceInfo {
 	public double getSurcharge() { return sobrecarga; }
 	
 	@Override
-	public String getCompanyLogo() { return ""; }
+	public String getCompanyLogo() { 
+		return logo;
+	}
 	
 	@Override
 	public List<IResourceUsageInfo> getResourcePrices(){ return rUsage; }
