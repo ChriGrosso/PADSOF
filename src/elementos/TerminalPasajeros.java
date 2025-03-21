@@ -13,8 +13,8 @@ import vuelos.VueloPasajeros;
 public class TerminalPasajeros extends Terminal{
 	private int capacidadPersonas;
 	
-	public TerminalPasajeros(String id, double costeph,LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, int capacidadPersonas){
-		super(id, costeph, fchRegistro, numeroPuertas, prefijoPuerta);
+	public TerminalPasajeros(String id, LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, int capacidadPersonas){
+		super(id, fchRegistro, numeroPuertas, prefijoPuerta);
 		this.setCapacidadPersonas(capacidadPersonas);
 	}
 

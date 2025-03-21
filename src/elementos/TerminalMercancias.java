@@ -8,8 +8,8 @@ public class TerminalMercancias extends Terminal {
 	
 	private double capacidadToneladas; 
 	
-	public TerminalMercancias(String id, double costeph,LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, double capacidadToneladas) {
-		super(id,costeph,fchRegistro,numeroPuertas,prefijoPuerta);
+	public TerminalMercancias(String id,LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, double capacidadToneladas) {
+		super(id,fchRegistro,numeroPuertas,prefijoPuerta);
 		this.setCapacidadToneladas(capacidadToneladas);
 	}
 

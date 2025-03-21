@@ -22,8 +22,11 @@ public abstract class Hangar extends ElementoEstructural {
 		return 0;
 	}
 	
-	public boolean comprobarCompatibilidad(Avion a) {
-		return false;
+	public boolean comprobarCompatibilidad(Avion avion) {
+		if(avion.getTipoAvion().getAltura()<=this.alturaPlaza && avion.getTipoAvion().getAnchura()<= this.anchuraPlaza && avion.getTipoAvion().getLargo() <= this.largoPlaza)
+			return true;
+		else
+			return false;
 	}
 
 	/**

@@ -4,20 +4,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.MonthDay;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import aerolineas.Aerolinea;
+import aeropuertos.Temporada;
 import aviones.Avion;
 import aviones.AvionMercancias;
+import aviones.AvionPasajeros;
 import aviones.EstadoAvion;
 import elementos.Finger;
 import elementos.Pista;
 import elementos.TerminalMercancias;
 import elementos.ZonaParking;
-import sistema.Aeropuerto;
-import sistema.Direccion;
+import aeropuertos.Aeropuerto;
+import aeropuertos.Direccion;
 import vuelos.EstadoVuelo;
 import vuelos.Periodicidad;
 import vuelos.VueloMercancias;
@@ -27,6 +32,8 @@ class VueloMercanciasTest {
 	private LocalDateTime timeLlegada;
 	private LocalDateTime timeSalida;
 	private Aerolinea a;
+	private Aeropuerto ap1;
+	private Aeropuerto ap2;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -37,9 +44,31 @@ class VueloMercanciasTest {
 		AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
 		Avion av = new Avion("0001", date, m, date2, EstadoAvion.EN_HANGAR); 
 		a = new Aerolinea("IBE", "Iberia");
-		Aeropuerto ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, "De 7:30 a 21:30", Direccion.NORTE);
-		Aeropuerto ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, "De 0:00 a 23:59", Direccion.OESTE);
+		ArrayList<Temporada> temp1 = new ArrayList<Temporada>();
+		temp1.add(new Temporada (MonthDay.of(3, 5), LocalTime.NOON, LocalTime.MIDNIGHT, MonthDay.of(2, 5)));
+		ArrayList<Temporada> temp2 = new ArrayList<Temporada>();
+		temp2.add(new Temporada(MonthDay.of(3, 5), LocalTime.NOON, LocalTime.MIDNIGHT, MonthDay.of(9, 9)));
+		temp2.add(new Temporada(MonthDay.of(10, 9), LocalTime.of(5, 0), LocalTime.of(1, 0), MonthDay.of(2, 5)));
+		ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, 1, temp1, Direccion.NORTE);
+		ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, 2, temp2, Direccion.OESTE);
 		vm1 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, a, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
+	}
+	
+	@Test
+	void testExceptionConstructor() {
+		LocalDate date = LocalDate.of(2023, 3, 14);
+		LocalDate date2 = LocalDate.of(2024, 6, 20);
+		AvionPasajeros p = new AvionPasajeros("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 200);
+		Avion av = new Avion("0001", date, p, date2, EstadoAvion.EN_HANGAR);
+		
+		// Usar assertThrows para verificar que se lanza la excepción correcta
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            // Aquí llamas al constructor o método que debe lanzar la excepción
+            @SuppressWarnings("unused")
+			VueloMercancias vm2 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, a, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
+        });
+		
+		assertEquals("Un vuelo de mercancías debe tener un avión para mercancías", exception.getMessage());
 	}
 
 	@Test
@@ -65,7 +94,7 @@ class VueloMercanciasTest {
 	@Test
 	void testAsignarTerminal() {
 		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
-		TerminalMercancias t = new TerminalMercancias("T1", 35.67, dateTerm, 60, "AB", 1056);
+		TerminalMercancias t = new TerminalMercancias("T1", dateTerm, 60, "AB", 1056);
 		vm1.asignarTerminal(t);
 		assertEquals(t.getId(), vm1.getTerminal().getId());
 	}
@@ -73,9 +102,9 @@ class VueloMercanciasTest {
 	@Test
 	void testAsignarPuerta() {
 		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
-		TerminalMercancias t = new TerminalMercancias("T1", 35.67, dateTerm, 60, "AB", 1056);
+		TerminalMercancias t = new TerminalMercancias("T1", dateTerm, 60, "AB", 1056);
 		vm1.asignarTerminal(t);
-		vm1.asignarPuerta("AB2");
+		vm1.asignarPuerta(t.getPuertas().get("AB2"));
 		assertEquals("AB2", vm1.getPuerta().getCod());
 	}
 
@@ -208,7 +237,7 @@ class VueloMercanciasTest {
 
 	@Test
 	void testAsignarPista() {
-		Pista p = new Pista("P001", 11.5, LocalDate.of(2022, 5, 5), false, 35);
+		Pista p = new Pista("P001", LocalDate.of(2022, 5, 5), true, 35);
 		assertEquals(true, vm1.asignarPista(p));
 		vm1.asignarPista(p);
 		assertEquals("P001", vm1.getPista().getId());

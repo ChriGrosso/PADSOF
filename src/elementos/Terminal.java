@@ -12,8 +12,8 @@ public abstract class Terminal extends ElementoEstructural {
 	private HashMap<String, Puerta> puertas;
 	private ArrayList<Vuelo> vuelos;
 	
-	public Terminal(String id, double costeph,LocalDate fchRegistro, int numeroPuertas,  String prefijoPuerta) {
-		super(id,costeph,fchRegistro);
+	public Terminal(String id, LocalDate fchRegistro, int numeroPuertas,  String prefijoPuerta) {
+		super(id,0,fchRegistro);
 		this.numeroPuertas = numeroPuertas;
 		this.prefijoPuerta = prefijoPuerta;
 		this.puertas = new HashMap<String, Puerta>();

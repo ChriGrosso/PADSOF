@@ -32,7 +32,8 @@ public class Aeropuerto {
      * @param t                 Lista de temporadas del aeropuerto.
      * @param d                 Dirección física del aeropuerto.
      */
-    public Aeropuerto(String nombre, String codigo, String ciudad, String pais, double distancia, int difHoraria, int numTemporadas, ArrayList<Temporada> t, Direccion d) {
+    public Aeropuerto(String nombre, String codigo, String ciudad, String pais, double distancia, 
+    		int difHoraria, int numTemporadas, ArrayList<Temporada> t, Direccion d) {
         this.nombre = nombre;
         this.codigo = codigo;
         this.ciudadMasCercana = ciudad;

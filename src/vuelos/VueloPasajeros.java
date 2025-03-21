@@ -12,15 +12,24 @@ import elementos.TerminalPasajeros;
 
 public class VueloPasajeros extends Vuelo{
 	private TerminalPasajeros terminal;
-	private Puerta puerta;
 	private int numPasajeros;
 
 	public VueloPasajeros(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolinea, boolean llegada, int numPasajeros, Periodicidad periodicidad,
 			Avion avion) {
 		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
-		if(avion.getTipoAvion() instanceof AvionPasajeros) {
-			throw new IllegalArgumentException("Un vuelo de pasajeros debe tener un avión para pasajeros\n");
+		if((avion.getTipoAvion() instanceof AvionPasajeros) == false) {
+			throw new IllegalArgumentException("Un vuelo de pasajeros debe tener un avión para pasajeros");
+		}
+		this.numPasajeros = numPasajeros;
+	}
+	
+	public VueloPasajeros(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+			Aerolinea aerolinea, boolean llegada, int numPasajeros, Periodicidad periodicidad,
+			Avion avion) {
+		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
+		if((avion.getTipoAvion() instanceof AvionPasajeros) == false) {
+			throw new IllegalArgumentException("Un vuelo de pasajeros debe tener un avión para pasajeros");
 		}
 		this.numPasajeros = numPasajeros;
 	}
@@ -33,9 +42,6 @@ public class VueloPasajeros extends Vuelo{
 		return this.terminal;
 	}
 	
-	public Puerta getPuerta() {
-		return this.puerta;
-	}
 
 	public boolean asignarTerminal(TerminalPasajeros terminal) {
 		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getPasajerosTotal()+this.numPasajeros > terminal.getCapacidadPersonas()) {
@@ -46,9 +52,14 @@ public class VueloPasajeros extends Vuelo{
 	}
 	
 	public boolean asignarPuerta(Puerta puerta) {
+		if(this.terminal == null) {
+			throw new IllegalArgumentException("No se puede asignar puerta de embarque a un vuelo sin terminal");
+		}
 		if(this.terminal.getPuertas().containsKey(puerta.getCod()) == false || puerta.enUso() == true) {
 			return false;
 		}
+		this.setPuerta(puerta);
+		puerta.setVuelo(this);
 		return true;
 	}
 }

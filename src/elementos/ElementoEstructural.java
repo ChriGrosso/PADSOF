@@ -79,6 +79,10 @@ public abstract class ElementoEstructural {
 	
 	public boolean addUso(LocalDateTime horaUso) {
 		Uso u = new Uso(horaUso, this);
+		if(this.historialUsos.isEmpty()) {
+			this.historialUsos.addLast(u);
+			return true;
+		}
 		if(this.historialUsos.getLast().getHoraDesuso() == null) {
 			return false;
 		}

@@ -1,3 +1,4 @@
+
 package aerolineas;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public class Aerolinea {
 	private ArrayList<Vuelo> vuelos;
 	private HashMap<String, Avion> aviones;
 	private ArrayList<TipoAvion> tiposAviones;
-	private HashMap<String, Uso> historialUsos;
+	private HashMap<ClaveVueloElemento, Uso> historialUsos;
 	
 	public Aerolinea(String id, String nombre) {
 		this.id = id;
@@ -23,7 +24,7 @@ public class Aerolinea {
 		this.vuelos = new ArrayList<Vuelo>();
 		this.aviones = new HashMap<String, Avion>();
 		this.tiposAviones = new ArrayList<TipoAvion>();
-		this.historialUsos = new HashMap<String, Uso>();
+		this.historialUsos = new HashMap<ClaveVueloElemento, Uso>();
 	}
 	
 	
@@ -72,12 +73,22 @@ public class Aerolinea {
 		return true;
 	}
 	
-	public boolean addUso(LocalDateTime horaUso, ElementoEstructural elem) {
+	public boolean addUso(LocalDateTime horaUso, Vuelo vuelo, ElementoEstructural elem) {
 		Uso u = new Uso(horaUso, elem);
+		ClaveVueloElemento clave = new ClaveVueloElemento(vuelo, elem);
 		if(elem.addUso(horaUso) == false) {
 			return false;
 		}
-		this.historialUsos.put(elem.getId(), u);
+		this.historialUsos.put(clave, u);
+		return true;
+	}
+	
+	public boolean setEndUso(LocalDateTime horaDesuso, Vuelo vuelo, ElementoEstructural elem) {
+		ClaveVueloElemento clave = new ClaveVueloElemento(vuelo, elem);
+		if(this.historialUsos.containsKey(clave) == false) {
+			return false;
+		}
+		this.historialUsos.get(clave).setHoraDesuso(horaDesuso);
 		return true;
 	}
 	

@@ -24,7 +24,7 @@ class AvionTest {
 		AvionMercancias av1 = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
 		AvionPasajeros av2 = new AvionPasajeros("Airbus", "A320-200", 3717.83, 11.8, 34.12, 37.6, 173);
 		a1 = new Avion("0001", date, av1, date2, EstadoAvion.EN_HANGAR); 
-		a2 = new Avion("0002", date2, av2, EstadoAvion.OPERATIVO);
+		a2 = new Avion("0002", date2, av2, EstadoAvion.ESPERANDO_PISTA);
 	}
 	
 	
@@ -64,7 +64,7 @@ class AvionTest {
 
 	@Test
 	void testGetEstadoAvion() {
-		assertEquals(EstadoAvion.OPERATIVO, a2.getEstadoAvion());
+		assertEquals(EstadoAvion.ESPERANDO_PISTA, a2.getEstadoAvion());
 	}
 
 	@Test

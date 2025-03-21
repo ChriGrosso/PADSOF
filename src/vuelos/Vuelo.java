@@ -6,9 +6,11 @@ import java.util.ArrayList;
 
 import aerolineas.Aerolinea;
 import aviones.Avion;
+import aviones.EstadoAvion;
 import elementos.Finger;
 import elementos.LocalizacionAterrizaje;
 import elementos.Pista;
+import elementos.Puerta;
 import elementos.ZonaParking;
 import aeropuertos.Aeropuerto;
 
@@ -29,6 +31,7 @@ public abstract class Vuelo {
 	private EstadoVuelo estVuelo = null;
 	private LocalizacionAterrizaje locAterrizaje;
 	private Pista pista;
+	private Puerta puerta;
 	
 	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolineas, boolean llegada, Periodicidad periodicidad, Avion avion) {
@@ -50,6 +53,7 @@ public abstract class Vuelo {
 		this.avion = avion;
 		this.llegada = llegada;
 		this.periodicidad = periodicidad;
+		this.estVuelo = EstadoVuelo.EN_TIEMPO;
 	}
 
 	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, Aerolinea aerolinea,
@@ -65,6 +69,13 @@ public abstract class Vuelo {
 		this.avion = avion;
 		this.llegada = llegada;
 		this.periodicidad = periodicidad;
+	}
+	
+	public boolean isVueloMercancias() {
+		if(this instanceof VueloMercancias) {
+			return true;
+		}
+		return false;
 	}
 
 	public String getId() {
@@ -123,6 +134,10 @@ public abstract class Vuelo {
 		return this.estVuelo;
 	}
 	
+	public Avion getAvion() {
+		return this.avion;
+	}
+	
 	
 	public LocalizacionAterrizaje getLocAterrizaje() {
 		return this.locAterrizaje;
@@ -132,6 +147,14 @@ public abstract class Vuelo {
 		return this.pista;
 	}
 	
+	public Puerta getPuerta() {
+		return this.puerta;
+	}
+	
+	
+	public void setPuerta(Puerta puerta) {
+		this.puerta = puerta;
+	}
 	
 	public void setFinger(boolean finger) {
 		this.finger = finger;
@@ -151,9 +174,124 @@ public abstract class Vuelo {
 		return;
 	}
 	
-	public void setEstVuelo(EstadoVuelo estV) {
-		this.estVuelo = estV;
-		return;
+	public boolean setEstVuelo(EstadoVuelo estV) {
+		// Si es un vuelo de llegada
+		if(this.llegada) {
+			// ESPERANDO_PISTA: no hay todavía pista o localización de aterrizaje
+			if(estV == EstadoVuelo.ESPERANDO_PISTA_A && this.pista == null && this.locAterrizaje == null) {
+				this.estVuelo = estV;
+				return true;
+			}
+			// ESPERANDO_AT: espera en su pista, no la usa
+			if(estV == EstadoVuelo.ESPERANDO_ATERRIZAJE && this.pista != null && this.pista.getUsando().equals(this) == false) {
+				this.estVuelo = estV;
+				this.puerta.liberarPuerta();
+				this.avion.setEstadoAvion(EstadoAvion.ESPERANDO_PISTA);
+				return true;
+			}
+			if(estV == EstadoVuelo.ATERRIZADO) {
+				this.estVuelo = estV;
+				this.avion.setEstadoAvion(EstadoAvion.EN_PISTA);
+				this.pista.actualizarColaVuelos();
+				return true;
+			}
+			if(estV == EstadoVuelo.DESEMBARQUE_INI || estV == EstadoVuelo.DESEMBARQUE_FIN ||
+				estV == EstadoVuelo.DESCARGA_INI || estV == EstadoVuelo.DESCARGA_FIN) {
+				if(this.finger) {
+					this.avion.setEstadoAvion(EstadoAvion.EN_FINGER);
+				} else {
+					this.avion.setEstadoAvion(EstadoAvion.EN_PARKING);
+				}
+				this.estVuelo = estV;
+				return true;
+			}
+			if((estV == EstadoVuelo.OPERATIVO && siguienteVueloConAvion() != null) || 
+				(estV == EstadoVuelo.EN_HANGAR && siguienteVueloConAvion() == null)) {
+				this.estVuelo = estV;
+				if(estV == EstadoVuelo.EN_HANGAR) {
+					Aerolinea conAvion = null;
+					this.avion.setEstadoAvion(EstadoAvion.EN_HANGAR);
+					for(Aerolinea a: this.aerolinea) {
+						if(a.getAviones().containsValue(this.avion)) {
+							conAvion = a;
+						}
+					}
+					conAvion.addUso(LocalDateTime.now(), null, this.avion.getHangar());
+				}
+				for(Aerolinea a: this.aerolinea) {
+					a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
+				}
+				return true;
+			}
+			return false;
+		}
+		else {
+			// ESPERANDO_PISTA: no hay todavía pista, ya ha cargado
+			if(estV == EstadoVuelo.ESPERANDO_PISTA_D && this.pista == null) {
+				this.estVuelo = estV;
+				return true;
+			}
+			// ESPERANDO_DESP: espera en su pista, no la usa
+			if(estV == EstadoVuelo.ESPERANDO_DESPEGUE && this.pista != null && this.pista.getUsando().equals(this) == false) {
+				this.estVuelo = estV;
+				this.puerta.liberarPuerta();
+				this.avion.setEstadoAvion(EstadoAvion.ESPERANDO_PISTA);
+				for(Aerolinea a: this.aerolinea) {
+					a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
+				}
+				return true;
+			}
+			if(estV == EstadoVuelo.EN_VUELO) {
+				this.estVuelo = estV;
+				this.avion.setEstadoAvion(EstadoAvion.FUERA_AEROPUERTO);
+				this.pista.actualizarColaVuelos();
+				return true;
+			}
+			if(estV == EstadoVuelo.EMBARQUE || estV == EstadoVuelo.CARGA) {
+				// El avion está en hangar?
+				if(this.avion.getEstadoAvion() == EstadoAvion.EN_HANGAR) {
+					Aerolinea conAvion = null;
+					for(Aerolinea a: this.aerolinea) {
+						if(a.getAviones().containsValue(this.avion)) {
+							conAvion = a;
+						}
+					}
+					conAvion.setEndUso(LocalDateTime.now(), null, this.avion.getHangar());
+				}
+				if(this.finger) {
+					this.avion.setEstadoAvion(EstadoAvion.EN_FINGER);
+				} else {
+					this.avion.setEstadoAvion(EstadoAvion.EN_PARKING);
+				}
+				this.estVuelo = estV;
+				return true;
+			}
+			return false;
+		}
+	}
+	private Vuelo siguienteVueloConAvion() {
+		Aerolinea aerolinea = null;
+		Vuelo siguienteVuelo = null;
+		// Si el vuelo de ahora ha sido compartido, averiguar de qué aerolínea es el avión
+		if(this.compartido) {
+			for(Aerolinea a: this.aerolinea) {
+				if(a.getAviones().containsValue(this.avion)) {
+					aerolinea = a;
+					break;
+				}
+			}
+		} else { aerolinea = this.aerolinea.getFirst(); }
+		
+		// Buscar en esa aerolinea el siguiente vuelo (salida) con el mismo avion que salga en menos de 1 hora
+		//      (si existe)
+		for(Vuelo v: aerolinea.getVuelos()) {
+			if(v.llegada == false && v.getAvion().equals(this.avion) && 
+				v.horaSalida.isAfter(this.horaLlegadaEfectiva) && 
+				Duration.between(this.horaLlegadaEfectiva, v.horaSalida).toHours() < 1) {
+				siguienteVuelo = v;
+			}
+		}
+		return siguienteVuelo;
 	}
 	
 	
@@ -183,22 +321,27 @@ public abstract class Vuelo {
 	
 	public boolean asignarLocAterrizaje(LocalizacionAterrizaje locAt) {
 		// Comprobar qué tipo de LocAterrizaje es
+		// Si es Finger
 		if(locAt instanceof Finger) {
+			// Comprobar si se puede asignar el elemento
 			if(asignarFinger((Finger) locAt) == false) {
 				return false;
 			}
 			for(Aerolinea a: this.aerolinea) {
-				a.addUso(LocalDateTime.now(), locAt);
+				a.addUso(LocalDateTime.now(), this, locAt);
 			}
 			this.locAterrizaje = locAt;
 			this.finger = true;
 			return true;
-		} else if(locAt instanceof ZonaParking) {
+		} 
+		// Si es Parking
+		else if(locAt instanceof ZonaParking) {
+			// Comprobar si se puede asignar el elemento
 			if(asignarParking((ZonaParking) locAt) == false) {
 				return false;
 			}
 			for(Aerolinea a: this.aerolinea) {
-				a.addUso(LocalDateTime.now(), locAt);
+				a.addUso(LocalDateTime.now(), this, locAt);
 			}
 			this.locAterrizaje = locAt;
 			this.finger = false;
@@ -223,8 +366,9 @@ public abstract class Vuelo {
 	
 	
 	public boolean asignarPista(Pista pista) {
-		for(Aerolinea a: this.aerolinea) {
-			a.addUso(LocalDateTime.now(), pista);
+		// Comprobar que el tipo de pista sea adecuado para el vuelo
+		if((pista.isDespegue() && this.llegada) || (!pista.isDespegue() && !this.llegada)) {
+			return false;
 		}
 		pista.addVuelo(this);
 		this.pista = pista;
