@@ -2,6 +2,8 @@ package usuarios;
 
 import java.util.ArrayList;
 
+import aviones.EstadoAvion;
+import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
 import elementos.Terminal;
 
@@ -11,7 +13,6 @@ public class Controlador extends Usuario{
 	
 	public Controlador(String dni, String nombre, String password, Terminal terminal, ArrayList<Vuelo> vuelos) {
 		super(dni, nombre, password);
-		super.setTipo("CONTROLADOR");
 		this.terminal = terminal;
 		this.vuelosASuCargo = vuelos;
 	}
@@ -41,5 +42,15 @@ public class Controlador extends Usuario{
 	}
 	public Boolean esOperador() {
 		return false;
+	}
+
+	@Override
+	public Boolean sigueCambioEstadoVuelo(EstadoVuelo estado) {
+		return null;
+	}
+
+	@Override
+	public Boolean sigueCambioEstadoAvion(EstadoAvion estado) {
+		return null;
 	}
 }

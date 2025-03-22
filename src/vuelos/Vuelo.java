@@ -12,9 +12,10 @@ import elementos.LocalizacionAterrizaje;
 import elementos.Pista;
 import elementos.Puerta;
 import elementos.ZonaParking;
+import notificaciones.Observable;
 import aeropuertos.Aeropuerto;
 
-public abstract class Vuelo {
+public abstract class Vuelo extends Observable{
 	private String id;
 	private Aeropuerto origen;
 	private Aeropuerto destino;
@@ -35,6 +36,7 @@ public abstract class Vuelo {
 	
 	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolineas, boolean llegada, Periodicidad periodicidad, Avion avion) {
+		super();
 		this.id = id;
 		this.origen = origen;
 		this.destino = destino;
@@ -79,6 +81,7 @@ public abstract class Vuelo {
 		return false;
 	}
 
+	@Override 
 	public String getId() {
 		return this.id;
 	}

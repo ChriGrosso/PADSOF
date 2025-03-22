@@ -16,6 +16,7 @@ public class Avion extends Observable {
 	private Hangar hangar;
 	
 	public Avion(String matricula, LocalDate fechaCompra, TipoAvion tipoAvion, LocalDate fechaUltimaRevision) { 
+		super();
 		this.matricula = matricula;
 		this.fechaCompra = fechaCompra;
 		this.tipoAvion = tipoAvion;
@@ -81,5 +82,10 @@ public class Avion extends Observable {
 		this.hangar = null;
 		hangar.setNumPlazas(hangar.getNumPlazas()-1);
 		return;
+	}
+
+	@Override
+	public String getId() {
+		return this.matricula;
 	}
 }
