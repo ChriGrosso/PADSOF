@@ -1,19 +1,26 @@
 package sistema;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.MonthDay;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
 import aerolineas.Aerolinea;
 import aeropuertos.Aeropuerto;
+import aeropuertos.Direccion;
+import aeropuertos.Temporada;
+import aviones.EstadoAvion;
 import elementos.Finger;
 import elementos.Hangar;
 import elementos.Pista;
@@ -21,6 +28,7 @@ import elementos.Terminal;
 import elementos.ZonaParking;
 import facturas.Factura;
 import usuarios.Usuario;
+import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
 
 public class SkyManager implements Serializable {
@@ -117,9 +125,48 @@ public class SkyManager implements Serializable {
 	    }
 	}
 	
-	public void cargarDatosAeropuertos(String fichero) {
-		
+	public void cargarDatosAeropuertos(String nombreFichero) {
+	    try (BufferedReader br = new BufferedReader(new FileReader(nombreFichero))) {
+	            String linea;
+	            ArrayList<Temporada> temporadas = new ArrayList<Temporada>();
+	            while ((linea = br.readLine()) != null) {
+	                String[] datos = linea.split(";");
+	                String nombre = datos[0];
+	                String codigo = datos[1];
+	                String ciudadMasCercana = datos[2];
+	                String pais = datos[3];
+	                double distanciaCiudad = Double.parseDouble(datos[4]);
+	                String direccionCiudad = datos[5];
+	                Direccion dir = Direccion.getDireccion(direccionCiudad);
+	                int diferenciaHoraria = Integer.parseInt(datos[6]);
+	                int numeroTemporadas = Integer.parseInt(datos[7]);
+
+	                for (int i = 0; i < numeroTemporadas; i++) {
+	                    String aux = datos[8 + i * 3];
+	                    String[] auxs = aux.split("/");
+	                    MonthDay fechaInicio = MonthDay.of(Integer.parseInt(auxs[1]), Integer.parseInt(auxs[0]));
+	                    
+	                    aux = datos[9 + i * 3];
+	                    auxs = aux.split(":");
+	                    String[] aux2 = auxs[1].split("-");
+	                    LocalTime apertura = LocalTime.of(Integer.parseInt(auxs[0]), Integer.parseInt(aux2[0]));
+	                    LocalTime cierre = LocalTime.of(Integer.parseInt(aux2[1]), Integer.parseInt(auxs[2]));
+	                    
+	                    aux = datos[10 + i * 3];
+	                    auxs = aux.split("/");
+	                    MonthDay fechaFin = MonthDay.of(Integer.parseInt(auxs[1]), Integer.parseInt(auxs[0]));
+
+	                    Temporada temporada = new Temporada(fechaInicio, apertura, cierre, fechaFin);
+	                    temporadas.add(temporada);
+	                }
+	                
+	                Aeropuerto aeropuerto = new Aeropuerto(nombre, codigo, ciudadMasCercana, pais, distanciaCiudad, diferenciaHoraria, temporadas, dir);
+	                this.registrarAeropuertoExterno(aeropuerto);
+	            }
+	            
+	    } catch (IOException e) { e.printStackTrace(); }
 	}
+
 	
 	public double getCosteBaseLlegada() {
 		return this.costeBaseLlegada;
@@ -190,6 +237,13 @@ public class SkyManager implements Serializable {
 		this.aerolineas.put(a.getId(), a);
 		return true;
 	}
+	public Boolean registrarAeropuertoExterno(Aeropuerto a) {
+		if (this.aeropuertosExternos.containsKey(a.getCodigo()) == true) {
+			return false;
+		}
+		this.aeropuertosExternos.put(a.getCodigo(), a);
+		return true;
+	}
 	public Boolean registrarFactura(Factura f) {
 		if (this.facturas.containsKey(f.getId()) == true) {
 			return false;
@@ -245,15 +299,19 @@ public class SkyManager implements Serializable {
 	 
 	 
 	public Vuelo buscarVueloPorCodigo(String id) {
+		this.updateVuelos();
 		return this.vuelos.get(id);
 	}
 	 
 	public ArrayList<Vuelo> buscarVuelosPorTerminal(Terminal t) {
+		this.updateVuelos();
 		if (this.terminales.containsKey(t.getId())) {
-			return t;
+			return t.getVuelos();
 		}
+		return null;
 	}
 	public ArrayList<Vuelo> buscarVuelosPorHoraLlegada(LocalDateTime hLlegada) {
+		this.updateVuelos();
 		ArrayList<Vuelo> vuelosHLlegada = new ArrayList<Vuelo>();
 		Collection<Vuelo> vuelos = this.vuelos.values();
 		
@@ -266,11 +324,12 @@ public class SkyManager implements Serializable {
 	}
 	
 	public ArrayList<Vuelo> buscarVuelosPorHoraSalida(LocalDateTime hSalida) {
+		this.updateVuelos();
 		ArrayList<Vuelo> vuelosHSalida = new ArrayList<Vuelo>();
 		Collection<Vuelo> vuelos = this.vuelos.values();
 		
 		for(Vuelo v: vuelos) {
-			if (v.getHoraLlegada().equals(hSalida)) {
+			if (v.getHoraSalida().equals(hSalida)) {
 				vuelosHSalida.add(v);
 			}
 		}
@@ -278,14 +337,37 @@ public class SkyManager implements Serializable {
 	}
 	
 	private void updateVuelos() {
-		LocalDateTime horaActual;
+		LocalDateTime horaActual = LocalDateTime.now();
+		Collection<Vuelo> vuelos = this.vuelos.values();
+		
+		for (Vuelo v: vuelos) {
+			EstadoAvion estAvion = v.getAvion().getEstadoAvion();
+			if (v.getEstVuelo().equals(EstadoVuelo.EN_TIEMPO)) {
+				if ((horaActual.isAfter(v.getHoraLlegada()) && v.getLlegada() && estAvion.equals(EstadoAvion.FUERA_AEROPUERTO)) || 
+						(horaActual.plusMinutes(45).isAfter(v.getHoraSalida()) && !v.getLlegada() && estAvion.equals(EstadoAvion.FUERA_AEROPUERTO)) ||
+						(horaActual.isAfter(v.getHoraSalida()) && !v.getLlegada() && 
+								(estAvion.equals(EstadoAvion.EN_HANGAR) || estAvion.equals(EstadoAvion.EN_PARKING) || estAvion.equals(EstadoAvion.EN_FINGER))) ) {
+					v.setEstVuelo(EstadoVuelo.RETRASADO);
+				}
+			}
+			if (v.getEstVuelo().equals(EstadoVuelo.ESPERANDO_DESPEGUE) && estAvion.equals(EstadoAvion.FUERA_AEROPUERTO)) {
+				v.setEstVuelo(EstadoVuelo.EN_VUELO);
+			}
+		}
+		
 	}
 	
 	
 	public String verEstadisticasGestor() {
 		String estadisticas = "";
+		if (this.usuarioActual.esGestor() == false) { 
+			return null; 
+		}	
+		
+		
+		
+		
 		return estadisticas;
 	}
-	
 	
 }

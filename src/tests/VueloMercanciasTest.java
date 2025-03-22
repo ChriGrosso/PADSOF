@@ -49,8 +49,8 @@ class VueloMercanciasTest {
 		ArrayList<Temporada> temp2 = new ArrayList<Temporada>();
 		temp2.add(new Temporada(MonthDay.of(3, 5), LocalTime.NOON, LocalTime.MIDNIGHT, MonthDay.of(9, 9)));
 		temp2.add(new Temporada(MonthDay.of(10, 9), LocalTime.of(5, 0), LocalTime.of(1, 0), MonthDay.of(2, 5)));
-		ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, 1, temp1, Direccion.NORTE);
-		ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, 2, temp2, Direccion.OESTE);
+		ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, temp1, Direccion.NORTE);
+		ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, temp2, Direccion.OESTE);
 		vm1 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, a, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
 	}
 	

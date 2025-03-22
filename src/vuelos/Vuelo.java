@@ -175,6 +175,10 @@ public abstract class Vuelo {
 	}
 	
 	public boolean setEstVuelo(EstadoVuelo estV) {
+		if (estV == EstadoVuelo.RETRASADO && this.estVuelo.equals(EstadoVuelo.EN_TIEMPO)) {
+			this.estVuelo = estV;
+			return true;
+		}
 		// Si es un vuelo de llegada
 		if(this.llegada) {
 			// ESPERANDO_PISTA: no hay todavía pista o localización de aterrizaje
@@ -193,6 +197,7 @@ public abstract class Vuelo {
 				this.estVuelo = estV;
 				this.avion.setEstadoAvion(EstadoAvion.EN_PISTA);
 				this.pista.actualizarColaVuelos();
+				this.horaLlegadaEfectiva = LocalDateTime.now();
 				return true;
 			}
 			if(estV == EstadoVuelo.DESEMBARQUE_INI || estV == EstadoVuelo.DESEMBARQUE_FIN ||
@@ -245,6 +250,7 @@ public abstract class Vuelo {
 				this.estVuelo = estV;
 				this.avion.setEstadoAvion(EstadoAvion.FUERA_AEROPUERTO);
 				this.pista.actualizarColaVuelos();
+				this.horaSalidaEfectiva = LocalDateTime.now();
 				return true;
 			}
 			if(estV == EstadoVuelo.EMBARQUE || estV == EstadoVuelo.CARGA) {

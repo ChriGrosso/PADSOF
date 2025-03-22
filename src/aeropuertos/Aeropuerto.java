@@ -15,7 +15,6 @@ public class Aeropuerto {
     private String pais;
     private double distanciaCiudadMasCercana;
     private int diferenciaHoraria;
-    private int numeroTemporadas;
     private ArrayList<Temporada> temporadas;
     private Direccion direccion;
 
@@ -28,19 +27,17 @@ public class Aeropuerto {
      * @param pais              País donde se encuentra el aeropuerto.
      * @param distancia         Distancia en kilómetros hasta la ciudad más cercana.
      * @param difHoraria        Diferencia horaria con respecto al UTC.
-     * @param numTemporadas     Número de temporadas activas del aeropuerto.
      * @param t                 Lista de temporadas del aeropuerto.
      * @param d                 Dirección física del aeropuerto.
      */
     public Aeropuerto(String nombre, String codigo, String ciudad, String pais, double distancia, 
-    		int difHoraria, int numTemporadas, ArrayList<Temporada> t, Direccion d) {
+    		int difHoraria, ArrayList<Temporada> t, Direccion d) {
         this.nombre = nombre;
         this.codigo = codigo;
         this.ciudadMasCercana = ciudad;
         this.pais = pais;
         this.distanciaCiudadMasCercana = distancia;
         this.diferenciaHoraria = difHoraria;
-        this.numeroTemporadas = numTemporadas;
         this.temporadas = t;
         this.direccion = d;
     }
@@ -97,15 +94,6 @@ public class Aeropuerto {
      */
     public int getDiferenciaHoraria() {
         return this.diferenciaHoraria;
-    }
-
-    /**
-     * Obtiene el número total de temporadas activas del aeropuerto.
-     *
-     * @return Número de temporadas activas.
-     */
-    public int getNumeroTemporadas() {
-        return this.numeroTemporadas;
     }
 
     /**
@@ -178,7 +166,6 @@ public class Aeropuerto {
      */
     public void addTemporada(Temporada t) {
         this.temporadas.add(t);
-        this.numeroTemporadas++;
     }
 
     /**
