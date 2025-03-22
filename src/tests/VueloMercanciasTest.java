@@ -16,7 +16,6 @@ import aeropuertos.Temporada;
 import aviones.Avion;
 import aviones.AvionMercancias;
 import aviones.AvionPasajeros;
-import aviones.EstadoAvion;
 import elementos.Finger;
 import elementos.Pista;
 import elementos.TerminalMercancias;
@@ -42,7 +41,7 @@ class VueloMercanciasTest {
 		timeSalida = LocalDateTime.of(2025, 2, 11, 14, 0);
 		timeLlegada = LocalDateTime.of(2025, 2, 11, 17, 0);
 		AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
-		Avion av = new Avion("0001", date, m, date2, EstadoAvion.EN_HANGAR); 
+		Avion av = new Avion("0001", date, m, date2); 
 		a = new Aerolinea("IBE", "Iberia");
 		ArrayList<Temporada> temp1 = new ArrayList<Temporada>();
 		temp1.add(new Temporada (MonthDay.of(3, 5), LocalTime.NOON, LocalTime.MIDNIGHT, MonthDay.of(2, 5)));
@@ -59,7 +58,7 @@ class VueloMercanciasTest {
 		LocalDate date = LocalDate.of(2023, 3, 14);
 		LocalDate date2 = LocalDate.of(2024, 6, 20);
 		AvionPasajeros p = new AvionPasajeros("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 200);
-		Avion av = new Avion("0001", date, p, date2, EstadoAvion.EN_HANGAR);
+		Avion av = new Avion("0001", date, p, date2);
 		
 		// Usar assertThrows para verificar que se lanza la excepción correcta
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -163,7 +162,7 @@ class VueloMercanciasTest {
 
 	@Test
 	void testGetEstVueloNotInit() {
-		assertNull(vm1.getEstVuelo());
+		assertEquals(vm1.getEstVuelo(), EstadoVuelo.EN_TIEMPO);
 	}
 
 	@Test
@@ -192,8 +191,8 @@ class VueloMercanciasTest {
 
 	@Test
 	void testSetEstVuelo() {
-		vm1.setEstVuelo(EstadoVuelo.DESCARGA_INI);
-		assertEquals(EstadoVuelo.DESCARGA_INI, vm1.getEstVuelo());
+		vm1.setEstVuelo(EstadoVuelo.CARGA);
+		assertEquals(EstadoVuelo.CARGA, vm1.getEstVuelo());
 	}
 
 	@Test

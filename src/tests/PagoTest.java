@@ -1,6 +1,5 @@
 package tests;
 
-import es.uam.eps.padsof.telecard.*;
 import facturas.*;
 import aerolineas.*;
 

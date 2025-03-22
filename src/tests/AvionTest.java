@@ -23,8 +23,8 @@ class AvionTest {
 		LocalDate date2 = LocalDate.of(2024, 6, 20);
 		AvionMercancias av1 = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
 		AvionPasajeros av2 = new AvionPasajeros("Airbus", "A320-200", 3717.83, 11.8, 34.12, 37.6, 173);
-		a1 = new Avion("0001", date, av1, date2, EstadoAvion.EN_HANGAR); 
-		a2 = new Avion("0002", date2, av2, EstadoAvion.ESPERANDO_PISTA);
+		a1 = new Avion("0001", date, av1, date2); 
+		a2 = new Avion("0002", date2, av2);
 	}
 	
 	
@@ -63,8 +63,8 @@ class AvionTest {
 	}
 
 	@Test
-	void testGetEstadoAvion() {
-		assertEquals(EstadoAvion.ESPERANDO_PISTA, a2.getEstadoAvion());
+	void testGetEstadoAvionNotInit() {
+		assertEquals(EstadoAvion.FUERA_AEROPUERTO, a2.getEstadoAvion());
 	}
 
 	@Test
@@ -76,8 +76,8 @@ class AvionTest {
 
 	@Test
 	void testSetEstadoAvion() {
-		a1.setEstadoAvion(EstadoAvion.FUERA_AEROPUERTO);
-		assertEquals(EstadoAvion.FUERA_AEROPUERTO, a1.getEstadoAvion());
+		a1.setEstadoAvion(EstadoAvion.EN_FINGER);
+		assertEquals(EstadoAvion.EN_FINGER, a1.getEstadoAvion());
 	}
 }
 

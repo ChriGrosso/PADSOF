@@ -15,16 +15,16 @@ public class Avion extends Observable {
 	private EstadoAvion estadoAvion;
 	private Hangar hangar;
 	
-	public Avion(String matricula, LocalDate fechaCompra, TipoAvion tipoAvion, LocalDate fechaUltimaRevision, EstadoAvion estadoAvion) { 
+	public Avion(String matricula, LocalDate fechaCompra, TipoAvion tipoAvion, LocalDate fechaUltimaRevision) { 
 		this.matricula = matricula;
 		this.fechaCompra = fechaCompra;
 		this.tipoAvion = tipoAvion;
 		this.fechaUltimaRevision = fechaUltimaRevision;
-		this.estadoAvion = estadoAvion;
+		this.estadoAvion = EstadoAvion.FUERA_AEROPUERTO;
 	}
 	
-	public Avion(String matricula, LocalDate fechaCompra, TipoAvion tipoAvion, EstadoAvion estadoAvion) {
-		this(matricula, fechaCompra, tipoAvion, fechaCompra, estadoAvion);
+	public Avion(String matricula, LocalDate fechaCompra, TipoAvion tipoAvion) {
+		this(matricula, fechaCompra, tipoAvion, fechaCompra);
 		this.fechaUltimaRevision = null;
 		this.hangar = null;
 	}

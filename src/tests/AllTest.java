@@ -8,7 +8,8 @@ import org.junit.platform.suite.api.Suite;
 				AvionMercanciasTest.class,
 				AvionPasajerosTest.class,
 				VueloMercanciasTest.class,
-				FacturaTest.class})
+				FacturaTest.class, 
+				PagoTest.class})
 @Suite
 public class AllTest {
 }

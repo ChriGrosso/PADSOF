@@ -28,7 +28,7 @@ public abstract class Vuelo {
 	private Avion avion;
 	private ArrayList<Aerolinea> aerolinea;
 	private Periodicidad periodicidad;
-	private EstadoVuelo estVuelo = null;
+	private EstadoVuelo estVuelo;
 	private LocalizacionAterrizaje locAterrizaje;
 	private Pista pista;
 	private Puerta puerta;
@@ -69,6 +69,7 @@ public abstract class Vuelo {
 		this.avion = avion;
 		this.llegada = llegada;
 		this.periodicidad = periodicidad;
+		this.estVuelo = EstadoVuelo.EN_TIEMPO;
 	}
 	
 	public boolean isVueloMercancias() {
