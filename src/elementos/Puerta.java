@@ -3,17 +3,18 @@
  */
 package elementos;
 
+import java.time.LocalDate;
+
 import vuelos.Vuelo;
 
 /**
  * 
  */
-public class Puerta {
-	private String cod;
+public class Puerta extends ElementoEstructural{
 	private Vuelo vueloAsig = null;
 	
-	public Puerta(String cod) {
-		this.setCod(cod);
+	public Puerta(String cod, LocalDate fchRegistro) {
+		super(cod, 0, fchRegistro);
 	}
 	
 	public boolean enUso() {
@@ -27,14 +28,14 @@ public class Puerta {
 	 * @return the cod
 	 */
 	public String getCod() {
-		return cod;
+		return this.getId();
 	}
 
 	/**
 	 * @param cod the cod to set
 	 */
 	public void setCod(String cod) {
-		this.cod = cod;
+		this.setId(cod);
 	}
 	
 	public void setVuelo(Vuelo v) {

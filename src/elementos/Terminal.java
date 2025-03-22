@@ -21,7 +21,7 @@ public abstract class Terminal extends ElementoEstructural {
 		
 		for(int i = 1; i<= numeroPuertas; i++) {
 			String nomP = prefijoPuerta + i;
-			Puerta p = new Puerta(nomP);
+			Puerta p = new Puerta(nomP, fchRegistro);
 			this.puertas.put(nomP, p);
 		}
 	}
@@ -55,7 +55,8 @@ public abstract class Terminal extends ElementoEstructural {
 		} else if(numeroPuertas > this.numeroPuertas) {
 			for(int i = this.numeroPuertas; i <= numeroPuertas; i++) {
 				String nomP = this.prefijoPuerta + i;
-				this.puertas.remove(nomP);
+				Puerta p = new Puerta(nomP, this.getFchRegistro());
+				this.puertas.put(nomP, p);
 			}
 		} 
 		
@@ -76,7 +77,7 @@ public abstract class Terminal extends ElementoEstructural {
 		// Cambiar el código de las puertas con el perfijo correspondiente
 		for(int i = 1; i<= this.numeroPuertas; i++) {
 			String nomP = prefijoPuerta + i;
-			Puerta p = new Puerta(nomP);
+			Puerta p = new Puerta(nomP, this.getFchRegistro());
 			this.puertas.put(nomP, p);
 		}
 		

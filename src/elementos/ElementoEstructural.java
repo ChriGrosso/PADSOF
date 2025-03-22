@@ -9,10 +9,10 @@ public abstract class ElementoEstructural {
 	private LocalDate fchRegistro;
 	private ArrayList<Uso> historialUsos;
 	
-	public ElementoEstructural(String id, double costeph,LocalDate fchRegistro2) {
+	public ElementoEstructural(String id, double costeph,LocalDate fchRegistro) {
 		this.setId(id);
 		this.setCostePorHora(costeph);
-		this.setFchRegistro(fchRegistro2);
+		this.setFchRegistro(fchRegistro);
 		this.historialUsos = new ArrayList<Uso>();
 	}
 	
