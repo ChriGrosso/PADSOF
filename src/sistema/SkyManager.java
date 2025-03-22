@@ -91,6 +91,7 @@ public class SkyManager implements Serializable {
 	
 	/**
      * Retorna la única instancia de SkyManager.
+     * 
      * @return Instancia única de SkyManager.
      */
     public static SkyManager getInstance() {

@@ -9,7 +9,9 @@ import org.junit.platform.suite.api.Suite;
 				AvionPasajerosTest.class,
 				VueloMercanciasTest.class,
 				FacturaTest.class, 
-				PagoTest.class})
+				PagoTest.class,
+				AeropuertoTest.class,
+				TemporadaTest.class})
 @Suite
 public class AllTest {
 }
