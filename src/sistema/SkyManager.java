@@ -30,7 +30,16 @@ import facturas.Factura;
 import usuarios.Usuario;
 import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
+import elementos.Puerta;
 
+/**
+ * 
+ * SkyManager es una clase Singleton que gestiona la información del sistema aeroportuario,
+ * incluyendo aeropuertos, usuarios, vuelos, aerolíneas, terminales, pistas, y más.
+ * También permite la persistencia de datos a través de la serialización.
+ *
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es 
+ */
 public class SkyManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static transient SkyManager INSTANCE = null;
@@ -52,7 +61,10 @@ public class SkyManager implements Serializable {
 	private HashMap<String, Factura> facturas;
 	private Usuario usuarioActual;
 	
-	// Private constructor suppresses
+	/**
+     * Constructor privado para aplicar el patrón Singleton.
+     * Carga los datos desde un archivo si existe.
+     */
 	private SkyManager() {
 		File fichero = new File("skyManagerDatos.dat");
 		if (fichero.exists()) {
@@ -77,17 +89,27 @@ public class SkyManager implements Serializable {
 		this.usuarioActual = null;
 	}
 	
+	/**
+     * Retorna la única instancia de SkyManager.
+     * @return Instancia única de SkyManager.
+     */
     public static SkyManager getInstance() {
         if (INSTANCE == null) {
         	INSTANCE = new SkyManager();
         }
         return INSTANCE;
     }
-	//El método "clone" sobreescrito que arroja una excepción, para evitar que se pueda clonar el objeto
+    
+    /**
+     * Evita la clonación del objeto Singleton.
+     */
 	public Object clone() throws CloneNotSupportedException {
 	    	throw new CloneNotSupportedException(); 
 	}
 	
+	/**
+     * Guarda los datos de SkyManager en un archivo.
+     */
 	public void guardarDatos() {
 		try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("skyManagerDatos.dat"))) {
 			salida.writeObject(this);
@@ -97,9 +119,9 @@ public class SkyManager implements Serializable {
 	    }
 	}
 
-	//Método para CARGAR los datos desde un archivo
-	//leer de disco la clase sistema
-	// actualizar los atributos de la nueva clase sistema creada a la original
+	/**
+     * Carga los datos desde un archivo y actualiza la instancia actual.
+     */
 	private void cargarDatos() {
 		try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("skyManagerDatos.dat"))) {
 	        SkyManager refDisco = (SkyManager) entrada.readObject();
@@ -118,6 +140,7 @@ public class SkyManager implements Serializable {
 	        this.usuarios = refDisco.usuarios;
 	        this.vuelos = refDisco.vuelos;
 	        this.zonasParking = refDisco.zonasParking;
+	        this.usuarioActual = null;
 	        
 	    } catch (IOException | ClassNotFoundException e) {
 	    	System.err.println("Error al cargar los datos: " + e.getMessage());
@@ -125,6 +148,12 @@ public class SkyManager implements Serializable {
 	    }
 	}
 	
+	/**
+     * Carga la información de aeropuertos externos desde un archivo de texto.
+     * 
+     * @param nombreFichero nombre del archivo que contiene los datos de los aeropuertos.
+     * @throws IOException Si ocurre un error al leer el archivo.
+     */
 	public void cargarDatosAeropuertos(String nombreFichero) {
 	    try (BufferedReader br = new BufferedReader(new FileReader(nombreFichero))) {
 	            String linea;
@@ -167,62 +196,151 @@ public class SkyManager implements Serializable {
 	    } catch (IOException e) { e.printStackTrace(); }
 	}
 
-	
+	 /**
+     * Obtiene el costo base de llegada.
+     * 
+     * @return Costo base de llegada.
+     */
 	public double getCosteBaseLlegada() {
 		return this.costeBaseLlegada;
 	}
+	
+	/**
+     * Obtiene el costo base de salida.
+     * 
+     * @return Costo base de salida.
+     */
 	public double getCosteBaseSalida() {
 		return this.costeBaseSalida;
 	}
+	
+	/**
+     * Obtiene el costo extra asociado al transporte de mercancías.
+     * 
+     * @return Costo extra por mercancías.
+     */
 	public double getCosteExtraMercancias() {
 		return this.costeExtraMercancias;
 	}
+	
+	/**
+     * Obtiene el costo extra asociado al transporte de pasajeros.
+     * 
+     * @return Costo extra por pasajero.
+     */
 	public double getCosteExtraPasajeros() {
 		return this.costeExtraPasajeros;
 	}
+	
+	/**
+     * Obtiene la lista de aeropuertos externos registrados.
+     * 
+     * @return Mapa con aeropuertos externos (clave: código, valor: objeto Aeropuerto).
+     */
 	public HashMap<String, Aeropuerto> getAeropuertosExternos(){
 		return this.aeropuertosExternos;
 	}
+	
+	/**
+     * Obtiene la información del aeropuerto propio.
+     * 
+     * @return Objeto Aeropuerto con la información propia.
+     */
 	public Aeropuerto getInformacionPropia(){
 		return this.informacionPropia;
 	}
+	
+	/**
+     * Obtiene la lista de usuarios registrados.
+     * 
+     * @return Mapa con usuarios (clave: DNI, valor: objeto Usuario).
+     */
 	public HashMap<String, Usuario> getUsuarios(){
 		return this.usuarios;
 	}
+	
+	/**
+     * Obtiene la lista de vuelos registrados.
+     * 
+     * @return Mapa con vuelos (clave: identificador del vuelo, valor: objeto Vuelo).
+     */
 	public HashMap<String, Vuelo> getVuelos(){
 		return this.vuelos;
 	}
+	
+	/**
+     * Obtiene la lista de aerolíneas registradas.
+     * 
+     * @return Mapa con aerolíneas registradas.
+     */
 	public HashMap<String, Aerolinea> getAerolineas(){
 		return this.aerolineas;
 	}
+	
+	/**
+     * Obtiene la lista de facturas registradas.
+     * 
+     * @return Mapa con facturas registradas.
+     */
 	public HashMap<String, Factura> getFacturas(){
 		return this.facturas;
 	}
 	
-	
+	/**
+     * Modifica el costo base de llegada.
+     * 
+     * @param coste Nuevo valor del costo base de llegada.
+     */
 	public void setCosteBaseLlegada(double coste) {
 		this.costeBaseLlegada = coste;
 		return;
 	}
+	
+	 /**
+     * Modifica el costo base de salida.
+     * 
+     * @param coste Nuevo valor del costo base de salida.
+     */
 	public void setCosteBaseSalida(double coste) {
 		this.costeBaseLlegada = coste;
 		return;
 	}
+	
+	/**
+     * Modifica el costo extra asociado al transporte de mercancías.
+     * 
+     * @param coste Nuevo valor del costo extra por mercancías.
+     */
 	public void setCosteExtraMercancias(double coste) {
 		this.costeBaseLlegada = coste;
 		return;
 	}
+	
+	/**
+     * Modifica el costo extra asociado al transporte de pasajeros.
+     * 
+     * @param coste Nuevo valor del costo extra por pasajeros.
+     */
 	public void setCosteExtraPasajeros(double coste) {
 		this.costeBaseLlegada = coste;
 		return;
 	}
+	
+	/**
+     * Modifica la información del aeropuerto propio.
+     * 
+     * @param informacion Nuevo objeto Aeropuerto con la información actualizada.
+     */
 	public void setInformacionPropia(Aeropuerto informacion){
 		this.informacionPropia = informacion;
 		return;
 	}
 	
-	
-	
+	/**
+     * Registra un usuario en el sistema.
+     * @param u Usuario a registrar.
+     * @return true si el usuario fue registrado correctamente, false si ya existía.
+     */
 	public Boolean registrarUsuario(Usuario u){
 		if (this.usuarios.containsKey(u.getDni()) == true) {
 			return false;
@@ -230,6 +348,13 @@ public class SkyManager implements Serializable {
 		this.usuarios.put(u.getDni(), u);
 		return true;
 	}
+	
+	/**
+     * Registra una nueva aerolínea en el sistema.
+     * 
+     * @param a Aerolínea a registrar.
+     * @return true si la aerolínea se registró correctamente, false si ya existía.
+     */
 	public Boolean registrarAerolinea(Aerolinea a) {
 		if (this.aerolineas.containsKey(a.getId()) == true) {
 			return false;
@@ -237,6 +362,13 @@ public class SkyManager implements Serializable {
 		this.aerolineas.put(a.getId(), a);
 		return true;
 	}
+	
+	/**
+     * Registra un aeropuerto externo en el sistema.
+     * 
+     * @param a Aeropuerto a registrar.
+     * @return true si se registró correctamente, false si ya existía.
+     */
 	public Boolean registrarAeropuertoExterno(Aeropuerto a) {
 		if (this.aeropuertosExternos.containsKey(a.getCodigo()) == true) {
 			return false;
@@ -244,6 +376,13 @@ public class SkyManager implements Serializable {
 		this.aeropuertosExternos.put(a.getCodigo(), a);
 		return true;
 	}
+	
+	/**
+     * Registra una factura en el sistema.
+     * 
+     * @param f Factura a registrar.
+     * @return true si se registró correctamente, false si ya existía.
+     */
 	public Boolean registrarFactura(Factura f) {
 		if (this.facturas.containsKey(f.getId()) == true) {
 			return false;
@@ -251,6 +390,13 @@ public class SkyManager implements Serializable {
 		this.facturas.put(f.getId(), f);
 		return true;
 	}
+	
+	/**
+     * Registra una terminal en el sistema.
+     * 
+     * @param t Terminal a registrar.
+     * @return true si se registró correctamente, false si ya existía.
+     */
 	public Boolean registrarTerminal(Terminal t) {
 		if (this.terminales.containsKey(t.getId()) == true) {
 			return false;
@@ -258,6 +404,13 @@ public class SkyManager implements Serializable {
 		this.terminales.put(t.getId(), t);
 		return true;
 	}
+	
+	/**
+     * Registra una pista en el sistema.
+     * 
+     * @param p Pista a registrar.
+     * @return true si se registró correctamente, false si ya existía.
+     */
 	public Boolean registrarPista(Pista p) {
 		if (this.pistas.containsKey(p.getId()) == true) {
 			return false;
@@ -265,6 +418,13 @@ public class SkyManager implements Serializable {
 		this.pistas.put(p.getId(), p);
 		return true;
 	}
+	
+	/**
+     * Registra un finger en el sistema.
+     * 
+     * @param fi Finger a registrar.
+     * @return true si se registró correctamente, false si ya existía.
+     */
 	public Boolean registrarFinger(Finger fi) {
 		if (this.fingers.containsKey(fi.getId()) == true) {
 			return false;
@@ -272,6 +432,13 @@ public class SkyManager implements Serializable {
 		this.fingers.put(fi.getId(), fi);
 		return true;
 	}
+	
+	/**
+     * Registra una zona de parking en el sistema.
+     * 
+     * @param zp Zona de parking a registrar.
+     * @return true si se registró correctamente, false si ya existía.
+     */
 	public Boolean registrarZonaParking(ZonaParking zp) {
 		if (this.zonasParking.containsKey(zp.getId()) == true) {
 			return false;
@@ -279,6 +446,13 @@ public class SkyManager implements Serializable {
 		this.zonasParking.put(zp.getId(), zp);
 		return true;
 	}
+	
+	 /**
+     * Registra un hangar en el sistema.
+     * 
+     * @param h Hangar a registrar.
+     * @return true si se registró correctamente, false si ya existía.
+     */
 	public Boolean registrarHangar(Hangar h) {
 		if (this.hangares.containsKey(h.getId()) == true) {
 			return false;
@@ -287,29 +461,53 @@ public class SkyManager implements Serializable {
 		return true;
 	}
 	
-	
+	/**
+     * Inicia sesión con un usuario y una contraseña.
+     * 
+     * @param user DNI del usuario.
+     * @param password Contraseña del usuario.
+     * @throws IllegalArgumentException Si el usuario no existe o la contraseña es incorrecta.
+     */
 	public void logIn(String user, String password) {
 		Usuario usuario = usuarios.get(user);
 	    if (usuario != null && usuario.getPassword().equals(password)) {
 	        this.usuarioActual = usuario;
 	    } else {
-	        System.out.println("Usuario o contraseña incorrectos.");
+	    	throw new IllegalArgumentException("Usuario o contraseña incorrectos.");
 	    }
 	}
 	 
-	 
+	/**
+     * Busca un vuelo por su código.
+     * @param id Código del vuelo.
+     * @return Vuelo encontrado o null si no existe.
+     */
 	public Vuelo buscarVueloPorCodigo(String id) {
 		this.updateVuelos();
 		return this.vuelos.get(id);
 	}
-	 
+	
+	/**
+     * Busca los vuelos asociados a una terminal específica.
+     * 
+     * @param t Terminal en la que se quieren buscar vuelos.
+     * @return Una lista de vuelos de la terminal si existe, de lo contrario, lanza una excepción.
+     * @throws IllegalArgumentException Si la terminal no está registrada en el sistema.
+     */
 	public ArrayList<Vuelo> buscarVuelosPorTerminal(Terminal t) {
 		this.updateVuelos();
 		if (this.terminales.containsKey(t.getId())) {
 			return t.getVuelos();
 		}
-		return null;
+		throw new IllegalArgumentException("La terminal no está registrada en el sistema.");
 	}
+	
+	/**
+     * Busca vuelos que tengan una hora de llegada específica.
+     * 
+     * @param hLlegada Hora de llegada de los vuelos a buscar.
+     * @return Una lista de vuelos que coinciden con la hora de llegada indicada.
+     */
 	public ArrayList<Vuelo> buscarVuelosPorHoraLlegada(LocalDateTime hLlegada) {
 		this.updateVuelos();
 		ArrayList<Vuelo> vuelosHLlegada = new ArrayList<Vuelo>();
@@ -323,6 +521,12 @@ public class SkyManager implements Serializable {
 		return vuelosHLlegada;		
 	}
 	
+	/**
+     * Busca vuelos que tengan una hora de salida específica.
+     * 
+     * @param hSalida Hora de salida de los vuelos a buscar.
+     * @return Una lista de vuelos que coinciden con la hora de salida indicada.
+     */
 	public ArrayList<Vuelo> buscarVuelosPorHoraSalida(LocalDateTime hSalida) {
 		this.updateVuelos();
 		ArrayList<Vuelo> vuelosHSalida = new ArrayList<Vuelo>();
@@ -336,6 +540,10 @@ public class SkyManager implements Serializable {
 		return vuelosHSalida;	
 	}
 	
+	/**
+     * Actualiza el estado de los vuelos basado en la hora actual.
+     * De forma que se puedan actualizar los estados automaticos.
+     */
 	private void updateVuelos() {
 		LocalDateTime horaActual = LocalDateTime.now();
 		Collection<Vuelo> vuelos = this.vuelos.values();
@@ -357,17 +565,43 @@ public class SkyManager implements Serializable {
 		
 	}
 	
-	
+	/**
+     * Método que muestra las esdisticas de uso medio diario de distintos elementos del aeropuerto.
+     * Solo se puden ver si el usuario tiene el rol de Gestor.
+     *  
+     * @return Un string con todos los datos de las estadisticas.
+     */
 	public String verEstadisticasGestor() {
-		String estadisticas = "";
 		if (this.usuarioActual.esGestor() == false) { 
 			return null; 
-		}	
+		}
+		String estadFingers = "Uso Medio Diario Fingers: \n";
+		String estadParkings = "Uso Medio Diario Zonas Parking: \n";
+		String estadPuertas = "Uso Medio Diario Puertas: \n";
+		String estadHangares = "Uso Medio Diario Hangares: \n";
+		Collection<Finger> fingers = this.fingers.values();
+		Collection<ZonaParking> parkings = this.zonasParking.values();
+		Collection<Hangar> hangares = this.hangares.values();
+		Collection<Terminal> terminales = this.terminales.values();
+
+		for(Finger f: fingers) {
+			estadFingers += "Finger ("+ f.getId() +"): "+ f.mediaHorasUsoDiario() +" horas\n";
+		}
+		for(ZonaParking k: parkings) {
+			estadParkings += "Zona Parking ("+ k.getId() +"): "+ k.mediaHorasUsoDiario() +" horas\n";
+		}
+		for(Hangar h: hangares) {
+			estadHangares += "Hangar ("+ h.getId() +"): "+ h.mediaHorasUsoDiario() +" horas\n";
+		}		
+		for(Terminal t: terminales) {
+			Collection<Puerta> puertas = t.getPuertas().values();
+			estadPuertas += "Terminal "+ t.getId() +":\n";
+			for(Puerta p: puertas) {
+				estadPuertas += "Puerta ("+ p.getCod() +"): "+ p.mediaHorasUsoDiario() +" horas\n";
+			}
+		}
 		
-		
-		
-		
-		return estadisticas;
+		return estadFingers+estadParkings+estadPuertas+estadHangares;
 	}
 	
 }
