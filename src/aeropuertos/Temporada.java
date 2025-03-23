@@ -1,5 +1,6 @@
 package aeropuertos;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.MonthDay;
 
@@ -12,7 +13,8 @@ import java.time.MonthDay;
  * 
  * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es 
  */
-public class Temporada {
+public class Temporada implements Serializable{
+	private static final long serialVersionUID = 1L;
     private MonthDay fechaInicioTemporada;
     private LocalTime apertura;
     private LocalTime cierre;

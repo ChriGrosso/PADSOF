@@ -1,5 +1,6 @@
 package vuelos;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import elementos.TerminalMercancias;
 import aeropuertos.Aeropuerto;
 
 public class VueloMercancias extends Vuelo {
+	private static final long serialVersionUID = 1L;
 	private TerminalMercancias terminal;
 	private double carga;
 	private boolean mercanciasPeligrosas;

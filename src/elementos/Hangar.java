@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import aviones.Avion;
 
 public abstract class Hangar extends ElementoEstructural {
+	private static final long serialVersionUID = 1L;
 	private int numPlazas;
 	private double alturaPlaza;
 	private double anchuraPlaza;

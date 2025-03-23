@@ -10,6 +10,7 @@ import aviones.*;
  * 
  */
 public class ZonaParking extends LocalizacionAterrizaje{
+	private static final long serialVersionUID = 1L;
 	private int numPlazas;
 	private double alturaPlaza;
 	private double anchuraPlaza;

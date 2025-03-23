@@ -7,6 +7,7 @@ import java.util.HashMap;
 import vuelos.Vuelo;
 
 public abstract class Terminal extends ElementoEstructural {
+	private static final long serialVersionUID = 1L;
 	private int numeroPuertas;
 	private String prefijoPuerta;
 	private HashMap<String, Puerta> puertas;

@@ -69,24 +69,24 @@ public class SkyManager implements Serializable {
 		File fichero = new File("skyManagerDatos.dat");
 		if (fichero.exists()) {
 			 this.cargarDatos();
-			 return;
+		} else {
+			this.costeBaseLlegada = 10;
+			this.costeBaseSalida = 10;
+			this.costeExtraMercancias = 10;
+			this.costeExtraPasajeros = 10;
+			this.informacionPropia = null;
+			this.aeropuertosExternos = new HashMap<String, Aeropuerto>();
+			this.usuarios = new HashMap<String, Usuario>();
+			this.vuelos = new HashMap<String, Vuelo>();
+			this.aerolineas = new HashMap<String, Aerolinea>();
+			this.terminales = new HashMap<String, Terminal>();
+			this.pistas = new HashMap<String, Pista>();
+			this.fingers = new HashMap<String, Finger>();
+			this.zonasParking = new HashMap<String, ZonaParking>();
+			this.hangares = new HashMap<String, Hangar>();
+			this.facturas = new HashMap<String, Factura>();
+			this.usuarioActual = null;
 		}
-		this.costeBaseLlegada = 10;
-		this.costeBaseSalida = 10;
-		this.costeExtraMercancias = 10;
-		this.costeExtraPasajeros = 10;
-		this.informacionPropia = null;
-		this.aeropuertosExternos = new HashMap<String, Aeropuerto>();
-		this.usuarios = new HashMap<String, Usuario>();
-		this.vuelos = new HashMap<String, Vuelo>();
-		this.aerolineas = new HashMap<String, Aerolinea>();
-		this.terminales = new HashMap<String, Terminal>();
-		this.pistas = new HashMap<String, Pista>();
-		this.fingers = new HashMap<String, Finger>();
-		this.zonasParking = new HashMap<String, ZonaParking>();
-		this.hangares = new HashMap<String, Hangar>();
-		this.facturas = new HashMap<String, Factura>();
-		this.usuarioActual = null;
 	}
 	
 	/**
@@ -126,21 +126,21 @@ public class SkyManager implements Serializable {
 	private void cargarDatos() {
 		try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("skyManagerDatos.dat"))) {
 	        SkyManager refDisco = (SkyManager) entrada.readObject();
-	        this.aerolineas = refDisco.aerolineas;
-	        this.aeropuertosExternos = refDisco.aeropuertosExternos;
+	        this.aerolineas = (refDisco.aerolineas!= null) ? refDisco.aerolineas : new HashMap<String, Aerolinea>();
+	        this.aeropuertosExternos = (refDisco.aeropuertosExternos!= null) ? refDisco.aeropuertosExternos : new HashMap<String, Aeropuerto>();
 	        this.costeBaseLlegada = refDisco.costeExtraMercancias;
 	        this.costeBaseSalida = refDisco.costeBaseSalida;
 	        this.costeExtraMercancias = refDisco.costeExtraMercancias;
 	        this.costeExtraPasajeros = refDisco.costeExtraPasajeros;
-	        this.facturas = refDisco.facturas;
-	        this.fingers = refDisco.fingers;
-	        this.hangares = refDisco.hangares;
+	        this.facturas = (refDisco.facturas!= null) ? refDisco.facturas : new HashMap<String, Factura>();
+	        this.fingers = (refDisco.fingers!= null) ? refDisco.fingers : new HashMap<String, Finger>();
+	        this.hangares = (refDisco.hangares!= null) ? refDisco.hangares : new HashMap<String, Hangar>();
 	        this.informacionPropia = refDisco.informacionPropia;
-	        this.pistas = refDisco.pistas;
-	        this.terminales = refDisco.terminales;
-	        this.usuarios = refDisco.usuarios;
-	        this.vuelos = refDisco.vuelos;
-	        this.zonasParking = refDisco.zonasParking;
+	        this.pistas = (refDisco.pistas!= null) ? refDisco.pistas : new HashMap<String, Pista>();
+	        this.terminales = (refDisco.terminales!= null) ? refDisco.terminales : new HashMap<String, Terminal>();
+	        this.usuarios = (refDisco.usuarios!= null) ? refDisco.usuarios : new HashMap<String, Usuario>();
+	        this.vuelos = (refDisco.vuelos!= null) ? refDisco.vuelos : new HashMap<String, Vuelo>();
+	        this.zonasParking = (refDisco.zonasParking!= null) ? refDisco.zonasParking : new HashMap<String, ZonaParking>();
 	        this.usuarioActual = null;
 	        
 	    } catch (IOException | ClassNotFoundException e) {
@@ -288,6 +288,60 @@ public class SkyManager implements Serializable {
 	}
 	
 	/**
+     * Obtiene la lista de terminales registradas.
+     * 
+     * @return Mapa con terminales registradas.
+     */
+	public HashMap<String, Terminal> getTerminales(){
+		return this.terminales;
+	}
+	
+	/**
+     * Obtiene la lista de pistas registradas.
+     * 
+     * @return Mapa con pistas registradas.
+     */
+	public HashMap<String, Pista> getPistas(){
+		return this.pistas;
+	}
+	
+	/**
+     * Obtiene la lista de fingers registrados.
+     * 
+     * @return Mapa con fingers registrados.
+     */
+	public HashMap<String, Finger> getFingers(){
+		return this.fingers;
+	}
+	
+	/**
+     * Obtiene la lista de zonas de parking registradas.
+     * 
+     * @return Mapa con zonas de parking registradas.
+     */
+	public HashMap<String, ZonaParking> getZonasParking(){
+		return this.zonasParking;
+	}
+	
+	/**
+     * Obtiene la lista de hangares registrados.
+     * 
+     * @return Mapa con hangares registrados.
+     */
+	public HashMap<String, Hangar> getHangares(){
+		return this.hangares;
+	}
+	
+	/**
+     * Obtiene el usuario actual que ha iniciado sesion.
+     * 
+     * @return usuario actual.
+     */
+	public Usuario getUsuarioActual(){
+		return this.usuarioActual;
+	}
+	
+	/**
      * Modifica el costo base de llegada.
      * 
      * @param coste Nuevo valor del costo base de llegada.
@@ -303,7 +357,7 @@ public class SkyManager implements Serializable {
      * @param coste Nuevo valor del costo base de salida.
      */
 	public void setCosteBaseSalida(double coste) {
-		this.costeBaseLlegada = coste;
+		this.costeBaseSalida = coste;
 		return;
 	}
 	
@@ -313,7 +367,7 @@ public class SkyManager implements Serializable {
      * @param coste Nuevo valor del costo extra por mercancías.
      */
 	public void setCosteExtraMercancias(double coste) {
-		this.costeBaseLlegada = coste;
+		this.costeExtraMercancias = coste;
 		return;
 	}
 	
@@ -323,7 +377,7 @@ public class SkyManager implements Serializable {
      * @param coste Nuevo valor del costo extra por pasajeros.
      */
 	public void setCosteExtraPasajeros(double coste) {
-		this.costeBaseLlegada = coste;
+		this.costeExtraPasajeros = coste;
 		return;
 	}
 	

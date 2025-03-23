@@ -1,6 +1,7 @@
 
 package aerolineas;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +11,8 @@ import elementos.ElementoEstructural;
 import elementos.Uso;
 import vuelos.Vuelo;
 
-public class Aerolinea {
+public class Aerolinea implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String nombre;
 	private ArrayList<Vuelo> vuelos;

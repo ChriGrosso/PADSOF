@@ -3,7 +3,7 @@ package elementos;
 import java.time.LocalDate;
 
 public class HangarMercancias extends Hangar {
-	
+	private static final long serialVersionUID = 1L;
 	private boolean materialesPeligrosos;
 
 	public HangarMercancias(String id, double costeph, LocalDate fchRegistro, int numPlazas, double alturaPlaza, double anchuraPlaza, double largoPlaza) {

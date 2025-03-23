@@ -1,5 +1,6 @@
 package aeropuertos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -8,8 +9,9 @@ import java.util.ArrayList;
  * 
  * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es 
  */
-public class Aeropuerto {
-    private String nombre;
+public class Aeropuerto implements Serializable{
+	private static final long serialVersionUID = 1L;
+	private String nombre;
     private String codigo;
     private String ciudadMasCercana;
     private String pais;

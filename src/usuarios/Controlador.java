@@ -2,12 +2,11 @@ package usuarios;
 
 import java.util.ArrayList;
 
-import aviones.EstadoAvion;
-import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
 import elementos.Terminal;
 
 public class Controlador extends Usuario{
+	private static final long serialVersionUID = 1L;
 	private Terminal terminal;
 	private ArrayList<Vuelo> vuelosASuCargo; 
 	
@@ -42,15 +41,5 @@ public class Controlador extends Usuario{
 	}
 	public Boolean esOperador() {
 		return false;
-	}
-
-	@Override
-	public Boolean sigueCambioEstadoVuelo(EstadoVuelo estado) {
-		return null;
-	}
-
-	@Override
-	public Boolean sigueCambioEstadoAvion(EstadoAvion estado) {
-		return null;
 	}
 }

@@ -9,6 +9,7 @@ import aviones.Avion;
  * 
  */
 public class Finger extends LocalizacionAterrizaje{
+	private static final long serialVersionUID = 1L;
 	private double alturaMax;
 	
 	public Finger(String id, double costeph,LocalDate fchRegistro, double alturaMax) {

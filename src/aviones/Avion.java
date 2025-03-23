@@ -1,5 +1,6 @@
 package aviones;
 
+import java.io.Serializable;
 import java.time.LocalDate; // import the LocalDate class
 
 import elementos.Hangar;
@@ -7,7 +8,8 @@ import elementos.HangarMercancias;
 import elementos.HangarPasajeros;
 import notificaciones.Observable;
 
-public class Avion extends Observable {
+public class Avion extends Observable implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String matricula;
 	private LocalDate fechaCompra;
 	private LocalDate fechaUltimaRevision;

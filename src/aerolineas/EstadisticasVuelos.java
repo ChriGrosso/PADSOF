@@ -1,5 +1,6 @@
 package aerolineas;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -8,7 +9,8 @@ import aeropuertos.Aeropuerto;
 import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
 
-public class EstadisticasVuelos {
+public class EstadisticasVuelos implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private Aerolinea aerolinea;
 	
 	public EstadisticasVuelos(Aerolinea aerolinea) {

@@ -1,9 +1,11 @@
 package elementos;
 
+import java.io.Serializable;
 import java.time.*;
 import java.util.ArrayList;
 
-public abstract class ElementoEstructural {
+public abstract class ElementoEstructural implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private double costePorHora;
 	private LocalDate fchRegistro;

@@ -1,5 +1,6 @@
 package vuelos;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ import elementos.ZonaParking;
 import notificaciones.Observable;
 import aeropuertos.Aeropuerto;
 
-public abstract class Vuelo extends Observable{
+public abstract class Vuelo extends Observable implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private Aeropuerto origen;
 	private Aeropuerto destino;

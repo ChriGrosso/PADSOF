@@ -1,11 +1,13 @@
 package elementos;
 
+import java.io.Serializable;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 
 import es.uam.eps.padsof.invoices.IResourceUsageInfo;
 
-public class Uso implements IResourceUsageInfo {
+public class Uso implements IResourceUsageInfo, Serializable{
+	private static final long serialVersionUID = 1L;
 	
 	private LocalDateTime horaUso;
 	private LocalDateTime horaDesuso;

@@ -11,6 +11,7 @@ import elementos.Puerta;
 import elementos.TerminalPasajeros;
 
 public class VueloPasajeros extends Vuelo{
+	private static final long serialVersionUID = 1L;
 	private TerminalPasajeros terminal;
 	private int numPasajeros;
 

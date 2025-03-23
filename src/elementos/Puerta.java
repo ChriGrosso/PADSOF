@@ -11,6 +11,7 @@ import vuelos.Vuelo;
  * 
  */
 public class Puerta extends ElementoEstructural{
+	private static final long serialVersionUID = 1L;
 	private Vuelo vueloAsig = null;
 	
 	public Puerta(String cod, LocalDate fchRegistro) {

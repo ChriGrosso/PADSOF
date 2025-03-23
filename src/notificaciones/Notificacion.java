@@ -1,5 +1,6 @@
 package notificaciones;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import usuarios.Usuario;
@@ -11,7 +12,8 @@ import usuarios.Usuario;
  * 
  * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es 
  */
-public class Notificacion {
+public class Notificacion implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String mensaje;
 	private LocalDateTime fechaEmision;
 	private Usuario emisor;

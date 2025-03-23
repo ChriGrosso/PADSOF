@@ -11,6 +11,7 @@ import vuelos.VueloPasajeros;
  * 
  */
 public class TerminalPasajeros extends Terminal{
+	private static final long serialVersionUID = 1L;
 	private int capacidadPersonas;
 	
 	public TerminalPasajeros(String id, LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, int capacidadPersonas){

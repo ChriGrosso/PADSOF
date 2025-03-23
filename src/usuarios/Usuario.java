@@ -1,5 +1,6 @@
 package usuarios;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import aviones.EstadoAvion;
@@ -13,7 +14,8 @@ import vuelos.EstadoVuelo;
  * 
  * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es 
  */
-public abstract class Usuario implements Observer{
+public abstract class Usuario implements Observer, Serializable{
+	private static final long serialVersionUID = 1L;
 	private String dni;
 	private String nombre;
 	private String password;
@@ -90,12 +92,13 @@ public abstract class Usuario implements Observer{
      * Método llamado cuando se actualiza el estado de un vuelo.
      * 
      * @param id     Identificador del vuelo.
-     * @param estado Nuevo estado del vuelo.
+     * @param anterior Estado actual del vuelo.
+     * @param nuevo Nuevo estado del vuelo.
      */
     @Override
-	public void update(String id, EstadoVuelo estado) {
-		if (this.sigueCambioEstadoVuelo(estado)) {
-			String s = "El vuelo "+ id+ " está "+ estado+"\n";
+	public void update(String id, EstadoVuelo anterior, EstadoVuelo nuevo) {
+		if (this.sigueCambioEstadoVuelo(anterior, nuevo)) {
+			String s = "El vuelo "+ id+ " ha pasado de "+ anterior+" a "+ nuevo+"\n";
 			this.notificaciones.add(new Notificacion(s, null));
 		}		
 	}
@@ -104,14 +107,41 @@ public abstract class Usuario implements Observer{
      * Método llamado cuando se actualiza el estado de un avión.
      * 
      * @param id     Identificador del avión.
-     * @param estado Nuevo estado del avión.
+     * @param anterior Estado actual del avión.
+     * @param nuevo Nuevo estado del avión.
      */
 	@Override
-	public void update(String id, EstadoAvion estado) {
-		if (this.sigueCambioEstadoAvion(estado)) {
-			String s = "El avión "+ id+ " está "+ estado+"\n";
+	public void update(String id, EstadoAvion anterior, EstadoAvion nuevo) {
+		if (this.sigueCambioEstadoAvion(anterior, nuevo)) {
+			String s = "El avión "+ id+ " ha pasado de "+ anterior+" a "+ nuevo+"\n";
 			this.notificaciones.add(new Notificacion(s, null));
 		}
+	}
+	
+	/**
+     * Método para comprobar si este usuario sigue un determinado cambio
+     * de estado de vuelo.
+     * 
+     * @param anterior Estado actual del vuelo.
+     * @param nuevo Estado al que se va a cambiar el estado del vuelo.
+     * @return true si lo sigue, y false si no lo hace.
+     */
+	@Override
+	public Boolean sigueCambioEstadoVuelo(EstadoVuelo anterior, EstadoVuelo nuevo) {
+		return true;
+	}
+	
+	/**
+     * Método para comprobar si este usuario sigue un determinado cambio
+     * de estado de avión.
+     * 
+     * @param anterior Estado actual del avión.
+     * @param nuevo Estado al que se va a cambiar el estado del avión.
+     * @return true si lo sigue, y false si no lo hace.
+     */
+	@Override
+	public Boolean sigueCambioEstadoAvion(EstadoAvion anterior, EstadoAvion nuevo) {
+		return true;
 	}
 	
 	/**

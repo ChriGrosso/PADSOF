@@ -2,6 +2,8 @@ package facturas;
 
 import es.uam.eps.padsof.invoices.*;
 import es.uam.eps.padsof.telecard.*;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,7 +15,8 @@ import aviones.*;
 import elementos.*;
 
 
-public class Factura implements IInvoiceInfo {
+public class Factura implements IInvoiceInfo, Serializable{
+	private static final long serialVersionUID = 1L;
     private String id;
     private double precioBase;
     private double total;

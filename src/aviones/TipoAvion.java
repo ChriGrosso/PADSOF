@@ -1,6 +1,9 @@
 package aviones;
 
-public abstract class TipoAvion {
+import java.io.Serializable;
+
+public abstract class TipoAvion implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private String marca;
 	private String modelo;
 	private double autonomia;

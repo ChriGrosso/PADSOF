@@ -5,7 +5,7 @@ import vuelos.Vuelo;
 import vuelos.VueloMercancias;
 
 public class TerminalMercancias extends Terminal {
-	
+	private static final long serialVersionUID = 1L;
 	private double capacidadToneladas; 
 	
 	public TerminalMercancias(String id,LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, double capacidadToneladas) {

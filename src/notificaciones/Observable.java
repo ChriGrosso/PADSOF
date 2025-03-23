@@ -1,5 +1,6 @@
 package notificaciones;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -14,7 +15,8 @@ import vuelos.EstadoVuelo;
  * 
  * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es 
  */
-public abstract class Observable {
+public abstract class Observable implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private HashMap<String, Usuario> observers;
 	
 	/**
@@ -66,15 +68,16 @@ public abstract class Observable {
      * Notifica a un usuario específico sobre un cambio de estado en un vuelo.
      * 
      * @param u      Usuario a notificar.
-     * @param estado Nuevo estado del vuelo.
+     * @param anterior Estado actual del vuelo.
+     * @param nuevo Estado al que se va a cambiar el estado del vuelo.
      * @throws IllegalArgumentException Si el usuario es nulo.
      */
-	public void notifyObserver(Usuario u, EstadoVuelo estado) {
+	public void notifyObserver(Usuario u, EstadoVuelo anterior, EstadoVuelo nuevo) {
 		if (u == null) {
             throw new IllegalArgumentException("El usuario no puede ser nulo.");
         }
 		if (this.observers.containsKey(u.getDni())) {
-			u.update(this.getId(), estado);
+			u.update(this.getId(), anterior, nuevo);
 		}
 	}
 	
@@ -82,15 +85,16 @@ public abstract class Observable {
      * Notifica a un usuario específico sobre un cambio de estado en un avión.
      * 
      * @param u      Usuario a notificar.
-     * @param estado Nuevo estado del avión.
+     * @param anterior Estado actual del avión.
+     * @param nuevo Estado al que se va a cambiar el estado del avión.
      * @throws IllegalArgumentException Si el usuario es nulo.
      */
-	public void notifyObserver(Usuario u, EstadoAvion estado) {
+	public void notifyObserver(Usuario u, EstadoAvion anterior, EstadoAvion nuevo) {
 		if (u == null) {
             throw new IllegalArgumentException("El usuario no puede ser nulo.");
         }
 		if (this.observers.containsKey(u.getDni())) {
-			u.update(this.getId(), estado);
+			u.update(this.getId(), anterior, nuevo);
 		}
 		return;
 	}
@@ -98,13 +102,14 @@ public abstract class Observable {
 	/**
      * Notifica a todos los observadores sobre un cambio de estado en un vuelo.
      * 
-     * @param estado Nuevo estado del vuelo.
+     * @param anterior Estado actual del vuelo.
+     * @param nuevo Estado al que se va a cambiar el estado del vuelo.
      */
-	public void notifyObservers(EstadoVuelo estado) {
+	public void notifyObservers(EstadoVuelo anterior, EstadoVuelo nuevo) {
 		Collection<Usuario> usuarios = observers.values();
 		
 		for (Usuario u: usuarios) {
-			u.update(this.getId(), estado);
+			u.update(this.getId(), anterior, nuevo);
 		}
 		return;
 	}
@@ -112,13 +117,14 @@ public abstract class Observable {
 	/**
      * Notifica a todos los observadores sobre un cambio de estado en un avión.
      * 
-     * @param estado Nuevo estado del avión.
+     * @param anterior Estado actual del avión.
+     * @param nuevo Estado al que se va a cambiar el estado del avión.
      */
-	public void notifyObservers(EstadoAvion estado) {
+	public void notifyObservers(EstadoAvion anterior, EstadoAvion nuevo) {
 		Collection<Usuario> usuarios = observers.values();
 		
 		for (Usuario u: usuarios) {
-			u.update(this.getId(), estado);
+			u.update(this.getId(), anterior, nuevo);
 		}
 		return;
 	}

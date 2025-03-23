@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import vuelos.Vuelo;
 
 public class Pista extends ElementoEstructural{
-	
+	private static final long serialVersionUID = 1L;
 	private boolean despegue;
 	private int longitud;
 	private ArrayList<Vuelo> vuelosQueSirve; 

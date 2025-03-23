@@ -1,11 +1,13 @@
 package aerolineas;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import elementos.ElementoEstructural;
 import vuelos.Vuelo;
 
-public class ClaveVueloElemento {
+public class ClaveVueloElemento implements Serializable {
+	private static final long serialVersionUID = 1L;
     private Vuelo vuelo;
     private ElementoEstructural elemento;
 
