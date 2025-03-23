@@ -84,4 +84,55 @@ public class EstadisticasVuelos implements Serializable{
 		}
 		return retrasoMedioMinutos/i;
 	}
+	
+	public String vuelosEnTiempoToString() {
+		String estadisticas = "De los " + this.aerolinea.getVuelos().size() + " vuelos de la aerolinea "
+				+ this.aerolinea.getNombre() + " tenemos:\n";
+		ArrayList<Vuelo> vuelos = null;
+		vuelos = this.vuelosEnTiempo();
+		estadisticas += "Ha habido " + vuelos.size() + " vuelos que han llegado a tiempo.\n";
+		for (Vuelo v: vuelos) {
+			estadisticas += v.toString() + "\n";
+		}
+		return estadisticas;
+	}
+	
+	public String vuelosRetrasadosToString() {
+		String estadisticas = "De los " + this.aerolinea.getVuelos().size() + " vuelos de la aerolinea "
+				+ this.aerolinea.getNombre() + " tenemos:\n";
+		ArrayList<Vuelo> vuelos = null;
+		vuelos = this.vuelosRetrasados();
+		estadisticas += "Ha habido " + vuelos.size() + " vuelos retrasados.\n";
+		for (Vuelo v: vuelos) {
+			estadisticas += v.toString() + "\n";
+		}
+		return estadisticas;
+	}
+	
+	public String retrasoMedioMesToString(Month month) {
+		String estadisticas = "De los " + this.aerolinea.getVuelos().size() + " vuelos de la aerolinea "
+				+ this.aerolinea.getNombre() + " tenemos:\n";
+		long retraso = this.retrasoMedioPorMesMinutos(month);
+		estadisticas += "Ha habido un retraso medio de " + retraso + " minutos en el mes de "
+				+ month.toString() + "\n";
+		return estadisticas;
+	}
+	
+	public String retrasoMedioVueloToString(Aeropuerto origen, Aeropuerto destino) {
+		String estadisticas = "De los " + this.aerolinea.getVuelos().size() + " vuelos de la aerolinea "
+				+ this.aerolinea.getNombre() + " tenemos:\n";
+		long retraso = this.retrasoMedioPorVueloMinutos(origen, destino);
+		estadisticas += "Ha habido un retraso medio de " + retraso + " minutos en los vuelos desde " 
+						+ origen.getNombre() + " a " + destino.getNombre() + "\n";
+		return estadisticas;
+	}
+	
+	public String retrasoMedioFranjaHToString(LocalTime inicio, LocalTime fin) {
+		String estadisticas = "De los " + this.aerolinea.getVuelos().size() + " vuelos de la aerolinea "
+				+ this.aerolinea.getNombre() + " tenemos:\n";
+		long retraso = this.retrasoMedioPorFranjaHorariaMinutos(inicio, fin);
+		estadisticas += "Ha habido un retraso medio de " + retraso + " minutos en los vuelos entre las " 
+						+ inicio.toString() + " y las " + fin.toString() + "\n";
+		return estadisticas;
+	}
 }

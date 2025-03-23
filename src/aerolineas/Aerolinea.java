@@ -3,12 +3,17 @@ package aerolineas;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import aeropuertos.Aeropuerto;
 import aviones.Avion;
 import aviones.TipoAvion;
 import elementos.ElementoEstructural;
 import elementos.Uso;
+import usuarios.Usuario;
 import vuelos.Vuelo;
 
 public class Aerolinea implements Serializable{
@@ -19,6 +24,7 @@ public class Aerolinea implements Serializable{
 	private HashMap<String, Avion> aviones;
 	private ArrayList<TipoAvion> tiposAviones;
 	private HashMap<ClaveVueloElemento, Uso> historialUsos;
+	private EstadisticasVuelos estadisticasVuelos;
 	
 	public Aerolinea(String id, String nombre) {
 		this.id = id;
@@ -27,6 +33,7 @@ public class Aerolinea implements Serializable{
 		this.aviones = new HashMap<String, Avion>();
 		this.tiposAviones = new ArrayList<TipoAvion>();
 		this.historialUsos = new HashMap<ClaveVueloElemento, Uso>();
+		this.estadisticasVuelos = new EstadisticasVuelos(this);
 	}
 	
 	
@@ -97,5 +104,30 @@ public class Aerolinea implements Serializable{
 	public void LimpiarHistorialUsos() {
 		this.historialUsos.clear();
 		return;
+	}
+	
+	public String verEstadisticasOperadorEnTiempo(Usuario user) {
+		if(user.esOperador() == false) { return null; }
+		return this.estadisticasVuelos.vuelosEnTiempoToString();
+	}
+	
+	public String verEstadisticasOperadorRetrasados(Usuario user) {
+		if(user.esOperador() == false) { return null; }
+		return this.estadisticasVuelos.vuelosRetrasadosToString();
+	}
+	
+	public String verEstadisticasOperadorRetrasoMes(Usuario user, Month month) {
+		if(user.esOperador() == false) { return null; }
+		return this.estadisticasVuelos.retrasoMedioMesToString(month);
+	}
+	
+	public String verEstadisticasOperadorRetrasoVuelo(Usuario user, Aeropuerto origen, Aeropuerto destino) {
+		if(user.esOperador() == false) { return null; }
+		return this.estadisticasVuelos.retrasoMedioVueloToString(origen, destino);
+	}
+	
+	public String verEstadisticasOperadorRetrasoFranjaHoraria(Usuario user, LocalTime inicio, LocalTime fin) {
+		if(user.esOperador() == false) { return null; }
+		return this.estadisticasVuelos.retrasoMedioFranjaHToString(inicio, fin);
 	}
 }

@@ -3,6 +3,7 @@ package vuelos;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import aerolineas.Aerolinea;
@@ -76,14 +77,30 @@ public abstract class Vuelo extends Observable implements Serializable{
 		this.estVuelo = EstadoVuelo.EN_TIEMPO;
 	}
 	
+	@Override
+	public String toString() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		String vuelo = "Flight " + this.id + " (";
+		if(!this.compartido) {
+			vuelo += this.aerolinea.getFirst().getNombre();
+		} else {
+			vuelo += this.aerolinea.getFirst().getNombre() + ", " + this.aerolinea.getLast().getNombre();
+		}
+		vuelo += ")\n" + "From: " + this.origen.getCiudadMasCercana() + " to " + this.destino.getCiudadMasCercana() 
+		         + "\n" + "Departure: " + this.horaSalida.format(formatter) + "\n" +
+		         "Arrival: " + this.horaLlegada.format(formatter) + "\n" +
+		         "Status: " + this.estVuelo.toString();
+
+	    return vuelo;
+	}
+	
 	public boolean isVueloMercancias() {
 		if(this instanceof VueloMercancias) {
 			return true;
 		}
 		return false;
 	}
-
-	@Override 
+ 
 	public String getId() {
 		return this.id;
 	}
