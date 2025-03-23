@@ -12,7 +12,8 @@ import org.junit.platform.suite.api.Suite;
 				PagoTest.class,
 				AeropuertoTest.class,
 				TemporadaTest.class,
-				NotificacionTest.class})
+				NotificacionTest.class,
+				AerolineaTest.class})
 @Suite
 public class AllTest {
 }
