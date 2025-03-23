@@ -105,6 +105,7 @@ class VueloMercanciasTest {
 		vm1.asignarTerminal(t);
 		vm1.asignarPuerta(t.getPuertas().get("AB2"));
 		assertEquals("AB2", vm1.getPuerta().getCod());
+		assertTrue(vm1.setEstVuelo(EstadoVuelo.CARGA));
 	}
 
 	@Test
@@ -191,8 +192,8 @@ class VueloMercanciasTest {
 
 	@Test
 	void testSetEstVuelo() {
-		vm1.setEstVuelo(EstadoVuelo.CARGA);
-		assertEquals(EstadoVuelo.CARGA, vm1.getEstVuelo());
+		vm1.setEstVuelo(EstadoVuelo.RETRASADO);
+		assertEquals(EstadoVuelo.RETRASADO, vm1.getEstVuelo());
 	}
 
 	@Test

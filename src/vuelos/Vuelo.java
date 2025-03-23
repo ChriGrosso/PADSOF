@@ -206,8 +206,8 @@ public abstract class Vuelo extends Observable implements Serializable{
 				this.horaLlegadaEfectiva = LocalDateTime.now();
 				return true;
 			}
-			if(estV == EstadoVuelo.DESEMBARQUE_INI || estV == EstadoVuelo.DESEMBARQUE_FIN ||
-				estV == EstadoVuelo.DESCARGA_INI || estV == EstadoVuelo.DESCARGA_FIN) {
+			if((estV == EstadoVuelo.DESEMBARQUE_INI || estV == EstadoVuelo.DESEMBARQUE_FIN ||
+				estV == EstadoVuelo.DESCARGA_INI || estV == EstadoVuelo.DESCARGA_FIN) && this.puerta != null) {
 				if(this.finger) {
 					this.avion.setEstadoAvion(EstadoAvion.EN_FINGER);
 				} else {
@@ -236,6 +236,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 			}
 			return false;
 		}
+		// Si es un vuelo de salida
 		else {
 			// ESPERANDO_PISTA: no hay todavía pista, ya ha cargado
 			if(estV == EstadoVuelo.ESPERANDO_PISTA_D && this.pista == null) {
@@ -259,7 +260,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 				this.horaSalidaEfectiva = LocalDateTime.now();
 				return true;
 			}
-			if(estV == EstadoVuelo.EMBARQUE || estV == EstadoVuelo.CARGA) {
+			if((estV == EstadoVuelo.EMBARQUE || estV == EstadoVuelo.CARGA) && this.puerta != null) {
 				// El avion está en hangar?
 				if(this.avion.getEstadoAvion() == EstadoAvion.EN_HANGAR) {
 					Aerolinea conAvion = null;

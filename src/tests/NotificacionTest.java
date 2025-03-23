@@ -27,7 +27,8 @@ class NotificacionTest {
     }
 
     @Test
-    void testGetFechaEmision() {
+    void testGetFechaEmision() throws InterruptedException {
+    	Thread.sleep(1000);
     	assertTrue(
             notificacion.getFechaEmision().isBefore(LocalDateTime.now()));
     }
