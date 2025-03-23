@@ -11,6 +11,7 @@ import java.util.HashMap;
 import aeropuertos.Aeropuerto;
 import aviones.Avion;
 import aviones.TipoAvion;
+import elementos.ClaveVueloHoraUso;
 import elementos.ElementoEstructural;
 import elementos.Uso;
 import usuarios.Usuario;
@@ -57,9 +58,13 @@ public class Aerolinea implements Serializable{
 		return this.tiposAviones;
 	}
 	
+	public HashMap<ClaveVueloElemento, Uso> getHistorialUsos() {
+		return this.historialUsos;
+	}
+	
 	
 	public boolean addVuelo(Vuelo v) {
-		if(this.vuelos.contains(v)) {
+		if(this.vuelos.contains(v) || !this.aviones.containsValue(v.getAvion())) {
 			return false;
 		}
 		this.vuelos.add(v);
@@ -67,7 +72,7 @@ public class Aerolinea implements Serializable{
 	}
 	
 	public boolean addAvion(Avion a) {
-		if(this.aviones.containsKey(a.getMatricula())) {
+		if(this.aviones.containsKey(a.getMatricula()) || !this.tiposAviones.contains(a.getTipoAvion())) {
 			return false;
 		}
 		this.aviones.put(a.getMatricula(), a);
@@ -85,10 +90,8 @@ public class Aerolinea implements Serializable{
 	public boolean addUso(LocalDateTime horaUso, Vuelo vuelo, ElementoEstructural elem) {
 		Uso u = new Uso(horaUso, elem);
 		ClaveVueloElemento clave = new ClaveVueloElemento(vuelo, elem);
-		if(elem.addUso(horaUso) == false) {
-			return false;
-		}
 		this.historialUsos.put(clave, u);
+		elem.addUso(vuelo, horaUso);
 		return true;
 	}
 	
@@ -98,6 +101,8 @@ public class Aerolinea implements Serializable{
 			return false;
 		}
 		this.historialUsos.get(clave).setHoraDesuso(horaDesuso);
+		ClaveVueloHoraUso clave2 = new ClaveVueloHoraUso(vuelo, this.historialUsos.get(clave).getHoraUso());
+		elem.getHistorailUsos().get(clave2).setHoraDesuso(horaDesuso);
 		return true;
 	}
 	

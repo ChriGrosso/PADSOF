@@ -105,6 +105,8 @@ class VueloMercanciasTest {
 		vm1.asignarTerminal(t);
 		vm1.asignarPuerta(t.getPuertas().get("AB2"));
 		assertEquals("AB2", vm1.getPuerta().getCod());
+		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
+		vm1.setLocAterrizaje(f);
 		assertTrue(vm1.setEstVuelo(EstadoVuelo.CARGA));
 	}
 
@@ -214,16 +216,16 @@ class VueloMercanciasTest {
 	@Test
 	void testAsignarLocAterrizajeFingerSuccess() {
 		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
-		assertEquals(true, vm1.asignarLocAterrizaje(f));
+		assertTrue(vm1.asignarLocAterrizaje(f));
 		vm1.asignarLocAterrizaje(f);
 		assertEquals("F001", vm1.getLocAterrizaje().getId());
-		assertEquals(true, vm1.getFinger());
+		assertTrue(vm1.getFinger());
 	}
 	
 	@Test
 	void testAsignarLocAterrizajeZonaParkingFail() {
 		ZonaParking zp = new ZonaParking("ZP001", 6.78, LocalDate.of(2022, 5, 5), 200, 16.77, 56.9, 66.89);
-		assertEquals(false, vm1.asignarLocAterrizaje(zp));
+		assertFalse(vm1.asignarLocAterrizaje(zp));
 	}
 	
 	@Test
@@ -241,6 +243,10 @@ class VueloMercanciasTest {
 		assertEquals(true, vm1.asignarPista(p));
 		vm1.asignarPista(p);
 		assertEquals("P001", vm1.getPista().getId());
+		assertTrue(vm1.setEstVuelo(EstadoVuelo.EN_VUELO));
+		vm1.setEstVuelo(EstadoVuelo.EN_VUELO);
+		assertNull(vm1.getPista().getUsando());
+		assertFalse(vm1.getPista().enUso());
 	}
 
 }

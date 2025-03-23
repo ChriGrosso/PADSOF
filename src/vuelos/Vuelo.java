@@ -230,6 +230,9 @@ public abstract class Vuelo extends Observable implements Serializable{
 				} else {
 					this.avion.setEstadoAvion(EstadoAvion.EN_PARKING);
 				}
+				for(Aerolinea a: this.aerolinea) {
+					a.addUso(LocalDateTime.now(), this, this.locAterrizaje);
+				}
 				this.estVuelo = estV;
 				return true;
 			}
@@ -277,7 +280,8 @@ public abstract class Vuelo extends Observable implements Serializable{
 				this.horaSalidaEfectiva = LocalDateTime.now();
 				return true;
 			}
-			if((estV == EstadoVuelo.EMBARQUE || estV == EstadoVuelo.CARGA) && this.puerta != null) {
+			if((estV == EstadoVuelo.EMBARQUE || estV == EstadoVuelo.CARGA) && this.puerta != null
+					&& this.locAterrizaje != null) {
 				// El avion está en hangar?
 				if(this.avion.getEstadoAvion() == EstadoAvion.EN_HANGAR) {
 					Aerolinea conAvion = null;

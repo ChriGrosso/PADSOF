@@ -26,7 +26,7 @@ public class Pista extends ElementoEstructural{
 	 * @return the despegue
 	 */
 	public boolean isDespegue() {
-		return despegue;
+		return this.despegue;
 	}
 
 	/**
@@ -61,7 +61,6 @@ public class Pista extends ElementoEstructural{
 	public void addVuelo(Vuelo v) {
 		if(this.usando == null) {
 			this.usando = v;
-			this.addUso(LocalDateTime.now());
 		} else {
 			this.vuelosQueSirve.addLast(v);
 		}
@@ -70,6 +69,7 @@ public class Pista extends ElementoEstructural{
 	
 	public void actualizarColaVuelos() {
 		if(this.vuelosQueSirve.isEmpty()) {
+			this.usando = null;
 			return;
 		}
 		Vuelo siguiente = this.vuelosQueSirve.getFirst();
