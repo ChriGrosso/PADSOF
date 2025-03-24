@@ -80,4 +80,13 @@ public class Notificacion implements Serializable{
         }
 		this.leida = leida;
 	}
+	
+	/**
+     * Obtiene el mensaje de la notificación.
+     *
+     * @return Contenido del mensaje.
+     */
+	public String toString() {
+		return this.mensaje+" ("+this.fechaEmision+") ";
+	}
 }

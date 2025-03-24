@@ -4,37 +4,56 @@ import java.time.LocalDate;
 import vuelos.Vuelo;
 import vuelos.VueloMercancias;
 
+/**
+ * Clase que representa una terminal especializada en la gestión de vuelos de mercancías.
+ * Hereda de Terminal y añade un atributo para la capacidad total en toneladas.
+ */
 public class TerminalMercancias extends Terminal {
-	private static final long serialVersionUID = 1L;
-	private double capacidadToneladas; 
-	
-	public TerminalMercancias(String id,LocalDate fchRegistro,int numeroPuertas,  String prefijoPuerta, double capacidadToneladas) {
-		super(id,fchRegistro,numeroPuertas,prefijoPuerta);
-		this.setCapacidadToneladas(capacidadToneladas);
-	}
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @return the capacidadToneladas
-	 */
-	public double getCapacidadToneladas() {
-		return capacidadToneladas;
-	}
+    private double capacidadToneladas; // Capacidad máxima de carga que puede gestionar la terminal
 
-	/**
-	 * @param capacidadToneladas the capacidadToneladas to set
-	 */
-	public void setCapacidadToneladas(double capacidadToneladas) {
-		this.capacidadToneladas = capacidadToneladas;
-	}
+    /**
+     * Constructor de TerminalMercancias.
+     * @param id identificador de la terminal
+     * @param fchRegistro fecha de registro de la terminal
+     * @param numeroPuertas número total de puertas en la terminal
+     * @param prefijoPuerta prefijo que se usará para las puertas
+     * @param capacidadToneladas capacidad máxima en toneladas que puede albergar
+     */
+    public TerminalMercancias(String id, LocalDate fchRegistro, int numeroPuertas,
+                              String prefijoPuerta, double capacidadToneladas) {
+        super(id, fchRegistro, numeroPuertas, prefijoPuerta);
+        this.setCapacidadToneladas(capacidadToneladas);
+    }
 
-	public double getCargaTotal() {
-		if(this.getVuelos().isEmpty()) {
-			return 0;
-		}
-		double total = 0;
-		for(Vuelo v: this.getVuelos()) {
-			total = ((VueloMercancias) v).getCarga();
-		}
-		return total;
-	}
+    /**
+     * @return capacidad total en toneladas de la terminal
+     */
+    public double getCapacidadToneladas() {
+        return capacidadToneladas;
+    }
+
+    /**
+     * Establece la capacidad máxima de la terminal en toneladas.
+     */
+    public void setCapacidadToneladas(double capacidadToneladas) {
+        this.capacidadToneladas = capacidadToneladas;
+    }
+
+    /**
+     * Calcula la carga total actual sumando la carga de todos los vuelos de mercancías.
+     * @return carga total en toneladas
+     */
+    public double getCargaTotal() {
+        if (this.getVuelos().isEmpty()) {
+            return 0;
+        }
+
+        double total = 0;
+        for (Vuelo v : this.getVuelos()) {
+            total += ((VueloMercancias) v).getCarga();
+        }
+        return total;
+    }
 }

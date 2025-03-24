@@ -1,42 +1,62 @@
-/**
- * 
- */
 package elementos;
+
 import java.time.LocalDate;
 import aviones.Avion;
 
 /**
+ * Clase que representa un Finger (pasarela telescópica) en un aeropuerto.
+ * Hereda de LocalizacionAterrizaje y puede ser utilizado para conectar un avión
+ * directamente con la terminal.
  * 
+ * @author Christian Grosso - christian.grosso@estudiante.uam.es
  */
-public class Finger extends LocalizacionAterrizaje{
-	private static final long serialVersionUID = 1L;
-	private double alturaMax;
-	
-	public Finger(String id, double costeph,LocalDate fchRegistro, double alturaMax) {
-		super(id,costeph,fchRegistro);
-		this.setAlturaMax(alturaMax);
-	}
-	
-	public boolean enUso() {
-		return false;
-	}
-	
-	public boolean comprobarCompatibilidad(Avion a) {
-		return false;
-	}
+public class Finger extends LocalizacionAterrizaje {
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @return the alturaMax
-	 */
-	public double getAlturaMax() {
-		return alturaMax;
-	}
+    private double alturaMax; // Altura máxima permitida para que un avión use este finger
 
-	/**
-	 * @param alturaMax the alturaMax to set
-	 */
-	public void setAlturaMax(double alturaMax) {
-		this.alturaMax = alturaMax;
-	}
+    /**
+     * Constructor del finger.
+     * @param id identificador único del finger
+     * @param costeph coste por hora de uso
+     * @param fchRegistro fecha de alta en el sistema
+     * @param alturaMax altura máxima permitida del avión
+     */
+    public Finger(String id, double costeph, LocalDate fchRegistro, double alturaMax) {
+        super(id, costeph, fchRegistro);
+        this.setAlturaMax(alturaMax);
+    }
 
+    /**
+     * Indica si el finger está en uso actualmente.
+     * Este método actualmente no está implementado.
+     * @return false por defecto
+     */
+    public boolean enUso() {
+        return false;
+    }
+
+    /**
+     * Verifica si un avión es compatible con el finger según su altura.
+     * Este método actualmente no está implementado.
+     * @param a avión a comprobar
+     * @return false por defecto
+     */
+    public boolean comprobarCompatibilidad(Avion a) {
+        return false;
+    }
+
+    /**
+     * @return la altura máxima permitida
+     */
+    public double getAlturaMax() {
+        return alturaMax;
+    }
+
+    /**
+     * Establece la altura máxima permitida para el finger.
+     */
+    public void setAlturaMax(double alturaMax) {
+        this.alturaMax = alturaMax;
+    }
 }

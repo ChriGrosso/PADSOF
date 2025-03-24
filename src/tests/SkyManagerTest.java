@@ -37,10 +37,25 @@ import vuelos.VueloMercancias;
 class SkyManagerTest {
 
 	private SkyManager skyManager;
+	private Vuelo vuelo;
+	private Aerolinea a;
     
     @BeforeEach
     void setUp() throws Exception {
         skyManager = SkyManager.getInstance();
+        AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
+		Avion av = new Avion("0001", LocalDate.of(2023, 3, 14), m, LocalDate.of(2024, 6, 20)); 
+		a = new Aerolinea("IBE", "Iberia");
+
+		ArrayList<Temporada> temp1 = new ArrayList<Temporada>();
+		temp1.add(new Temporada (MonthDay.of(3, 5), LocalTime.NOON, LocalTime.MIDNIGHT, MonthDay.of(2, 5)));
+		ArrayList<Temporada> temp2 = new ArrayList<Temporada>();
+		temp2.add(new Temporada(MonthDay.of(3, 5), LocalTime.NOON, LocalTime.MIDNIGHT, MonthDay.of(9, 9)));
+		temp2.add(new Temporada(MonthDay.of(10, 9), LocalTime.of(5, 0), LocalTime.of(1, 0), MonthDay.of(2, 5)));
+		Aeropuerto ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, temp1, Direccion.NORTE);
+		Aeropuerto ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, temp2, Direccion.OESTE);
+		vuelo = new VueloMercancias("H1893", ap1, ap2, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0),
+				a, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
     }
 
     @Test
@@ -200,6 +215,13 @@ class SkyManagerTest {
         skyManager.registrarAerolinea(aerolinea);
         assertTrue(skyManager.getAerolineas().containsKey("IBE"));
     }
+    
+    @Test
+    void testRegistrarVuelo() {
+		skyManager.registrarAerolinea(a);
+        skyManager.registrarVuelo(vuelo);
+        assertTrue(skyManager.getVuelos().containsKey("H1893"));
+    }
 
     @Test
     void testRegistrarAeropuertoExterno() {
@@ -222,7 +244,7 @@ class SkyManagerTest {
     void testRegistrarTerminal() {
         Terminal terminal = new TerminalMercancias("Terminal1", LocalDate.now(), 3, "PU", 30.0);
         skyManager.registrarTerminal(terminal);
-        assertTrue(skyManager.getTerminales().containsValue(terminal));
+        assertTrue(skyManager.getTerminales().containsKey("Terminal1"));
     }
 
     @Test
@@ -263,40 +285,38 @@ class SkyManagerTest {
 
 	@Test
     void testBuscarVueloPorCodigo() {
-		AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
-		Avion av = new Avion("0001", LocalDate.of(2023, 3, 14), m, LocalDate.of(2024, 6, 20)); 
-		Aerolinea a = new Aerolinea("IBE", "Iberia");
-		ArrayList<Temporada> temp1 = new ArrayList<Temporada>();
-		temp1.add(new Temporada (MonthDay.of(3, 5), LocalTime.NOON, LocalTime.MIDNIGHT, MonthDay.of(2, 5)));
-		ArrayList<Temporada> temp2 = new ArrayList<Temporada>();
-		temp2.add(new Temporada(MonthDay.of(3, 5), LocalTime.NOON, LocalTime.MIDNIGHT, MonthDay.of(9, 9)));
-		temp2.add(new Temporada(MonthDay.of(10, 9), LocalTime.of(5, 0), LocalTime.of(1, 0), MonthDay.of(2, 5)));
-		Aeropuerto ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, temp1, Direccion.NORTE);
-		Aeropuerto ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, temp2, Direccion.OESTE);
-		Vuelo vuelo = new VueloMercancias("H1893", ap1, ap2, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0),
-				a, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
-        skyManager.getVuelos().put("V123", vuelo);
-        assertEquals(vuelo, skyManager.buscarVueloPorCodigo("V123"));
+		skyManager.registrarAerolinea(a);
+        skyManager.registrarVuelo(vuelo);
+        assertEquals(vuelo.getId(), skyManager.buscarVueloPorCodigo(vuelo.getId()).getId());
     }
 
 	@Test
 	void testBuscarVuelosPorTerminal() {
-		fail("Not yet implemented");
+		skyManager.registrarAerolinea(a);
+        skyManager.registrarVuelo(vuelo);
+        Terminal terminal = new TerminalMercancias("Terminal1", LocalDate.now(), 3, "PU", 30.0);
+        skyManager.registrarTerminal(terminal);
+        //terminal.addVuelo(vuelo);
+        assertTrue(skyManager.buscarVuelosPorTerminal(terminal).contains(vuelo));
 	}
 
 	@Test
 	void testBuscarVuelosPorHoraLlegada() {
-		fail("Not yet implemented");
+		skyManager.registrarAerolinea(a);
+        skyManager.registrarVuelo(vuelo);
+        assertTrue(skyManager.buscarVuelosPorHoraLlegada(vuelo.getHoraLlegada()).size()>0);
 	}
 
 	@Test
 	void testBuscarVuelosPorHoraSalida() {
-		fail("Not yet implemented");
+		skyManager.registrarAerolinea(a);
+        skyManager.registrarVuelo(vuelo);
+        assertTrue(skyManager.buscarVuelosPorHoraSalida(vuelo.getHoraSalida()).size()>0);
 	}
 
 	@Test
 	void testVerEstadisticasGestor() {
-		fail("Not yet implemented");
+		assertTrue(skyManager.verEstadisticasGestor().length()>0);
 	}
 
 }

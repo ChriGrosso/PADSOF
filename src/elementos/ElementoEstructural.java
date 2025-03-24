@@ -7,89 +7,131 @@ import java.util.HashMap;
 
 import vuelos.Vuelo;
 
-public abstract class ElementoEstructural implements Serializable{
+/**
+ * Clase abstracta que representa un elemento estructural del aeropuerto,
+ * como pistas, hangares, puertas, etc. Incluye funcionalidades comunes como
+ * cálculo de coste por uso, historial de usos y estadísticas.
+ * 
+ * @author Christian Grosso - christian.grosso@estudiante.uam.es
+ */
+public abstract class ElementoEstructural implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id;
-	private double costePorHora;
-	private LocalDate fchRegistro;
-	private HashMap<Vuelo,Uso> historialUsos;
-	
-	public ElementoEstructural(String id, double costeph,LocalDate fchRegistro) {
+
+	private String id; // Identificador único del elemento
+	private double costePorHora; // Coste de uso por hora
+	private LocalDate fchRegistro; // Fecha en que el elemento fue registrado
+	private HashMap<ClaveVueloHoraUso, Uso> historialUsos; // Historial de usos por vuelo y hora
+
+	/**
+	 * Constructor base para cualquier elemento estructural.
+	 * @param id identificador único del elemento
+	 * @param costeph coste por hora de uso
+	 * @param fchRegistro fecha de alta del elemento
+	 */
+	public ElementoEstructural(String id, double costeph, LocalDate fchRegistro) {
 		this.setId(id);
 		this.setCostePorHora(costeph);
 		this.setFchRegistro(fchRegistro);
-		this.historialUsos = new HashMap<Vuelo,Uso>();
+		this.historialUsos = new HashMap<>();
 	}
-	
+
+	/**
+	 * Calcula el total de horas que este recurso ha sido utilizado en el día actual.
+	 * Solo considera los usos que tienen fecha igual a hoy.
+	 * @return total de horas de uso del día actual
+	 */
 	public double horasUsoDiario() {
 		LocalDate diaHoy = LocalDate.now();
 		double horasUsoHoy = 0;
-		for(int i = this.historialUsos.size()-1; ((ArrayList<Uso>) this.historialUsos.values()).get(i).getHoraUso().getDayOfYear() == diaHoy.getDayOfYear() &&
-			((ArrayList<Uso>) this.historialUsos.values()).get(i).getHoraUso().getYear() == diaHoy.getYear(); i--) {
-			horasUsoHoy += ((ArrayList<Uso>) this.historialUsos.values()).get(i).calcularDuracion();
+
+		// Convierte los valores del HashMap en una lista y recorre desde el final
+		ArrayList<Uso> usos = new ArrayList<>(this.historialUsos.values());
+
+		for (int i = usos.size() - 1;
+		     i >= 0 && usos.get(i).getHoraUso().getDayOfYear() == diaHoy.getDayOfYear()
+		         && usos.get(i).getHoraUso().getYear() == diaHoy.getYear();
+		     i--) {
+			horasUsoHoy += usos.get(i).calcularDuracion();
 		}
 		return horasUsoHoy;
 	}
-	
+
+	/**
+	 * Calcula la media de horas de uso diario (sin implementar aún).
+	 * @return 0 (valor por defecto)
+	 */
 	public double mediaHorasUsoDiario() {
 		return 0;
 	}
 
+	// Getters y setters con documentación básica
+
 	/**
-	 * @return the fchRegistro
+	 * @return la fecha de registro del elemento
 	 */
 	public LocalDate getFchRegistro() {
 		return fchRegistro;
 	}
 
 	/**
-	 * @param fchRegistro2 the fchRegistro to set
+	 * Establece la fecha de registro del elemento.
 	 */
 	public void setFchRegistro(LocalDate fchRegistro2) {
 		this.fchRegistro = fchRegistro2;
 	}
 
 	/**
-	 * @return the id
+	 * @return el identificador del elemento
 	 */
 	public String getId() {
 		return id;
 	}
 
 	/**
-	 * @param id the id to set
+	 * Establece el identificador del elemento.
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 
 	/**
-	 * @return the costePorHora
+	 * @return el coste por hora del elemento
 	 */
 	public double getCostePorHora() {
 		return costePorHora;
 	}
 
 	/**
-	 * @param costePorHora the costePorHora to set
+	 * Establece el coste por hora del elemento.
 	 */
 	public void setCostePorHora(double costePorHora) {
 		this.costePorHora = costePorHora;
 	}
 
-	
-	public HashMap<Vuelo, Uso> getHistorailUsos() {
+	/**
+	 * Devuelve el historial de usos del elemento.
+	 */
+	public HashMap<ClaveVueloHoraUso, Uso> getHistorailUsos() {
 		return this.historialUsos;
 	}
-	
+
+	/**
+	 * Registra un nuevo uso de este elemento por parte de un vuelo en un momento dado.
+	 * @param vuelo vuelo que usa el recurso
+	 * @param horaUso hora en la que inicia el uso
+	 * @return true si el uso fue registrado correctamente
+	 */
 	public boolean addUso(Vuelo vuelo, LocalDateTime horaUso) {
 		Uso u = new Uso(horaUso, this);
-		this.historialUsos.put(vuelo, u);
+		ClaveVueloHoraUso clave = new ClaveVueloHoraUso(vuelo, horaUso);
+		this.historialUsos.put(clave, u);
 		return true;
 	}
-	
+
+	/**
+	 * Elimina todo el historial de usos del elemento.
+	 */
 	public void LimpiarHistorialUsos() {
 		this.historialUsos.clear();
-		return;
 	}
 }
