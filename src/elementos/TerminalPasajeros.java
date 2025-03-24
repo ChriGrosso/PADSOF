@@ -28,12 +28,6 @@ public class TerminalPasajeros extends Terminal {
         this.setCapacidadPersonas(capacidadPersonas);
     }
 
-    /**
-     * @return capacidad máxima de personas que admite la terminal
-     */
-    public int getCapacidadPersonas() {
-        return capacidadPersonas;
-    }
 
     /**
      * Establece la capacidad máxima de personas de la terminal.
@@ -61,5 +55,13 @@ public class TerminalPasajeros extends Terminal {
 	@Override
 	public boolean isMercancias() {
 		return false;
+	}
+
+	/**
+     * @return capacidad máxima de personas que admite la terminal
+     */
+	@Override
+	public double getCapacidad() {
+		return capacidadPersonas;
 	}
 }

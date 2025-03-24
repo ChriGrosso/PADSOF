@@ -27,12 +27,6 @@ public class TerminalMercancias extends Terminal {
         this.setCapacidadToneladas(capacidadToneladas);
     }
 
-    /**
-     * @return capacidad total en toneladas de la terminal
-     */
-    public double getCapacidadToneladas() {
-        return capacidadToneladas;
-    }
 
     /**
      * Establece la capacidad máxima de la terminal en toneladas.
@@ -60,5 +54,13 @@ public class TerminalMercancias extends Terminal {
 	@Override
 	public boolean isMercancias() {
 		return true;
+	}
+
+	/**
+     * @return capacidad total en toneladas de la terminal
+     */
+	@Override
+	public double getCapacidad() {
+		return capacidadToneladas;
 	}
 }

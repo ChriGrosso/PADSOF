@@ -47,6 +47,7 @@ public abstract class Terminal extends ElementoEstructural {
     
     
     public abstract boolean isMercancias();
+    public abstract double getCapacidad();
 
     /**
      * Cuenta cuántas puertas están actualmente en uso.
