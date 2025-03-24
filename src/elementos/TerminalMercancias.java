@@ -56,4 +56,9 @@ public class TerminalMercancias extends Terminal {
         }
         return total;
     }
+
+	@Override
+	public boolean isMercancias() {
+		return true;
+	}
 }

@@ -44,6 +44,9 @@ public abstract class Terminal extends ElementoEstructural {
             this.puertas.put(nomP, p);
         }
     }
+    
+    
+    public abstract boolean isMercancias();
 
     /**
      * Cuenta cuántas puertas están actualmente en uso.

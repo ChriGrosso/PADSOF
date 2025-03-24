@@ -57,4 +57,9 @@ public class TerminalPasajeros extends Terminal {
         }
         return total;
     }
+
+	@Override
+	public boolean isMercancias() {
+		return false;
+	}
 }
