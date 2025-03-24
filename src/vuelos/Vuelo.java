@@ -232,6 +232,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 				}
 				for(Aerolinea a: this.aerolinea) {
 					a.addUso(LocalDateTime.now(), this, this.locAterrizaje);
+					a.addUso(LocalDateTime.now(), this, this.puerta);
 				}
 				this.estVuelo = estV;
 				return true;
@@ -251,6 +252,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 				}
 				for(Aerolinea a: this.aerolinea) {
 					a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
+					a.setEndUso(LocalDateTime.now(), this, this.puerta);
 				}
 				return true;
 			}
@@ -270,6 +272,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 				this.avion.setEstadoAvion(EstadoAvion.ESPERANDO_PISTA);
 				for(Aerolinea a: this.aerolinea) {
 					a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
+					a.setEndUso(LocalDateTime.now(), this, this.puerta);
 				}
 				return true;
 			}
@@ -296,6 +299,10 @@ public abstract class Vuelo extends Observable implements Serializable{
 					this.avion.setEstadoAvion(EstadoAvion.EN_FINGER);
 				} else {
 					this.avion.setEstadoAvion(EstadoAvion.EN_PARKING);
+				}
+				for(Aerolinea a: this.aerolinea) {
+					a.addUso(LocalDateTime.now(), this, this.locAterrizaje);
+					a.addUso(LocalDateTime.now(), this, this.puerta);
 				}
 				this.estVuelo = estV;
 				return true;

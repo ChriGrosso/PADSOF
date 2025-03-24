@@ -25,7 +25,7 @@ public class Factura implements IInvoiceInfo, Serializable{
     private boolean pagado = false;
     private Aerolinea aerolinea;
     private List <IResourceUsageInfo> rUsage = new ArrayList<>();
-    private List <Uso> serviciosUsados = new ArrayList<>();;
+    private List <Uso> serviciosUsados = new ArrayList<>();
     private double sobrecarga = 0;
     private String logo;
 
@@ -35,7 +35,7 @@ public class Factura implements IInvoiceInfo, Serializable{
         this.total = total;
         this.fechaEmision = fechaEmision;
         this.aerolinea = aerolinea;
-        this.serviciosUsados = null;
+        this.serviciosUsados = aerolinea.getArrayUsos();
         this.logo=logo;
     }
     

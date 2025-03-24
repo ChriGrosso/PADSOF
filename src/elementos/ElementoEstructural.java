@@ -12,13 +12,13 @@ public abstract class ElementoEstructural implements Serializable{
 	private String id;
 	private double costePorHora;
 	private LocalDate fchRegistro;
-	private HashMap<ClaveVueloHoraUso,Uso> historialUsos;
+	private HashMap<Vuelo,Uso> historialUsos;
 	
 	public ElementoEstructural(String id, double costeph,LocalDate fchRegistro) {
 		this.setId(id);
 		this.setCostePorHora(costeph);
 		this.setFchRegistro(fchRegistro);
-		this.historialUsos = new HashMap<ClaveVueloHoraUso,Uso>();
+		this.historialUsos = new HashMap<Vuelo,Uso>();
 	}
 	
 	public double horasUsoDiario() {
@@ -78,14 +78,13 @@ public abstract class ElementoEstructural implements Serializable{
 	}
 
 	
-	public HashMap<ClaveVueloHoraUso, Uso> getHistorailUsos() {
+	public HashMap<Vuelo, Uso> getHistorailUsos() {
 		return this.historialUsos;
 	}
 	
 	public boolean addUso(Vuelo vuelo, LocalDateTime horaUso) {
 		Uso u = new Uso(horaUso, this);
-		ClaveVueloHoraUso clave = new ClaveVueloHoraUso(vuelo, horaUso);
-		this.historialUsos.put(clave, u);
+		this.historialUsos.put(vuelo, u);
 		return true;
 	}
 	

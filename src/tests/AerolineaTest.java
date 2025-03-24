@@ -22,7 +22,6 @@ import aviones.AvionPasajeros;
 import elementos.Finger;
 import elementos.Hangar;
 import elementos.HangarMercancias;
-import elementos.Pista;
 import elementos.TerminalMercancias;
 import vuelos.EstadoVuelo;
 import vuelos.Periodicidad;
