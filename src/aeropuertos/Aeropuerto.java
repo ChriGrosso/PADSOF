@@ -43,6 +43,15 @@ public class Aeropuerto implements Serializable{
         this.temporadas = t;
         this.direccion = d;
     }
+    
+    /**
+     * Da una representacion en cadena del aeropuerto.
+     *
+     * @return String con la info del aeropuerto.
+     */
+    public String toString() {
+    	return ""+this.nombre+" ("+this.codigo+"): "+this.ciudadMasCercana+" ("+this.pais+") ";
+    }
 
     /**
      * Obtiene el nombre del aeropuerto.

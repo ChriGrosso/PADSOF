@@ -712,7 +712,7 @@ public class SkyManager implements Serializable {
 		 ArrayList<Terminal> terminales = new ArrayList<Terminal>();
 		 Collection<Terminal> termSistema = this.terminales.values();
 		 TipoAvion avion = vuelo.getAvion().getTipoAvion();
-		 System.out.println(termSistema);
+		 
 		 LocalDateTime horaVuelo, r1, r2;
 		 if (vuelo.getLlegada()) {
 			 horaVuelo = vuelo.getHoraLlegada();
