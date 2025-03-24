@@ -27,8 +27,8 @@ public class Pista extends ElementoEstructural {
      * @param despegue true si es pista de despegue, false si es de aterrizaje
      * @param longitud longitud física de la pista
      */
-    public Pista(String id, LocalDate fchRegistro, boolean despegue, double longitud, double costePH) {
-        super(id, costePH, fchRegistro);
+    public Pista(String id, LocalDate fchRegistro, boolean despegue, double longitud) {
+        super(id, 0, fchRegistro);
         this.setDespegue(despegue);
         this.setLongitud(longitud);
         this.vuelosQueSirve = new ArrayList<>();

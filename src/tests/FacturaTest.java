@@ -20,7 +20,7 @@ public class FacturaTest {
 	    Factura factura = new Factura("INV-001", 500.0, 750.0, LocalDate.now(), aerolinea, "logo.png");
 
 	    // Aggiunta di un uso e sincronizzazione con rUsage
-	    Pista recurso = new Pista("1", LocalDate.now(), true, 22.00, 10.35); // Usa la classe Pista (figlia concreta)
+	    Finger recurso = new Finger("1", 10.35, LocalDate.now(), 22.00); // Usa la classe Finger (figlia concreta)
 	    Uso uso = new Uso(LocalDateTime.now().minusHours(1), recurso);
 	    uso.setHoraDesuso(LocalDateTime.now());
 
