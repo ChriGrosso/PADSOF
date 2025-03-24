@@ -20,7 +20,7 @@ public abstract class ElementoEstructural implements Serializable {
 	private String id; // Identificador único del elemento
 	private double costePorHora; // Coste de uso por hora
 	private LocalDate fchRegistro; // Fecha en que el elemento fue registrado
-	private HashMap<ClaveVueloHoraUso, Uso> historialUsos; // Historial de usos por vuelo y hora
+	private HashMap<Vuelo, Uso> historialUsos; // Historial de usos por vuelo
 
 	/**
 	 * Constructor base para cualquier elemento estructural.
@@ -111,7 +111,7 @@ public abstract class ElementoEstructural implements Serializable {
 	/**
 	 * Devuelve el historial de usos del elemento.
 	 */
-	public HashMap<ClaveVueloHoraUso, Uso> getHistorailUsos() {
+	public HashMap<Vuelo, Uso> getHistorailUsos() {
 		return this.historialUsos;
 	}
 
@@ -123,8 +123,7 @@ public abstract class ElementoEstructural implements Serializable {
 	 */
 	public boolean addUso(Vuelo vuelo, LocalDateTime horaUso) {
 		Uso u = new Uso(horaUso, this);
-		ClaveVueloHoraUso clave = new ClaveVueloHoraUso(vuelo, horaUso);
-		this.historialUsos.put(clave, u);
+		this.historialUsos.put(vuelo, u);
 		return true;
 	}
 
