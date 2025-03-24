@@ -3,6 +3,8 @@ package elementos;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import usuarios.Controlador;
 import vuelos.Vuelo;
 
 /**
@@ -18,6 +20,7 @@ public abstract class Terminal extends ElementoEstructural {
     private String prefijoPuerta;                       // Prefijo que se usa para nombrar las puertas (ej. "A", "T", etc.)
     private HashMap<String, Puerta> puertas;            // Mapa de código -> puerta
     private ArrayList<Vuelo> vuelos;                    // Lista de vuelos asignados a esta terminal
+    private ArrayList<Controlador> controladores;       // Lista de controladores
 
     /**
      * Constructor de Terminal.
@@ -32,6 +35,7 @@ public abstract class Terminal extends ElementoEstructural {
         this.prefijoPuerta = prefijoPuerta;
         this.puertas = new HashMap<>();
         this.vuelos = new ArrayList<>();
+        this.controladores = new ArrayList<>();
 
         // Inicializa las puertas automáticamente
         for (int i = 1; i <= numeroPuertas; i++) {
@@ -98,5 +102,13 @@ public abstract class Terminal extends ElementoEstructural {
 
     public void addVuelo(Vuelo v) {
         this.vuelos.add(v);
+    }
+    
+    public ArrayList<Controlador> getControladores() {
+        return this.controladores;
+    }
+
+    public void addControlador(Controlador c) {
+        this.controladores.add(c);
     }
 }
