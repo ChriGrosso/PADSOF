@@ -11,6 +11,7 @@ public class AvionMercancias extends TipoAvion{
 		this.productosPeligrosos = productosPeligrosos;
 	}
 
+	@Override
 	public double getCapacidad() {
 		return this.capacidad;
 	}

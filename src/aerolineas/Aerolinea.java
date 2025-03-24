@@ -194,6 +194,7 @@ public class Aerolinea implements Serializable{
 		Uso u = new Uso(horaUso, elem);
 		ClaveVueloElemento clave = new ClaveVueloElemento(vuelo, elem);
 		this.historialUsos.put(clave, u);
+		vuelo.getMapaElemClave().put(elem, clave);
 		elem.addUso(vuelo, horaUso);
 		return true;
 	}
@@ -207,7 +208,7 @@ public class Aerolinea implements Serializable{
 		if(!this.vuelos.contains(vuelo)) {
 			return false;
 		}
-		ClaveVueloElemento clave = new ClaveVueloElemento(vuelo, elem);
+		ClaveVueloElemento clave = vuelo.getMapaElemClave().get(elem);
 		this.historialUsos.get(clave).setHoraDesuso(horaDesuso);
 		elem.getHistorailUsos().get(vuelo).setHoraDesuso(horaDesuso);
 		return true;

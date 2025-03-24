@@ -33,6 +33,7 @@ public abstract class TipoAvion implements Serializable{
 	
 	
 	public abstract boolean isMercancias();
+	public abstract double getCapacidad();
 	
 	public String getMarca() {
 		return this.marca;

@@ -137,7 +137,8 @@ class AerolineaTest {
 		vm2.asignarTerminal(t);
 		vm2.asignarPuerta(t.getPuertas().get("AB2"));
 		vm2.setEstVuelo(EstadoVuelo.DESCARGA_INI);
-		assertTrue(a.getHistorialUsos().containsKey(new ClaveVueloElemento(vm2, f)));
+		
+		assertTrue(a.getHistorialUsos().containsKey(vm2.getMapaElemClave().get(f)));
 	}
 
 	@Test
