@@ -296,7 +296,7 @@ class SkyManagerTest {
         skyManager.registrarVuelo(vuelo);
         Terminal terminal = new TerminalMercancias("Terminal1", LocalDate.now(), 3, "PU", 30.0);
         skyManager.registrarTerminal(terminal);
-        //terminal.addVuelo(vuelo);
+        terminal.addVuelo(vuelo);
         assertTrue(skyManager.buscarVuelosPorTerminal(terminal).contains(vuelo));
 	}
 

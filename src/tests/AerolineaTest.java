@@ -130,31 +130,35 @@ class AerolineaTest {
 
 	@Test
 	void testAddUso() {
+		a.addVuelo(vm2);
 		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
-		vm2.setLocAterrizaje(f);
+		vm2.asignarLocAterrizaje(f);
 		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
 		TerminalMercancias t = new TerminalMercancias("T1", dateTerm, 60, "AB", 1056);
 		vm2.asignarTerminal(t);
 		vm2.asignarPuerta(t.getPuertas().get("AB2"));
 		vm2.setEstVuelo(EstadoVuelo.DESCARGA_INI);
-		assertTrue(a.getHistorialUsos().containsKey(new ClaveVueloElemento(vm2, f)));
+		
+		assertTrue(a.getHistorialUsos().containsKey(vm2.getMapaElemClave().get(f)));
 	}
 
 	@Test
-	void testSetEndUso() throws InterruptedException {
+	void testSetEndUso() {
+		a.addVuelo(vm2);
 		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
-		vm2.setLocAterrizaje(f);
+		vm2.asignarLocAterrizaje(f);
 		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
 		TerminalMercancias t = new TerminalMercancias("T1", dateTerm, 60, "AB", 1056);
 		vm2.asignarTerminal(t);
 		vm2.asignarPuerta(t.getPuertas().get("AB2"));
 		vm2.setEstVuelo(EstadoVuelo.DESCARGA_INI);
-		Thread.sleep(1000);
 		vm2.setEstVuelo(EstadoVuelo.DESCARGA_FIN);
 		Hangar h = new HangarMercancias("HM001", 14.33, dateTerm, 50, 23.45, 70, 70);
 		vm2.getAvion().asignarHangar(h);
+		assertTrue(vm2.setEstVuelo(EstadoVuelo.EN_HANGAR));
 		vm2.setEstVuelo(EstadoVuelo.EN_HANGAR);
 		assertTrue(a.getHistorialUsos().get(new ClaveVueloElemento(vm2, f)).getHoraDesuso() != null);
+		assertTrue(a.getHistorialUsos().get(new ClaveVueloElemento(vm2, t.getPuertas().get("AB2"))).getHoraDesuso() != null);
 	}
 
 	@Test

@@ -5,10 +5,13 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import aerolineas.Aerolinea;
+import aerolineas.ClaveVueloElemento;
 import aviones.Avion;
 import aviones.EstadoAvion;
+import elementos.ElementoEstructural;
 import elementos.Finger;
 import elementos.LocalizacionAterrizaje;
 import elementos.Pista;
@@ -36,10 +39,10 @@ public abstract class Vuelo extends Observable implements Serializable{
 	private LocalizacionAterrizaje locAterrizaje;
 	private Pista pista;
 	private Puerta puerta;
+	private HashMap<ElementoEstructural, ClaveVueloElemento> mapaElemClave;
 	
 	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolineas, boolean llegada, Periodicidad periodicidad, Avion avion) {
-		super();
 		this.id = id;
 		this.origen = origen;
 		this.destino = destino;
@@ -59,6 +62,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 		this.llegada = llegada;
 		this.periodicidad = periodicidad;
 		this.estVuelo = EstadoVuelo.EN_TIEMPO;
+		this.mapaElemClave = new HashMap<ElementoEstructural, ClaveVueloElemento>();
 	}
 
 	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, Aerolinea aerolinea,
@@ -75,6 +79,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 		this.llegada = llegada;
 		this.periodicidad = periodicidad;
 		this.estVuelo = EstadoVuelo.EN_TIEMPO;
+		this.mapaElemClave = new HashMap<ElementoEstructural, ClaveVueloElemento>();
 	}
 	
 	@Override
@@ -174,6 +179,10 @@ public abstract class Vuelo extends Observable implements Serializable{
 		return this.puerta;
 	}
 	
+	public HashMap<ElementoEstructural, ClaveVueloElemento> getMapaElemClave() {
+		return this.mapaElemClave;
+	}
+	
 	
 	public void setPuerta(Puerta puerta) {
 		this.puerta = puerta;
@@ -231,9 +240,11 @@ public abstract class Vuelo extends Observable implements Serializable{
 				} else {
 					this.avion.setEstadoAvion(EstadoAvion.EN_PARKING);
 				}
-				for(Aerolinea a: this.aerolinea) {
-					a.addUso(LocalDateTime.now(), this, this.locAterrizaje);
-					a.addUso(LocalDateTime.now(), this, this.puerta);
+				if(estV == EstadoVuelo.DESEMBARQUE_INI || estV == EstadoVuelo.DESCARGA_INI) {
+					for(Aerolinea a: this.aerolinea) {
+						a.addUso(LocalDateTime.now(), this, this.locAterrizaje);
+						a.addUso(LocalDateTime.now(), this, this.puerta);
+					}
 				}
 				this.estVuelo = estV;
 				return true;
