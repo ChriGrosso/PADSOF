@@ -130,6 +130,7 @@ class AerolineaTest {
 
 	@Test
 	void testAddUso() {
+		a.addVuelo(vm2);
 		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
 		vm2.asignarLocAterrizaje(f);
 		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
@@ -143,6 +144,7 @@ class AerolineaTest {
 
 	@Test
 	void testSetEndUso() {
+		a.addVuelo(vm2);
 		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
 		vm2.asignarLocAterrizaje(f);
 		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
