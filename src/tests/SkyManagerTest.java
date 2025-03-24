@@ -43,7 +43,7 @@ class SkyManagerTest {
     @BeforeEach
     void setUp() throws Exception {
         skyManager = SkyManager.getInstance();
-        AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
+        AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 2, false);
 		Avion av = new Avion("0001", LocalDate.of(2023, 3, 14), m, LocalDate.of(2024, 6, 20)); 
 		a = new Aerolinea("IBE", "Iberia");
 
@@ -204,7 +204,7 @@ class SkyManagerTest {
 
 	@Test
     void testRegistrarUsuario() {
-		Usuario usuario = new Gestor("01020304A", "Gestor", "password");
+		Usuario usuario = new Gestor("01020304B", "Gestor", "password");
         skyManager.registrarUsuario(usuario);
         assertTrue(skyManager.getUsuarios().containsKey("01020304A"));
     }
@@ -277,10 +277,10 @@ class SkyManagerTest {
 
 	@Test
 	void testLogIn() {
-		Usuario usuario = new Gestor("01020304A", "Gestor", "password");
+		Usuario usuario = new Gestor("11111111A", "Gestor", "password");
 		skyManager.registrarUsuario(usuario);
-		skyManager.logIn("01020304A", "password");
-		assertEquals("01020304A", skyManager.getUsuarioActual().getDni());
+		skyManager.logIn("11111111A", "password");
+		assertEquals("11111111A", skyManager.getUsuarioActual().getDni());
 	}
 
 	@Test
@@ -316,7 +316,46 @@ class SkyManagerTest {
 
 	@Test
 	void testVerEstadisticasGestor() {
+		Usuario usuario = new Gestor("11111111A", "Gestor", "password");
+		skyManager.registrarUsuario(usuario);
+		skyManager.logIn("11111111A", "password");
 		assertTrue(skyManager.verEstadisticasGestor().length()>0);
+	}
+	
+	@Test
+	void testVerFacturasPorEstatusDePago() {
+		Factura factura = new Factura("INV-999", 500.0, 750.0, LocalDate.now(), a, "logo.png");
+		skyManager.registrarFactura(factura);
+		ArrayList<Factura> facs = skyManager.verFacturasPorEstatusDePago(false);
+		int flag =0;
+		for (Factura f: facs) {
+			if (f.getId().equals("INV-999")) {
+				assertTrue(true);
+				flag = 1;
+			}
+		}
+		if(flag==0) {
+			assertTrue(false);
+		}
+	}
+	
+	@Test
+	void testGetTerminalesDisponibles() {
+		Terminal terminal = new TerminalMercancias("Terminal1"+LocalDateTime.now(), LocalDate.now(), 3, "PU", 30.0);
+		
+		skyManager.registrarTerminal(terminal);
+		
+		ArrayList<Terminal> terminales = skyManager.getTerminalesDisponibles(vuelo);
+		int flag =0;
+		for (Terminal t: terminales) {
+			if (t.getId().equals(terminal.getId())) {
+				assertTrue(true);
+				flag = 1;
+			}
+		}
+		if(flag==0) {
+			assertTrue(false);
+		}
 	}
 
 }

@@ -1,6 +1,8 @@
 package elementos;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import vuelos.Vuelo;
 import vuelos.VueloPasajeros;
 
@@ -51,7 +53,35 @@ public class TerminalPasajeros extends Terminal {
         }
         return total;
     }
+    
+    /**
+     * Calcula el número total de pasajeros presentes en todos los vuelos asignados a la terminal.
+     * @param r1 Extremo inferior del rango de tiempo
+     * @param r2 Extremo superior del rango de tiempo
+     * @return número total de pasajeros
+     */
+    public int getPasajerosTotal(LocalDateTime r1, LocalDateTime r2) {
+        if (this.getVuelos().isEmpty()) {
+            return 0;
+        }
 
+        int total = 0;
+        for (Vuelo v : this.getVuelos()) {
+        	if (v.getLlegada() && v.getHoraLlegada().isBefore(r2) && v.getHoraLlegada().isAfter(r1)) {
+        		 total += ((VueloPasajeros) v).getNumPasajeros();
+        	}
+        	if (!v.getLlegada() && v.getHoraSalida().isBefore(r2) && v.getHoraSalida().isAfter(r1)) {
+        		 total += ((VueloPasajeros) v).getNumPasajeros();
+        	}
+        }
+        return total;
+    }
+    
+    /**
+     * Determina si una terminal es de mercancias
+     * 
+     * @return false, no es de mercancias
+     */
 	@Override
 	public boolean isMercancias() {
 		return false;
@@ -66,8 +96,15 @@ public class TerminalPasajeros extends Terminal {
 	}
 
 
+	/**
+	 * Método para obtener la capacidad disponible de la terminal en un rango especifico de tiempo
+	 * 
+	 * @param r1 Extremo inferior del rango de tiempo
+     * @param r2 Extremo superior del rango de tiempo
+     * @return capacidad disponible en toneladas de la terminal
+     */
 	@Override
-	public double getCapDisponible() {
-		return this.getCapacidad()-this.getPasajerosTotal();
+	public double getCapDisponible(LocalDateTime r1, LocalDateTime r2) {
+		return this.capacidadPersonas-this.getPasajerosTotal(r1, r2);
 	}
 }

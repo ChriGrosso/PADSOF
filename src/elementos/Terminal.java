@@ -1,6 +1,7 @@
 package elementos;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -48,7 +49,7 @@ public abstract class Terminal extends ElementoEstructural {
     
     public abstract boolean isMercancias();
     public abstract double getCapacidad();
-    public abstract double getCapDisponible();
+    public abstract double getCapDisponible(LocalDateTime r1, LocalDateTime r2);
 
     /**
      * Cuenta cuántas puertas están actualmente en uso.
@@ -60,6 +61,28 @@ public abstract class Terminal extends ElementoEstructural {
             if (p.enUso()) {
                 p_ocupadas += 1;
             }
+        }
+        return p_ocupadas;
+    }
+    
+    /**
+     * Cuenta cuántas puertas estaran ocupadas dentro del rango de tiempo especificado.
+     * 
+     * @param r1 Extremo inferior del rango de tiempo
+     * @param r2 Extremo superior del rango de tiempo
+     * @return número de puertas ocupadas
+     */
+    public int numPuertasOcupadasTerm(LocalDateTime r1, LocalDateTime r2) {
+        int p_ocupadas = 0;
+
+        for(Vuelo v: this.vuelos) {
+        	if (v.getLlegada() && v.getHoraLlegada().isBefore(r2) && v.getHoraLlegada().isAfter(r1)) {
+        		p_ocupadas +=1;
+        	}
+        	if (!v.getLlegada() && v.getHoraSalida().isBefore(r2) && v.getHoraSalida().isAfter(r1)) {
+        		p_ocupadas +=1;
+        	}
+        	
         }
         return p_ocupadas;
     }

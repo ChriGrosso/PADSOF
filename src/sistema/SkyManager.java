@@ -21,12 +21,14 @@ import aeropuertos.Aeropuerto;
 import aeropuertos.Direccion;
 import aeropuertos.Temporada;
 import aviones.EstadoAvion;
+import aviones.TipoAvion;
 import elementos.Finger;
 import elementos.Hangar;
 import elementos.Pista;
 import elementos.Terminal;
 import elementos.ZonaParking;
 import facturas.Factura;
+import usuarios.Gestor;
 import usuarios.Usuario;
 import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
@@ -43,7 +45,8 @@ import elementos.Puerta;
 public class SkyManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static transient SkyManager INSTANCE = null;
-
+	
+	private long rangoTiempoMinutosMostrarTerminalesAvion;
 	private double costeBaseSalida;
 	private double costeBaseLlegada;
 	private double costeExtraMercancias;
@@ -70,6 +73,7 @@ public class SkyManager implements Serializable {
 		if (fichero.exists()) {
 			 this.cargarDatos();
 		} else {
+			this.rangoTiempoMinutosMostrarTerminalesAvion = 30;
 			this.costeBaseLlegada = 10;
 			this.costeBaseSalida = 10;
 			this.costeExtraMercancias = 10;
@@ -86,6 +90,8 @@ public class SkyManager implements Serializable {
 			this.hangares = new HashMap<String, Hangar>();
 			this.facturas = new HashMap<String, Factura>();
 			this.usuarioActual = null;
+			Usuario gestor = new Gestor("01020304A", "Pepe", "password123");
+			this.usuarios.put("01020304A", gestor);
 		}
 	}
 	
@@ -414,10 +420,7 @@ public class SkyManager implements Serializable {
 		if (this.vuelos.containsKey(v.getId())) {
 			return false;
 		}
-		Aerolinea a = v.getAerolinea();
-		if (this.aerolineas.containsKey(a.getId()) == false) {
-			return false;
-		}
+	
 		this.vuelos.put(v.getId(), v);
 		return true;
 	}
@@ -432,12 +435,7 @@ public class SkyManager implements Serializable {
 		if (this.aerolineas.containsKey(a.getId()) == true) {
 			return false;
 		}
-		ArrayList<Vuelo> vuelos = a.getVuelos();
-		for (Vuelo v: vuelos) {
-			if(this.vuelos.containsKey(v.getId())==false) {
-				this.vuelos.put(v.getId(), v);
-			}
-		}
+		
 		this.aerolineas.put(a.getId(), a);
 		return true;
 	}
@@ -466,10 +464,7 @@ public class SkyManager implements Serializable {
 		if (this.facturas.containsKey(f.getId()) == true) {
 			return false;
 		}
-		String idArolinea = f.getAirline();
-		if (this.aerolineas.containsKey(idArolinea) == false) {
-			return false;
-		}
+		
 		this.facturas.put(f.getId(), f);
 		return true;
 	}
@@ -484,12 +479,7 @@ public class SkyManager implements Serializable {
 		if (this.terminales.containsKey(t.getId()) == true) {
 			return false;
 		}
-		ArrayList<Vuelo> vuelos = t.getVuelos();
-		for (Vuelo v: vuelos) {
-			if(this.vuelos.containsKey(v.getId())==false) {
-				this.vuelos.put(v.getId(), v);
-			}
-		}
+	
 		this.terminales.put(t.getId(), t);
 		return true;
 	}
@@ -559,7 +549,7 @@ public class SkyManager implements Serializable {
      */
 	public void logIn(String user, String password) {
 		Usuario usuario = usuarios.get(user);
-	    if (usuario != null && usuario.getPassword().equals(password)) {
+	    if (this.usuarios.containsKey(user) && usuario.getPassword().equals(password)) {
 	        this.usuarioActual = usuario;
 	    } else {
 	    	throw new IllegalArgumentException("Usuario o contraseña incorrectos.");
@@ -692,5 +682,80 @@ public class SkyManager implements Serializable {
 		
 		return estadFingers+estadParkings+estadPuertas+estadHangares;
 	}
+	
+
+	/**
+     * Devuelve las facturas que esten pagadas o las no lo esten dependiendo del parametro introducido.
+     * 
+     * @param pagado Boolean sobre si se quieren facturas por pagar o que ya esten pagadas.
+     * @return Una lista de facturas.
+     */
+	 public ArrayList<Factura> verFacturasPorEstatusDePago(Boolean pagado) {
+		 ArrayList<Factura> facturas = new ArrayList<Factura>();
+		 Collection <Factura> factSistema = this.facturas.values();
+		 
+		 for (Factura f: factSistema) {
+			 if (f.isPagado() == pagado) {
+				 facturas.add(f);
+			 }
+		 }
+		 return facturas;
+	 }
+	 
+	 /**
+	 * Devuelve las terminales disponibles para asignar a un vuelo.
+	 * 
+	 * @param vuelo Vuelo al que se le quiere asignar terminal.
+	 * @return Una lista de terminables disponibles.
+	 */
+	 public ArrayList<Terminal> getTerminalesDisponibles(Vuelo vuelo) {
+		 ArrayList<Terminal> terminales = new ArrayList<Terminal>();
+		 Collection<Terminal> termSistema = this.terminales.values();
+		 TipoAvion avion = vuelo.getAvion().getTipoAvion();
+		 System.out.println(termSistema);
+		 LocalDateTime horaVuelo, r1, r2;
+		 if (vuelo.getLlegada()) {
+			 horaVuelo = vuelo.getHoraLlegada();
+		 } else {
+			 horaVuelo = vuelo.getHoraSalida();
+		 }
+		 r1 = horaVuelo.minusMinutes(rangoTiempoMinutosMostrarTerminalesAvion);
+		 r2 = horaVuelo.plusMinutes(rangoTiempoMinutosMostrarTerminalesAvion);
+		 
+		 for (Terminal t: termSistema) {
+			 if (t.isMercancias() == vuelo.isVueloMercancias() && avion.getCapacidad() < t.getCapDisponible(r1, r2) 
+					 && t.numPuertasOcupadasTerm(r1, r2)<t.getNumeroPuertas()) {
+				 terminales.add(t);
+			 }
+		 }
+		 
+		 return terminales;
+	 }
+	 
+	 /**
+	  * Devuelve la representacion en String del sistema.
+	  * 
+	  * @return Un string con todo el contenido del sistema.
+	  */
+	 public String toString() {
+		 String s = "Sistema SkyManager costes: BaseLlegada ("+this.costeBaseLlegada+"), BaseSalida: ("+this.costeBaseSalida+
+				 "), ExtraMercancias: ("+this.costeExtraMercancias+"), ExtraPasajeros: ("+this.costeExtraPasajeros+")\n";
+		 
+		 s += "Informacion Propia Apuerto: "+this.informacionPropia+"\n";
+		 s += "Aeropuertos Externos: "+this.aeropuertosExternos+"\n";
+		 s += "Usuarios: "+ this.usuarios+"\n";
+		 s += "Vuelos: "+ this.vuelos+"\n";
+		 s += "Aerolineas: "+ this.aerolineas+"\n";
+		 s += "Terminales: "+this.terminales+"\n";
+		 s += "Pistas: "+this.pistas+"\n";
+		 s += "Fingers: "+this.fingers+"\n";
+		 s += "Zonas Parking: "+this.zonasParking+"\n";
+		 s += "Hangares: "+this.hangares+"\n";
+		 s += "Facturas: "+this.facturas+"\n";
+		 s += "Usuario Actual: "+this.usuarioActual+"\n";
+		 
+		 return s;
+	 }
+	 
 	
 }

@@ -34,6 +34,15 @@ public abstract class ElementoEstructural implements Serializable {
 		this.setFchRegistro(fchRegistro);
 		this.historialUsos = new HashMap<>();
 	}
+	
+	/**
+	 * Da una representacion en cadena del elemento
+	 * 
+	 * @return String con la informacion del elemento
+	 */
+	public String toString() {
+		return "id: "+this.id+" fechaRegistro: "+this.fchRegistro+" Usos: "+this.getHistorailUsos();
+	}
 
 	/**
 	 * Calcula el total de horas que este recurso ha sido utilizado en el día actual.
@@ -152,4 +161,5 @@ public abstract class ElementoEstructural implements Serializable {
 	public void LimpiarHistorialUsos() {
 		this.historialUsos.clear();
 	}
+
 }
