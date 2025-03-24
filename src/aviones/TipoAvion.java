@@ -31,6 +31,9 @@ public abstract class TipoAvion implements Serializable{
 		this.largo = largo;
 	}
 	
+	
+	public abstract boolean isMercancias();
+	
 	public String getMarca() {
 		return this.marca;
 	}

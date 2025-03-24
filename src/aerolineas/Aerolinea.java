@@ -3,18 +3,14 @@ package aerolineas;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import aeropuertos.Aeropuerto;
 import aviones.Avion;
 import aviones.TipoAvion;
 import elementos.ElementoEstructural;
 import elementos.Uso;
 import usuarios.Operador;
-import usuarios.Usuario;
 import vuelos.Vuelo;
 
 /**
@@ -68,6 +64,15 @@ public class Aerolinea implements Serializable{
      */
 	public String getNombre() {
 		return this.nombre;
+	}
+	
+	/**
+     * Obtiene las estadísticas de la aerolínea.
+     *
+     * @return Estadísticas de la aerolínea.
+     */
+	public EstadisticasVuelos getEstadisticas() {
+		return this.estadisticasVuelos;
 	}
 	
 	/**
@@ -203,9 +208,6 @@ public class Aerolinea implements Serializable{
 			return false;
 		}
 		ClaveVueloElemento clave = new ClaveVueloElemento(vuelo, elem);
-		if(this.historialUsos.containsKey(clave) == false) {
-			return false;
-		}
 		this.historialUsos.get(clave).setHoraDesuso(horaDesuso);
 		elem.getHistorailUsos().get(vuelo).setHoraDesuso(horaDesuso);
 		return true;
@@ -218,56 +220,5 @@ public class Aerolinea implements Serializable{
 	public void LimpiarHistorialUsos() {
 		this.historialUsos.clear();
 		return;
-	}
-	
-	
-	/**
-     * Obtiene las estadísticas de los vuelos que llegaron a tiempo de la aerolínea.
-     *
-     * @return Estadísticas de los vuelos que llegaron a tiempo de la aerolínea.
-     */
-	public String verEstadisticasOperadorEnTiempo(Usuario user) {
-		if(user.esOperador() == false) { return null; }
-		return this.estadisticasVuelos.vuelosEnTiempoToString();
-	}
-	
-	/**
-     * Obtiene las estadísticas de los vuelos retrasadoss de la aerolínea.
-     *
-     * @return Estadísticas de los vuelos retrasados de la aerolínea.
-     */
-	public String verEstadisticasOperadorRetrasados(Usuario user) {
-		if(user.esOperador() == false) { return null; }
-		return this.estadisticasVuelos.vuelosRetrasadosToString();
-	}
-	
-	/**
-     * Obtiene el retraso medio (en minutos) de la aerolínea por mes.
-     *
-     * @return Retraso medio (en minutos) de la aerolínea por mes.
-     */
-	public String verEstadisticasOperadorRetrasoMes(Usuario user, Month month) {
-		if(user.esOperador() == false) { return null; }
-		return this.estadisticasVuelos.retrasoMedioMesToString(month);
-	}
-	
-	/**
-     * Obtiene el retraso medio (en minutos) de la aerolínea por vuelo.
-     *
-     * @return Retraso medio (en minutos) de la aerolínea por vuelo.
-     */
-	public String verEstadisticasOperadorRetrasoVuelo(Usuario user, Aeropuerto origen, Aeropuerto destino) {
-		if(user.esOperador() == false) { return null; }
-		return this.estadisticasVuelos.retrasoMedioVueloToString(origen, destino);
-	}
-	
-	/**
-     * Obtiene el retraso medio (en minutos) de la aerolínea por mfranja horaria.
-     *
-     * @return Retraso medio (en minutos) de la aerolínea por franja horaria.
-     */
-	public String verEstadisticasOperadorRetrasoFranjaHoraria(Usuario user, LocalTime inicio, LocalTime fin) {
-		if(user.esOperador() == false) { return null; }
-		return this.estadisticasVuelos.retrasoMedioFranjaHToString(inicio, fin);
 	}
 }

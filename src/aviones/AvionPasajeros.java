@@ -12,4 +12,9 @@ public class AvionPasajeros extends TipoAvion {
 	public int getNumPlazas() {
 		return this.numPlazas;
 	}
+
+	@Override
+	public boolean isMercancias() {
+		return false;
+	}
 }
