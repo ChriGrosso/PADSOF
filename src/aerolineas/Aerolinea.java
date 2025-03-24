@@ -16,6 +16,12 @@ import elementos.Uso;
 import usuarios.Usuario;
 import vuelos.Vuelo;
 
+/**
+ * Clase Aerolinea que representa a una aerolinea con sus características principales, 
+ * como su nombre, código, los aviones que tiene o los vuelos que maneja.
+ * 
+ * @author Sofía Castro - sofiai.castro@estudiante.uam.es 
+ */
 public class Aerolinea implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String id;
@@ -26,6 +32,12 @@ public class Aerolinea implements Serializable{
 	private HashMap<ClaveVueloElemento, Uso> historialUsos;
 	private EstadisticasVuelos estadisticasVuelos;
 	
+	/**
+     * Constructor de la clase Aerolinea.
+     *
+     * @param id       Código de identificación de la aerolínea.
+     * @param nombre   Nombre de la aerolínea.
+     */
 	public Aerolinea(String id, String nombre) {
 		this.id = id;
 		this.nombre = nombre;
@@ -37,35 +49,75 @@ public class Aerolinea implements Serializable{
 	}
 	
 	
+	/**
+     * Obtiene el código de la aerolínea.
+     *
+     * @return Código de la aerolínea.
+     */
 	public String getId()  {
 		return this.id;
 	}
 	
+	/**
+     * Obtiene el nombre de la aerolínea.
+     *
+     * @return Nombre de la aerolínea.
+     */
 	public String getNombre() {
 		return this.nombre;
 	}
 	
+	/**
+     * Obtiene los vuelos de la aerolínea.
+     *
+     * @return Lista de vuelos de la aerolínea.
+     */
 	public ArrayList<Vuelo> getVuelos() {
 		return this.vuelos;
 	}
 	
+	/**
+     * Obtiene los aviones de la aerolínea.
+     *
+     * @return Lista (en forma de HashMap) de aviones de la aerolínea.
+     */
 	public HashMap<String, Avion> getAviones() {
 		return this.aviones;
 	}
 	
+	/**
+     * Obtiene los tipos de aviones de la aerolínea.
+     *
+     * @return Lista de tipos de aviones de la aerolínea.
+     */
 	public ArrayList<TipoAvion> getTiposAvion() {
 		return this.tiposAviones;
 	}
 	
+	/**
+     * Obtiene el historial de usos de la infraestructura del aeropuerto de la aerolínea.
+     *
+     * @return Lista (en forma de HashMap) de todos los usos de infraestructura de la aerolínea.
+     */
 	public HashMap<ClaveVueloElemento, Uso> getHistorialUsos() {
 		return this.historialUsos;
 	}
 	
+	/**
+     * Obtiene el historial de usos de la infraestructura del aeropuerto de la aerolínea.
+     *
+     * @return Lista (no en HashMap) de todos los usos de infraestructura de la aerolínea.
+     */
 	public ArrayList<Uso> getArrayUsos() {
 		return (ArrayList<Uso>) this.historialUsos.values();
 	}
 	
 	
+	/**
+     * Añade un vuelo a la lista de la aerolínea.
+     *
+     * @return True si se ha podido hacer la operación correctamente, False sino.
+     */
 	public boolean addVuelo(Vuelo v) {
 		if(this.vuelos.contains(v) || !this.aviones.containsValue(v.getAvion())) {
 			return false;
@@ -74,6 +126,11 @@ public class Aerolinea implements Serializable{
 		return true;
 	}
 	
+	/**
+     * Añade un avión a la lista de la aerolínea.
+     *
+     * @return True si se ha podido hacer la operación correctamente, False sino.
+     */
 	public boolean addAvion(Avion a) {
 		if(this.aviones.containsKey(a.getMatricula()) || !this.tiposAviones.contains(a.getTipoAvion())) {
 			return false;
@@ -82,6 +139,11 @@ public class Aerolinea implements Serializable{
 		return true;
 	}
 	
+	/**
+     * Añade un vuelo a la lista de la aerolínea.
+     *
+     * @return True si se ha podido hacer la operación correctamente, False sino.
+     */
 	public boolean addTipoAvion(TipoAvion ta) {
 		if(this.tiposAviones.contains(ta)) {
 			return false;
@@ -90,7 +152,15 @@ public class Aerolinea implements Serializable{
 		return true;
 	}
 	
+	/**
+     * Añade un uso de la infraestructura por un vuelo de la aerolínea.
+     *
+     * @return True si se ha podido hacer la operación correctamente, False sino.
+     */
 	public boolean addUso(LocalDateTime horaUso, Vuelo vuelo, ElementoEstructural elem) {
+		if(!this.vuelos.contains(vuelo)) {
+			return false;
+		}
 		Uso u = new Uso(horaUso, elem);
 		ClaveVueloElemento clave = new ClaveVueloElemento(vuelo, elem);
 		this.historialUsos.put(clave, u);
@@ -98,7 +168,15 @@ public class Aerolinea implements Serializable{
 		return true;
 	}
 	
+	/**
+     * Termina un uso de la infraestructura por un vuelo de la aerolínea.
+     *
+     * @return True si se ha podido hacer la operación correctamente, False sino.
+     */
 	public boolean setEndUso(LocalDateTime horaDesuso, Vuelo vuelo, ElementoEstructural elem) {
+		if(!this.vuelos.contains(vuelo)) {
+			return false;
+		}
 		ClaveVueloElemento clave = new ClaveVueloElemento(vuelo, elem);
 		if(this.historialUsos.containsKey(clave) == false) {
 			return false;
@@ -108,31 +186,61 @@ public class Aerolinea implements Serializable{
 		return true;
 	}
 	
+	/**
+     * Limpia el historial de usos de la aerolínea.
+     *
+     */
 	public void LimpiarHistorialUsos() {
 		this.historialUsos.clear();
 		return;
 	}
 	
+	
+	/**
+     * Obtiene las estadísticas de los vuelos que llegaron a tiempo de la aerolínea.
+     *
+     * @return Estadísticas de los vuelos que llegaron a tiempo de la aerolínea.
+     */
 	public String verEstadisticasOperadorEnTiempo(Usuario user) {
 		if(user.esOperador() == false) { return null; }
 		return this.estadisticasVuelos.vuelosEnTiempoToString();
 	}
 	
+	/**
+     * Obtiene las estadísticas de los vuelos retrasadoss de la aerolínea.
+     *
+     * @return Estadísticas de los vuelos retrasados de la aerolínea.
+     */
 	public String verEstadisticasOperadorRetrasados(Usuario user) {
 		if(user.esOperador() == false) { return null; }
 		return this.estadisticasVuelos.vuelosRetrasadosToString();
 	}
 	
+	/**
+     * Obtiene el retraso medio (en minutos) de la aerolínea por mes.
+     *
+     * @return Retraso medio (en minutos) de la aerolínea por mes.
+     */
 	public String verEstadisticasOperadorRetrasoMes(Usuario user, Month month) {
 		if(user.esOperador() == false) { return null; }
 		return this.estadisticasVuelos.retrasoMedioMesToString(month);
 	}
 	
+	/**
+     * Obtiene el retraso medio (en minutos) de la aerolínea por vuelo.
+     *
+     * @return Retraso medio (en minutos) de la aerolínea por vuelo.
+     */
 	public String verEstadisticasOperadorRetrasoVuelo(Usuario user, Aeropuerto origen, Aeropuerto destino) {
 		if(user.esOperador() == false) { return null; }
 		return this.estadisticasVuelos.retrasoMedioVueloToString(origen, destino);
 	}
 	
+	/**
+     * Obtiene el retraso medio (en minutos) de la aerolínea por mfranja horaria.
+     *
+     * @return Retraso medio (en minutos) de la aerolínea por franja horaria.
+     */
 	public String verEstadisticasOperadorRetrasoFranjaHoraria(Usuario user, LocalTime inicio, LocalTime fin) {
 		if(user.esOperador() == false) { return null; }
 		return this.estadisticasVuelos.retrasoMedioFranjaHToString(inicio, fin);
