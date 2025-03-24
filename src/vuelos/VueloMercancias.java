@@ -52,7 +52,7 @@ public class VueloMercancias extends Vuelo {
 	
 
 	public boolean asignarTerminal(TerminalMercancias terminal) {
-		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getCargaTotal()+this.carga > terminal.getCapacidadToneladas()) {
+		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getCargaTotal()+this.carga > terminal.getCapacidad()) {
 			return false;
 		}
 		this.terminal = terminal;

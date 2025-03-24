@@ -45,7 +45,7 @@ public class VueloPasajeros extends Vuelo{
 	
 
 	public boolean asignarTerminal(TerminalPasajeros terminal) {
-		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getPasajerosTotal()+this.numPasajeros > terminal.getCapacidadPersonas()) {
+		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getPasajerosTotal()+this.numPasajeros > terminal.getCapacidad()) {
 			return false;
 		}
 		this.terminal = terminal;
