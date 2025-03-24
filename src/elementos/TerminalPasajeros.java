@@ -64,4 +64,10 @@ public class TerminalPasajeros extends Terminal {
 	public double getCapacidad() {
 		return capacidadPersonas;
 	}
+
+
+	@Override
+	public double getCapDisponible() {
+		return this.getCapacidad()-this.getPasajerosTotal();
+	}
 }
