@@ -2,6 +2,8 @@ package elementos;
 
 import java.time.*;
 import java.util.ArrayList;
+
+import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
 
 /**
@@ -88,10 +90,16 @@ public class Pista extends ElementoEstructural {
      */
     public void actualizarColaVuelos() {
         if (this.vuelosQueSirve.isEmpty()) {
+        	if(this.despegue) {
+        		this.usando.setEstVuelo(EstadoVuelo.EN_VUELO);
+        	}
             this.usando = null;
             return;
         }
         Vuelo siguiente = this.vuelosQueSirve.get(0);
+        if(this.despegue) {
+    		this.usando.setEstVuelo(EstadoVuelo.EN_VUELO);
+    	}
         this.usando = siguiente;
         this.vuelosQueSirve.remove(0);
     }
