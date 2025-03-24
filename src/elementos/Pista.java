@@ -16,7 +16,7 @@ public class Pista extends ElementoEstructural {
     private static final long serialVersionUID = 1L;
 
     private boolean despegue;              // Indica si la pista es para despegue (true) o aterrizaje (false)
-    private int longitud;                  // Longitud de la pista en metros
+    private double longitud;                  // Longitud de la pista en metros
     private ArrayList<Vuelo> vuelosQueSirve; // Cola de vuelos esperando para usar la pista
     private Vuelo usando;                  // Vuelo que está utilizando la pista actualmente
 
@@ -27,8 +27,8 @@ public class Pista extends ElementoEstructural {
      * @param despegue true si es pista de despegue, false si es de aterrizaje
      * @param longitud longitud física de la pista
      */
-    public Pista(String id, LocalDate fchRegistro, boolean despegue, int longitud) {
-        super(id, 0, fchRegistro);
+    public Pista(String id, LocalDate fchRegistro, boolean despegue, double longitud, double costePH) {
+        super(id, costePH, fchRegistro);
         this.setDespegue(despegue);
         this.setLongitud(longitud);
         this.vuelosQueSirve = new ArrayList<>();
@@ -50,11 +50,11 @@ public class Pista extends ElementoEstructural {
         this.despegue = despegue;
     }
 
-    public int getLongitud() {
+    public double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(int longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
 

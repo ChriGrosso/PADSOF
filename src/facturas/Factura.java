@@ -3,6 +3,7 @@ package facturas;
 import es.uam.eps.padsof.invoices.*;
 import es.uam.eps.padsof.telecard.*;
 
+import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -44,6 +45,24 @@ public class Factura implements IInvoiceInfo, Serializable {
         this.aerolinea = aerolinea;
         this.logo = logo;
     }
+    
+    public void addUso(Uso uso) {
+        this.serviciosUsados.add(uso);
+        this.rUsage.add(uso);
+    }
+
+    public void generarFactura(String path) throws NonExistentFileException, UnsupportedImageTypeException {
+        File outputDirectory = new File(path).getParentFile();
+        
+        // Verifica se la cartella di destinazione esiste
+        if (!outputDirectory.exists() || !outputDirectory.isDirectory()) {
+            throw new NonExistentFileException("La carpeta de destino no existe.");
+        }
+
+        // Procedi con la creazione della fattura (se il percorso è valido)
+        InvoiceSystem.createInvoice(this, path);
+    }
+
 
     /**
      * Calcula el coste total basado en los servicios usados.

@@ -35,7 +35,8 @@ public class Uso implements IResourceUsageInfo, Serializable {
      * @return duración del uso (puede incluir decimales si se adaptara)
      */
     public double calcularDuracion() {
-        return ChronoUnit.HOURS.between(horaUso, horaDesuso);
+        long minutes = ChronoUnit.MINUTES.between(horaUso, horaDesuso);
+        return minutes / 60.0;
     }
 
     /**

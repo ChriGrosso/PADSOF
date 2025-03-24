@@ -55,13 +55,32 @@ public abstract class ElementoEstructural implements Serializable {
 		}
 		return horasUsoHoy;
 	}
-
+	
 	/**
-	 * Calcula la media de horas de uso diario (sin implementar aún).
-	 * @return 0 (valor por defecto)
+	 * Calcula la media de horas que este recurso ha sido utilizado.
+	 * Se consideran todos los usos.
+	 * @return media Horas de uso diario
 	 */
 	public double mediaHorasUsoDiario() {
-		return 0;
+	    if (this.historialUsos.isEmpty()) {
+	        return 0.0;
+	    }
+
+	    HashMap<LocalDate, Double> usoPorDia = new HashMap<>();
+
+	    for (Uso uso : this.historialUsos.values()) {
+	        LocalDate fecha = uso.getHoraUso().toLocalDate();
+	        double duracion = uso.calcularDuracion();
+
+	        usoPorDia.put(fecha, usoPorDia.getOrDefault(fecha, 0.0) + duracion);
+	    }
+
+	    double totalHoras = 0.0;
+	    for (double horas : usoPorDia.values()) {
+	        totalHoras += horas;
+	    }
+
+	    return totalHoras / usoPorDia.size();
 	}
 
 	// Getters y setters con documentación básica
