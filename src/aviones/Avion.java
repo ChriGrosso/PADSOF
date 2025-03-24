@@ -56,6 +56,7 @@ public class Avion extends Observable implements Serializable {
 		return;
 	}
 	public void setEstadoAvion(EstadoAvion estadoAvion) {
+		this.notifyObservers(this.estadoAvion, estadoAvion);
 		this.estadoAvion = estadoAvion;
 		return;
 	}

@@ -198,6 +198,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 	}
 	
 	public boolean setEstVuelo(EstadoVuelo estV) {
+		this.notifyObservers(this.estVuelo, estV);
 		if (estV == EstadoVuelo.RETRASADO && this.estVuelo.equals(EstadoVuelo.EN_TIEMPO)) {
 			this.estVuelo = estV;
 			return true;

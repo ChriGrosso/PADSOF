@@ -13,7 +13,12 @@ import org.junit.platform.suite.api.Suite;
 				AeropuertoTest.class,
 				TemporadaTest.class,
 				NotificacionTest.class,
-				AerolineaTest.class})
+				AerolineaTest.class,
+				SkyManagerTest.class,
+				ControladorTest.class,
+				OperadorTest.class,
+				GestorTest.class,
+				UsuarioTest.class})
 @Suite
 public class AllTest {
 }

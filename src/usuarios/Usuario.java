@@ -63,6 +63,15 @@ public abstract class Usuario implements Observer, Serializable{
 	}
 	
 	/**
+     * Obtiene las notificaciones del usuario.
+     * 
+     * @return Lista de notificaciones del usuario.
+     */
+	public ArrayList<Notificacion> getNotificaciones() {
+		return this.notificaciones;
+	}
+	
+	/**
      * Establece una nueva contraseña para el usuario.
      * 
      * @param p Nueva contraseña a establecer.

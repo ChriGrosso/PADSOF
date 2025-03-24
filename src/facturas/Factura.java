@@ -75,7 +75,7 @@ public class Factura implements IInvoiceInfo, Serializable{
 
 	@Override
 	public String getAirline() {
-		return this.aerolinea.getNombre();
+		return this.aerolinea.getId();
 	}
 
 	@Override

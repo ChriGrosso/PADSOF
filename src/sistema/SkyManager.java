@@ -405,6 +405,24 @@ public class SkyManager implements Serializable {
 	}
 	
 	/**
+     * Registra un nuevo vuelo en el sistema.
+     * 
+     * @param v vuelo a registrar.
+     * @return true si el vuelo se registró correctamente, false si ya existía.
+     */
+	public Boolean registrarVuelo(Vuelo v) {
+		if (this.vuelos.containsKey(v.getId())) {
+			return false;
+		}
+		Aerolinea a = v.getAerolinea();
+		if (this.aerolineas.containsKey(a.getId()) == false) {
+			return false;
+		}
+		this.vuelos.put(v.getId(), v);
+		return true;
+	}
+	
+	/**
      * Registra una nueva aerolínea en el sistema.
      * 
      * @param a Aerolínea a registrar.
@@ -413,6 +431,12 @@ public class SkyManager implements Serializable {
 	public Boolean registrarAerolinea(Aerolinea a) {
 		if (this.aerolineas.containsKey(a.getId()) == true) {
 			return false;
+		}
+		ArrayList<Vuelo> vuelos = a.getVuelos();
+		for (Vuelo v: vuelos) {
+			if(this.vuelos.containsKey(v.getId())==false) {
+				this.vuelos.put(v.getId(), v);
+			}
 		}
 		this.aerolineas.put(a.getId(), a);
 		return true;
@@ -442,6 +466,10 @@ public class SkyManager implements Serializable {
 		if (this.facturas.containsKey(f.getId()) == true) {
 			return false;
 		}
+		String idArolinea = f.getAirline();
+		if (this.aerolineas.containsKey(idArolinea) == false) {
+			return false;
+		}
 		this.facturas.put(f.getId(), f);
 		return true;
 	}
@@ -455,6 +483,12 @@ public class SkyManager implements Serializable {
 	public Boolean registrarTerminal(Terminal t) {
 		if (this.terminales.containsKey(t.getId()) == true) {
 			return false;
+		}
+		ArrayList<Vuelo> vuelos = t.getVuelos();
+		for (Vuelo v: vuelos) {
+			if(this.vuelos.containsKey(v.getId())==false) {
+				this.vuelos.put(v.getId(), v);
+			}
 		}
 		this.terminales.put(t.getId(), t);
 		return true;
