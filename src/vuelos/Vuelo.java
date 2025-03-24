@@ -231,9 +231,11 @@ public abstract class Vuelo extends Observable implements Serializable{
 				} else {
 					this.avion.setEstadoAvion(EstadoAvion.EN_PARKING);
 				}
-				for(Aerolinea a: this.aerolinea) {
-					a.addUso(LocalDateTime.now(), this, this.locAterrizaje);
-					a.addUso(LocalDateTime.now(), this, this.puerta);
+				if(estV == EstadoVuelo.DESEMBARQUE_INI || estV == EstadoVuelo.DESCARGA_INI) {
+					for(Aerolinea a: this.aerolinea) {
+						a.addUso(LocalDateTime.now(), this, this.locAterrizaje);
+						a.addUso(LocalDateTime.now(), this, this.puerta);
+					}
 				}
 				this.estVuelo = estV;
 				return true;

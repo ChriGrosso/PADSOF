@@ -153,8 +153,9 @@ class AerolineaTest {
 		vm2.setEstVuelo(EstadoVuelo.DESCARGA_FIN);
 		Hangar h = new HangarMercancias("HM001", 14.33, dateTerm, 50, 23.45, 70, 70);
 		vm2.getAvion().asignarHangar(h);
-		vm2.setEstVuelo(EstadoVuelo.EN_HANGAR);
+		assertTrue(vm2.setEstVuelo(EstadoVuelo.EN_HANGAR));
 		assertTrue(a.getHistorialUsos().get(new ClaveVueloElemento(vm2, f)).getHoraDesuso() != null);
+		assertTrue(a.getHistorialUsos().get(new ClaveVueloElemento(vm2, t.getPuertas().get("AB2"))).getHoraDesuso() != null);
 	}
 
 	@Test
