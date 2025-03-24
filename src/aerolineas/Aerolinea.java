@@ -13,6 +13,7 @@ import aviones.Avion;
 import aviones.TipoAvion;
 import elementos.ElementoEstructural;
 import elementos.Uso;
+import usuarios.Operador;
 import usuarios.Usuario;
 import vuelos.Vuelo;
 
@@ -31,6 +32,7 @@ public class Aerolinea implements Serializable{
 	private ArrayList<TipoAvion> tiposAviones;
 	private HashMap<ClaveVueloElemento, Uso> historialUsos;
 	private EstadisticasVuelos estadisticasVuelos;
+	private ArrayList<Operador> operadores;
 	
 	/**
      * Constructor de la clase Aerolinea.
@@ -46,6 +48,7 @@ public class Aerolinea implements Serializable{
 		this.tiposAviones = new ArrayList<TipoAvion>();
 		this.historialUsos = new HashMap<ClaveVueloElemento, Uso>();
 		this.estadisticasVuelos = new EstadisticasVuelos(this);
+		this.operadores = new ArrayList<Operador>();
 	}
 	
 	
@@ -92,6 +95,15 @@ public class Aerolinea implements Serializable{
      */
 	public ArrayList<TipoAvion> getTiposAvion() {
 		return this.tiposAviones;
+	}
+	
+	/**
+     * Obtiene los operadores de la aerolínea.
+     *
+     * @return Lista de operadores de la aerolínea.
+     */
+	public ArrayList<Operador> getOperadores() {
+		return this.operadores;
 	}
 	
 	/**
@@ -149,6 +161,19 @@ public class Aerolinea implements Serializable{
 			return false;
 		}
 		this.tiposAviones.add(ta);
+		return true;
+	}
+	
+	/**
+     * Añade un operador a la lista de la aerolínea.
+     *
+     * @return True si se ha podido hacer la operación correctamente, False sino.
+     */
+	public boolean addOperador(Operador op) {
+		if(this.operadores.contains(op)) {
+			return false;
+		}
+		this.operadores.add(op);
 		return true;
 	}
 	
