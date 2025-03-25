@@ -48,12 +48,15 @@ public class EstadisticasVuelos implements Serializable{
 	public long retrasoMedioPorMesMinutos(Month month) {
 		long retrasoMedioMinutos = 0;
 		ArrayList<Vuelo> vuelosRetrasados = vuelosRetrasados();
-		int i = 0;
+		long i = 0;
 		for(Vuelo v: vuelosRetrasados) {
-			if(v.getHoraSalida().getMonth() == month) {
+			if(v.getHoraSalida().getMonth() == month || v.getHoraLlegada().getMonth() == month) {
 				retrasoMedioMinutos += v.calcularRetraso();
 				i++;
 			}
+		}
+		if(i == 0) {
+			return 0;
 		}
 		return retrasoMedioMinutos/i;
 	}
@@ -68,6 +71,9 @@ public class EstadisticasVuelos implements Serializable{
 				i++;
 			}
 		}
+		if(i == 0) {
+			return 0;
+		}
 		return retrasoMedioMinutos/i;
 	}
 	
@@ -76,11 +82,14 @@ public class EstadisticasVuelos implements Serializable{
 		ArrayList<Vuelo> vuelosRetrasados = vuelosRetrasados();
 		int i = 0;
 		for(Vuelo v: vuelosRetrasados) {
-			if((v.getLlegada() == false && v.getHoraSalida().toLocalTime().isAfter(inicio)) || 
-				(v.getLlegada() == true && v.getHoraLlegada().toLocalTime().isBefore(fin))) {
+			if((v.getHoraSalida().toLocalTime().isAfter(inicio) || v.getHoraSalida().toLocalTime().equals(inicio)) 
+				&& (v.getHoraLlegada().toLocalTime().isBefore(fin) || v.getHoraLlegada().toLocalTime().equals(fin))) {
 				retrasoMedioMinutos += v.calcularRetraso();
 				i++;
 			}
+		}
+		if(i == 0) {
+			return 0;
 		}
 		return retrasoMedioMinutos/i;
 	}

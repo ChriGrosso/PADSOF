@@ -7,12 +7,11 @@ import aerolineas.Aerolinea;
 import aviones.Avion;
 import aviones.AvionMercancias;
 import elementos.Puerta;
-import elementos.TerminalMercancias;
+import elementos.Terminal;
 import aeropuertos.Aeropuerto;
 
 public class VueloMercancias extends Vuelo {
 	private static final long serialVersionUID = 1L;
-	private TerminalMercancias terminal;
 	private double carga;
 	private boolean mercanciasPeligrosas;
 
@@ -46,24 +45,22 @@ public class VueloMercancias extends Vuelo {
 		return this.mercanciasPeligrosas;
 	}
 	
-	public TerminalMercancias getTerminal() {
-		return this.terminal;
-	}
 	
 
-	public boolean asignarTerminal(TerminalMercancias terminal) {
-		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getCargaTotal()+this.carga > terminal.getCapacidad()) {
+	public boolean asignarTerminal(Terminal terminal) {
+		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getCapacidadOcup()+this.carga > terminal.getCapacidad()
+			|| !terminal.isMercancias()) {
 			return false;
 		}
-		this.terminal = terminal;
+		this.setTerminal(terminal);
 		return true;
 	}
 	
 	public boolean asignarPuerta(Puerta puerta) {
-		if(this.terminal == null) {
+		if(this.getTerminal() == null) {
 			throw new IllegalArgumentException("No se puede asignar puerta de carga a un vuelo sin terminal");
 		}
-		if(this.terminal.getPuertas().containsKey(puerta.getCod()) == false || puerta.enUso() == true) {
+		if(this.getTerminal().getPuertas().containsKey(puerta.getCod()) == false || puerta.enUso() == true) {
 			return false;
 		}
 		this.setPuerta(puerta);

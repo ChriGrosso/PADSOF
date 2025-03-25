@@ -8,6 +8,7 @@ import aeropuertos.Aeropuerto;
 import aviones.Avion;
 import aviones.AvionPasajeros;
 import elementos.Puerta;
+import elementos.Terminal;
 import elementos.TerminalPasajeros;
 
 public class VueloPasajeros extends Vuelo{
@@ -44,11 +45,12 @@ public class VueloPasajeros extends Vuelo{
 	}
 	
 
-	public boolean asignarTerminal(TerminalPasajeros terminal) {
-		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getPasajerosTotal()+this.numPasajeros > terminal.getCapacidad()) {
+	public boolean asignarTerminal(Terminal terminal) {
+		if(terminal.numPuertasOcupadasTerm() == terminal.getNumeroPuertas() || terminal.getCapacidadOcup()+this.numPasajeros > terminal.getCapacidad()
+			|| terminal.isMercancias()) {
 			return false;
 		}
-		this.terminal = terminal;
+		this.setTerminal(terminal);
 		return true;
 	}
 	

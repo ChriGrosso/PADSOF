@@ -50,6 +50,7 @@ public abstract class Terminal extends ElementoEstructural {
     public abstract boolean isMercancias();
     public abstract double getCapacidad();
     public abstract double getCapDisponible(LocalDateTime r1, LocalDateTime r2);
+    public abstract double getCapacidadOcup();
 
     /**
      * Cuenta cuántas puertas están actualmente en uso.

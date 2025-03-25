@@ -108,4 +108,10 @@ public class TerminalMercancias extends Terminal {
 		
 		return this.capacidadToneladas-this.getCargaTotal(r1, r2);
 	}
+
+
+	@Override
+	public double getCapacidadOcup() {
+		return this.getCargaTotal();
+	}
 }

@@ -107,4 +107,10 @@ public class TerminalPasajeros extends Terminal {
 	public double getCapDisponible(LocalDateTime r1, LocalDateTime r2) {
 		return this.capacidadPersonas-this.getPasajerosTotal(r1, r2);
 	}
+
+
+	@Override
+	public double getCapacidadOcup() {
+		return this.getCapacidadOcup();
+	}
 }

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.MonthDay;
 import java.util.ArrayList;
 
@@ -26,10 +27,13 @@ import elementos.TerminalMercancias;
 import vuelos.EstadoVuelo;
 import vuelos.Periodicidad;
 import vuelos.VueloMercancias;
+import vuelos.VueloPasajeros;
 
 class AerolineaTest {
 	private VueloMercancias vm1;
 	private VueloMercancias vm2;
+	private VueloPasajeros vp1;
+	private VueloPasajeros vp2;
 	private Aerolinea a;
 	private Aeropuerto ap1;
 	private Aeropuerto ap2;
@@ -70,6 +74,8 @@ class AerolineaTest {
 		
 		vm1 = new VueloMercancias("H1893", ap1, ap2, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0), a, false, 155.64, false, Periodicidad.NO_PERIODICO, avm1);
 		vm2 = new VueloMercancias("H1899", ap2, ap1, LocalDateTime.of(2025, 2, 12, 14, 0), LocalDateTime.of(2025, 2, 12, 17, 0), a, true, 155.64, false, Periodicidad.NO_PERIODICO, avm2);
+		vp1 = new VueloPasajeros("H1894", ap3, ap4, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0), a, false, 155, Periodicidad.NO_PERIODICO, avp1);
+		vp2 = new VueloPasajeros("H1890", ap3, ap4, LocalDateTime.of(2025, 2, 12, 14, 0), LocalDateTime.of(2025, 2, 12, 17, 0), a, true, 155, Periodicidad.NO_PERIODICO, avp2);
 		
 		a.addTipoAvion(m);
 		a.addTipoAvion(p);
@@ -77,6 +83,7 @@ class AerolineaTest {
 		a.addAvion(avm2);
 		a.addAvion(avp1);
 		a.addVuelo(vm1);
+		a.addVuelo(vp1);
 	}
 
 	@Test
@@ -92,7 +99,8 @@ class AerolineaTest {
 	@Test
 	void testGetVuelos() {
 		assertTrue(a.getVuelos().contains(vm1));
-		assertEquals(1, a.getVuelos().size());
+		assertTrue(a.getVuelos().contains(vp1));
+		assertEquals(2, a.getVuelos().size());
 	}
 
 	@Test
@@ -174,4 +182,84 @@ class AerolineaTest {
 		assertTrue(a.getHistorialUsos().isEmpty());
 	}
 
+	@Test
+	void testVuelosEnTiempoYRetrasados() {
+		a.addAvion(avp2);
+		a.addVuelo(vp2);
+		vm1.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 11, 14, 1));
+		vm1.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 11, 16, 56));
+		
+		vp1.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 11, 14, 2));
+		vp1.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 11, 16, 56));
+		
+		vp2.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 12, 14, 0));
+		vp2.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 12, 16, 56));
+		
+		assertEquals(a.getEstadisticas().numVuelosEnTiempo(), 1);
+		assertEquals(a.getEstadisticas().numVuelosRetrasados(), 2);
+	}
+	
+	@Test
+	void testRetrasosMedioMes() {
+		a.addAvion(avp2);
+		a.addVuelo(vp2);
+		a.addVuelo(vm2);
+		vm1.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 11, 14, 1));
+		vm1.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 11, 16, 56));
+		
+		vm2.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 12, 14, 30));
+		vm2.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 12, 16, 56));
+		
+		vp1.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 11, 14, 2));
+		vp1.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 11, 16, 56));
+		
+		vp2.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 12, 14, 5));
+		vp2.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 12, 16, 56));
+		
+		assertEquals(a.getEstadisticas().retrasoMedioPorMesMinutos(Month.FEBRUARY), 9);
+		assertEquals(a.getEstadisticas().retrasoMedioPorMesMinutos(Month.APRIL), 0);
+	}
+	
+	@Test
+	void testRetrasosMedioVuelo() {
+		a.addAvion(avp2);
+		a.addVuelo(vp2);
+		a.addVuelo(vm2);
+		vm1.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 11, 14, 1));
+		vm1.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 11, 16, 56));
+		
+		vm2.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 12, 14, 30));
+		vm2.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 12, 16, 56));
+		
+		vp1.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 11, 14, 2));
+		vp1.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 11, 16, 56));
+		
+		vp2.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 12, 14, 5));
+		vp2.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 12, 16, 56));
+		
+		assertEquals(a.getEstadisticas().retrasoMedioPorVueloMinutos(ap3, ap4), 3);
+		assertEquals(a.getEstadisticas().retrasoMedioPorVueloMinutos(ap1, ap2), 1);
+		assertEquals(a.getEstadisticas().retrasoMedioPorVueloMinutos(ap2, ap1), 30);
+	}
+	
+	@Test
+	void testRetrasosMedioFranjaHoraria() {
+		a.addAvion(avp2);
+		a.addVuelo(vp2);
+		a.addVuelo(vm2);
+		vm1.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 11, 14, 1));
+		vm1.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 11, 16, 56));
+		
+		vm2.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 12, 14, 30));
+		vm2.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 12, 16, 56));
+		
+		vp1.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 11, 14, 2));
+		vp1.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 11, 16, 56));
+		
+		vp2.setHoraSalidaEfectiva(LocalDateTime.of(2025, 2, 12, 14, 5));
+		vp2.setHoraLlegadaEfectiva(LocalDateTime.of(2025, 2, 12, 16, 56));
+		
+		assertEquals(a.getEstadisticas().retrasoMedioPorFranjaHorariaMinutos(LocalTime.of(14, 0), LocalTime.of(17, 0)), 9);
+		assertEquals(a.getEstadisticas().retrasoMedioPorFranjaHorariaMinutos(LocalTime.of(11, 0), LocalTime.of(13, 0)), 0);
+	}
 }
