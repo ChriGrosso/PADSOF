@@ -1,6 +1,7 @@
 package notificaciones;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -35,6 +36,15 @@ public abstract class Observable implements Serializable{
 	public abstract String getId();
 	
 	/**
+     * Obtiene los usuarios que siguen el objeto.
+     * 
+     * @return Lista de observadores del objeto.
+     */
+	public ArrayList<Usuario> getObservers() {
+		return new ArrayList<Usuario>(this.observers.values());
+	}
+	
+	/**
      * Agrega un usuario a la lista de observadores.
      * 
      * @param user Usuario a agregar.
@@ -62,41 +72,6 @@ public abstract class Observable implements Serializable{
 		if (observers.containsKey(user.getDni())) {
 			observers.remove(user.getDni());
 		}
-	}
-	
-	/**
-     * Notifica a un usuario específico sobre un cambio de estado en un vuelo.
-     * 
-     * @param u      Usuario a notificar.
-     * @param anterior Estado actual del vuelo.
-     * @param nuevo Estado al que se va a cambiar el estado del vuelo.
-     * @throws IllegalArgumentException Si el usuario es nulo.
-     */
-	public void notifyObserver(Usuario u, EstadoVuelo anterior, EstadoVuelo nuevo) {
-		if (u == null) {
-            throw new IllegalArgumentException("El usuario no puede ser nulo.");
-        }
-		if (this.observers.containsKey(u.getDni())) {
-			u.update(this.getId(), anterior, nuevo);
-		}
-	}
-	
-	 /**
-     * Notifica a un usuario específico sobre un cambio de estado en un avión.
-     * 
-     * @param u      Usuario a notificar.
-     * @param anterior Estado actual del avión.
-     * @param nuevo Estado al que se va a cambiar el estado del avión.
-     * @throws IllegalArgumentException Si el usuario es nulo.
-     */
-	public void notifyObserver(Usuario u, EstadoAvion anterior, EstadoAvion nuevo) {
-		if (u == null) {
-            throw new IllegalArgumentException("El usuario no puede ser nulo.");
-        }
-		if (this.observers.containsKey(u.getDni())) {
-			u.update(this.getId(), anterior, nuevo);
-		}
-		return;
 	}
 	
 	/**

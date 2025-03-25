@@ -11,6 +11,7 @@ import aviones.TipoAvion;
 import elementos.ElementoEstructural;
 import elementos.Uso;
 import usuarios.Operador;
+import usuarios.Usuario;
 import vuelos.Vuelo;
 
 /**
@@ -140,6 +141,9 @@ public class Aerolinea implements Serializable{
 			return false;
 		}
 		this.vuelos.add(v);
+		for (Usuario u: this.operadores) {
+			v.addObserver(u);
+		}
 		return true;
 	}
 	

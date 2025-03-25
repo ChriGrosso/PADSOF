@@ -18,7 +18,8 @@ import org.junit.platform.suite.api.Suite;
 				ControladorTest.class,
 				OperadorTest.class,
 				GestorTest.class,
-				UsuarioTest.class})
+				UsuarioTest.class,
+				ObservableTest.class})
 @Suite
 public class AllTest {
 }

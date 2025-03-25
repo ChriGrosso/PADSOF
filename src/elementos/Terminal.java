@@ -138,5 +138,8 @@ public abstract class Terminal extends ElementoEstructural {
 
     public void addControlador(Controlador c) {
         this.controladores.add(c);
+        for (Vuelo v: this.vuelos) {
+        	v.addObserver(c);
+        }
     }
 }

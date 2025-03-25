@@ -92,8 +92,6 @@ public abstract class ElementoEstructural implements Serializable {
 	    return totalHoras / usoPorDia.size();
 	}
 
-	// Getters y setters con documentación básica
-
 	/**
 	 * @return la fecha de registro del elemento
 	 */
@@ -103,12 +101,16 @@ public abstract class ElementoEstructural implements Serializable {
 
 	/**
 	 * Establece la fecha de registro del elemento.
+	 * 
+	 * @param fchRegistro2 Nueva fecha de registro
 	 */
 	public void setFchRegistro(LocalDate fchRegistro2) {
 		this.fchRegistro = fchRegistro2;
 	}
 
 	/**
+	 * Obtinen el identificador del elemento
+	 * 
 	 * @return el identificador del elemento
 	 */
 	public String getId() {
@@ -117,6 +119,8 @@ public abstract class ElementoEstructural implements Serializable {
 
 	/**
 	 * Establece el identificador del elemento.
+	 * 
+	 * @param id Nuevo identificador del elemento
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -131,6 +135,8 @@ public abstract class ElementoEstructural implements Serializable {
 
 	/**
 	 * Establece el coste por hora del elemento.
+	 * 
+	 * @param costePorHora Nuevo coste del elemento
 	 */
 	public void setCostePorHora(double costePorHora) {
 		this.costePorHora = costePorHora;
