@@ -111,6 +111,6 @@ public class TerminalPasajeros extends Terminal {
 
 	@Override
 	public double getCapacidadOcup() {
-		return this.getCapacidadOcup();
+		return this.getPasajerosTotal();
 	}
 }

@@ -11,6 +11,8 @@ import aviones.Avion;
 import aviones.AvionMercancias;
 import aviones.AvionPasajeros;
 import aviones.EstadoAvion;
+import elementos.Hangar;
+import elementos.HangarMercancias;
 
 
 class AvionTest {
@@ -78,6 +80,22 @@ class AvionTest {
 	void testSetEstadoAvion() {
 		a1.setEstadoAvion(EstadoAvion.EN_FINGER);
 		assertEquals(EstadoAvion.EN_FINGER, a1.getEstadoAvion());
+	}
+	
+	@Test
+	void testAsignarHangar() {
+		LocalDate date = LocalDate.of(2023, 3, 14);
+		Hangar h = new HangarMercancias("H1", 10.4, date, 50, 20, 65, 67.8);
+		assertTrue(a1.asignarHangar(h));
+	}
+	
+	@Test
+	void testDesasignarHangar() {
+		LocalDate date = LocalDate.of(2023, 3, 14);
+		Hangar h = new HangarMercancias("H1", 10.4, date, 50, 20, 65, 67.8);
+		a1.asignarHangar(h);
+		a1.desasignarHangar();
+		assertEquals(0, h.numPlazasOcupadasHangar());
 	}
 }
 

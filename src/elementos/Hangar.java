@@ -1,6 +1,8 @@
 package elementos;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+
 import aviones.Avion;
 
 /**
@@ -17,6 +19,7 @@ public abstract class Hangar extends ElementoEstructural {
     private double alturaPlaza;    // Altura máxima permitida por plaza
     private double anchuraPlaza;   // Anchura máxima permitida por plaza
     private double largoPlaza;     // Largo máximo permitido por plaza
+    private ArrayList<Avion> aviones;
 
     /**
      * Constructor de Hangar.
@@ -35,6 +38,7 @@ public abstract class Hangar extends ElementoEstructural {
         this.setNumPlazas(numPlazas);
         this.setAnchuraPlaza(anchuraPlaza);
         this.setLargoPlaza(largoPlaza);
+        this.aviones = new ArrayList<Avion>();
     }
 
     /**
@@ -43,7 +47,7 @@ public abstract class Hangar extends ElementoEstructural {
      * @return 0 por defecto
      */
     public int numPlazasOcupadasHangar() {
-        return 0;
+        return this.aviones.size();
     }
 
     /**
@@ -89,5 +93,19 @@ public abstract class Hangar extends ElementoEstructural {
 
     public void setLargoPlaza(double largoPlaza) {
         this.largoPlaza = largoPlaza;
+    }
+    
+    public ArrayList<Avion> getAviones() {
+    	return this.aviones;
+    }
+    
+    public void addAvion(Avion av) {
+    	this.aviones.add(av);
+    	return;
+    }
+    
+    public void removeAvion(Avion av) {
+    	this.aviones.remove(av);
+    	return;
     }
 }

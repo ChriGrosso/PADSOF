@@ -108,17 +108,15 @@ public abstract class Vuelo extends Observable implements Serializable{
 	 */
 	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolineas, boolean llegada, Avion avion, String diasAlternos) {
-		if(periodicidad != Periodicidad.DIAS_ALTERNOS) {
-			throw new IllegalArgumentException("Solo un vuelo en dias alternos puede usar este constructor\n");
-		}
+		this.diasAlternos = new ArrayList<DayOfWeek>();
 		for(String c: diasAlternos.split(" ")) {
-			if(c == "L") { this.diasAlternos.add(DayOfWeek.MONDAY); }
-			if(c == "M") { this.diasAlternos.add(DayOfWeek.TUESDAY); }
-			if(c == "X") { this.diasAlternos.add(DayOfWeek.WEDNESDAY); }
-			if(c == "J") { this.diasAlternos.add(DayOfWeek.THURSDAY); }
-			if(c == "V") { this.diasAlternos.add(DayOfWeek.FRIDAY); }
-			if(c == "S") { this.diasAlternos.add(DayOfWeek.SATURDAY); }
-			if(c == "D") { this.diasAlternos.add(DayOfWeek.SUNDAY); }
+			if(c.equals("L")) { this.diasAlternos.add(DayOfWeek.MONDAY); }
+			if(c.equals("M")) { this.diasAlternos.add(DayOfWeek.TUESDAY); }
+			if(c.equals("X")) { this.diasAlternos.add(DayOfWeek.WEDNESDAY); }
+			if(c.equals("J")) { this.diasAlternos.add(DayOfWeek.THURSDAY); }
+			if(c.equals("V")) { this.diasAlternos.add(DayOfWeek.FRIDAY); }
+			if(c.equals("S")) { this.diasAlternos.add(DayOfWeek.SATURDAY); }
+			if(c.equals("D")) { this.diasAlternos.add(DayOfWeek.SUNDAY); }
 		}
 		this.id = id;
 		this.origen = origen;
