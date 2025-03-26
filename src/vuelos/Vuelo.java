@@ -712,8 +712,32 @@ public abstract class Vuelo extends Observable implements Serializable{
 	 */
 	public abstract boolean asignarTerminal(Terminal terminal);
 	
+	/**
+	 * Desasigna el vuelo a su terminal.
+	 *
+	 */
 	public void deasignarTerminal() {
 		this.terminal.getVuelos().remove(this);
 		this.terminal = null;
+	}
+	
+	/**
+     * Asigna una puerta al vuelo, validando que la puerta esté disponible y 
+     * que el vuelo tenga una terminal asignada previamente.
+     * 
+     * @param puerta La puerta a asignar al vuelo.
+     * @return true si la puerta fue asignada correctamente, false si no fue posible.
+     * @throws IllegalArgumentException Si el vuelo no tiene una terminal asignada.
+     */
+	public boolean asignarPuerta(Puerta puerta) {
+		if(this.terminal == null) {
+			throw new IllegalArgumentException("No se puede asignar puerta de a un vuelo sin terminal");
+		}
+		if(this.terminal.getPuertas().containsKey(puerta.getCod()) == false || puerta.enUso() == true) {
+			return false;
+		}
+		this.setPuerta(puerta);
+		puerta.setVuelo(this);
+		return true;
 	}
 }

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import aerolineas.Aerolinea;
 import aviones.Avion;
 import aviones.AvionMercancias;
-import elementos.Puerta;
 import elementos.Terminal;
 import aeropuertos.Aeropuerto;
 
@@ -49,6 +48,17 @@ public class VueloMercancias extends Vuelo {
 		this.mercanciasPeligrosas = mercanciasPeligrosas;
 	}
 	
+	public VueloMercancias(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+			ArrayList<Aerolinea> aerolinea, boolean llegada, double carga, boolean mercanciasPeligrosas, 
+			Avion avion, String diasAlternos) {
+		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, avion, diasAlternos);
+		if((avion.getTipoAvion() instanceof AvionMercancias) == false) {
+			throw new IllegalArgumentException("Un vuelo de mercancías debe tener un avión para mercancías");
+		}
+		this.carga = carga;
+		this.mercanciasPeligrosas = mercanciasPeligrosas;
+	}
+	
 	
 	/**
      * Obtiene la cantidad de carga transportada por el vuelo.
@@ -81,26 +91,6 @@ public class VueloMercancias extends Vuelo {
 			return false;
 		}
 		this.setTerminal(terminal);
-		return true;
-	}
-	
-	/**
-     * Asigna una puerta al vuelo de mercancías, validando que la puerta esté disponible y 
-     * que el vuelo tenga una terminal asignada previamente.
-     * 
-     * @param puerta La puerta a asignar al vuelo.
-     * @return true si la puerta fue asignada correctamente, false si no fue posible.
-     * @throws IllegalArgumentException Si el vuelo no tiene una terminal asignada.
-     */
-	public boolean asignarPuerta(Puerta puerta) {
-		if(this.getTerminal() == null) {
-			throw new IllegalArgumentException("No se puede asignar puerta de carga a un vuelo sin terminal");
-		}
-		if(this.getTerminal().getPuertas().containsKey(puerta.getCod()) == false || puerta.enUso() == true) {
-			return false;
-		}
-		this.setPuerta(puerta);
-		puerta.setVuelo(this);
 		return true;
 	}
 }
