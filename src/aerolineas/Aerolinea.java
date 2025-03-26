@@ -12,7 +12,10 @@ import elementos.ElementoEstructural;
 import elementos.Uso;
 import usuarios.Operador;
 import usuarios.Usuario;
+import vuelos.Periodicidad;
 import vuelos.Vuelo;
+import vuelos.VueloMercancias;
+import vuelos.VueloPasajeros;
 
 /**
  * Clase Aerolinea que representa a una aerolinea con sus características principales, 
@@ -225,5 +228,35 @@ public class Aerolinea implements Serializable{
 	public void LimpiarHistorialUsos() {
 		this.historialUsos.clear();
 		return;
+	}
+	
+	
+	/**
+     * Añade un vuelo a la lista de la aerolínea.
+     *
+     * @return True si se ha podido hacer la operación correctamente, False sino.
+     */
+	public boolean addVueloPeriodico(Vuelo v) {
+		if(!this.vuelos.contains(v) || !this.aviones.containsValue(v.getAvion())) {
+			return false;
+		}
+		if(v.isVueloMercancias()) {
+			if(v.getPeriodicidad() == Periodicidad.DIARIO) {
+				VueloMercancias nuevoV = new VueloMercancias(v.getId(), v.getOrigen(), v.getDestino(),
+				v.getHoraSalida().plusDays(1), v.getHoraLlegada().plusDays(1), v.getAerolinea(), v.getLlegada(), ((VueloMercancias) v).getCarga(),
+				((VueloMercancias) v).getMercanciasPeligrosas(), v.getPeriodicidad(), v.getAvion());
+			} else {}
+		} else {
+			if(v.getPeriodicidad() == Periodicidad.DIARIO) {
+				VueloPasajeros nuevoV = new VueloPasajeros(v.getId(), v.getOrigen(), v.getDestino(),
+				v.getHoraSalida().plusDays(1), v.getHoraLlegada().plusDays(1), v.getAerolinea(), v.getLlegada(), 
+				((VueloPasajeros) v).getNumPasajeros(), v.getPeriodicidad(), v.getAvion());
+			} else {}
+		}
+		this.vuelos.add(nuevoV);
+		for (Usuario u: this.operadores) {
+			v.addObserver(u);
+		}
+		return true;
 	}
 }
