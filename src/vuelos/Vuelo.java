@@ -279,11 +279,12 @@ public abstract class Vuelo extends Observable implements Serializable{
 	/**
 	 * Obtiene la aerolínea principal del vuelo.
 	 *
-	 * @return Aerolínea principal.
+	 * @return Aerolínea principal de un vuelo compartido. La única si el vuelo no es compartido
 	 */
-	public ArrayList<Aerolinea> getAerolinea() {
-		return this.aerolinea;
+	public Aerolinea getAerolinea() {
+		return this.aerolinea.get(0);
 	}
+	
 	
 	/**
 	 * Obtiene la periodicidad del vuelo.

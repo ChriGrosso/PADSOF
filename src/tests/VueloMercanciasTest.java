@@ -30,7 +30,7 @@ class VueloMercanciasTest {
 	private VueloMercancias vm1;
 	private LocalDateTime timeLlegada;
 	private LocalDateTime timeSalida;
-	private Aerolinea a;
+	private ArrayList<Aerolinea> arrayA;
 	private Aeropuerto ap1;
 	private Aeropuerto ap2;
 	
@@ -41,8 +41,12 @@ class VueloMercanciasTest {
 		timeSalida = LocalDateTime.of(2025, 2, 11, 14, 0);
 		timeLlegada = LocalDateTime.of(2025, 2, 11, 17, 0);
 		AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
-		Avion av = new Avion("0001", date, m, date2); 
-		a = new Aerolinea("IBE", "Iberia");
+		Avion av = new Avion("0001", date, m, date2);
+		
+		Aerolinea a = new Aerolinea("IBE", "Iberia");
+		arrayA = new ArrayList<Aerolinea>();
+		arrayA.add(a);
+		
 		ArrayList<Temporada> temp1 = new ArrayList<Temporada>();
 		temp1.add(new Temporada (MonthDay.of(3, 5), LocalTime.NOON, LocalTime.MIDNIGHT, MonthDay.of(2, 5)));
 		ArrayList<Temporada> temp2 = new ArrayList<Temporada>();
@@ -50,7 +54,7 @@ class VueloMercanciasTest {
 		temp2.add(new Temporada(MonthDay.of(10, 9), LocalTime.of(5, 0), LocalTime.of(1, 0), MonthDay.of(2, 5)));
 		ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, temp1, Direccion.NORTE);
 		ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, temp2, Direccion.OESTE);
-		vm1 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, a, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
+		vm1 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
 	}
 	
 	@Test
@@ -64,7 +68,7 @@ class VueloMercanciasTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             // Aquí llamas al constructor o método que debe lanzar la excepción
             @SuppressWarnings("unused")
-			VueloMercancias vm2 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, a, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
+			VueloMercancias vm2 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
         });
 		
 		assertEquals("Un vuelo de mercancías debe tener un avión para mercancías", exception.getMessage());
@@ -154,8 +158,8 @@ class VueloMercanciasTest {
 
 	@Test
 	void testGetAerolineas() {
-		assertEquals(a.getId(), vm1.getAerolinea().getId());
-		assertEquals(a.getNombre(), vm1.getAerolinea().getNombre());
+		assertEquals(arrayA.get(0).getId(), vm1.getAerolinea().getId());
+		assertEquals(arrayA.get(0).getNombre(), vm1.getAerolinea().getNombre());
 	}
 
 	@Test
