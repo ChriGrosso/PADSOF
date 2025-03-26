@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.time.DayOfWeek; 
 
 import aerolineas.Aerolinea;
 import aerolineas.ClaveVueloElemento;
@@ -36,7 +37,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 	private Avion avion;
 	private ArrayList<Aerolinea> aerolinea;
 	private Periodicidad periodicidad;
-	private String diasAlternos;
+	private ArrayList<DayOfWeek> diasAlternos;
 	private EstadoVuelo estVuelo;
 	private LocalizacionAterrizaje locAterrizaje;
 	private Pista pista;
@@ -87,10 +88,18 @@ public abstract class Vuelo extends Observable implements Serializable{
 	
 	// Constructores específicos para vuelos en días alternos
 	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
-			ArrayList<Aerolinea> aerolineas, boolean llegada, Periodicidad periodicidad, Avion avion, 
-			String diasAlternos) {
+			ArrayList<Aerolinea> aerolineas, boolean llegada, Avion avion, String diasAlternos) {
 		if(periodicidad != Periodicidad.DIAS_ALTERNOS) {
 			throw new IllegalArgumentException("Solo un vuelo en dias alternos puede usar este constructor\n");
+		}
+		for(String c: diasAlternos.split(" ")) {
+			if(c == "L") { this.diasAlternos.add(DayOfWeek.MONDAY); }
+			if(c == "M") { this.diasAlternos.add(DayOfWeek.TUESDAY); }
+			if(c == "X") { this.diasAlternos.add(DayOfWeek.WEDNESDAY); }
+			if(c == "J") { this.diasAlternos.add(DayOfWeek.THURSDAY); }
+			if(c == "V") { this.diasAlternos.add(DayOfWeek.FRIDAY); }
+			if(c == "S") { this.diasAlternos.add(DayOfWeek.SATURDAY); }
+			if(c == "D") { this.diasAlternos.add(DayOfWeek.SUNDAY); }
 		}
 		this.id = id;
 		this.origen = origen;
@@ -109,16 +118,24 @@ public abstract class Vuelo extends Observable implements Serializable{
 		}
 		this.avion = avion;
 		this.llegada = llegada;
-		this.periodicidad = periodicidad;
-		this.diasAlternos = diasAlternos;
+		this.periodicidad = Periodicidad.DIAS_ALTERNOS;
 		this.estVuelo = EstadoVuelo.EN_TIEMPO;
 		this.mapaElemClave = new HashMap<ElementoEstructural, ClaveVueloElemento>();
 	}
 
 	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, Aerolinea aerolinea,
-			boolean llegada, Periodicidad periodicidad, Avion avion, String diasAlternos) {
+			boolean llegada, Avion avion, String diasAlternos) {
 		if(periodicidad != Periodicidad.DIAS_ALTERNOS) {
 			throw new IllegalArgumentException("Solo un vuelo en dias alternos puede usar este constructor\n");
+		}
+		for(String c: diasAlternos.split(" ")) {
+			if(c == "L") { this.diasAlternos.add(DayOfWeek.MONDAY); }
+			if(c == "M") { this.diasAlternos.add(DayOfWeek.TUESDAY); }
+			if(c == "X") { this.diasAlternos.add(DayOfWeek.WEDNESDAY); }
+			if(c == "J") { this.diasAlternos.add(DayOfWeek.THURSDAY); }
+			if(c == "V") { this.diasAlternos.add(DayOfWeek.FRIDAY); }
+			if(c == "S") { this.diasAlternos.add(DayOfWeek.SATURDAY); }
+			if(c == "D") { this.diasAlternos.add(DayOfWeek.SUNDAY); }
 		}
 		this.id = id;
 		this.origen = origen;
@@ -130,8 +147,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 		this.compartido = false;
 		this.avion = avion;
 		this.llegada = llegada;
-		this.periodicidad = periodicidad;
-		this.diasAlternos = diasAlternos;
+		this.periodicidad = Periodicidad.DIAS_ALTERNOS;
 		this.estVuelo = EstadoVuelo.EN_TIEMPO;
 		this.mapaElemClave = new HashMap<ElementoEstructural, ClaveVueloElemento>();
 	}
@@ -313,7 +329,6 @@ public abstract class Vuelo extends Observable implements Serializable{
 			}
 			if((estV == EstadoVuelo.OPERATIVO && siguienteVueloConAvion() != null) || 
 				(estV == EstadoVuelo.EN_HANGAR && siguienteVueloConAvion() == null)) {
-				this.estVuelo = estV;
 				if(estV == EstadoVuelo.EN_HANGAR) {
 					Aerolinea conAvion = null;
 					this.avion.setEstadoAvion(EstadoAvion.EN_HANGAR);
@@ -328,6 +343,13 @@ public abstract class Vuelo extends Observable implements Serializable{
 					a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
 					a.setEndUso(LocalDateTime.now(), this, this.puerta);
 				}
+				// Añadir nuevo vuelo si es necesario
+				if(this.periodicidad != Periodicidad.NO_PERIODICO) {
+					for(Aerolinea a: this.aerolinea) {
+						a.addVueloPeriodico(this);
+					}
+				}
+				this.estVuelo = estV;
 				return true;
 			}
 			return false;
@@ -355,6 +377,12 @@ public abstract class Vuelo extends Observable implements Serializable{
 				this.avion.setEstadoAvion(EstadoAvion.FUERA_AEROPUERTO);
 				this.pista.actualizarColaVuelos();
 				this.horaSalidaEfectiva = LocalDateTime.now();
+				// Añadir nuevo vuelo si es necesario
+				if(this.periodicidad != Periodicidad.NO_PERIODICO) {
+					for(Aerolinea a: this.aerolinea) {
+						a.addVueloPeriodico(this);
+					}
+				}
 				return true;
 			}
 			if((estV == EstadoVuelo.EMBARQUE || estV == EstadoVuelo.CARGA) && this.puerta != null
@@ -491,4 +519,9 @@ public abstract class Vuelo extends Observable implements Serializable{
 	}
 	
 	public abstract boolean asignarTerminal(Terminal terminal);
+	
+	public void deasignarTerminal() {
+		this.terminal.getVuelos().remove(this);
+		this.terminal = null;
+	}
 }
