@@ -90,35 +90,6 @@ public abstract class Vuelo extends Observable implements Serializable{
 		this.mapaElemClave = new HashMap<ElementoEstructural, ClaveVueloElemento>();
 	}
 	
-	/**
-	 * Constructor de Vuelo con una sola aerolínea.
-	 *
-	 * @param id         Identificador del vuelo.
-	 * @param origen     Aeropuerto de origen.
-	 * @param destino    Aeropuerto de destino.
-	 * @param horaSalida Hora de salida programada.
-	 * @param horaLlegada Hora de llegada programada.
-	 * @param aerolinea  Aerolínea operando el vuelo.
-	 * @param llegada    Indica si el vuelo es de llegada.
-	 * @param periodicidad Periodicidad del vuelo.
-	 * @param avion      Avión asignado al vuelo.
-	 */
-	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, Aerolinea aerolinea,
-			boolean llegada, Periodicidad periodicidad, Avion avion) {
-		this.id = id;
-		this.origen = origen;
-		this.destino = destino;
-		this.horaSalida = horaSalida;
-		this.horaLlegada = horaLlegada;
-		this.aerolinea = new ArrayList<Aerolinea>();
-		this.aerolinea.add(aerolinea);
-		this.compartido = false;
-		this.avion = avion;
-		this.llegada = llegada;
-		this.periodicidad = periodicidad;
-		this.estVuelo = EstadoVuelo.EN_TIEMPO;
-		this.mapaElemClave = new HashMap<ElementoEstructural, ClaveVueloElemento>();
-	}
 	
 	/**
 	 * Constructor para vuelos con días alternos y múltiples aerolíneas.
@@ -171,49 +142,6 @@ public abstract class Vuelo extends Observable implements Serializable{
 		this.mapaElemClave = new HashMap<ElementoEstructural, ClaveVueloElemento>();
 	}
 	
-	/**
-	 * Constructor para vuelos con días alternos y una sola aerolínea.
-	 *
-	 * @param id           Identificador del vuelo.
-	 * @param origen       Aeropuerto de origen.
-	 * @param destino      Aeropuerto de destino.
-	 * @param horaSalida   Hora de salida programada.
-	 * @param horaLlegada  Hora de llegada programada.
-	 * @param aerolinea    Aerolínea operando el vuelo.
-	 * @param llegada      Indica si el vuelo es de llegada.
-	 * @param periodicidad Periodicidad del vuelo (debe ser DIAS_ALTERNOS).
-	 * @param avion        Avión asignado al vuelo.
-	 * @param diasAlternos Días en los que opera el vuelo.
-	 * @throws IllegalArgumentException Si la periodicidad no es DIAS_ALTERNOS.
-	 */
-	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, Aerolinea aerolinea,
-			boolean llegada, Avion avion, String diasAlternos) {
-		if(periodicidad != Periodicidad.DIAS_ALTERNOS) {
-			throw new IllegalArgumentException("Solo un vuelo en dias alternos puede usar este constructor\n");
-		}
-		for(String c: diasAlternos.split(" ")) {
-			if(c == "L") { this.diasAlternos.add(DayOfWeek.MONDAY); }
-			if(c == "M") { this.diasAlternos.add(DayOfWeek.TUESDAY); }
-			if(c == "X") { this.diasAlternos.add(DayOfWeek.WEDNESDAY); }
-			if(c == "J") { this.diasAlternos.add(DayOfWeek.THURSDAY); }
-			if(c == "V") { this.diasAlternos.add(DayOfWeek.FRIDAY); }
-			if(c == "S") { this.diasAlternos.add(DayOfWeek.SATURDAY); }
-			if(c == "D") { this.diasAlternos.add(DayOfWeek.SUNDAY); }
-		}
-		this.id = id;
-		this.origen = origen;
-		this.destino = destino;
-		this.horaSalida = horaSalida;
-		this.horaLlegada = horaLlegada;
-		this.aerolinea = new ArrayList<Aerolinea>();
-		this.aerolinea.add(aerolinea);
-		this.compartido = false;
-		this.avion = avion;
-		this.llegada = llegada;
-		this.periodicidad = Periodicidad.DIAS_ALTERNOS;
-		this.estVuelo = EstadoVuelo.EN_TIEMPO;
-		this.mapaElemClave = new HashMap<ElementoEstructural, ClaveVueloElemento>();
-	}
 	
 	/**
 	 * Retorna la representación en String del vuelo.
@@ -353,8 +281,8 @@ public abstract class Vuelo extends Observable implements Serializable{
 	 *
 	 * @return Aerolínea principal.
 	 */
-	public Aerolinea getAerolinea() {
-		return this.aerolinea.getFirst();
+	public ArrayList<Aerolinea> getAerolinea() {
+		return this.aerolinea;
 	}
 	
 	/**
@@ -430,10 +358,15 @@ public abstract class Vuelo extends Observable implements Serializable{
 	}
 	
 	/**
-	 * Asigna una terminal al vuelo.
+	 * Obtiene los días por los que opera un vuelo.
 	 *
-	 * @param terminal Terminal a asignar.
+	 * @return Los días de la semana por los que opera un vuelo. Null si no es periódico o es diario.
 	 */
+	public ArrayList<DayOfWeek> getDiasAlternos() {
+		return this.diasAlternos;
+	}
+	
+	
 	public void setTerminal(Terminal terminal) {
 		this.terminal = terminal;
 	}

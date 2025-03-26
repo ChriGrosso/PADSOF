@@ -2,6 +2,7 @@
 package aerolineas;
 
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -240,18 +241,41 @@ public class Aerolinea implements Serializable{
 		if(!this.vuelos.contains(v) || !this.aviones.containsValue(v.getAvion())) {
 			return false;
 		}
+		Vuelo nuevoV;
 		if(v.isVueloMercancias()) {
 			if(v.getPeriodicidad() == Periodicidad.DIARIO) {
-				VueloMercancias nuevoV = new VueloMercancias(v.getId(), v.getOrigen(), v.getDestino(),
+				nuevoV = new VueloMercancias(v.getId(), v.getOrigen(), v.getDestino(),
 				v.getHoraSalida().plusDays(1), v.getHoraLlegada().plusDays(1), v.getAerolinea(), v.getLlegada(), ((VueloMercancias) v).getCarga(),
 				((VueloMercancias) v).getMercanciasPeligrosas(), v.getPeriodicidad(), v.getAvion());
-			} else {}
+			} else {
+				DayOfWeek day;
+				if(v.getLlegada()) {
+					day = v.getHoraLlegada().getDayOfWeek();
+				} else {
+					day = v.getHoraSalida().getDayOfWeek();
+				}
+				int diasASumar = siguienteDia(day, v.getDiasAlternos());
+				nuevoV = new VueloMercancias(v.getId(), v.getOrigen(), v.getDestino(),
+				v.getHoraSalida().plusDays(diasASumar), v.getHoraLlegada().plusDays(diasASumar), v.getAerolinea(), v.getLlegada(), ((VueloMercancias) v).getCarga(),
+				((VueloMercancias) v).getMercanciasPeligrosas(), v.getPeriodicidad(), v.getAvion());
+			}
 		} else {
 			if(v.getPeriodicidad() == Periodicidad.DIARIO) {
-				VueloPasajeros nuevoV = new VueloPasajeros(v.getId(), v.getOrigen(), v.getDestino(),
+				nuevoV = new VueloPasajeros(v.getId(), v.getOrigen(), v.getDestino(),
 				v.getHoraSalida().plusDays(1), v.getHoraLlegada().plusDays(1), v.getAerolinea(), v.getLlegada(), 
 				((VueloPasajeros) v).getNumPasajeros(), v.getPeriodicidad(), v.getAvion());
-			} else {}
+			} else {
+				DayOfWeek day;
+				if(v.getLlegada()) {
+					day = v.getHoraLlegada().getDayOfWeek();
+				} else {
+					day = v.getHoraSalida().getDayOfWeek();
+				}
+				int diasASumar = siguienteDia(day, v.getDiasAlternos());
+				nuevoV = new VueloPasajeros(v.getId(), v.getOrigen(), v.getDestino(),
+				v.getHoraSalida().plusDays(diasASumar), v.getHoraLlegada().plusDays(diasASumar), v.getAerolinea(), v.getLlegada(), 
+				((VueloPasajeros) v).getNumPasajeros(), v.getPeriodicidad(), v.getAvion());
+			}
 		}
 		this.vuelos.add(nuevoV);
 		for (Usuario u: this.operadores) {
@@ -259,4 +283,22 @@ public class Aerolinea implements Serializable{
 		}
 		return true;
 	}
+	// Calcular el número de días hasta el siguiente vuelo
+	private static int siguienteDia(DayOfWeek dia, ArrayList<DayOfWeek> diasAlternos) {
+		int minimaDistancia = Integer.MAX_VALUE;
+		for(DayOfWeek d: diasAlternos) {
+			if (!d.equals(dia)) { // Nos aseguramos de que no sea el mismo día
+                int distancia = calcularDistancia(d, dia);
+                if (distancia < minimaDistancia) {
+                    minimaDistancia = distancia;
+                }
+            }
+		}
+		return minimaDistancia;
+	}
+	// Calcula la distancia circular entre dos días de la semana
+    private static int calcularDistancia(DayOfWeek dia1, DayOfWeek dia2) {
+        int distancia = Math.abs(dia1.getValue() - dia2.getValue());
+        return Math.min(distancia, 7 - distancia); // Distancia circular
+    }
 }

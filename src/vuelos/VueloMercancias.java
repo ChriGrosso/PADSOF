@@ -49,32 +49,6 @@ public class VueloMercancias extends Vuelo {
 		this.mercanciasPeligrosas = mercanciasPeligrosas;
 	}
 	
-	/**
-     * Constructor que crea un vuelo de mercancías con la información necesaria para un solo vuelo.
-     * 
-     * @param id El identificador único del vuelo.
-     * @param origen El aeropuerto de origen.
-     * @param destino El aeropuerto de destino.
-     * @param horaSalida La hora de salida del vuelo.
-     * @param horaLlegada La hora de llegada del vuelo.
-     * @param aerolinea La aerolínea asociada al vuelo.
-     * @param llegada Indica si es un vuelo de llegada.
-     * @param carga La cantidad de carga transportada en el vuelo.
-     * @param mercanciasPeligrosas Indica si el vuelo transporta mercancías peligrosas.
-     * @param periodicidad La periodicidad del vuelo.
-     * @param avion El avión utilizado para el vuelo.
-     * @throws IllegalArgumentException Si el avión no es del tipo AvionMercancias.
-     */
-	public VueloMercancias(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
-			Aerolinea aerolinea, boolean llegada, double carga, boolean mercanciasPeligrosas, 
-			Periodicidad periodicidad, Avion avion) {
-		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
-		if((avion.getTipoAvion() instanceof AvionMercancias) == false) {
-			throw new IllegalArgumentException("Un vuelo de mercancías debe tener un avión para mercancías");
-		}
-		this.carga = carga;
-		this.mercanciasPeligrosas = mercanciasPeligrosas;
-	}
 	
 	/**
      * Obtiene la cantidad de carga transportada por el vuelo.

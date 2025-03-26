@@ -38,6 +38,8 @@ class ControladorTest {
         AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
 		Avion av = new Avion("0001", LocalDate.of(2023, 3, 14), m, LocalDate.of(2024, 6, 20)); 
 		Aerolinea a = new Aerolinea("IBE", "Iberia");
+		ArrayList<Aerolinea> arrayA = new ArrayList<Aerolinea>();
+		arrayA.add(a);
 
 		ArrayList<Temporada> temp1 = new ArrayList<Temporada>();
 		temp1.add(new Temporada (MonthDay.of(3, 5), LocalTime.NOON, LocalTime.MIDNIGHT, MonthDay.of(2, 5)));
@@ -47,9 +49,9 @@ class ControladorTest {
 		Aeropuerto ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, temp1, Direccion.NORTE);
 		Aeropuerto ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, temp2, Direccion.OESTE);
 		vuelo1 = new VueloMercancias("H1893", ap1, ap2, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0),
-				a, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
+				arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
 		vuelo2 = new VueloMercancias("V456", ap2, ap1, LocalDateTime.of(2025, 3, 9, 13, 0), LocalDateTime.of(2025, 3, 9, 17, 0),
-				a, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
+				arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
 		
 		controlador = new Controlador("01020304M", "jperez", "password123", terminal, new ArrayList<Vuelo>(Arrays.asList(vuelo1)));
 

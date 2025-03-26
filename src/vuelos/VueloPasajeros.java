@@ -26,15 +26,6 @@ public class VueloPasajeros extends Vuelo{
 		this.numPasajeros = numPasajeros;
 	}
 	
-	public VueloPasajeros(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
-			Aerolinea aerolinea, boolean llegada, int numPasajeros, Periodicidad periodicidad,
-			Avion avion) {
-		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
-		if((avion.getTipoAvion() instanceof AvionPasajeros) == false) {
-			throw new IllegalArgumentException("Un vuelo de pasajeros debe tener un avión para pasajeros");
-		}
-		this.numPasajeros = numPasajeros;
-	}
 
 	public int getNumPasajeros() {
 		return this.numPasajeros;
