@@ -92,6 +92,7 @@ public class DemoApp {
         
         
        //Generar una factura y pagarla para que se vea que funciona
+        generarFacturaMensual(aerolinea);
         
         
         //
