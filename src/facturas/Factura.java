@@ -2,6 +2,7 @@ package facturas;
 
 import es.uam.eps.padsof.invoices.*;
 import es.uam.eps.padsof.telecard.*;
+import sistema.SkyManager;
 
 import java.io.File;
 import java.io.Serializable;
@@ -13,7 +14,6 @@ import java.util.List;
 import aerolineas.*;
 import elementos.*;
 import aviones.*;
-import sistema.*;
 
 /**
  * Clase que representa una factura generada para una aerolínea,
@@ -74,9 +74,9 @@ public class Factura implements IInvoiceInfo, Serializable {
      */
     public double calcularFactura(Aerolinea a, boolean esSalida) {
         this.aerolinea = a;
+        double suma = 0;
         calcularCostesBaseYSobrecarga(esSalida);  // << rimosso 'aeropuerto'
 
-        double suma = 0;
         for (Uso u : this.serviciosUsados) {
             suma += u.calcularCosteUso();
         }
@@ -119,6 +119,7 @@ public class Factura implements IInvoiceInfo, Serializable {
         } else {
             this.precioBase = sm.getCosteBaseLlegada();
         }
+
 
         if (this.tipoAvion != null && this.tipoAvion.isMercancias()) {
             this.sobrecarga = sm.getCosteExtraMercancias();

@@ -459,7 +459,8 @@ public abstract class Vuelo extends Observable implements Serializable{
 				return true;
 			}
 			if((estV == EstadoVuelo.DESEMBARQUE_INI || estV == EstadoVuelo.DESEMBARQUE_FIN ||
-				estV == EstadoVuelo.DESCARGA_INI || estV == EstadoVuelo.DESCARGA_FIN) && this.puerta != null) {
+				estV == EstadoVuelo.DESCARGA_INI || estV == EstadoVuelo.DESCARGA_FIN) && this.puerta != null 
+				&& this.locAterrizaje != null) {
 				if(this.finger) {
 					this.avion.setEstadoAvion(EstadoAvion.EN_FINGER);
 				} else {
@@ -485,10 +486,16 @@ public abstract class Vuelo extends Observable implements Serializable{
 						}
 					}
 					conAvion.addUso(LocalDateTime.now(), null, this.avion.getHangar());
-					for(Aerolinea a: this.aerolinea) {
-						a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
-						a.setEndUso(LocalDateTime.now(), this, this.puerta);
-					}
+				}
+				for(Aerolinea a: this.aerolinea) {
+					a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
+					a.setEndUso(LocalDateTime.now(), this, this.puerta);
+				}
+				this.puerta.liberarPuerta();
+				if(this.finger) {
+					this.desasignarFinger((Finger) this.locAterrizaje);
+				} else {
+					this.desasignarParking((ZonaParking) this.locAterrizaje);
 				}
 				// Añadir nuevo vuelo si es necesario
 				if(this.periodicidad != Periodicidad.NO_PERIODICO) {
@@ -593,7 +600,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 					break;
 				}
 			}
-		} else { aerolinea = this.aerolinea.getFirst(); }
+		} else { aerolinea = this.getAerolinea(); }
 		
 		// Buscar en esa aerolinea el siguiente vuelo (salida) con el mismo avion que salga en menos de 1 hora
 		//      (si existe)

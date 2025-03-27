@@ -262,6 +262,7 @@ class VueloMercanciasTest {
 		vm1.setEstVuelo(EstadoVuelo.EN_VUELO);
 		assertEquals(EstadoVuelo.EN_VUELO, vm1.getEstVuelo());
 		assertTrue(vm1.getAerolinea().getHistorialUsos().get(vm1.getMapaElemClave().get(vm1.getPuerta())).getHoraDesuso() != null);
+		assertTrue(vm1.getAerolinea().getHistorialUsos().get(vm1.getMapaElemClave().get(vm1.getLocAterrizaje())).getHoraDesuso() != null);
 	}
 
 

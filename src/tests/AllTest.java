@@ -8,6 +8,7 @@ import org.junit.platform.suite.api.Suite;
 				AvionMercanciasTest.class,
 				AvionPasajerosTest.class,
 				VueloMercanciasTest.class,
+				VueloPasajerosTest.class,
 				FacturaTest.class, 
 				PagoTest.class,
 				AeropuertoTest.class,
