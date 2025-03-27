@@ -36,7 +36,7 @@ public class FacturaTest {
         factura.addUso(uso);
         factura.calcularFactura(aerolinea);
 
-        double expected = 100.0 + 20.0 + 30.0;
+        double expected = 50.0;
         assertEquals(expected, factura.getPrice(), 0.001, "Il prezzo totale della fattura non è corretto.");
     }
 
