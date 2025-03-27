@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import aviones.Avion;
@@ -139,8 +140,8 @@ public class Aerolinea implements Serializable{
      *
      * @return Lista (no en HashMap) de todos los usos de infraestructura de la aerolínea.
      */
-	public ArrayList<Uso> getArrayUsos() {
-		return (ArrayList<Uso>) this.historialUsos.values();
+	public Collection<Uso> getArrayUsos() {
+		return this.historialUsos.values();
 	}
 	
 	

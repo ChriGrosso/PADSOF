@@ -92,15 +92,12 @@ public class DemoApp {
         
         
        //Generar una factura y pagarla para que se vea que funciona
-        generarFacturaMensual(aerolinea);
+        Aerolinea a = v.getAerolinea();
+        generarFacturaMensual(a);
         
         
-        //
-        //eso es lo que falta por probar creo :)
-        //
         
        //Generar las estadisticas
-        Aerolinea a = v.getAerolinea();
         EstadisticasVuelos est = a.getEstadisticas();
         ArrayList<Vuelo> vuelos = est.vuelosEnTiempo();
         System.out.println("Vuelos en tiempo de la aerolinea: " + a.getNombre() + " (" + est.numVuelosEnTiempo() + ")\n");
@@ -118,8 +115,8 @@ public class DemoApp {
       //Verificar que los datos se mantienen correctamente al guardarlos y cargarlos
         app.guardarDatos();
         SkyManager app2 = SkyManager.getInstance() ;
-        System.out.println("\n\n Instancia ");
-        System.out.println(app2);
+        System.out.println("\n\n Instancia 2:\n");
+        //System.out.println(app2);
     }
     
     public static void configuraCostesBase() {
@@ -277,10 +274,10 @@ public class DemoApp {
             factura.addUso(uso);
         }
 
-        factura.calcularFactura(aerolinea, true); // true = partenza
+        factura.calcularFactura(aerolinea); 
 
         try {
-            String path = "./facturas/" + idFactura + ".pdf";
+            String path = "./resources/" + idFactura + ".pdf";
             factura.generarFactura(path);
             System.out.println("Factura mensual generada: " + path);
         } catch (Exception e) {
