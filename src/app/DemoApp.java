@@ -22,6 +22,7 @@ import vuelos.Periodicidad;
 import vuelos.Vuelo;
 import vuelos.VueloPasajeros;
 import vuelos.VueloMercancias;
+import elementos.Finger;
 
 
 public class DemoApp {
@@ -69,8 +70,17 @@ public class DemoApp {
         
         //Simulacion de que el vuelo se realice
         v.setEstVuelo(EstadoVuelo.ESPERANDO_PISTA_A);
-        v.asignarPista(null);
+        v.asignarPista(app.getPistasDisponibles(v).getFirst());
+        v.asignarLocAterrizaje(app.getFingersDisponibles(v).getFirst());
         
+        v.setEstVuelo(EstadoVuelo.ESPERANDO_ATERRIZAJE);
+        v.setEstVuelo(EstadoVuelo.ATERRIZADO);
+        
+        v.asignarPuerta(t.getPuertasDisponibles().getFirst());
+        
+        v.setEstVuelo(EstadoVuelo.DESEMBARQUE_INI);
+        v.setEstVuelo(EstadoVuelo.DESEMBARQUE_FIN);
+        System.out.println(app);
         
         
        
@@ -195,9 +205,9 @@ public class DemoApp {
     	ArrayList<Aeropuerto> aeropuertos = new ArrayList<Aeropuerto>(app.getAeropuertosExternos().values());
     	Avion avion = aerolineas.get(1).getAviones().get("AV-4532LM");
     	
-    	//Vuelo de pasajeros de salida
+    	//Vuelo de pasajeros de llegada
     	Vuelo v1 = new VueloPasajeros("VL0000", aeropuertos.get(0), aeropuertos.get(2), LocalDateTime.of(2025, 5, 10, 14, 30), LocalDateTime.of(2025, 5, 10, 17, 45), 
-    			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(0), aerolineas.get(1))), false, 150, Periodicidad.NO_PERIODICO, avion);
+    			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(0), aerolineas.get(1))), true, 150, Periodicidad.NO_PERIODICO, avion);
     	aerolineas.get(0).addVuelo(v1); 
     	aerolineas.get(1).addVuelo(v1);
     	app.registrarVuelo(v1);
@@ -207,7 +217,7 @@ public class DemoApp {
     	//Vuelo de Mercancias de llegada
     	avion = aerolineas.get(2).getAviones().get("AV-1209QW");
     	Vuelo v2 = new VueloMercancias("VL0001", aeropuertos.get(4), aeropuertos.get(3), LocalDateTime.of(2025, 4, 15, 12, 30), LocalDateTime.of(2025, 4, 15, 15, 45), 
-    			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(2))), true, 10, false, Periodicidad.NO_PERIODICO, avion);
+    			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(2))), false, 10, false, Periodicidad.NO_PERIODICO, avion);
     	aerolineas.get(2).addVuelo(v2);
     	app.registrarVuelo(v2);
     	s = "Vuelo "+v2.getId()+" a espera de asignación de Terminal y controlador";

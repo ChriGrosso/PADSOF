@@ -3,6 +3,7 @@ package elementos;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import usuarios.Controlador;
@@ -209,5 +210,22 @@ public abstract class Terminal extends ElementoEstructural {
         for (Vuelo v: this.vuelos) {
         	v.addObserver(c);
         }
+    }
+    
+    /**
+	 * Devuelve las puertas disponibles para asignar a un vuelo.
+	 * 
+	 * @return Una lista con las puertas disponibles.
+	 */
+    public ArrayList<Puerta> getPuertasDisponibles() {
+    	ArrayList<Puerta> disponibles = new ArrayList<Puerta>();
+    	Collection<Puerta> puertas = this.puertas.values();
+    	
+    	for (Puerta p: puertas) {
+    		if (!p.enUso()) {
+    			disponibles.add(p);
+    		}
+    	}
+    	return disponibles;
     }
 }

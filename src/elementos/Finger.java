@@ -31,7 +31,7 @@ public class Finger extends LocalizacionAterrizaje {
 
     /**
      * Indica si el finger está en uso actualmente.
-     * Este método actualmente no está implementado.
+     *  
      * @return false por defecto
      */
     public boolean enUso() {
@@ -41,11 +41,14 @@ public class Finger extends LocalizacionAterrizaje {
 
     /**
      * Verifica si un avión es compatible con el finger según su altura.
-     * Este método actualmente no está implementado.
+     * 
      * @param a avión a comprobar
-     * @return false por defecto
+     * @return true si son compatibles, false si no lo son
      */
     public boolean comprobarCompatibilidad(Avion a) {
+    	if (a.getTipoAvion().getAltura()<=this.alturaMax) {
+    		return true;
+    	}
         return false;
     }
 

@@ -776,6 +776,42 @@ public class SkyManager implements Serializable {
 		 return terminales;
 	 }
 	 
+	 /**
+	 * Devuelve las pistas disponibles para asignar a un vuelo.
+	 * 
+	 * @param vuelo Vuelo al que se le quiere asignar la pista.
+	 * @return Una lista de pistas disponibles.
+	 */
+	 public ArrayList<Pista> getPistasDisponibles(Vuelo v) {
+		 ArrayList<Pista> disponibles = new ArrayList<Pista>();
+		 Collection<Pista> pistas = this.pistas.values();
+		 
+		 for (Pista p: pistas) {
+			 if (v.getLlegada()!=p.isDespegue() && !p.enUso()) {
+				 disponibles.add(p);
+			 }
+		 }
+		 return disponibles;
+	 }
+	 
+	 /**
+	 * Devuelve los fingers disponibles para asignar a un vuelo.
+	 * 
+	 * @param vuelo Vuelo al que se le quiere asignar la pista.
+	 * @return Una lista con los fingers disponibles.
+	 */
+	 public ArrayList<Finger> getFingersDisponibles(Vuelo v) {
+		 ArrayList<Finger> disponibles = new ArrayList<Finger>();
+		 Collection<Finger> fingers = this.fingers.values();
+		 
+		 for (Finger f: fingers) {
+			 if (f.comprobarCompatibilidad(v.getAvion()) && !f.enUso()) {
+				 disponibles.add(f);
+			 }
+		 }
+		 return disponibles;
+	 }
+
 	 
 	 /**
 	  * Devuelve la representacion en String del sistema.
