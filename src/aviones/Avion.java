@@ -34,7 +34,6 @@ public class Avion extends Observable implements Serializable {
      * @param fechaUltimaRevision Fecha de la última revisión técnica del avión.
      */
 	public Avion(String matricula, LocalDate fechaCompra, TipoAvion tipoAvion, LocalDate fechaUltimaRevision) { 
-		super();
 		this.matricula = matricula;
 		this.fechaCompra = fechaCompra;
 		this.tipoAvion = tipoAvion;
@@ -52,7 +51,6 @@ public class Avion extends Observable implements Serializable {
 	public Avion(String matricula, LocalDate fechaCompra, TipoAvion tipoAvion) {
 		this(matricula, fechaCompra, tipoAvion, fechaCompra);
 		this.fechaUltimaRevision = null;
-		this.hangar = null;
 	}
 	
 	/**
@@ -150,7 +148,7 @@ public class Avion extends Observable implements Serializable {
 		}
 		
 		this.hangar = hangar;
-		hangar.setNumPlazas(hangar.getNumPlazas()+1);
+		hangar.addAvion(this);
 		return true;
 	}
 	
@@ -162,8 +160,8 @@ public class Avion extends Observable implements Serializable {
 			return;
 		}
 		
+		hangar.removeAvion(this);
 		this.hangar = null;
-		hangar.setNumPlazas(hangar.getNumPlazas()-1);
 		return;
 	}
 
