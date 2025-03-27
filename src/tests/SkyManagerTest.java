@@ -168,6 +168,7 @@ class SkyManagerTest {
 	
 	@Test
     void testGetUsuarioActual() {
+		skyManager.logIn("01020304A", "password123");
         assertNotNull(skyManager.getUsuarioActual());
     }
 
