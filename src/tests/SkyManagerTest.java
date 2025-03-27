@@ -77,7 +77,7 @@ class SkyManagerTest {
     
     @Test
     void testCargarDatosAeropuertos() {
-        assertDoesNotThrow(() -> skyManager.cargarDatosAeropuertos("src\\sistema\\AeropuertosData.dat"));
+        assertDoesNotThrow(() -> skyManager.cargarDatosAeropuertos("resources\\AeropuertosData.dat"));
     }
 
     @Test

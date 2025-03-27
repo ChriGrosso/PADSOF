@@ -23,16 +23,12 @@ public class Controlador extends Usuario{
      * @param nombre   Nombre del controlador.
      * @param password Contraseña del controlador.
      * @param terminal Terminal asignada al controlador.
-     * @param vuelos   Lista de vuelos a su cargo.
      */
-	public Controlador(String dni, String nombre, String password, Terminal terminal, ArrayList<Vuelo> vuelos) {
+	public Controlador(String dni, String nombre, String password, Terminal terminal) {
 		super(dni, nombre, password);
 		this.terminal = terminal;
-		this.vuelosASuCargo = vuelos;
-		//sigue los vuelos que tiene asignados
-		for (Vuelo v: vuelos) {
-			v.addObserver(this);
-		}
+		this.vuelosASuCargo = new ArrayList<Vuelo>();
+
 		//sigue los vuelos de su terminal
 		ArrayList<Vuelo> vuelosTerminal = terminal.getVuelos();
 		for (Vuelo v: vuelosTerminal) {

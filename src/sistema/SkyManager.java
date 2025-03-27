@@ -69,7 +69,7 @@ public class SkyManager implements Serializable {
      * Carga los datos desde un archivo si existe.
      */
 	private SkyManager() {
-		File fichero = new File("skyManagerDatos.dat");
+		File fichero = new File("resources\\skyManagerDatos.dat");
 		if (fichero.exists()) {
 			 this.cargarDatos();
 		} else {
@@ -118,7 +118,7 @@ public class SkyManager implements Serializable {
      * Guarda los datos de SkyManager en un archivo.
      */
 	public void guardarDatos() {
-		try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("skyManagerDatos.dat"))) {
+		try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("resources\\skyManagerDatos.dat"))) {
 			salida.writeObject(this);
 	    } catch (IOException e) {
 	        System.err.println("Error al guardar los datos: " + e.getMessage());
@@ -130,7 +130,7 @@ public class SkyManager implements Serializable {
      * Carga los datos desde un archivo y actualiza la instancia actual.
      */
 	private void cargarDatos() {
-		try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("skyManagerDatos.dat"))) {
+		try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("resources\\skyManagerDatos.dat"))) {
 	        SkyManager refDisco = (SkyManager) entrada.readObject();
 	        this.aerolineas = (refDisco.aerolineas!= null) ? refDisco.aerolineas : new HashMap<String, Aerolinea>();
 	        this.aeropuertosExternos = (refDisco.aeropuertosExternos!= null) ? refDisco.aeropuertosExternos : new HashMap<String, Aeropuerto>();
@@ -158,7 +158,7 @@ public class SkyManager implements Serializable {
 	/**
      * Carga la información de aeropuertos externos desde un archivo de texto.
      * 
-     * @param nombreFichero nombre del archivo que contiene los datos de los aeropuertos.
+     * @param nombreFichero nombre (path) del archivo que contiene los datos de los aeropuertos.
      * @throws IOException Si ocurre un error al leer el archivo.
      */
 	public void cargarDatosAeropuertos(String nombreFichero) {
@@ -742,16 +742,16 @@ public class SkyManager implements Serializable {
 				 "), ExtraMercancias: ("+this.costeExtraMercancias+"), ExtraPasajeros: ("+this.costeExtraPasajeros+")\n";
 		 
 		 s += "Informacion Propia Apuerto: "+this.informacionPropia+"\n";
-		 s += "Aeropuertos Externos: "+this.aeropuertosExternos+"\n";
-		 s += "Usuarios: "+ this.usuarios+"\n";
-		 s += "Vuelos: "+ this.vuelos+"\n";
-		 s += "Aerolineas: "+ this.aerolineas+"\n";
-		 s += "Terminales: "+this.terminales+"\n";
-		 s += "Pistas: "+this.pistas+"\n";
-		 s += "Fingers: "+this.fingers+"\n";
-		 s += "Zonas Parking: "+this.zonasParking+"\n";
-		 s += "Hangares: "+this.hangares+"\n";
-		 s += "Facturas: "+this.facturas+"\n";
+		 s += "Aeropuertos Externos: "+this.aeropuertosExternos.values()+"\n";
+		 s += "Usuarios: "+ this.usuarios.values()+"\n";
+		 s += "Vuelos: "+ this.vuelos.values()+"\n";
+		 s += "Aerolineas: "+ this.aerolineas.values()+"\n";
+		 s += "Terminales: "+this.terminales.values()+"\n";
+		 s += "Pistas: "+this.pistas.values()+"\n";
+		 s += "Fingers: "+this.fingers.values()+"\n";
+		 s += "Zonas Parking: "+this.zonasParking.values()+"\n";
+		 s += "Hangares: "+this.hangares.values()+"\n";
+		 s += "Facturas: "+this.facturas.values()+"\n";
 		 s += "Usuario Actual: "+this.usuarioActual+"\n";
 		 
 		 return s;

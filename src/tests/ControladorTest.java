@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.MonthDay;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,7 +52,8 @@ class ControladorTest {
 		vuelo2 = new VueloMercancias("V456", ap2, ap1, LocalDateTime.of(2025, 3, 9, 13, 0), LocalDateTime.of(2025, 3, 9, 17, 0),
 				arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
 		
-		controlador = new Controlador("01020304M", "jperez", "password123", terminal, new ArrayList<Vuelo>(Arrays.asList(vuelo1)));
+		controlador = new Controlador("01020304M", "jperez", "password123", terminal);
+		controlador.asignarVuelo(vuelo1);
 
 	}
 

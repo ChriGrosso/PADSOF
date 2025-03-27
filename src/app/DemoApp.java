@@ -1,6 +1,11 @@
 package app;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.MonthDay;
 import java.util.*;
 import aerolineas.*;
 import aeropuertos.*;
@@ -9,375 +14,127 @@ import elementos.*;
 import facturas.*;
 import notificaciones.*;
 import sistema.*;
-import vuelos.*;
+import usuarios.Controlador;
+import usuarios.Gestor;
+import usuarios.Operador;
+import vuelos.EstadoVuelo;
 
 public class DemoApp {
-
-    private static final String DATA_FILE = System.getProperty("user.home") + File.separator + "aeropuerto.dat";
-    private static List<Usuario> usuarios = new ArrayList<>();
-    private static List<Vuelo> vuelos = new ArrayList<>();
-    private static List<ElementoEstructural> elementos = new ArrayList<>();
-    private static List<Aerolinea> aerolineas = new ArrayList<>();
-    private static Scanner scanner = new Scanner(System.in);
+    private static SkyManager app;
 
     public static void main(String[] args) {
-        cargarDatos();
-
-        System.out.println("Bienvenido a SkyManager - DemoApp");
-
-        Usuario admin = new Usuario("12345678A", "admin123", "Admin");
-        if (usuarios.stream().noneMatch(u -> u.getDni().equals(admin.getDni()))) {
-            usuarios.add(admin);
+        File archivo = new File("resources\\skyManagerDatos.dat");
+        if (archivo.exists()) { // Verifica si el archivo existe
+        	archivo.delete();  //eliminamos datos antiguos para que sea mas facil ver como se van añadiendo los objetos en esta demo
         }
-
-        Usuario logueado = login();
-        if (logueado == null || !"Admin".equals(logueado.getTipo())) {
-            System.out.println("Acceso denegado.");
-            return;
-        }
+        //obtener la instancia del sistema
+        app = SkyManager.getInstance();
         
-        crearUsuariosDemo();
-        configurarAeropuertoDemo();
-        programarVuelosDemo();
-        generarFacturacionDemo();
-
-        boolean salir = false;
-        while (!salir) {
-            System.out.println("Seleccione una opción:");
-            System.out.println("1. Crear usuarios demo");
-            System.out.println("2. Configurar aeropuerto demo");
-            System.out.println("3. Programar vuelos demo");
-            System.out.println("4. Generar facturación demo");
-            System.out.println("5. Ver usuarios");
-            System.out.println("6. Ver vuelos");
-            System.out.println("7. Guardar datos");
-            System.out.println("8. Cargar datos");
-            System.out.println("9. Crear vuelo manual");
-            System.out.println("10. Ver facturación y simular pago");
-            System.out.println("11. Ver facturas pendientes");
-            System.out.println("12. Buscar vuelos por destino");
-            System.out.println("13. Buscar vuelos por fecha (YYYY-MM-DD)");
-            System.out.println("0. Salir");
-            System.out.print("Opción: ");
-            String opcion = scanner.nextLine();
-
-            switch (opcion) {
-                case "1" -> crearUsuariosDemo();
-                case "2" -> configurarAeropuertoDemo();
-                case "3" -> programarVuelosDemo();
-                case "4" -> generarFacturacionDemo();
-                case "5" -> usuarios.forEach(System.out::println);
-                case "6" -> vuelos.forEach(System.out::println);
-                case "7" -> guardarDatos();
-                case "8" -> cargarDatos();
-                case "9" -> crearVueloManual();
-                case "10" -> verFacturacionYSimularPago();
-                case "11" -> verFacturasPendientes();
-                case "12" -> buscarVuelosPorDestino();
-                case "13" -> buscarVuelosPorFecha();
-                case "0" -> salir = true;
-                default -> System.out.println("Opción no válida.");
-            }
-        }
+        //iniciar sesión como el gestor del sistema (generado automaticamente al crear la app)
+        app.logIn("01020304A", "password123");
+        
+        configurarAeropuerto();
+        app.cargarDatosAeropuertos("resources//AeropuertosData.dat");
+        
+        registrarUsuarios();
+        System.out.println(app);
+       
+        //Configurar notificaciones gestor
+        Gestor g = (Gestor) app.getUsuarios().get("01020304A");
+        g.seguirCamEstado(EstadoVuelo.EN_TIEMPO, EstadoVuelo.RETRASADO);
+        g.seguirCamEstado(EstadoAvion.EN_FINGER, EstadoAvion.EN_HANGAR);
+        
+        
+        //Ahora vamos a iniciar sesion como un operador
+        app.logIn("67891234A", "SkyOps2025!");
+        
+        darDeAltaAviones();
+        
         
     }
-
-    private static Usuario login() {
-        System.out.print("DNI: ");
-        String dni = scanner.nextLine();
-        System.out.print("Contraseña: ");
-        String pass = scanner.nextLine();
-
-        return usuarios.stream()
-                .filter(u -> u.getDni().equals(dni) && u.getContrasena().equals(pass))
-                .findFirst()
-                .orElse(null);
+    
+    
+    private static void configurarAeropuerto() {
+    	ArrayList<Temporada> temporadas = new ArrayList<>(Arrays.asList(new Temporada(MonthDay.of(Month.JANUARY, 1), LocalTime.of(8, 0), LocalTime.of(10, 30), MonthDay.of(Month.JULY, 31)),
+    			new Temporada(MonthDay.of(Month.AUGUST, 1), LocalTime.of(7, 0), LocalTime.of(11, 00), MonthDay.of(Month.DECEMBER, 31))));
+    	Aeropuerto infoPropia = new Aeropuerto("Aeropuerto Internacional Solaria", "SOL", "Madrid", "España", 0, 0, temporadas, Direccion.NORTE);
+    	app.setInformacionPropia(infoPropia);
+    	app.setCosteBaseLlegada(20);
+    	app.setCosteBaseSalida(35);
+    	app.setCosteExtraMercancias(25);
+    	app.setCosteExtraPasajeros(10);
+    	
+    	//Configurar infraestructura aeropuerto
+    	//2 terminales con 2 puertas cada una
+    	Terminal t1 = new TerminalMercancias("TM0000", LocalDate.now(), 2, "PM", 300);
+    	app.registrarTerminal(t1);
+    	Terminal t2 = new TerminalPasajeros("TP0000", LocalDate.now(), 2, "PP", 500);
+    	app.registrarTerminal(t2);
+    	
+    	//2 Hangares
+    	Hangar h1 = new HangarMercancias("HM0000", 20, LocalDate.now(), 35, 28, 72, 80);
+    	app.registrarHangar(h1);
+    	Hangar h2 = new HangarPasajeros("HP0000", 15, LocalDate.now(), 30, 25, 71, 80);
+    	app.registrarHangar(h2);
+    	
+    	//3 pistas
+    	Pista p1 = new Pista("PS0000", LocalDate.now(), false, 1500);
+    	app.registrarPista(p1);
+    	Pista p2 = new Pista("PS0001", LocalDate.now(), true, 1500);
+    	app.registrarPista(p2);
+    	Pista p3 = new Pista("PS0002", LocalDate.now(), true, 1500);
+    	app.registrarPista(p3);
+    	
+    	//2 fingers
+    	Finger f1 = new Finger("FI0000", 10, LocalDate.now(), 26);
+    	app.registrarFinger(f1);
+    	Finger f2 = new Finger("FI0001", 10, LocalDate.now(), 28);
+    	app.registrarFinger(f2);
+    	
+    	//2 Zonas de Parking
+    	ZonaParking zk1 = new ZonaParking("PK0000", 12, LocalDate.now(), 20, 26, 82, 82);
+    	app.registrarZonaParking(zk1);
+    	ZonaParking pk2 = new ZonaParking("PK0001", 12, LocalDate.now(), 25, 28, 82, 83);
+    	app.registrarZonaParking(pk2);
+    	
     }
-
-    private static void crearUsuariosDemo() {
-        if (usuarios.stream().noneMatch(u -> u.getDni().equals("98765432B"))) {
-            usuarios.add(new Usuario("98765432B", "op123", "Operador"));
-        }
-        if (usuarios.stream().noneMatch(u -> u.getDni().equals("11223344C"))) {
-            usuarios.add(new Usuario("11223344C", "ctrl123", "Controlador"));
-        }
+    
+    private static void registrarUsuarios() {
+    	ArrayList<Terminal> terminales = new ArrayList<Terminal>(app.getTerminales().values());
+    	ArrayList<Aerolinea> aerolineas = new ArrayList<Aerolinea>(app.getAerolineas().values());
+    	//tres controladores
+    	Controlador c1 = new Controlador("34567891X", "Javier Gómez", "TowerCtrl!2025", terminales.get(0));
+    	app.registrarUsuario(c1);
+    	Controlador c2 = new Controlador("45678912Y", "Laura Méndez", "ApproachSafe2024$", terminales.get(1));
+    	app.registrarUsuario(c2);
+    	Controlador c3 = new Controlador("56789123Z", "Miguel Torres", "GroundCtrl!2025", terminales.get(0));
+    	app.registrarUsuario(c3);
+    	
+    	//cuatro operadores
+    	Operador o1 = new Operador("67891234A", "Ana Ramírez", "SkyOps2025!", aerolineas.get(0));
+    	app.registrarUsuario(o1);
+    	Operador o2 = new Operador("78912345B", "Daniel Fernández", "AeroFlight2024@", aerolineas.get(1));
+    	app.registrarUsuario(o2);
+    	Operador o3 = new Operador("89012345C", "Sergio López", "FixJet#2025", aerolineas.get(1));
+    	app.registrarUsuario(o3);
+    	Operador o4 = new Operador("90123456D", "Patricia Navarro", "RoutePlan#2024", aerolineas.get(2));
+    	app.registrarUsuario(o4);	
     }
-
-    private static void configurarAeropuertoDemo() {
-        elementos.add(new Pista(1, "Despegue"));
-        elementos.add(new Pista(2, "Aterrizaje"));
-        elementos.add(new Terminal("T1", 100));
-        elementos.add(new Hangar("H1", 5));
+    
+    private static void darDeAltaAviones() {
+    	ArrayList<Aerolinea> aerolineas = new ArrayList<Aerolinea>(app.getAerolineas().values());
+    	
+    	TipoAvion ta1 = new AvionMercancias("Boeing", "747-8F", 14200.0, 19.4, 68.4, 69.3, 10, false);
+    	TipoAvion ta2 = new AvionPasajeros("Airbus", "A350-900", 15000.0, 17.0, 64.8, 66.8, 440);
+    	Avion a1 = new Avion ("AV-9876XP", LocalDate.now(), ta1);
+    	aerolineas.get(0).addAvion(a1);
+    	Avion a2 = new Avion ("AV-4532LM", LocalDate.now(), ta2);
+    	aerolineas.get(1).addAvion(a2);
+    	Avion a3 = new Avion ("AV-1209QW", LocalDate.now(), ta1);
+    	aerolineas.get(2).addAvion(a3);
+    	
+    	
     }
-
-    private static void programarVuelosDemo() {
-        Aerolinea al = new Aerolinea("AirDemo", "ADM");
-        aerolineas.add(al);
-
-        Avion a = new Avion("EC-DMO", "Pasajeros", 180, 0);
-        Date fecha = new Date();
-        Vuelo v = new Vuelo("Madrid", "Barcelona", a, fecha, "Programado");
-
-        boolean conflicto = vuelos.stream().anyMatch(
-            vuelo -> Math.abs(vuelo.getFecha().getTime() - v.getFecha().getTime()) < 3600000
-        );
-
-        if (!conflicto) {
-            vuelos.add(v);
-            System.out.println("Vuelo programado correctamente.");
-        } else {
-            System.out.println("Conflicto de horario: ya existe un vuelo en una hora cercana.");
-        }
-    }
-
-    private static void generarFacturacionDemo() {
-        System.out.println("Generando factura para aerolíneas...");
-        for (Aerolinea a : aerolineas) {
-            System.out.println("Factura generada para " + a.getNombre() + " (500 EUR)");
-        }
-    }
-
-    private static void guardarDatos() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
-            out.writeObject(usuarios);
-            out.writeObject(vuelos);
-            out.writeObject(elementos);
-            out.writeObject(aerolineas);
-            System.out.println("Datos guardados correctamente.");
-        } catch (IOException e) {
-            System.out.println("Error al guardar datos: " + e.getMessage());
-        }
-    }
-
-    private static void crearVueloManual() {
-        System.out.print("Origen: ");
-        String origen = scanner.nextLine();
-        System.out.print("Destino: ");
-        String destino = scanner.nextLine();
-        System.out.print("Fecha (timestamp en ms): ");
-        long timestamp = Long.parseLong(scanner.nextLine());
-        Date fecha = new Date(timestamp);
-        System.out.print("Matrícula avión: ");
-        String matricula = scanner.nextLine();
-        System.out.print("Tipo (Pasajeros/Mercancias): ");
-        String tipo = scanner.nextLine();
-        System.out.print("Plazas: ");
-        int plazas = Integer.parseInt(scanner.nextLine());
-        System.out.print("Carga (kg): ");
-        double carga = Double.parseDouble(scanner.nextLine());
-
-        Avion avion = new Avion(matricula, tipo, plazas, carga);
-        Vuelo nuevoVuelo = new Vuelo(origen, destino, avion, fecha, "Programado");
-
-        boolean conflicto = vuelos.stream().anyMatch(
-            vuelo -> Math.abs(vuelo.getFecha().getTime() - nuevoVuelo.getFecha().getTime()) < 3600000
-        );
-
-        if (!conflicto) {
-            vuelos.add(nuevoVuelo);
-            System.out.println("Vuelo creado exitosamente.");
-        } else {
-            System.out.println("Conflicto de horario detectado. Vuelo no creado.");
-        }
-    }
-
-    private static void verFacturacionYSimularPago() {
-        if (aerolineas.isEmpty()) {
-            System.out.println("No hay aerolíneas registradas.");
-            return;
-        }
-
-        for (Aerolinea a : aerolineas) {
-            if (a.isFacturaPagada()) {
-                System.out.println("Factura para " + a.getNombre() + ": YA PAGADA");
-                continue;
-            }
-            System.out.println("Factura para " + a.getNombre() + ": 500 EUR");
-            System.out.print("¿Desea pagar esta factura? (s/n): ");
-            String respuesta = scanner.nextLine();
-            if (respuesta.equalsIgnoreCase("s")) {
-                a.setFacturaPagada(true);
-                System.out.println("Factura pagada con éxito.");
-            } else {
-                System.out.println("Factura pendiente de pago.");
-            }
-        }
-    }
-
-    private static void verFacturasPendientes() {
-        boolean hayPendientes = false;
-        for (Aerolinea a : aerolineas) {
-            if (!a.isFacturaPagada()) {
-                System.out.println("Factura pendiente: " + a.getNombre() + " (500 EUR)");
-                hayPendientes = true;
-            }
-        }
-        if (!hayPendientes) {
-            System.out.println("No hay facturas pendientes.");
-        }
-    }
-
-    private static void buscarVuelosPorDestino() {
-        System.out.print("Ingrese destino a buscar: ");
-        String destino = scanner.nextLine().trim().toLowerCase();
-        boolean encontrados = false;
-        for (Vuelo v : vuelos) {
-            if (v.getDestino().toLowerCase().contains(destino)) {
-                System.out.println(v);
-                encontrados = true;
-            }
-        }
-        if (!encontrados) {
-            System.out.println("No se encontraron vuelos con ese destino.");
-        }
-    }
-
-    private static void buscarVuelosPorFecha() {
-        System.out.print("Ingrese la fecha (YYYY-MM-DD): ");
-        String input = scanner.nextLine();
-        try {
-            String[] parts = input.split("-");
-            Calendar target = Calendar.getInstance();
-            target.set(Calendar.YEAR, Integer.parseInt(parts[0]));
-            target.set(Calendar.MONTH, Integer.parseInt(parts[1]) - 1);
-            target.set(Calendar.DAY_OF_MONTH, Integer.parseInt(parts[2]));
-            target.set(Calendar.HOUR_OF_DAY, 0);
-            target.set(Calendar.MINUTE, 0);
-            target.set(Calendar.SECOND, 0);
-            target.set(Calendar.MILLISECOND, 0);
-            long start = target.getTimeInMillis();
-            long end = start + 86400000;
-
-            boolean encontrados = false;
-            for (Vuelo v : vuelos) {
-                long t = v.getFecha().getTime();
-                if (t >= start && t < end) {
-                    System.out.println(v);
-                    encontrados = true;
-                }
-            }
-            if (!encontrados) {
-                System.out.println("No se encontraron vuelos para esa fecha.");
-            }
-        } catch (Exception e) {
-            System.out.println("Formato inválido. Use YYYY-MM-DD.");
-        }
-    }
-
-    private static void cargarDatos() {
-        File f = new File(DATA_FILE);
-        if (!f.exists()) return;
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(f))) {
-            usuarios = (List<Usuario>) in.readObject();
-            vuelos = (List<Vuelo>) in.readObject();
-            elementos = (List<ElementoEstructural>) in.readObject();
-            aerolineas = (List<Aerolinea>) in.readObject();
-            System.out.println("Datos cargados correctamente.");
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error al cargar datos: " + e.getMessage());
-        }
-    }
+    
+    
 }
-
-// Clases base semplificate per il dimostratore
-class Usuario implements Serializable {
-    private String dni, contrasena, tipo;
-    public Usuario(String d, String c, String t) { dni = d; contrasena = c; tipo = t; }
-    public String getDni() { return dni; }
-    public String getContrasena() { return contrasena; }
-    public String getTipo() { return tipo; }
-    @Override public String toString() {
-        return "Usuario{" + "dni='" + dni + '\'' + ", tipo='" + tipo + '\'' + '}';
-    }
-}
-
-class Vuelo implements Serializable {
-    private String origen, destino;
-    private Avion avion;
-    private Date fecha;
-    private String estado;
-    public Vuelo(String o, String d, Avion a, Date f, String e) {
-        origen = o; setDestino(d); avion = a; setFecha(f); estado = e;
-    }
-    @Override public String toString() {
-        return "Vuelo{" + "origen='" + origen + '\'' + ", destino='" + getDestino() + '\'' + ", estado='" + estado + '\'' + '}';
-    }
-	/**
-	 * @return the fecha
-	 */
-	public Date getFecha() {
-		return fecha;
-	}
-	/**
-	 * @param fecha the fecha to set
-	 */
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
-	}
-	/**
-	 * @return the destino
-	 */
-	public String getDestino() {
-		return destino;
-	}
-	/**
-	 * @param destino the destino to set
-	 */
-	public void setDestino(String destino) {
-		this.destino = destino;
-	}
-}
-
-class Avion implements Serializable {
-    private String matricula, tipo;
-    private int plazas;
-    private double carga;
-    public Avion(String m, String t, int p, double c) {
-        matricula = m; tipo = t; plazas = p; carga = c;
-    }
-    @Override public String toString() {
-        return "Avion{" + "matricula='" + matricula + '\'' + ", tipo='" + tipo + '\'' + '}';
-    }
-}
-
-class Aerolinea implements Serializable {
-    private boolean facturaPagada = false;
-    private String nombre, codigo;
-    public Aerolinea(String n, String c) { nombre = n; codigo = c; }
-    public String getNombre() { return nombre; }
-    public boolean isFacturaPagada() { return facturaPagada; }
-    public void setFacturaPagada(boolean pagada) { this.facturaPagada = pagada; }
-    @Override public String toString() {
-        return "Aerolinea{" + "nombre='" + nombre + '\'' + ", codigo='" + codigo + '\'' + '}';
-    }
-}
-
-abstract class ElementoEstructural implements Serializable {}
-
-class Pista extends ElementoEstructural {
-    private int numero;
-    private String tipo;
-    public Pista(int n, String t) { numero = n; tipo = t; }
-    @Override public String toString() {
-        return "Pista{" + "numero=" + numero + ", tipo='" + tipo + '\'' + '}';
-    }
-}
-
-class Terminal extends ElementoEstructural {
-    private String nombre;
-    private int capacidad;
-    public Terminal(String n, int c) { nombre = n; capacidad = c; }
-    @Override public String toString() {
-        return "Terminal{" + "nombre='" + nombre + '\'' + ", capacidad=" + capacidad + '}';
-    }
-}
-
-class Hangar extends ElementoEstructural {
-    private String nombre;
-    private int plazas;
-    public Hangar(String n, int p) { nombre = n; plazas = p; }
-    @Override public String toString() {
-        return "Hangar{" + "nombre='" + nombre + '\'' + ", plazas=" + plazas + '}';
-    }
-}
-
