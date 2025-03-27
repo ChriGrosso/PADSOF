@@ -34,7 +34,7 @@ public class FacturaTest {
 
         Factura factura = new Factura("INV-001", 0.0, 0.0, LocalDate.now(), aerolinea, "logo.png");
         factura.addUso(uso);
-        factura.calcularFactura(aerolinea, true);
+        factura.calcularFactura(aerolinea);
 
         double expected = 100.0 + 20.0 + 30.0;
         assertEquals(expected, factura.getPrice(), 0.001, "Il prezzo totale della fattura non è corretto.");

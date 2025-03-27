@@ -116,7 +116,7 @@ public class DemoApp {
       //Verificar que los datos se mantienen correctamente al guardarlos y cargarlos
         app.guardarDatos();
         SkyManager app2 = SkyManager.getInstance() ;
-        System.out.println("\n\n");
+        System.out.println("\n\n Instancia ");
         System.out.println(app2);
     }
     

@@ -14,6 +14,7 @@ import aerolineas.*;
 import elementos.*;
 import aviones.*;
 import sistema.*;
+import vuelos.Vuelo;
 
 /**
  * Clase que representa una factura generada para una aerolínea,
@@ -35,8 +36,6 @@ public class Factura implements IInvoiceInfo, Serializable {
     private List<Uso> serviciosUsados = new ArrayList<>(); // Servicios utilizados por la aerolínea
     private double sobrecarga = 0; // Coste extra adicional
     private String logo; // Ruta del logo de la compañía
-    private TipoAvion tipoAvion;
-
     /**
      * Constructor de Factura con los campos esenciales.
      */
@@ -72,7 +71,7 @@ public class Factura implements IInvoiceInfo, Serializable {
      * @param a Aerolínea a la que pertenece la factura
      * @return coste total de los servicios
      */
-    public double calcularFactura(Aerolinea a, boolean esSalida) {
+    public double calcularFactura(Aerolinea a) {
         this.aerolinea = a;
         SkyManager sm = SkyManager.getInstance();
 
@@ -88,13 +87,6 @@ public class Factura implements IInvoiceInfo, Serializable {
         for (Uso u : this.serviciosUsados) {
             LocalDate dataUso = u.getHoraUso().toLocalDate();
             if (!dataUso.isBefore(inizioMese) && !dataUso.isAfter(fineMese)) {
-                // Calcolo costi base
-                if (esSalida) {
-                    totalBase += sm.getCosteBaseSalida();
-                } else {
-                    totalBase += sm.getCosteBaseLlegada();
-                }
-
                 // Calcolo surcharge in base al tipo di aereo
                 TipoAvion tipo = u.getAeronave().getTipoAvion();
                 if (tipo != null && tipo.isMercancias()) {
@@ -109,6 +101,16 @@ public class Factura implements IInvoiceInfo, Serializable {
                 // Aggiunge a lista per PDF
                 this.rUsage.add(u);
             }
+        }
+        for(Vuelo v: this.aerolinea.getVuelos()) {
+        	if (!v.getHoraSalida().toLocalDate().isBefore(inizioMese) && !v.getHoraSalida().toLocalDate().isAfter(fineMese)) {
+        		// Calcolo costi base
+                if (!v.getLlegada()) {
+                    totalBase += sm.getCosteBaseSalida();
+                } else {
+                    totalBase += sm.getCosteBaseLlegada();
+                }
+        	}
         }
 
         this.precioBase = totalBase;
