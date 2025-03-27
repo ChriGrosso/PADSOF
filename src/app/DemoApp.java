@@ -83,12 +83,19 @@ public class DemoApp {
         v.setEstVuelo(EstadoVuelo.EN_HANGAR);
         System.out.println(app);
         
+        v.getPuerta().getHistorailUsos().get(v).setHoraDesuso(v.getPuerta().getHistorailUsos().get(v).getHoraDesuso().plusHours(1));
+        v.getLocAterrizaje().getHistorailUsos().get(v).setHoraDesuso(v.getLocAterrizaje().getHistorailUsos().get(v).getHoraDesuso().plusHours(1));
+        
         app.logIn("01020304A", "password123");
         System.out.println("Estadisticas del Gestor: \n"+app.verEstadisticasGestor());
         
         
         
        //Generar una factura y pagarla para que se vea que funciona
+        
+        //
+        //eso es lo que falta por probar creo :)
+        //
         
        //Generar las estadisticas
         Aerolinea a = v.getAerolinea();
@@ -103,17 +110,14 @@ public class DemoApp {
         for(Vuelo v2: vuelos) {
         	System.out.println(v2.toString() + "\n");
         }
-       //
-       //eso es lo que falta por probar creo :)
-       //
-       //
 
         
         
       //Verificar que los datos se mantienen correctamente al guardarlos y cargarlos
         app.guardarDatos();
         SkyManager app2 = SkyManager.getInstance() ;
-        //System.out.println(app2);
+        System.out.println("\n\n");
+        System.out.println(app2);
     }
     
     public static void configuraCostesBase() {
