@@ -46,5 +46,12 @@ class NotificacionTest {
     void testSetLeida() {
         notificacion.setLeida(true);
         assertTrue(notificacion.getLeida());
+        assertThrows(IllegalArgumentException.class, () -> notificacion.setLeida(null));
     }
+    
+    @Test
+    void testToString() {
+        assertTrue(notificacion.toString().length()>0);
+    }
+    
 }
