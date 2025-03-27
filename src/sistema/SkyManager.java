@@ -46,7 +46,8 @@ public class SkyManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static transient SkyManager INSTANCE = null;
 	
-	private long rangoTiempoMinutosMostrarTerminalesAvion;
+	private int diasAntelacionProgVuelo; //dias minimos necesarios de antelacion para registrar un vuelo
+	private long rangoTiempoMinutosMostrarTerminalesAvion; //"rango" de tiempo en el que se buscaran las terminales al intentar asignarlas a un avion 
 	private double costeBaseSalida;
 	private double costeBaseLlegada;
 	private double costeExtraMercancias;
@@ -73,6 +74,7 @@ public class SkyManager implements Serializable {
 		if (fichero.exists()) {
 			 this.cargarDatos();
 		} else {
+			this.diasAntelacionProgVuelo = 1;
 			this.rangoTiempoMinutosMostrarTerminalesAvion = 30;
 			this.costeBaseLlegada = 10;
 			this.costeBaseSalida = 10;
@@ -147,6 +149,8 @@ public class SkyManager implements Serializable {
 	        this.usuarios = (refDisco.usuarios!= null) ? refDisco.usuarios : new HashMap<String, Usuario>();
 	        this.vuelos = (refDisco.vuelos!= null) ? refDisco.vuelos : new HashMap<String, Vuelo>();
 	        this.zonasParking = (refDisco.zonasParking!= null) ? refDisco.zonasParking : new HashMap<String, ZonaParking>();
+	        this.diasAntelacionProgVuelo = refDisco.diasAntelacionProgVuelo;
+	        this.rangoTiempoMinutosMostrarTerminalesAvion = refDisco.rangoTiempoMinutosMostrarTerminalesAvion;
 	        this.usuarioActual = null;
 	        
 	    } catch (IOException | ClassNotFoundException e) {
@@ -348,6 +352,46 @@ public class SkyManager implements Serializable {
 	}
 	
 	/**
+     * Obtiene el rango de tiempo (en minutos) que se considera a la hora de mostrar las 
+     * terminales disponibles al configurar un vuelo.
+     * 
+     * @return rango de tiempo en el que se buscaran las terminales al intentar asignarlas a un avion.
+     */
+	public long geRangoTiempoMinutosMostrarTerminalesAvion() {
+		return this.rangoTiempoMinutosMostrarTerminalesAvion;
+	}
+	
+	/**
+     * Obtiene la cantidad de dias necesarios de antelacion para registrar un vuelo
+     * 
+     * @return dias de antelacion necesarios para programar un vuelo.
+     */
+	public int getDiasAntelacionProgVuelo() {
+		return this.diasAntelacionProgVuelo;
+	}
+	
+	/**
+     * Modifica el rango de tiempo (en minutos) que se considera a la hora de mostrar las 
+     * terminales disponibles al configurar un vuelo.
+     * 
+     * @param coste Nuevo valor del costo base de llegada.
+     */
+	public void setRangoTiempoMinutosMostrarTerminalesAvion(long mins) {
+		this.rangoTiempoMinutosMostrarTerminalesAvion = mins;
+		return;
+	}
+	
+	/**
+     * Modifica la cantidad de dias necesarios de antelacion para registrar un vuelo
+     * 
+     * @param coste Nuevo valor del costo base de llegada.
+     */
+	public void setDiasAntelacionProgVuelo(int dias) {
+		this.diasAntelacionProgVuelo = dias;
+		return;
+	}
+	
+	/**
      * Modifica el costo base de llegada.
      * 
      * @param coste Nuevo valor del costo base de llegada.
@@ -417,7 +461,7 @@ public class SkyManager implements Serializable {
      * @return true si el vuelo se registró correctamente, false si ya existía.
      */
 	public Boolean registrarVuelo(Vuelo v) {
-		if (this.vuelos.containsKey(v.getId())) {
+		if (this.vuelos.containsKey(v.getId()) || v.getHoraSalida().isBefore(LocalDateTime.now().plusDays(this.diasAntelacionProgVuelo))) {
 			return false;
 		}
 	

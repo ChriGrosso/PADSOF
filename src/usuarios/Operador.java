@@ -26,6 +26,7 @@ public class Operador extends Usuario{
 	public Operador(String dni, String nombre, String password, Aerolinea aerolinea) {
 		super(dni, nombre, password);
 		this.aerolinea = aerolinea;
+		aerolinea.addOperador(this);
 		ArrayList<Vuelo> vuelos = aerolinea.getVuelos();
 		//sigue todos los vuelos de su aerolinea.
 		for (Vuelo v: vuelos) {

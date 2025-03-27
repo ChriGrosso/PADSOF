@@ -18,6 +18,11 @@ import usuarios.Controlador;
 import usuarios.Gestor;
 import usuarios.Operador;
 import vuelos.EstadoVuelo;
+import vuelos.Periodicidad;
+import vuelos.Vuelo;
+import vuelos.VueloPasajeros;
+import vuelos.VueloMercancias;
+
 
 public class DemoApp {
     private static SkyManager app;
@@ -30,14 +35,13 @@ public class DemoApp {
         //obtener la instancia del sistema
         app = SkyManager.getInstance();
         
-        //iniciar sesión como el gestor del sistema (generado automaticamente al crear la app)
+        //iniciar sesión como el gestor del sistema (generado automáticamente al crear la app)
         app.logIn("01020304A", "password123");
         
         configurarAeropuerto();
         app.cargarDatosAeropuertos("resources//AeropuertosData.dat");
         
         registrarUsuarios();
-        System.out.println(app);
        
         //Configurar notificaciones gestor
         Gestor g = (Gestor) app.getUsuarios().get("01020304A");
@@ -49,8 +53,24 @@ public class DemoApp {
         app.logIn("67891234A", "SkyOps2025!");
         
         darDeAltaAviones();
+        System.out.println(app);
+        programarVuelos();
+        
+        //el gestor debe haber recibo las notificaciones de que debe asignar terminal y controlador a los vuelos
+        System.out.println("Notificaciones Gestor: "+g.getNotificaciones());
+        Vuelo v = app.buscarVueloPorCodigo("VL0000");
+        v.asignarTerminal(app.getTerminalesDisponibles(v).getFirst());
         
         
+        
+        
+
+        
+        
+      //Verificar que los datos se mantienen correctamente al guardarlos y cargarlos
+        app.guardarDatos();
+        SkyManager app2 = SkyManager.getInstance() ;
+        //System.out.println(app2);
     }
     
     
@@ -63,6 +83,7 @@ public class DemoApp {
     	app.setCosteBaseSalida(35);
     	app.setCosteExtraMercancias(25);
     	app.setCosteExtraPasajeros(10);
+    	app.setDiasAntelacionProgVuelo(3);
     	
     	//Configurar infraestructura aeropuerto
     	//2 terminales con 2 puertas cada una
@@ -97,6 +118,15 @@ public class DemoApp {
     	ZonaParking pk2 = new ZonaParking("PK0001", 12, LocalDate.now(), 25, 28, 82, 83);
     	app.registrarZonaParking(pk2);
     	
+    	
+    	//3 Aerolineas
+    	Aerolinea ae1 = new Aerolinea("AE000", "American Airlines");
+    	app.registrarAerolinea(ae1);
+    	Aerolinea ae2 = new Aerolinea("AE001", "Delta Air Lines");
+    	app.registrarAerolinea(ae2);
+    	Aerolinea ae3 = new Aerolinea("AE002", "United Airlines");
+    	app.registrarAerolinea(ae3);
+    	
     }
     
     private static void registrarUsuarios() {
@@ -126,13 +156,37 @@ public class DemoApp {
     	
     	TipoAvion ta1 = new AvionMercancias("Boeing", "747-8F", 14200.0, 19.4, 68.4, 69.3, 10, false);
     	TipoAvion ta2 = new AvionPasajeros("Airbus", "A350-900", 15000.0, 17.0, 64.8, 66.8, 440);
+    	aerolineas.get(0).addTipoAvion(ta1);
+    	aerolineas.get(1).addTipoAvion(ta2);
+    	aerolineas.get(2).addTipoAvion(ta1);
     	Avion a1 = new Avion ("AV-9876XP", LocalDate.now(), ta1);
     	aerolineas.get(0).addAvion(a1);
     	Avion a2 = new Avion ("AV-4532LM", LocalDate.now(), ta2);
     	aerolineas.get(1).addAvion(a2);
     	Avion a3 = new Avion ("AV-1209QW", LocalDate.now(), ta1);
     	aerolineas.get(2).addAvion(a3);
+    }
+    
+    private static void programarVuelos() {
+    	ArrayList<Aerolinea> aerolineas = new ArrayList<Aerolinea>(app.getAerolineas().values());
+    	ArrayList<Aeropuerto> aeropuertos = new ArrayList<Aeropuerto>(app.getAeropuertosExternos().values());
+    	Avion avion = aerolineas.get(1).getAviones().get("AV-4532LM");
     	
+    	Vuelo v1 = new VueloPasajeros("VL0000", aeropuertos.get(0), aeropuertos.get(2), LocalDateTime.of(2025, 5, 10, 14, 30), LocalDateTime.of(2025, 5, 10, 17, 45), 
+    			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(0), aerolineas.get(1))), false, 150, Periodicidad.NO_PERIODICO, avion);
+    	aerolineas.get(0).addVuelo(v1); 
+    	aerolineas.get(1).addVuelo(v1);
+    	app.registrarVuelo(v1);
+    	String s = "Vuelo "+v1.getId()+" a espera de asignación de Terminal y controlador";
+    	app.getUsuarioActual().enviarNotificacion(s, app.getUsuarios().get("01020304A"));
+    	
+    	avion = aerolineas.get(2).getAviones().get("AV-1209QW");
+    	Vuelo v2 = new VueloMercancias("VL0001", aeropuertos.get(4), aeropuertos.get(3), LocalDateTime.of(2025, 4, 15, 12, 30), LocalDateTime.of(2025, 4, 15, 15, 45), 
+    			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(2))), true, 10, false, Periodicidad.NO_PERIODICO, avion);
+    	aerolineas.get(2).addVuelo(v2);
+    	app.registrarVuelo(v2);
+    	s = "Vuelo "+v2.getId()+" a espera de asignación de Terminal y controlador";
+    	app.getUsuarioActual().enviarNotificacion(s, app.getUsuarios().get("01020304A"));
     	
     }
     

@@ -22,14 +22,14 @@ public class VueloMercancias extends Vuelo {
 	private boolean mercanciasPeligrosas;
 	
 	/**
-     * Constructor que crea un vuelo de mercancías con la información necesaria.
+     * Constructor que crea un vuelo de mercancías con periodicidad normal.
      * 
      * @param id El identificador único del vuelo.
      * @param origen El aeropuerto de origen.
      * @param destino El aeropuerto de destino.
      * @param horaSalida La hora de salida del vuelo.
      * @param horaLlegada La hora de llegada del vuelo.
-     * @param aerolinea La lista de aerolíneas asociadas al vuelo.
+     * @param aerolinea La lista de 1 o 2 aerolíneas asociadas al vuelo.
      * @param llegada Indica si es un vuelo de llegada.
      * @param carga La cantidad de carga transportada en el vuelo.
      * @param mercanciasPeligrosas Indica si el vuelo transporta mercancías peligrosas.
@@ -48,6 +48,22 @@ public class VueloMercancias extends Vuelo {
 		this.mercanciasPeligrosas = mercanciasPeligrosas;
 	}
 	
+	/**
+     * Constructor que crea un vuelo de mercancías con periodicidad de dias alternos.
+     * 
+     * @param id El identificador único del vuelo.
+     * @param origen El aeropuerto de origen.
+     * @param destino El aeropuerto de destino.
+     * @param horaSalida La hora de salida del vuelo.
+     * @param horaLlegada La hora de llegada del vuelo.
+     * @param aerolineas La lista de 1 o 2 aerolíneas asociadas al vuelo.
+     * @param llegada Indica si es un vuelo de llegada.
+     * @param carga La cantidad de carga transportada en el vuelo.
+     * @param mercanciasPeligrosas Indica si el vuelo transporta mercancías peligrosas.
+     * @param avion El avión utilizado para el vuelo.
+     * @param diasAlternos
+     * @throws IllegalArgumentException Si el avión no es del tipo AvionMercancias.
+     */
 	public VueloMercancias(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolinea, boolean llegada, double carga, boolean mercanciasPeligrosas, 
 			Avion avion, String diasAlternos) {

@@ -2,13 +2,9 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import aviones.Avion;
-import aviones.AvionMercancias;
 import aviones.EstadoAvion;
 import usuarios.Gestor;
 import vuelos.EstadoVuelo;
@@ -16,12 +12,10 @@ import vuelos.EstadoVuelo;
 class GestorTest {
 	
 	private Gestor gestor;
-	private Avion av;
 
 	@BeforeEach
 	void setUp() throws Exception {
-		AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
-		av = new Avion("0001", LocalDate.of(2023, 3, 14), m, LocalDate.of(2024, 6, 20)); 
+		
 		gestor = new Gestor("01020304M", "jperez", "password123");
 	}
 

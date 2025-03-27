@@ -56,7 +56,7 @@ class SkyManagerTest {
 		temp2.add(new Temporada(MonthDay.of(10, 9), LocalTime.of(5, 0), LocalTime.of(1, 0), MonthDay.of(2, 5)));
 		Aeropuerto ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, temp1, Direccion.NORTE);
 		Aeropuerto ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, temp2, Direccion.OESTE);
-		vuelo = new VueloMercancias("H1893", ap1, ap2, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0),
+		vuelo = new VueloMercancias("H1893", ap1, ap2, LocalDateTime.of(2026, 2, 11, 14, 0), LocalDateTime.of(2026, 2, 11, 17, 0),
 				arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
     }
 

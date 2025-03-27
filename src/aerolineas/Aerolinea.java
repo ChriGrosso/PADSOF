@@ -52,6 +52,14 @@ public class Aerolinea implements Serializable{
 		this.operadores = new ArrayList<Operador>();
 	}
 	
+	/**
+     * Da una representación en string de la aerolínea.
+     *
+     * @return Cadena con la informacion de la aerolínea.
+     */
+	public String toString() {
+		return ""+this.nombre+" ("+this.id+") Vuelos: "+this.vuelos+" Aviones: "+this.aviones+" Operadores: "+this.operadores+"\n";
+	}
 	
 	/**
      * Obtiene el código de la aerolínea.
@@ -199,7 +207,7 @@ public class Aerolinea implements Serializable{
 		if(!this.vuelos.contains(vuelo)) {
 			return false;
 		}
-		Uso u = new Uso(horaUso, elem);
+		Uso u = new Uso(horaUso, elem, vuelo.getAvion());
 		ClaveVueloElemento clave = new ClaveVueloElemento(vuelo, elem);
 		this.historialUsos.put(clave, u);
 		vuelo.getMapaElemClave().put(elem, clave);
