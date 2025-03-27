@@ -53,13 +53,27 @@ public class DemoApp {
         app.logIn("67891234A", "SkyOps2025!");
         
         darDeAltaAviones();
-        System.out.println(app);
         programarVuelos();
+        System.out.println(app);
         
         //el gestor debe haber recibo las notificaciones de que debe asignar terminal y controlador a los vuelos
         System.out.println("Notificaciones Gestor: "+g.getNotificaciones());
         Vuelo v = app.buscarVueloPorCodigo("VL0000");
-        v.asignarTerminal(app.getTerminalesDisponibles(v).getFirst());
+        //asignamos el vuelo a una terminal y un controlador disponibles.
+        Terminal t = app.getTerminalesDisponibles(v).getFirst();
+        v.asignarTerminal(t);
+        t.getControladores().get(0).asignarVuelo(v);
+        
+        //el gestor va a seguir este vuelo
+        v.addObserver(g); 
+        
+        //Simulacion de que el vuelo se realice
+        v.setEstVuelo(EstadoVuelo.ESPERANDO_PISTA_A);
+        v.asignarPista(null);
+        
+        
+        
+       
         
         
         
@@ -132,13 +146,20 @@ public class DemoApp {
     private static void registrarUsuarios() {
     	ArrayList<Terminal> terminales = new ArrayList<Terminal>(app.getTerminales().values());
     	ArrayList<Aerolinea> aerolineas = new ArrayList<Aerolinea>(app.getAerolineas().values());
+    	Terminal t1 = app.getTerminales().get("TP0000"), t2 = app.getTerminales().get("TM0000");
     	//tres controladores
     	Controlador c1 = new Controlador("34567891X", "Javier Gómez", "TowerCtrl!2025", terminales.get(0));
     	app.registrarUsuario(c1);
+    	c1.setTerminal(t1);//le hemos asignado una terminal de pasajeros
+    	t1.addControlador(c1);
     	Controlador c2 = new Controlador("45678912Y", "Laura Méndez", "ApproachSafe2024$", terminales.get(1));
     	app.registrarUsuario(c2);
+    	c2.setTerminal(t1);
+    	t1.addControlador(c2);
     	Controlador c3 = new Controlador("56789123Z", "Miguel Torres", "GroundCtrl!2025", terminales.get(0));
     	app.registrarUsuario(c3);
+    	c3.setTerminal(t2);
+    	t2.addControlador(c3);
     	
     	//cuatro operadores
     	Operador o1 = new Operador("67891234A", "Ana Ramírez", "SkyOps2025!", aerolineas.get(0));
@@ -148,7 +169,9 @@ public class DemoApp {
     	Operador o3 = new Operador("89012345C", "Sergio López", "FixJet#2025", aerolineas.get(1));
     	app.registrarUsuario(o3);
     	Operador o4 = new Operador("90123456D", "Patricia Navarro", "RoutePlan#2024", aerolineas.get(2));
-    	app.registrarUsuario(o4);	
+    	app.registrarUsuario(o4);
+    	
+    	
     }
     
     private static void darDeAltaAviones() {
@@ -172,6 +195,7 @@ public class DemoApp {
     	ArrayList<Aeropuerto> aeropuertos = new ArrayList<Aeropuerto>(app.getAeropuertosExternos().values());
     	Avion avion = aerolineas.get(1).getAviones().get("AV-4532LM");
     	
+    	//Vuelo de pasajeros de salida
     	Vuelo v1 = new VueloPasajeros("VL0000", aeropuertos.get(0), aeropuertos.get(2), LocalDateTime.of(2025, 5, 10, 14, 30), LocalDateTime.of(2025, 5, 10, 17, 45), 
     			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(0), aerolineas.get(1))), false, 150, Periodicidad.NO_PERIODICO, avion);
     	aerolineas.get(0).addVuelo(v1); 
@@ -180,6 +204,7 @@ public class DemoApp {
     	String s = "Vuelo "+v1.getId()+" a espera de asignación de Terminal y controlador";
     	app.getUsuarioActual().enviarNotificacion(s, app.getUsuarios().get("01020304A"));
     	
+    	//Vuelo de Mercancias de llegada
     	avion = aerolineas.get(2).getAviones().get("AV-1209QW");
     	Vuelo v2 = new VueloMercancias("VL0001", aeropuertos.get(4), aeropuertos.get(3), LocalDateTime.of(2025, 4, 15, 12, 30), LocalDateTime.of(2025, 4, 15, 15, 45), 
     			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(2))), true, 10, false, Periodicidad.NO_PERIODICO, avion);

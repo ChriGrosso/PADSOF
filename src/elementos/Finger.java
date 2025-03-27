@@ -58,15 +58,26 @@ public class Finger extends LocalizacionAterrizaje {
 
     /**
      * Establece la altura máxima permitida para el finger.
+     * 
+     * @param alturaMax La nueva altura maxima
      */
     public void setAlturaMax(double alturaMax) {
         this.alturaMax = alturaMax;
     }
     
+    /**
+     * Obtiene el vuelo del finger
+     * 
+     * @return vuelo
+     */
     public Vuelo getVuelo() {
     	return this.vuelo;
     }
     
+    /**
+     * Establece un nuevo vuelo al finger
+     * @param v Nuevo vuelo
+     */
     public void setVuelo(Vuelo v) {
     	this.vuelo = v;
     	return;

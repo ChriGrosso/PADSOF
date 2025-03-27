@@ -44,6 +44,7 @@ public class VueloPasajeros extends Vuelo{
 			return false;
 		}
 		this.setTerminal(terminal);
+		terminal.addVuelo(this);
 		return true;
 	}
 }

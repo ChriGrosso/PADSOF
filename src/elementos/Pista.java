@@ -36,30 +36,56 @@ public class Pista extends ElementoEstructural {
 
     /**
      * Indica si la pista está actualmente en uso por un vuelo.
-     * @return false por defecto (no implementado)
+     * 
+     * @return true si esta en uso, false en caso contrario 
      */
     public boolean enUso() {
+    	if (this.usando != null) {
+    		return true;
+    	}
         return false;
     }
-
+    
+    /**
+     * Indica si la pista es de despegue.
+     * 
+     * @return true si es de despegue, false si no lo es
+     */
     public boolean isDespegue() {
         return this.despegue;
     }
-
+    
+    /**
+     * Establece si la pista es de despegue
+     * 
+     * @param true si la pista es de despegue, false si es de aterrizaje
+     */
     public void setDespegue(boolean despegue) {
         this.despegue = despegue;
     }
-
+    
+    /**
+     * Obtiene el vuelo que está actualmente utilizando la pista.
+     * 
+     * @return vuelo en uso de la pista
+     */
     public double getLongitud() {
         return longitud;
     }
-
+    
+    /**
+     * Cambia la longitud de la pista.
+     * 
+     * @param longitud Nueva longitud de la pista
+     */
     public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
 
     /**
      * Obtiene el vuelo que está actualmente utilizando la pista.
+     * 
+     * @return vuelo en uso de la pista
      */
     public Vuelo getUsando() {
         return this.usando;
@@ -67,6 +93,8 @@ public class Pista extends ElementoEstructural {
 
     /**
      * Devuelve la lista de vuelos en cola para utilizar la pista.
+     * 
+     * @return vuelos a los que sirve
      */
     public ArrayList<Vuelo> getVuelos() {
         return this.vuelosQueSirve;
@@ -74,6 +102,7 @@ public class Pista extends ElementoEstructural {
 
     /**
      * Añade un vuelo a la pista: si está libre, lo asigna; si no, lo encola.
+     * 
      * @param v vuelo a añadir
      */
     public void addVuelo(Vuelo v) {

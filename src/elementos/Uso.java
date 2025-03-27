@@ -50,45 +50,78 @@ public class Uso implements IResourceUsageInfo, Serializable {
         return this.calcularDuracion() * this.elem.getCostePorHora();
     }
     
+    /**
+     * Cambia el avion del recurso.
+     * @param avion Nuevo avión 
+     */
     public void setAeronave(Avion avion) {
         this.avion = avion;
     }
-
+    
+    /**
+     * Obtine el avión de este uso.
+     * @return avión del recurso
+     */
     public Avion getAeronave() {
         return this.avion;
     }
 
-    // Getters y setters
-
+    /**
+     * Obtine la hora de uso de este uso.
+     * @return hora de uso del recurso
+     */
     public LocalDateTime getHoraUso() {
         return horaUso;
     }
-
+    
+    /**
+     * Obtine la hora de desuso de este uso.
+     * @return hora de desuso del recurso
+     */
     public LocalDateTime getHoraDesuso() {
         return horaDesuso;
     }
-
+    
+    /**
+     * Cambia la hora de desuso de este uso.
+     * @param horaDesuso Nueva hora de desuso del recurso
+     */
     public void setHoraDesuso(LocalDateTime horaDesuso) {
         this.horaDesuso = horaDesuso;
     }
 
     // Métodos requeridos por IResourceUsageInfo
-
+    /**
+     * Obtine el coste por hora.
+     * @return coste por hora del recurso
+     */
     @Override
     public double getHourlyPrice() {
         return elem.getCostePorHora();
     }
-
+    
+    /**
+     * Obtine el precio.
+     * @return precio del uso total
+     */
     @Override
     public double getPrice() {
         return calcularCosteUso();
     }
-
+    
+    /**
+     * Obtine el identificador del uso.
+     * @return identificador
+     */
     @Override
     public String getResourceDescription() {
         return elem.getId();
     }
-
+    
+    /**
+     * Obtine el tiempo de uso del recurso.
+     * @return tiempo de uso total
+     */
     @Override
     public String getUsageTime() {
         return Double.toString(calcularDuracion());

@@ -776,6 +776,7 @@ public class SkyManager implements Serializable {
 		 return terminales;
 	 }
 	 
+	 
 	 /**
 	  * Devuelve la representacion en String del sistema.
 	  * 

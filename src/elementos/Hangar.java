@@ -62,48 +62,102 @@ public abstract class Hangar extends ElementoEstructural {
     }
 
     // Getters y setters
-
+    /**
+     * Obtiene el número de plazas disponibles.
+     * 
+     * @return Número de plazas.
+     */
     public int getNumPlazas() {
         return numPlazas;
     }
-
+    
+    /**
+     * Establece el número de plazas disponibles.
+     * 
+     * @param numPlazas Número de plazas a establecer.
+     */
     public void setNumPlazas(int numPlazas) {
         this.numPlazas = numPlazas;
     }
-
+    
+    /**
+     * Obtiene la altura de la plaza.
+     * 
+     * @return Altura de la plaza en metros.
+     */
     public double getAlturaPlaza() {
         return alturaPlaza;
     }
-
+    
+    /**
+     * Establece la altura de la plaza.
+     * 
+     * @param alturaPlaza Altura de la plaza en metros.
+     */
     public void setAlturaPlaza(double alturaPlaza) {
         this.alturaPlaza = alturaPlaza;
     }
-
+    
+    /**
+     * Obtiene la anchura de la plaza.
+     * 
+     * @return Anchura de la plaza en metros.
+     */
     public double getAnchuraPlaza() {
         return anchuraPlaza;
     }
-
+    
+    /**
+     * Establece la anchura de la plaza.
+     * 
+     * @param anchuraPlaza Anchura de la plaza en metros.
+     */
     public void setAnchuraPlaza(double anchuraPlaza) {
         this.anchuraPlaza = anchuraPlaza;
     }
-
+    
+    /**
+     * Obtiene el largo de la plaza.
+     * 
+     * @return Largo de la plaza en metros.
+     */
     public double getLargoPlaza() {
         return largoPlaza;
     }
-
+    
+    /**
+     * Establece el largo de la plaza.
+     * 
+     * @param largoPlaza Largo de la plaza en metros.
+     */
     public void setLargoPlaza(double largoPlaza) {
         this.largoPlaza = largoPlaza;
     }
     
+    /**
+     * Obtiene la lista de aviones en la plaza.
+     * 
+     * @return Lista de aviones.
+     */
     public ArrayList<Avion> getAviones() {
     	return this.aviones;
     }
     
+    /**
+     * Agrega un avión a la lista de aviones en la plaza.
+     * 
+     * @param av Avión a agregar.
+     */
     public void addAvion(Avion av) {
     	this.aviones.add(av);
     	return;
     }
     
+    /**
+     * Elimina un avión de la lista de aviones en la plaza.
+     * 
+     * @param av Avión a eliminar.
+     */
     public void removeAvion(Avion av) {
     	this.aviones.remove(av);
     	return;

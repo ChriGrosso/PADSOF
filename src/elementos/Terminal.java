@@ -46,10 +46,37 @@ public abstract class Terminal extends ElementoEstructural {
         }
     }
     
-    
+    /**
+     * Método para saber si una terminal es de mercancias o no
+     * 
+     * @return true, si es de mercancias, false en caso contrario
+     */
     public abstract boolean isMercancias();
+    
+    /**
+     * Obtiene la capacidad de la terminal.
+     * 
+     * método que se sobreescribe en las clases hija.
+     * 
+     * @return capicidad en personas en el caso de terminal de pasajeros o en toneladas en al caso de la de mercancias.
+     */
     public abstract double getCapacidad();
+    
+    /**
+     * Obtiene la capacidad disponible de la terminal, en un intervalo de tiempo dado.
+     * 
+     * @param r1 Extremo inferior del rango de tiempo
+     * @param r2 Extremo superior del rango de tiempo
+     * 
+     * @return capacidad disponible
+     */
     public abstract double getCapDisponible(LocalDateTime r1, LocalDateTime r2);
+    
+    /**
+     * Obtiene la capacidad ocupada de la terminal.
+     * 
+     * @return capacidad ocupada
+     */
     public abstract double getCapacidadOcup();
 
     /**
@@ -87,7 +114,12 @@ public abstract class Terminal extends ElementoEstructural {
         }
         return p_ocupadas;
     }
-
+    
+    /**
+     * Obtiene las puertas de la terminal.
+     * 
+     * @return número de puertas
+     */
     public int getNumeroPuertas() {
         return this.numeroPuertas;
     }
@@ -113,30 +145,65 @@ public abstract class Terminal extends ElementoEstructural {
         this.numeroPuertas = numeroPuertas;
     }
 
+    /**
+     * Obtiene el prefijo de puerta de la terminal.
+     * 
+     * @return prefijo de la puerta
+     */
     public String getPrefijoPuerta() {
         return this.prefijoPuerta;
     }
-
+    
+    /**
+     * Cambia el prefijo de puerta de la terminal.
+     * 
+     * @param prefijoPuerta Nuevo prefijo de las puertas de la terminal
+     */
     public void setPrefijoPuerta(String prefijoPuerta) {
         this.prefijoPuerta = prefijoPuerta;
     }
-
+    
+    /**
+     * Obtiene las puertas de la terminal.
+     * 
+     * @return puertas de la terminal
+     */
     public HashMap<String, Puerta> getPuertas() {
         return this.puertas;
     }
-
+    
+    /**
+     * Obtiene los vuelos de la terminal.
+     * 
+     * @return Lista con los vuelos de la terminal
+     */
     public ArrayList<Vuelo> getVuelos() {
         return this.vuelos;
     }
-
+    
+    /**
+     * Añade un vuelo a la lista de vuelos de la terminal
+     * 
+     * @param v Vuelo que se quiere añadir
+     */
     public void addVuelo(Vuelo v) {
         this.vuelos.add(v);
     }
     
+    /**
+     * Obtiene los controladores asignados de la terminal.
+     * 
+     * @return lista con los controladores
+     */
     public ArrayList<Controlador> getControladores() {
         return this.controladores;
     }
-
+    
+    /**
+     * Añade un controlador a la lista de vuelos de la terminal
+     * 
+     * @param v Controlador que se quiere añadir
+     */
     public void addControlador(Controlador c) {
         this.controladores.add(c);
         for (Vuelo v: this.vuelos) {

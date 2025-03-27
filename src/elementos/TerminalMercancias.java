@@ -109,7 +109,11 @@ public class TerminalMercancias extends Terminal {
 		return this.capacidadToneladas-this.getCargaTotal(r1, r2);
 	}
 
-
+	/**
+	 * Método para obtener la capacidad ocupada de la terminal
+	 * 
+     * @return capacidad total ocupada en toneladas de la terminal
+     */
 	@Override
 	public double getCapacidadOcup() {
 		return this.getCargaTotal();
