@@ -12,8 +12,8 @@ import java.util.List;
 
 import aerolineas.*;
 import elementos.*;
-import aeropuertos.*;
 import aviones.*;
+import sistema.*;
 
 /**
  * Clase que representa una factura generada para una aerolínea,
@@ -35,6 +35,7 @@ public class Factura implements IInvoiceInfo, Serializable {
     private List<Uso> serviciosUsados = new ArrayList<>(); // Servicios utilizados por la aerolínea
     private double sobrecarga = 0; // Coste extra adicional
     private String logo; // Ruta del logo de la compañía
+    private TipoAvion tipoAvion;
 
     /**
      * Constructor de Factura con los campos esenciales.
@@ -71,18 +72,19 @@ public class Factura implements IInvoiceInfo, Serializable {
      * @param a Aerolínea a la que pertenece la factura
      * @return coste total de los servicios
      */
-    public double calcularFactura(Aerolinea a, Aeropuerto aeropuerto, boolean esSalida) {
-        this.aerolinea = a; // Assicura che sia impostata correttamente
-        calcularCostesBaseYSobrecarga(aeropuerto, esSalida); // Calcola i costi base e la sobrecarga
+    public double calcularFactura(Aerolinea a, boolean esSalida) {
+        this.aerolinea = a;
+        calcularCostesBaseYSobrecarga(esSalida);  // << rimosso 'aeropuerto'
 
         double suma = 0;
         for (Uso u : this.serviciosUsados) {
-            suma += u.calcularCosteUso(); // Somma dei costi dei servizi
+            suma += u.calcularCosteUso();
         }
 
         this.total = this.precioBase + this.sobrecarga + suma;
         return this.total;
     }
+
 
     /**
      * Intenta realizar el pago usando un número de tarjeta.
@@ -109,22 +111,24 @@ public class Factura implements IInvoiceInfo, Serializable {
     }
     
     
-    public void calcularCostesBaseYSobrecarga(Aeropuerto aeropuerto, boolean esSalida) {
-        // Imposta il prezzo base in base alla direzione del volo
-        this.precioBase = esSalida ? aeropuerto.getCosteBaseSalida() : aeropuerto.getCosteBaseLlegada();
+    private void calcularCostesBaseYSobrecarga(boolean esSalida) {
+        SkyManager sm = SkyManager.getInstance();
 
-        // Calcola la sobrecarga in base ai servizi e al tipo di aereo
-        this.sobrecarga = 0;
-        for (Uso uso : this.serviciosUsados) {
-            TipoAvion tipo = uso.getAeronave().getTipoAvion(); // ← metodo da verificare
+        if (esSalida) {
+            this.precioBase = sm.getCosteBaseSalida();
+        } else {
+            this.precioBase = sm.getCosteBaseLlegada();
+        }
 
-            if (tipo.isMercancias()) {
-                this.sobrecarga += aeropuerto.getCosteExtraMercancias();
-            } else {
-                this.sobrecarga += aeropuerto.getCosteExtraPasanjeros();
-            }
+        if (this.tipoAvion != null && this.tipoAvion.isMercancias()) {
+            this.sobrecarga = sm.getCosteExtraMercancias();
+        } else {
+            this.sobrecarga = sm.getCosteExtraPasajeros();
         }
     }
+
+
+
 
 
 
@@ -159,11 +163,9 @@ public class Factura implements IInvoiceInfo, Serializable {
      */
     @Override
     public String getInvoiceDate() {
-        LocalDate date = LocalDate.now(); // Se usa la fecha actual
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return date.format(formatter);
+        return this.fechaEmision.format(formatter);
     }
-
     @Override
     public String getInvoiceIdentifier() {
         return this.getId();
@@ -174,16 +176,16 @@ public class Factura implements IInvoiceInfo, Serializable {
      */
     @Override
     public double getPrice() {
-        double rTotPrice = 0;
-        if (rUsage != null) {
-            for (IResourceUsageInfo ru : rUsage) {
-                rTotPrice += ru.getPrice() * Double.parseDouble(ru.getUsageTime());
-            }
+        double total = this.precioBase + this.sobrecarga;
+
+        for (Uso uso : this.serviciosUsados) {
+            total += uso.calcularCosteUso();
         }
-        rTotPrice += this.getBasePrice();
-        rTotPrice += this.getSurcharge();
-        return rTotPrice;
+
+        return total;
     }
+
+
 
     @Override
     public double getSurcharge() {

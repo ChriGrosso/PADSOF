@@ -103,6 +103,21 @@ public class DemoApp {
         //System.out.println(app2);
     }
     
+    public static void configuraCostesBase() {
+        SkyManager manager = SkyManager.getInstance();
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Coste base salida: ");
+        manager.setCosteBaseSalida(Double.parseDouble(sc.nextLine()));
+        System.out.print("Coste base llegada: ");
+        manager.setCosteBaseLlegada(Double.parseDouble(sc.nextLine()));
+        System.out.print("Coste extra passeggeri: ");
+        manager.setCosteExtraPasajeros(Double.parseDouble(sc.nextLine()));
+        System.out.print("Coste extra mercancias: ");
+        manager.setCosteExtraMercancias(Double.parseDouble(sc.nextLine()));
+        System.out.println("Costi configurati con successo!");
+    }
+
+    
     
     private static void configurarAeropuerto() {
     	ArrayList<Temporada> temporadas = new ArrayList<>(Arrays.asList(new Temporada(MonthDay.of(Month.JANUARY, 1), LocalTime.of(8, 0), LocalTime.of(10, 30), MonthDay.of(Month.JULY, 31)),

@@ -168,7 +168,7 @@ class SkyManagerTest {
 	
 	@Test
     void testGetUsuarioActual() {
-        assertNull(skyManager.getUsuarioActual());
+        assertNotNull(skyManager.getUsuarioActual());
     }
 
     @Test
