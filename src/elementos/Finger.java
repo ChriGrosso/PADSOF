@@ -2,6 +2,7 @@ package elementos;
 
 import java.time.LocalDate;
 import aviones.Avion;
+import vuelos.Vuelo;
 
 /**
  * Clase que representa un Finger (pasarela telescópica) en un aeropuerto.
@@ -14,6 +15,7 @@ public class Finger extends LocalizacionAterrizaje {
     private static final long serialVersionUID = 1L;
 
     private double alturaMax; // Altura máxima permitida para que un avión use este finger
+    private Vuelo vuelo;
 
     /**
      * Constructor del finger.
@@ -33,7 +35,8 @@ public class Finger extends LocalizacionAterrizaje {
      * @return false por defecto
      */
     public boolean enUso() {
-        return false;
+    	if(this.vuelo == null) { return false; }
+        return true;
     }
 
     /**
@@ -58,5 +61,14 @@ public class Finger extends LocalizacionAterrizaje {
      */
     public void setAlturaMax(double alturaMax) {
         this.alturaMax = alturaMax;
+    }
+    
+    public Vuelo getVuelo() {
+    	return this.vuelo;
+    }
+    
+    public void setVuelo(Vuelo v) {
+    	this.vuelo = v;
+    	return;
     }
 }

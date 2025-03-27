@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import aerolineas.Aerolinea;
+import aeropuertos.Aeropuerto;
+import aeropuertos.Direccion;
 import aeropuertos.Temporada;
 import aviones.Avion;
 import aviones.AvionMercancias;
@@ -19,9 +22,8 @@ import aviones.AvionPasajeros;
 import elementos.Finger;
 import elementos.Pista;
 import elementos.TerminalMercancias;
+import elementos.TerminalPasajeros;
 import elementos.ZonaParking;
-import aeropuertos.Aeropuerto;
-import aeropuertos.Direccion;
 import vuelos.EstadoVuelo;
 import vuelos.Periodicidad;
 import vuelos.VueloMercancias;
@@ -33,6 +35,7 @@ class VueloMercanciasTest {
 	private ArrayList<Aerolinea> arrayA;
 	private Aeropuerto ap1;
 	private Aeropuerto ap2;
+	private Avion av;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -41,7 +44,7 @@ class VueloMercanciasTest {
 		timeSalida = LocalDateTime.of(2025, 2, 11, 14, 0);
 		timeLlegada = LocalDateTime.of(2025, 2, 11, 17, 0);
 		AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
-		Avion av = new Avion("0001", date, m, date2);
+		av = new Avion("0001", date, m, date2);
 		
 		Aerolinea a = new Aerolinea("IBE", "Iberia");
 		arrayA = new ArrayList<Aerolinea>();
@@ -55,23 +58,42 @@ class VueloMercanciasTest {
 		ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, temp1, Direccion.NORTE);
 		ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, temp2, Direccion.OESTE);
 		vm1 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
+		
+		a.addTipoAvion(m);
+		a.addAvion(av);
+		a.addVuelo(vm1);
 	}
-	
+
 	@Test
 	void testExceptionConstructor() {
 		LocalDate date = LocalDate.of(2023, 3, 14);
 		LocalDate date2 = LocalDate.of(2024, 6, 20);
 		AvionPasajeros p = new AvionPasajeros("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 200);
-		Avion av = new Avion("0001", date, p, date2);
+		Avion av2 = new Avion("0001", date, p, date2);
 		
 		// Usar assertThrows para verificar que se lanza la excepción correcta
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             // Aquí llamas al constructor o método que debe lanzar la excepción
             @SuppressWarnings("unused")
-			VueloMercancias vm2 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
+			VueloMercancias vm2 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av2);
         });
 		
 		assertEquals("Un vuelo de mercancías debe tener un avión para mercancías", exception.getMessage());
+	}
+
+	@Test
+	void testVueloDiasAlternos() {
+		LocalDate date = LocalDate.of(2023, 3, 14);
+		LocalDate date2 = LocalDate.of(2024, 6, 20);
+		AvionMercancias m = new AvionMercancias("Airbus", "A350-900", 14815.96, 17.05, 64.75, 66.89, 280, false);
+		Avion av = new Avion("0001", date, m, date2);
+		
+		VueloMercancias vm2 = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, arrayA, false, 155.64, false, av, "L J S");
+		ArrayList<DayOfWeek> diasAlt = new ArrayList<DayOfWeek>();
+		diasAlt.add(DayOfWeek.MONDAY);
+		diasAlt.add(DayOfWeek.THURSDAY);
+		diasAlt.add(DayOfWeek.SATURDAY);
+		assertEquals(diasAlt, vm2.getDiasAlternos());
 	}
 
 	@Test
@@ -81,42 +103,27 @@ class VueloMercanciasTest {
 
 	@Test
 	void testGetMercanciasPeligrosas() {
-		assertEquals(false, vm1.getMercanciasPeligrosas());
-	}
-
-	@Test
-	void testGetTerminalNotInit() {
-		assertNull(vm1.getTerminal());
-	}
-
-	@Test
-	void testGetPuertaNotInit() {
-		assertNull(vm1.getPuerta());
-	}
-
-	@Test
-	void testAsignarTerminal() {
-		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
-		TerminalMercancias t = new TerminalMercancias("T1", dateTerm, 60, "AB", 1056);
-		vm1.asignarTerminal(t);
-		assertEquals(t.getId(), vm1.getTerminal().getId());
-	}
-
-	@Test
-	void testAsignarPuerta() {
-		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
-		TerminalMercancias t = new TerminalMercancias("T1", dateTerm, 60, "AB", 1056);
-		vm1.asignarTerminal(t);
-		vm1.asignarPuerta(t.getPuertas().get("AB2"));
-		assertEquals("AB2", vm1.getPuerta().getCod());
-		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
-		vm1.setLocAterrizaje(f);
-		assertTrue(vm1.setEstVuelo(EstadoVuelo.CARGA));
+		assertFalse(vm1.getMercanciasPeligrosas());
 	}
 
 	@Test
 	void testGetId() {
 		assertEquals("H1893", vm1.getId());
+	}
+
+	@Test
+	void testIsVueloMercancias() {
+		assertTrue(vm1.isVueloMercancias());
+	}
+
+	@Test
+	void testGetOrigen() {
+		assertEquals(ap1, vm1.getOrigen());
+	}
+
+	@Test
+	void testGetDestino() {
+		assertEquals(ap2, vm1.getDestino());
 	}
 
 	@Test
@@ -158,8 +165,12 @@ class VueloMercanciasTest {
 
 	@Test
 	void testGetAerolineas() {
-		assertEquals(arrayA.get(0).getId(), vm1.getAerolinea().getId());
-		assertEquals(arrayA.get(0).getNombre(), vm1.getAerolinea().getNombre());
+		assertEquals(arrayA, vm1.getAerolineas());
+	}
+
+	@Test
+	void testGetAerolinea() {
+		assertEquals(arrayA.get(0), vm1.getAerolinea());
 	}
 
 	@Test
@@ -173,6 +184,11 @@ class VueloMercanciasTest {
 	}
 
 	@Test
+	void testGetAvion() {
+		assertEquals(av, vm1.getAvion());
+	}
+
+	@Test
 	void testGetLocAterrizajeNotInit() {
 		assertNull(vm1.getLocAterrizaje());
 	}
@@ -180,6 +196,26 @@ class VueloMercanciasTest {
 	@Test
 	void testGetPistaNotInit() {
 		assertNull(vm1.getPista());
+	}
+
+	@Test
+	void testGetPuertaNotInit() {
+		assertNull(vm1.getPuerta());
+	}
+
+	@Test
+	void testGetMapaElemClave() {
+		assertTrue(vm1.getMapaElemClave().isEmpty());
+	}
+
+	@Test
+	void testGetTerminalNotInit() {
+		assertNull(vm1.getTerminal());
+	}
+
+	@Test
+	void testGetDiasAlternos() {
+		assertNull(vm1.getDiasAlternos());
 	}
 
 	@Test
@@ -196,11 +232,38 @@ class VueloMercanciasTest {
 		assertEquals(salidaEfec, vm1.getHoraSalidaEfectiva());
 	}
 
+	
 	@Test
 	void testSetEstVuelo() {
+		// Probar estados para SALIDA
 		vm1.setEstVuelo(EstadoVuelo.RETRASADO);
 		assertEquals(EstadoVuelo.RETRASADO, vm1.getEstVuelo());
+		
+		// CARGA
+		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
+		vm1.asignarLocAterrizaje(f);
+		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
+		TerminalMercancias t = new TerminalMercancias("T1", dateTerm, 60, "AB", 1056);
+		vm1.asignarTerminal(t);
+		vm1.asignarPuerta(t.getPuertas().get("AB2"));
+		vm1.setEstVuelo(EstadoVuelo.CARGA);
+		assertEquals(EstadoVuelo.CARGA, vm1.getEstVuelo());
+		assertTrue(vm1.getAerolinea().getHistorialUsos().containsKey(vm1.getMapaElemClave().get(vm1.getPuerta())));
+		assertTrue(vm1.getAerolinea().getHistorialUsos().containsKey(vm1.getMapaElemClave().get(vm1.getLocAterrizaje())));
+		
+		// ESPERANDO_PISTA_D
+		vm1.setEstVuelo(EstadoVuelo.ESPERANDO_PISTA_D);
+		assertEquals(EstadoVuelo.ESPERANDO_PISTA_D, vm1.getEstVuelo());
+		
+		// ESPERANDO_DESP-EN_VUELO
+		Pista p = new Pista("P001", LocalDate.of(2022, 5, 5), true, 35);
+		vm1.asignarPista(p);
+		assertFalse(vm1.setEstVuelo(EstadoVuelo.ESPERANDO_DESPEGUE));
+		vm1.setEstVuelo(EstadoVuelo.EN_VUELO);
+		assertEquals(EstadoVuelo.EN_VUELO, vm1.getEstVuelo());
+		assertTrue(vm1.getAerolinea().getHistorialUsos().get(vm1.getMapaElemClave().get(vm1.getPuerta())).getHoraDesuso() != null);
 	}
+
 
 	@Test
 	void testCalcularRetraso() {
@@ -251,6 +314,28 @@ class VueloMercanciasTest {
 		vm1.setEstVuelo(EstadoVuelo.EN_VUELO);
 		assertNull(vm1.getPista().getUsando());
 		assertFalse(vm1.getPista().enUso());
+	}
+
+	@Test
+	void testAsignarTerminal() {
+		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
+		TerminalMercancias tm = new TerminalMercancias("T1", dateTerm, 60, "AB", 1056);
+		TerminalPasajeros tp = new TerminalPasajeros("T1", dateTerm, 60, "CD", 1056);
+		assertFalse(vm1.asignarTerminal(tp));
+		vm1.asignarTerminal(tm);
+		assertEquals(tm.getId(), vm1.getTerminal().getId());
+	}
+
+	@Test
+	void testAsignarPuerta() {
+		LocalDate dateTerm = LocalDate.of(2020, 1, 22);
+		TerminalMercancias t = new TerminalMercancias("T1", dateTerm, 60, "AB", 1056);
+		vm1.asignarTerminal(t);
+		vm1.asignarPuerta(t.getPuertas().get("AB2"));
+		assertEquals("AB2", vm1.getPuerta().getCod());
+		Finger f = new Finger("F001", 12.34, LocalDate.of(2022, 5, 5), 18.7);
+		vm1.setLocAterrizaje(f);
+		assertTrue(vm1.setEstVuelo(EstadoVuelo.CARGA));
 	}
 
 }

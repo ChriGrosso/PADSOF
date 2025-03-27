@@ -1,7 +1,10 @@
 package elementos;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+
 import aviones.*;
+import vuelos.Vuelo;
 
 /**
  * Clase que representa una zona de parking para aviones.
@@ -14,6 +17,7 @@ public class ZonaParking extends LocalizacionAterrizaje {
     private double alturaPlaza;    // Altura máxima permitida por plaza
     private double anchuraPlaza;   // Anchura máxima permitida por plaza
     private double largoPlaza;     // Largo máximo permitido por plaza
+    private ArrayList<Vuelo> vuelos;
 
     /**
      * Constructor de la zona de parking.
@@ -32,6 +36,7 @@ public class ZonaParking extends LocalizacionAterrizaje {
         this.anchuraPlaza = anchuraPlaza;
         this.numPlazas = numPlazas;
         this.largoPlaza = largoPlaza;
+        this.vuelos = new ArrayList<Vuelo>();
     }
 
     /**
@@ -39,7 +44,7 @@ public class ZonaParking extends LocalizacionAterrizaje {
      * @return 0 por defecto
      */
     public int numPlazasOcupadasPark() {
-        return 0;
+        return this.vuelos.size();
     }
 
     /**
@@ -85,5 +90,19 @@ public class ZonaParking extends LocalizacionAterrizaje {
 
     public void setLargoPlaza(double largoPlaza) {
         this.largoPlaza = largoPlaza;
+    }
+    
+    public ArrayList<Vuelo> getVuelos() {
+    	return this.vuelos;
+    }
+    
+    public void addVuelo(Vuelo v) {
+    	this.vuelos.add(v);
+    	return;
+    }
+    
+    public void removeVuelo(Vuelo v) {
+    	this.vuelos.remove(v);
+    	return;
     }
 }

@@ -474,8 +474,8 @@ public abstract class Vuelo extends Observable implements Serializable{
 				this.estVuelo = estV;
 				return true;
 			}
-			if((estV == EstadoVuelo.OPERATIVO && siguienteVueloConAvion() != null) || 
-				(estV == EstadoVuelo.EN_HANGAR && siguienteVueloConAvion() == null)) {
+			if((estV == EstadoVuelo.OPERATIVO && siguienteVueloConAvion() != null && this.locAterrizaje != null) || 
+				(estV == EstadoVuelo.EN_HANGAR && siguienteVueloConAvion() == null && this.avion.getHangar() != null)) {
 				if(estV == EstadoVuelo.EN_HANGAR) {
 					Aerolinea conAvion = null;
 					this.avion.setEstadoAvion(EstadoAvion.EN_HANGAR);
@@ -485,10 +485,10 @@ public abstract class Vuelo extends Observable implements Serializable{
 						}
 					}
 					conAvion.addUso(LocalDateTime.now(), null, this.avion.getHangar());
-				}
-				for(Aerolinea a: this.aerolinea) {
-					a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
-					a.setEndUso(LocalDateTime.now(), this, this.puerta);
+					for(Aerolinea a: this.aerolinea) {
+						a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
+						a.setEndUso(LocalDateTime.now(), this, this.puerta);
+					}
 				}
 				// Añadir nuevo vuelo si es necesario
 				if(this.periodicidad != Periodicidad.NO_PERIODICO) {
@@ -511,11 +511,16 @@ public abstract class Vuelo extends Observable implements Serializable{
 			// ESPERANDO_DESP: espera en su pista, no la usa
 			if(estV == EstadoVuelo.ESPERANDO_DESPEGUE && this.pista != null && this.pista.getUsando().equals(this) == false) {
 				this.estVuelo = estV;
-				this.puerta.liberarPuerta();
 				this.avion.setEstadoAvion(EstadoAvion.ESPERANDO_PISTA);
 				for(Aerolinea a: this.aerolinea) {
 					a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
 					a.setEndUso(LocalDateTime.now(), this, this.puerta);
+				}
+				this.puerta.liberarPuerta();
+				if(this.finger) {
+					this.desasignarFinger((Finger) this.locAterrizaje);
+				} else {
+					this.desasignarParking((ZonaParking) this.locAterrizaje);
 				}
 				return true;
 			}
@@ -524,6 +529,18 @@ public abstract class Vuelo extends Observable implements Serializable{
 				this.avion.setEstadoAvion(EstadoAvion.FUERA_AEROPUERTO);
 				this.pista.actualizarColaVuelos();
 				this.horaSalidaEfectiva = LocalDateTime.now();
+				if(this.locAterrizaje != null && this.puerta != null) {
+					for(Aerolinea a: this.aerolinea) {
+						a.setEndUso(LocalDateTime.now(), this, this.locAterrizaje);
+						a.setEndUso(LocalDateTime.now(), this, this.puerta);
+					}
+					this.puerta.liberarPuerta();
+					if(this.finger) {
+						this.desasignarFinger((Finger) this.locAterrizaje);
+					} else {
+						this.desasignarParking((ZonaParking) this.locAterrizaje);
+					}
+				}
 				// Añadir nuevo vuelo si es necesario
 				if(this.periodicidad != Periodicidad.NO_PERIODICO) {
 					for(Aerolinea a: this.aerolinea) {
@@ -635,9 +652,6 @@ public abstract class Vuelo extends Observable implements Serializable{
 			if(asignarFinger((Finger) locAt) == false) {
 				return false;
 			}
-			for(Aerolinea a: this.aerolinea) {
-				a.addUso(LocalDateTime.now(), this, locAt);
-			}
 			this.locAterrizaje = locAt;
 			this.finger = true;
 			return true;
@@ -647,9 +661,6 @@ public abstract class Vuelo extends Observable implements Serializable{
 			// Comprobar si se puede asignar el elemento
 			if(asignarParking((ZonaParking) locAt) == false) {
 				return false;
-			}
-			for(Aerolinea a: this.aerolinea) {
-				a.addUso(LocalDateTime.now(), this, locAt);
 			}
 			this.locAterrizaje = locAt;
 			this.finger = false;
@@ -669,6 +680,12 @@ public abstract class Vuelo extends Observable implements Serializable{
 		if(locAt.enUso() == true || locAt.getAlturaMax() < this.avion.getTipoAvion().getAltura()) {
 			return false;
 		}
+		locAt.setVuelo(this);
+		return true;
+	}
+	
+	private boolean desasignarFinger(Finger locAt) {
+		locAt.setVuelo(null);
 		return true;
 	}
 	
@@ -683,6 +700,12 @@ public abstract class Vuelo extends Observable implements Serializable{
 		if(locAt.comprobarCompatibilidad(this.avion) == false || locAt.numPlazasOcupadasPark() == locAt.getNumPlazas()) {
 			return false;
 		}
+		locAt.addVuelo(this);
+		return true;
+	}
+	
+	private boolean desasignarParking(ZonaParking locAt) {
+		locAt.removeVuelo(this);
 		return true;
 	}
 	
