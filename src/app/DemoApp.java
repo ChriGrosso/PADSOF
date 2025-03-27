@@ -92,6 +92,8 @@ public class DemoApp {
         
         
        //Generar una factura y pagarla para que se vea que funciona
+        generarFacturaMensual(aerolinea);
+        
         
         //
         //eso es lo que falta por probar creo :)
@@ -262,6 +264,30 @@ public class DemoApp {
     	app.getUsuarioActual().enviarNotificacion(s, app.getUsuarios().get("01020304A"));
     	
     }
+    
+    public static void generarFacturaMensual(Aerolinea aerolinea) {
+        LocalDate hoy = LocalDate.now();
+        String idFactura = "FAC-" + aerolinea.getId() + "-" + hoy.toString();
+        String logo = "logo.png";
+
+        Factura factura = new Factura(idFactura, 0.0, 0.0, hoy, aerolinea, logo);
+
+        // Aggiunge tutti gli usi — sarà la Factura a filtrare quelli del mese precedente
+        for (Uso uso : aerolinea.getArrayUsos()) {
+            factura.addUso(uso);
+        }
+
+        factura.calcularFactura(aerolinea, true); // true = partenza
+
+        try {
+            String path = "./facturas/" + idFactura + ".pdf";
+            factura.generarFactura(path);
+            System.out.println("Factura mensual generada: " + path);
+        } catch (Exception e) {
+            System.out.println("Error al generar la factura: " + e.getMessage());
+        }
+    }
+
     
     
 }
