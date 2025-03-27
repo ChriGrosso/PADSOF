@@ -3,6 +3,7 @@ package elementos;
 import java.io.Serializable;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
+import aviones.*;
 
 import es.uam.eps.padsof.invoices.IResourceUsageInfo;
 
@@ -19,15 +20,17 @@ public class Uso implements IResourceUsageInfo, Serializable {
     private LocalDateTime horaUso;       // Momento en que comienza el uso del recurso
     private LocalDateTime horaDesuso;    // Momento en que finaliza el uso
     private ElementoEstructural elem;    // Elemento estructural utilizado (pista, hangar, puerta, etc.)
+    private Avion avion;
 
     /**
      * Constructor de Uso.
      * @param horaUso fecha y hora de inicio del uso
      * @param elem elemento estructural que se está utilizando
      */
-    public Uso(LocalDateTime horaUso, ElementoEstructural elem) {
+    public Uso(LocalDateTime horaUso, ElementoEstructural elem, Avion avion) {
         this.horaUso = horaUso;
         this.elem = elem;
+        this.avion = avion;
     }
 
     /**
@@ -45,6 +48,14 @@ public class Uso implements IResourceUsageInfo, Serializable {
      */
     public double calcularCosteUso() {
         return this.calcularDuracion() * this.elem.getCostePorHora();
+    }
+    
+    public void setAeronave(Avion avion) {
+        this.avion = avion;
+    }
+
+    public Avion getAeronave() {
+        return this.avion;
     }
 
     // Getters y setters

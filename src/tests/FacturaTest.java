@@ -7,32 +7,48 @@ import elementos.*;
 import es.uam.eps.padsof.invoices.*;
 import aerolineas.*;
 import java.time.*;
+import java.util.ArrayList;
+
+import aeropuertos.*;
+import aviones.*;
 
 public class FacturaTest {
 
 	@Test
 	void testCrearFacturaYUso() {
-	    // Creazione della aerolinea
+	    // 1. Crea una compagnia aerea
 	    Aerolinea aerolinea = new Aerolinea("AER001", "Sky Airlines");
 
-	    // Creazione della fattura
-	    Factura factura = new Factura("INV-001", 500.0, 750.0, LocalDate.now(), aerolinea, "logo.png");
+	    // 2. Crea un aeroporto e imposta i costi
+	    Aeropuerto aeropuerto = new Aeropuerto("Test Airport", "TEST", "City", "Country", 10.0, 1,
+	        new ArrayList<>(), null);
+	    aeropuerto.setCosteBaseSalida(100.0);          // Prezzo base per voli in partenza
+	    aeropuerto.setCosteExtraPasanjeros(20.0);       // Surcharge per aerei passeggeri
 
-	    // Aggiunta di un uso e sincronizzazione con rUsage
-	    Finger recurso = new Finger("1", 10.35, LocalDate.now(), 22.00); // Usa la classe Finger (figlia concreta)
-	    Uso uso = new Uso(LocalDateTime.now().minusHours(1), recurso);
+	    // 3. Crea un tipo di aereo passeggeri
+	    AvionPasajeros tipo = new AvionPasajeros("Boeing", "737", 5000, 12, 35, 40, 180);
+
+	    // 4. Crea l'aereo con quel tipo
+	    Avion avion = new Avion("AB123", LocalDate.now().minusYears(2), tipo);
+
+	    // 5. Crea una risorsa strutturale (Finger)
+	    Finger finger = new Finger("F001", 30.0, LocalDate.now(), 22.0); // 30€/ora
+
+	    // 6. Crea l'oggetto Uso per 1 ora con l'aereo
+	    Uso uso = new Uso(LocalDateTime.now().minusHours(1), finger, avion);
 	    uso.setHoraDesuso(LocalDateTime.now());
 
-	    // Aggiungiamo l'uso alla fattura
+	    // 7. Crea la fattura e aggiungi l'uso
+	    Factura factura = new Factura("INV-001", 0.0, 0.0, LocalDate.now(), aerolinea, "logo.png");
 	    factura.addUso(uso);
 
-	    // Verifica che l'uso sia stato aggiunto correttamente a rUsage
-	    assertEquals(1, factura.getResourcePrices().size(), "El uso no se ha agregado a la lista de recursos.");
-	    assertEquals(uso, factura.getResourcePrices().get(0), "El uso agregado no es el esperado.");
+	    // 8. Calcola il totale della fattura (volo in partenza)
+	    factura.calcularFactura(aerolinea, aeropuerto, true);
 
-	    // Verifica che il costo totale sia corretto
-	    double expectedPrice = 500.0 + 10.35; // Base price + price from usage
-	    assertEquals(expectedPrice, factura.getPrice(), "El precio total de la factura no es el esperado.");
+	    // 9. Verifica il prezzo atteso = base + surcharge + uso (1h x 30€)
+	    double expected = 100.0 + 20.0 + 30.0;
+
+	    assertEquals(expected, factura.getPrice(), 0.001, "Il prezzo totale della fattura non è corretto.");
 	}
 
 

@@ -12,6 +12,9 @@ import java.util.List;
 
 import aerolineas.*;
 import elementos.*;
+import aeropuertos.*;
+import aviones.*;
+import vuelos.*;
 
 /**
  * Clase que representa una factura generada para una aerolínea,
@@ -69,12 +72,17 @@ public class Factura implements IInvoiceInfo, Serializable {
      * @param a Aerolínea a la que pertenece la factura
      * @return coste total de los servicios
      */
-    public double calcularFactura(Aerolinea a) {
+    public double calcularFactura(Aerolinea a, Aeropuerto aeropuerto, boolean esSalida) {
+        this.aerolinea = a; // Assicura che sia impostata correttamente
+        calcularCostesBaseYSobrecarga(aeropuerto, esSalida); // Calcola i costi base e la sobrecarga
+
         double suma = 0;
         for (Uso u : this.serviciosUsados) {
-            suma += u.calcularCosteUso();
+            suma += u.calcularCosteUso(); // Somma dei costi dei servizi
         }
-        return suma;
+
+        this.total = this.precioBase + this.sobrecarga + suma;
+        return this.total;
     }
 
     /**
@@ -100,6 +108,27 @@ public class Factura implements IInvoiceInfo, Serializable {
             return false;
         }
     }
+    
+    
+    public void calcularCostesBaseYSobrecarga(Aeropuerto aeropuerto, boolean esSalida) {
+        // Imposta il prezzo base in base alla direzione del volo
+        this.precioBase = esSalida ? aeropuerto.getCosteBaseSalida() : aeropuerto.getCosteBaseLlegada();
+
+        // Calcola la sobrecarga in base ai servizi e al tipo di aereo
+        this.sobrecarga = 0;
+        for (Uso uso : this.serviciosUsados) {
+            TipoAvion tipo = uso.getAeronave().getTipoAvion(); // ← metodo da verificare
+
+            if (tipo.isMercancias()) {
+                this.sobrecarga += aeropuerto.getCosteExtraMercancias();
+            } else {
+                this.sobrecarga += aeropuerto.getCosteExtraPasanjeros();
+            }
+        }
+    }
+
+
+
 
     // Getters básicos
 

@@ -19,7 +19,11 @@ public class Aeropuerto implements Serializable{
     private int diferenciaHoraria;
     private ArrayList<Temporada> temporadas;
     private Direccion direccion;
-
+    private double costeBaseSalida;
+    private double costeBaseLlegada;
+    private double costeExtraMercancias;
+    private double costeExtraPasanjeros;
+    
     /**
      * Constructor que inicializa un aeropuerto con toda su información relevante.
      *
@@ -33,7 +37,7 @@ public class Aeropuerto implements Serializable{
      * @param d                 Dirección física del aeropuerto.
      */
     public Aeropuerto(String nombre, String codigo, String ciudad, String pais, double distancia, 
-    		int difHoraria, ArrayList<Temporada> t, Direccion d) {
+    	int difHoraria, ArrayList<Temporada> t, Direccion d) {
         this.nombre = nombre;
         this.codigo = codigo;
         this.ciudadMasCercana = ciudad;
@@ -187,5 +191,81 @@ public class Aeropuerto implements Serializable{
     public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
     }
+    
+    public boolean configurarCosteExtraPasanjeros(double amount) {
+    	setCosteExtraPasanjeros(amount);
+    	return true;
+    }
+    
+    public boolean configurarCosteExtraMercancias(double amount) {
+    	setCosteExtraMercancias(amount);
+    	return true;
+    }
+    
+    public boolean configurarCosteBaseLlegada(double amount) {
+    	setCosteBaseLlegada(amount);
+    	return true;
+    }
+    
+    public boolean configurarCosteBaseSalida(double amount) {
+    	setCosteBaseSalida(amount);
+    	return true;
+    }
+
+	/**
+	 * @return the costeBaseSalida
+	 */
+	public double getCosteBaseSalida() {
+		return costeBaseSalida;
+	}
+
+	/**
+	 * @param costeBaseSalida the costeBaseSalida to set
+	 */
+	public void setCosteBaseSalida(double costeBaseSalida) {
+		this.costeBaseSalida = costeBaseSalida;
+	}
+
+	/**
+	 * @return the costeBaseLlegada
+	 */
+	public double getCosteBaseLlegada() {
+		return costeBaseLlegada;
+	}
+
+	/**
+	 * @param costeBaseLlegada the costeBaseLlegada to set
+	 */
+	public void setCosteBaseLlegada(double costeBaseLlegada) {
+		this.costeBaseLlegada = costeBaseLlegada;
+	}
+
+	/**
+	 * @return the costeExtraMercancias
+	 */
+	public double getCosteExtraMercancias() {
+		return costeExtraMercancias;
+	}
+
+	/**
+	 * @param costeExtraMercancias the costeExtraMercancias to set
+	 */
+	public void setCosteExtraMercancias(double costeExtraMercancias) {
+		this.costeExtraMercancias = costeExtraMercancias;
+	}
+
+	/**
+	 * @return the costeExtraPasanjeros
+	 */
+	public double getCosteExtraPasanjeros() {
+		return costeExtraPasanjeros;
+	}
+
+	/**
+	 * @param costeExtraPasanjeros the costeExtraPasanjeros to set
+	 */
+	public void setCosteExtraPasanjeros(double costeExtraPasanjeros) {
+		this.costeExtraPasanjeros = costeExtraPasanjeros;
+	}
 }
 
