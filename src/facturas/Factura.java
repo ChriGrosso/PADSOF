@@ -74,16 +74,49 @@ public class Factura implements IInvoiceInfo, Serializable {
      */
     public double calcularFactura(Aerolinea a, boolean esSalida) {
         this.aerolinea = a;
-        calcularCostesBaseYSobrecarga(esSalida);  // << rimosso 'aeropuerto'
+        SkyManager sm = SkyManager.getInstance();
 
-        double suma = 0;
+        // Calcolo intervallo del mese precedente
+        LocalDate inizioMese = this.fechaEmision.minusMonths(1).withDayOfMonth(1);
+        LocalDate fineMese = inizioMese.withDayOfMonth(inizioMese.lengthOfMonth());
+
+        double totalBase = 0;
+        double totalSurcharge = 0;
+        double totalUso = 0;
+        this.rUsage.clear();
+
         for (Uso u : this.serviciosUsados) {
-            suma += u.calcularCosteUso();
+            LocalDate dataUso = u.getHoraUso().toLocalDate();
+            if (!dataUso.isBefore(inizioMese) && !dataUso.isAfter(fineMese)) {
+                // Calcolo costi base
+                if (esSalida) {
+                    totalBase += sm.getCosteBaseSalida();
+                } else {
+                    totalBase += sm.getCosteBaseLlegada();
+                }
+
+                // Calcolo surcharge in base al tipo di aereo
+                TipoAvion tipo = u.getAeronave().getTipoAvion();
+                if (tipo != null && tipo.isMercancias()) {
+                    totalSurcharge += sm.getCosteExtraMercancias();
+                } else {
+                    totalSurcharge += sm.getCosteExtraPasajeros();
+                }
+
+                // Calcolo ore d’uso del servizio
+                totalUso += u.calcularCosteUso();
+
+                // Aggiunge a lista per PDF
+                this.rUsage.add(u);
+            }
         }
 
-        this.total = this.precioBase + this.sobrecarga + suma;
+        this.precioBase = totalBase;
+        this.sobrecarga = totalSurcharge;
+        this.total = this.precioBase + this.sobrecarga + totalUso;
         return this.total;
     }
+
 
 
     /**
@@ -111,28 +144,6 @@ public class Factura implements IInvoiceInfo, Serializable {
     }
     
     
-    private void calcularCostesBaseYSobrecarga(boolean esSalida) {
-        SkyManager sm = SkyManager.getInstance();
-
-        if (esSalida) {
-            this.precioBase = sm.getCosteBaseSalida();
-        } else {
-            this.precioBase = sm.getCosteBaseLlegada();
-        }
-
-        if (this.tipoAvion != null && this.tipoAvion.isMercancias()) {
-            this.sobrecarga = sm.getCosteExtraMercancias();
-        } else {
-            this.sobrecarga = sm.getCosteExtraPasajeros();
-        }
-    }
-
-
-
-
-
-
-
     // Getters básicos
 
     public String getId() { return id; }

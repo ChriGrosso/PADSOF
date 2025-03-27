@@ -15,39 +15,30 @@ import sistema.SkyManager;
 
 public class FacturaTest {
 
-    @Test
+	@Test
     void testCrearFacturaYUso() {
-        // 1. Crea una compagnia aerea
         Aerolinea aerolinea = new Aerolinea("AER001", "Sky Airlines");
 
-        // 2. Imposta i costi nel gestore globale
         SkyManager manager = SkyManager.getInstance();
         manager.setCosteBaseSalida(100.0);
         manager.setCosteExtraPasajeros(20.0);
 
-        // 3. Crea un tipo di aereo passeggeri
         AvionPasajeros tipo = new AvionPasajeros("Boeing", "737", 5000, 12, 35, 40, 180);
-
-        // 4. Crea l'aereo con quel tipo
         Avion avion = new Avion("AB123", LocalDate.now().minusYears(2), tipo);
 
-        // 5. Crea una risorsa strutturale (Finger)
-        Finger finger = new Finger("F001", 30.0, LocalDate.now(), 22.0); // 30€/ora
+        Finger finger = new Finger("F001", 30.0, LocalDate.now(), 22.0);
 
-        // 6. Crea l'oggetto Uso per 1 ora con l'aereo
-        Uso uso = new Uso(LocalDateTime.now().minusHours(1), finger, avion);
-        uso.setHoraDesuso(LocalDateTime.now());
+        // Uso spostato al mese precedente
+        LocalDateTime usoInicio = LocalDateTime.now().minusMonths(1).withDayOfMonth(10);
+        LocalDateTime usoFine = usoInicio.plusHours(1);
+        Uso uso = new Uso(usoInicio, finger, avion);
+        uso.setHoraDesuso(usoFine);
 
-        // 7. Crea la fattura e aggiungi l'uso
         Factura factura = new Factura("INV-001", 0.0, 0.0, LocalDate.now(), aerolinea, "logo.png");
         factura.addUso(uso);
+        factura.calcularFactura(aerolinea, true);
 
-        // 8. Calcola il totale della fattura (volo in partenza)
-        factura.calcularFactura(aerolinea, true); // true = salida
-
-        // 9. Verifica il prezzo atteso = base + surcharge + uso (1h x 30€)
         double expected = 100.0 + 20.0 + 30.0;
-
         assertEquals(expected, factura.getPrice(), 0.001, "Il prezzo totale della fattura non è corretto.");
     }
 
