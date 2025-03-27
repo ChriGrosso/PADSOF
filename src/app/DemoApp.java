@@ -84,7 +84,10 @@ public class DemoApp {
         v.setEstVuelo(EstadoVuelo.EN_HANGAR);
         System.out.println(app);
         
+        app.logIn("01020304A", "password123");
+        System.out.println("Estadisticas del Gestor: \n"+app.verEstadisticasGestor());
         
+        Factura factura = new Factura(null, 0, 0, null, null, null);
         
         
         
