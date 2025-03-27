@@ -11,6 +11,7 @@ import aviones.Avion;
 import aviones.TipoAvion;
 import elementos.ElementoEstructural;
 import elementos.Uso;
+import sistema.SkyManager;
 import usuarios.Operador;
 import usuarios.Usuario;
 import vuelos.Periodicidad;
@@ -285,6 +286,7 @@ public class Aerolinea implements Serializable{
 				((VueloPasajeros) v).getNumPasajeros(), v.getPeriodicidad(), v.getAvion());
 			}
 		}
+		SkyManager.getInstance().registrarVuelo(nuevoV);
 		this.vuelos.add(nuevoV);
 		for (Usuario u: this.operadores) {
 			v.addObserver(u);
