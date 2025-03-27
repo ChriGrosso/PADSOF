@@ -8,8 +8,6 @@ import elementos.*;
 import es.uam.eps.padsof.invoices.*;
 import aerolineas.*;
 import java.time.*;
-import java.util.ArrayList;
-import aeropuertos.*;
 import aviones.*;
 import sistema.SkyManager;
 
