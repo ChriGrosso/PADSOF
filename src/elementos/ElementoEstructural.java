@@ -156,7 +156,7 @@ public abstract class ElementoEstructural implements Serializable {
 	 * @return true si el uso fue registrado correctamente
 	 */
 	public boolean addUso(Vuelo vuelo, LocalDateTime horaUso) {
-		Uso u = new Uso(horaUso, this);
+		Uso u = new Uso(horaUso, this, null);
 		this.historialUsos.put(vuelo, u);
 		return true;
 	}
