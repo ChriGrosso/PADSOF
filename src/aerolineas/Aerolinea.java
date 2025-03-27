@@ -150,7 +150,7 @@ public class Aerolinea implements Serializable{
      * @return True si se ha podido hacer la operación correctamente, False sino.
      */
 	public boolean addVuelo(Vuelo v) {
-		if(this.vuelos.contains(v) || !this.aviones.containsValue(v.getAvion())) {
+		if(this.vuelos.contains(v)) {
 			return false;
 		}
 		this.vuelos.add(v);

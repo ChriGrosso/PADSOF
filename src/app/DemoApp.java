@@ -89,7 +89,20 @@ public class DemoApp {
         
         
        //Generar una factura y pagarla para que se vea que funciona
+        
        //Generar las estadisticas
+        Aerolinea a = v.getAerolinea();
+        EstadisticasVuelos est = a.getEstadisticas();
+        ArrayList<Vuelo> vuelos = est.vuelosEnTiempo();
+        System.out.println("Vuelos en tiempo de la aerolinea: " + a.getNombre() + " (" + est.numVuelosEnTiempo() + ")\n");
+        for(Vuelo v2: vuelos) {
+        	System.out.println(v2.toString() + "\n");
+        }
+        vuelos = est.vuelosRetrasados();
+        System.out.println("Vuelos retrasados de la aerolinea: " + a.getNombre() + " (" + est.numVuelosRetrasados() + ")\n");
+        for(Vuelo v2: vuelos) {
+        	System.out.println(v2.toString() + "\n");
+        }
        //
        //eso es lo que falta por probar creo :)
        //
