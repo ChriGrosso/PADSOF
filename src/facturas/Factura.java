@@ -14,7 +14,6 @@ import aerolineas.*;
 import elementos.*;
 import aeropuertos.*;
 import aviones.*;
-import vuelos.*;
 
 /**
  * Clase que representa una factura generada para una aerolínea,
