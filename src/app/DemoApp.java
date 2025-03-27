@@ -252,7 +252,7 @@ public class DemoApp {
     public static void generarFacturaMensual(Aerolinea aerolinea) {
         LocalDate hoy = LocalDate.now();
         String idFactura = "FAC-" + aerolinea.getId() + "-" + hoy.toString();
-        String logo = "logo.png";
+        String logo = "./resources/logo.png";
 
         Factura factura = new Factura(idFactura, 0.0, 0.0, hoy, aerolinea, logo);
 
