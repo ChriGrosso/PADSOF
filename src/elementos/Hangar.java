@@ -63,7 +63,7 @@ public abstract class Hangar extends ElementoEstructural {
 
     // Getters y setters
     /**
-     * Obtiene el número de plazas disponibles.
+     * Obtiene el número de plazas totales del hangar.
      * 
      * @return Número de plazas.
      */

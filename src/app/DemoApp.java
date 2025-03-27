@@ -80,10 +80,12 @@ public class DemoApp {
         
         v.setEstVuelo(EstadoVuelo.DESEMBARQUE_INI);
         v.setEstVuelo(EstadoVuelo.DESEMBARQUE_FIN);
+        v.getAvion().asignarHangar(app.getHangaresDisponibles(v.getAvion()).getFirst());
+        v.setEstVuelo(EstadoVuelo.EN_HANGAR);
         System.out.println(app);
         
         
-       
+        
         
         
         

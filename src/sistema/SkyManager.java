@@ -20,6 +20,7 @@ import aerolineas.Aerolinea;
 import aeropuertos.Aeropuerto;
 import aeropuertos.Direccion;
 import aeropuertos.Temporada;
+import aviones.Avion;
 import aviones.EstadoAvion;
 import aviones.TipoAvion;
 import elementos.Finger;
@@ -807,6 +808,24 @@ public class SkyManager implements Serializable {
 		 for (Finger f: fingers) {
 			 if (f.comprobarCompatibilidad(v.getAvion()) && !f.enUso()) {
 				 disponibles.add(f);
+			 }
+		 }
+		 return disponibles;
+	 }
+	 
+	 /**
+	 * Devuelve los hangares disponibles para almacenar un avión.
+	 * 
+	 * @param a Avion al que se le quiere asignar el hangar.
+	 * @return Una lista con los hangares disponibles.
+	 */
+	 public ArrayList<Hangar> getHangaresDisponibles(Avion a) {
+		 ArrayList<Hangar> disponibles = new ArrayList<Hangar>();
+		 Collection<Hangar> hangares = this.hangares.values();
+		 
+		 for (Hangar h: hangares) {
+			 if (h.comprobarCompatibilidad(a) && h.numPlazasOcupadasHangar()<h.getNumPlazas()) {
+				 disponibles.add(h);
 			 }
 		 }
 		 return disponibles;
