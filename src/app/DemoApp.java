@@ -12,7 +12,6 @@ import aeropuertos.*;
 import aviones.*;
 import elementos.*;
 import facturas.*;
-import notificaciones.*;
 import sistema.*;
 import usuarios.Controlador;
 import usuarios.Gestor;
@@ -87,12 +86,14 @@ public class DemoApp {
         app.logIn("01020304A", "password123");
         System.out.println("Estadisticas del Gestor: \n"+app.verEstadisticasGestor());
         
-        Factura factura = new Factura(null, 0, 0, null, null, null);
         
         
-        
-        
-        
+       //Generar una factura y pagarla para que se vea que funciona
+       //Generar las estadisticas
+       //
+       //eso es lo que falta por probar creo :)
+       //
+       //
 
         
         
