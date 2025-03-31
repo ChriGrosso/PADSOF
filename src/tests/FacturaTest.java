@@ -32,7 +32,7 @@ public class FacturaTest {
         Uso uso = new Uso(usoInicio, finger, avion);
         uso.setHoraDesuso(usoFine);
 
-        Factura factura = new Factura("INV-001", 0.0, 0.0, LocalDate.now(), aerolinea, "logo.png");
+        Factura factura = new Factura("INV-001", 0.0, 0.0, LocalDate.now(), aerolinea, ".\\resources\\logo.png");
         factura.addUso(uso);
         factura.calcularFactura(aerolinea);
 
@@ -43,16 +43,16 @@ public class FacturaTest {
     @Test
     void testCreateInvoiceSuccess() {
         Aerolinea aerolinea = new Aerolinea("AER001", "Sky Airlines");
-        Factura factura = new Factura("INV-001", 100.0, 120.0, LocalDate.now(), aerolinea, "logo.png");
+        Factura factura = new Factura("INV-001", 100.0, 120.0, LocalDate.now(), aerolinea, ".\\resources\\logo.png");
         assertDoesNotThrow(() -> {
-            factura.generarFactura("./tmp/invoice_test.pdf");
+            factura.generarFactura("./resources/invoice_test.pdf");
         });
     }
 
     @Test
     void testCreateInvoiceFileNotFound() {
         Aerolinea aerolinea = new Aerolinea("AER001", "Sky Airlines");
-        Factura factura = new Factura("INV-002", 100.0, 120.0, LocalDate.now(), aerolinea, "logo.png");
+        Factura factura = new Factura("INV-002", 100.0, 120.0, LocalDate.now(), aerolinea, ".\\resources\\logo.png");
 
         String invalidPath = "/invalid/directory/invoice.pdf";
 
@@ -67,14 +67,14 @@ public class FacturaTest {
         Factura factura = new Factura("INV-003", 100.0, 120.0, LocalDate.now(), aerolinea, "logo.unsupported");
 
         assertThrows(UnsupportedImageTypeException.class, () -> {
-            factura.generarFactura("./tmp/invoice_test.pdf");
+            factura.generarFactura("./resources/invoice_test.pdf");
         }, "El tipo de imagen no es compatible.");
     }
 
     @Test
     void testGetInvoiceData() {
         Aerolinea aerolinea = new Aerolinea("AER001", "Sky Airlines");
-        Factura factura = new Factura("INV-003", 200.0, 250.0, LocalDate.now(), aerolinea, "logo.png");
+        Factura factura = new Factura("INV-003", 200.0, 250.0, LocalDate.now(), aerolinea, ".\\resources\\logo.png");
 
         assertEquals("Sky Airlines", factura.getAirline());
         assertEquals("SkyManager", factura.getCompanyName());
