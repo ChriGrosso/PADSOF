@@ -61,6 +61,10 @@ public class Aplicacion extends JFrame{
 		contenedor.setLayout(new CardLayout());
 		contenedor.add(cartas);
 	}
+	
+	public Login getLogin() {
+		return this.panelLogin;
+	}
 }
 
 
