@@ -7,7 +7,7 @@ public class Prueba {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {						
-					new Aplicacion().setVisible(true);
+					Aplicacion.getInstance().setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
