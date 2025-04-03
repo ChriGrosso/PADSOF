@@ -66,6 +66,11 @@ public class Aplicacion extends JFrame{
 		Container contenedor = this.getContentPane();
 		contenedor.setLayout(new CardLayout());
 		contenedor.add(cartas);
+		
+		// configurar tamaño de la ventana principal
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(500, 400);	
+		this.setLocationRelativeTo(null);
 	}
 	
 	public static Aplicacion getInstance() {
