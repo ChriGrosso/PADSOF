@@ -5,9 +5,6 @@ import java.awt.Container;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SpringLayout;
-
-import sistema.SkyManager;
 
 public class Aplicacion extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -52,14 +49,11 @@ public class Aplicacion extends JFrame{
 		panelLogin.setControlador(controlLogin);
 		
 		
-		// Creamos e inizializamos cada una de las cartas 
-		Login carta1 = new Login();
-		
 		// Creamos el panel que contiene las cartas 
 		cartas = new JPanel(new CardLayout()); 
-		cartas.add(carta1,LOGIN);
+		cartas.add(panelLogin,LOGIN);
 		
-		// Mostramos una carta 
+		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
 		
 		// añadir vistas a la ventana principal

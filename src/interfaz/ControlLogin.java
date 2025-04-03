@@ -22,15 +22,10 @@ public class ControlLogin implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Login")) {     // si se ha pulsado "Login"
-			
+			this.iniciarSesion();
 		}			 
 	}
 
-	private void mostrarLogin() {
-		// mostrar nueva vista
-		this.vista.setVisible(false);		
-		this.frame.getLogin().setVisible(true);
-	}
 	
 	private void iniciarSesion() {
 		// validar valores en la vista
