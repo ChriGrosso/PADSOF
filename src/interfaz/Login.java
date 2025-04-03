@@ -24,7 +24,7 @@ public class Login extends JPanel{
 		JLabel etiquetaPassword = new JLabel("Password");
 		campoUsuario = new JTextField(10);
 		campoPassword = new JPasswordField(10);
-		login = new JButton("Iniciar Sesión");
+		login = new JButton("Login");
 		
 		// añadir componentes al panel
 		this.add(etiquetaUsuario);

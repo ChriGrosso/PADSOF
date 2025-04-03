@@ -12,13 +12,15 @@ public class ControlLogin implements ActionListener{
 	
 	public ControlLogin(Aplicacion frame) {
 		this.frame = frame;
+		this.vista = frame.getLogin();
 		this.modelo = SkyManager.getInstance();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		if (e.getActionCommand().equals("Login")) {     // si se ha pulsado "Login"
+			
+		}			 
 	}
 
 }
