@@ -7,7 +7,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
+import sistema.SkyManager;
+
 public class Aplicacion extends JFrame{
+	private static final long serialVersionUID = 1L;
+
+	private static transient Aplicacion INSTANCE = null;
+	
 	// Inicializar todos los paneles personalizados
 	private Login panelLogin;
 	// Declaramos el panel con las cartas JPanel cartas; 
@@ -33,7 +39,7 @@ public class Aplicacion extends JFrame{
 	final static String CONT_GESTION_VUELOS   = "Controlador Vuelos";
 	
 	
-	public Aplicacion() {
+	private Aplicacion() {
 		super("SkyManager");
 		
 		//vistas
@@ -61,6 +67,13 @@ public class Aplicacion extends JFrame{
 		contenedor.setLayout(new CardLayout());
 		contenedor.add(cartas);
 	}
+	
+	public static Aplicacion getInstance() {
+        if (INSTANCE == null) {
+        	INSTANCE = new Aplicacion();
+        }
+        return INSTANCE;
+    }
 	
 	public Login getLogin() {
 		return this.panelLogin;
