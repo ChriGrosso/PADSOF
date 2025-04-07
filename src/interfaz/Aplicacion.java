@@ -13,6 +13,8 @@ public class Aplicacion extends JFrame{
 	
 	// Inicializar todos los paneles personalizados
 	private Login panelLogin;
+	private OperadorInicio panelOpInicio;
+	
 	// Declaramos el panel con las cartas JPanel cartas; 
 	private JPanel cartas;
 	final static String LOGIN = "Login"; 
@@ -41,17 +43,20 @@ public class Aplicacion extends JFrame{
 		
 		//vistas
 		panelLogin = new Login();
+		panelOpInicio = new OperadorInicio();
 		
 		//controladores
 		ControlLogin controlLogin = new ControlLogin(this);
+		ControlOperadorInicio controlOpInicio = new ControlOperadorInicio(this);
 		
 		// configurar las vistas con los controladores
 		panelLogin.setControlador(controlLogin);
-		
+		panelOpInicio.setControlador(controlOpInicio);
 		
 		// Creamos el panel que contiene las cartas 
 		cartas = new JPanel(new CardLayout()); 
 		cartas.add(panelLogin,LOGIN);
+		cartas.add(panelOpInicio,OP_INICIO);
 		
 		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
@@ -74,8 +79,16 @@ public class Aplicacion extends JFrame{
         return INSTANCE;
     }
 	
+	public JPanel getCartas() {
+		return this.cartas;
+	}
+	
 	public Login getLogin() {
 		return this.panelLogin;
+	}
+	
+	public OperadorInicio getOpInicio() {
+		return this.panelOpInicio;
 	}
 }
 

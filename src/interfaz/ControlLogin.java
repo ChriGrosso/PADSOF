@@ -1,5 +1,6 @@
 package interfaz;
 
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -55,5 +56,11 @@ public class ControlLogin implements ActionListener{
 		this.vista.setVisible(false);		
 		// obtener el usuario por el nif
 		Usuario user = this.modelo.getUsuarioActual();
+		CardLayout cl = (CardLayout) this.frame.getCartas().getLayout();
+		if(user.esOperador()) { cl.show(frame.getCartas(), Aplicacion.OP_INICIO); }
+		else if(user.esControlador()) { cl.show(frame.getCartas(), Aplicacion.CONT_INICIO); }
+		else if(user.esGestor()) { cl.show(frame.getCartas(), Aplicacion.GESTOR_INICIO); }
+		this.vista.update();
+		return;
 	}
 }
