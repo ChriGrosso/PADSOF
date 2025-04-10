@@ -12,8 +12,9 @@ public class ControlControladorInicio implements ActionListener {
 	private Aplicacion frame;
 	private SkyManager modelo;
 	
-	public ControlControladorInicio(Aplicacion frame) {
-		this.frame = frame;
+	public ControlControladorInicio() {
+		
+		this.frame = Aplicacion.getInstance();
 		this.vista = frame.getLogin();
 		this.modelo = SkyManager.getInstance();
 	}
