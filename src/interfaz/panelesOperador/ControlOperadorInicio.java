@@ -1,19 +1,15 @@
-package interfaz2;
+package interfaz.panelesOperador;
 
-import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import interfaz.Aplicacion;
 import sistema.SkyManager;
 
 public class ControlOperadorInicio implements ActionListener{
-	private Login vista;
-	private Aplicacion frame;
 	private SkyManager modelo;
 	
-	public ControlOperadorInicio(Aplicacion frame) {
-		this.frame = frame;
-		this.vista = frame.getLogin();
+	public ControlOperadorInicio() {
 		this.modelo = SkyManager.getInstance();
 	}
 
@@ -30,15 +26,13 @@ public class ControlOperadorInicio implements ActionListener{
 	
 	private void cerrarSesion() {
 		modelo.guardarDatos();
-		this.vista.setVisible(false);
-		CardLayout cl = (CardLayout) this.frame.getCartas().getLayout();
-		cl.show(frame.getCartas(), Aplicacion.LOGIN);
+		Aplicacion.getInstance().getOpInicio().setVisible(false);
+		Aplicacion.getInstance().showLogin();
 	}
 	
 	private void verNotificaciones() {
 		modelo.guardarDatos();
-		this.vista.setVisible(false);
-		CardLayout cl = (CardLayout) this.frame.getCartas().getLayout();
-		cl.show(frame.getCartas(), Aplicacion.VER_NOTIFICACIONES);
+		Aplicacion.getInstance().getOpInicio().setVisible(false);
+		Aplicacion.getInstance().showNotificaciones();
 	}
 }

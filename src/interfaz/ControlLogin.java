@@ -9,13 +9,9 @@ import sistema.SkyManager;
 import usuarios.Usuario;
 
 public class ControlLogin implements ActionListener{
-	private Login vista;
-	private Aplicacion frame;
 	private SkyManager modelo;
 	
 	public ControlLogin() {
-		this.frame = Aplicacion.getInstance();
-		this.vista = frame.getLogin();
 		this.modelo = SkyManager.getInstance();
 	}
 
@@ -29,15 +25,15 @@ public class ControlLogin implements ActionListener{
 	
 	private void iniciarSesion() {
 		// validar valores en la vista
-		String nifUser = vista.getNifUsuario();
-		char[] pswUser = vista.getPswUsuario();
+		String nifUser = Aplicacion.getInstance().getLogin().getNifUsuario();
+		char[] pswUser = Aplicacion.getInstance().getLogin().getPswUsuario();
 		String psw = new String(pswUser);
 		if (nifUser.equals("")) {
-			JOptionPane.showMessageDialog(vista, "Debe introducir un nif.", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(Aplicacion.getInstance().getLogin(), "Debe introducir un nif.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		if(psw.equals("")) {
-			JOptionPane.showMessageDialog(vista, "Debe introducir una password.", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(Aplicacion.getInstance().getLogin(), "Debe introducir una password.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
@@ -46,19 +42,19 @@ public class ControlLogin implements ActionListener{
 			modelo.logIn(nifUser, psw);
 		}
 		catch(IllegalArgumentException excep) {
-			JOptionPane.showMessageDialog(vista, excep.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			this.vista.update();
+			JOptionPane.showMessageDialog(Aplicacion.getInstance().getLogin(), excep.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			Aplicacion.getInstance().getLogin().update();
 			return;
 		}
 
 		// mostrar nueva vista (se ha iniciado sesión correctamente)
-		this.vista.setVisible(false);		
+		Aplicacion.getInstance().getLogin().setVisible(false);		
 		// obtener el usuario por el nif
 		Usuario user = this.modelo.getUsuarioActual();
-		if(user.esOperador()) { frame.showLogin(); }
-		else if(user.esControlador()) { frame.showContInicio(); }
-		else if(user.esGestor()) { frame.showGestorInicio(); }
-		this.vista.update();
+		if(user.esOperador()) { Aplicacion.getInstance().showLogin(); }
+		else if(user.esControlador()) { Aplicacion.getInstance().showContInicio(); }
+		else if(user.esGestor()) { Aplicacion.getInstance().showGestorInicio(); }
+		Aplicacion.getInstance().getLogin().update();
 		return;
 	}
 }

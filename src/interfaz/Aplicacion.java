@@ -6,6 +6,9 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import interfaz.panelesOperador.ControlOperadorInicio;
+import interfaz.panelesOperador.OperadorInicio;
+
 public class Aplicacion extends JFrame{
 	private static final long serialVersionUID = 1L;
 
@@ -114,6 +117,10 @@ public class Aplicacion extends JFrame{
 	
 	public void showGestorInicio() {
 		((CardLayout)cartas.getLayout()).show(cartas, GESTOR_INICIO);
+	}
+	
+	public void showNotificaciones() {
+		((CardLayout)cartas.getLayout()).show(cartas, VER_NOTIFICACIONES);
 	}
 }
 

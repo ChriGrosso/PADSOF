@@ -1,4 +1,4 @@
-package interfaz;
+package interfaz.panelesOperador;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
