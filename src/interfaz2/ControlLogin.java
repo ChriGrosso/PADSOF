@@ -1,5 +1,6 @@
-package interfaz;
+package interfaz2;
 
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,8 +14,8 @@ public class ControlLogin implements ActionListener{
 	private Aplicacion frame;
 	private SkyManager modelo;
 	
-	public ControlLogin() {
-		this.frame = Aplicacion.getInstance();
+	public ControlLogin(Aplicacion frame) {
+		this.frame = frame;
 		this.vista = frame.getLogin();
 		this.modelo = SkyManager.getInstance();
 	}
@@ -55,9 +56,10 @@ public class ControlLogin implements ActionListener{
 		this.vista.setVisible(false);		
 		// obtener el usuario por el nif
 		Usuario user = this.modelo.getUsuarioActual();
-		if(user.esOperador()) { frame.showLogin(); }
-		else if(user.esControlador()) { frame.showContInicio(); }
-		else if(user.esGestor()) { frame.showGestorInicio(); }
+		CardLayout cl = (CardLayout) this.frame.getCartas().getLayout();
+		if(user.esOperador()) { cl.show(frame.getCartas(), Aplicacion.OP_INICIO); }
+		else if(user.esControlador()) { cl.show(frame.getCartas(), Aplicacion.CONT_INICIO); }
+		else if(user.esGestor()) { cl.show(frame.getCartas(), Aplicacion.GESTOR_INICIO); }
 		this.vista.update();
 		return;
 	}

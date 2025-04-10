@@ -1,4 +1,4 @@
-package interfaz;
+package interfaz2;
 
 import java.awt.CardLayout;
 import java.awt.Container;
@@ -46,8 +46,8 @@ public class Aplicacion extends JFrame{
 		panelOpInicio = new OperadorInicio();
 		
 		//controladores
-		ControlLogin controlLogin = new ControlLogin();
-		ControlOperadorInicio controlOpInicio = new ControlOperadorInicio();
+		ControlLogin controlLogin = new ControlLogin(this);
+		ControlOperadorInicio controlOpInicio = new ControlOperadorInicio(this);
 		
 		// configurar las vistas con los controladores
 		panelLogin.setControlador(controlLogin);
@@ -87,24 +87,8 @@ public class Aplicacion extends JFrame{
 		return this.panelLogin;
 	}
 	
-	public void showLogin() {
-		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
-	}
-	
 	public OperadorInicio getOpInicio() {
 		return this.panelOpInicio;
-	}
-	
-	public void showOpInicio() {
-		((CardLayout)cartas.getLayout()).show(cartas, OP_INICIO);
-	}
-	
-	public void showContInicio() {
-		((CardLayout)cartas.getLayout()).show(cartas, CONT_INICIO);
-	}
-	
-	public void showGestorInicio() {
-		((CardLayout)cartas.getLayout()).show(cartas, GESTOR_INICIO);
 	}
 }
 

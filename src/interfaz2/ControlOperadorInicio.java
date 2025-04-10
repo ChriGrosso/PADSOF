@@ -1,4 +1,4 @@
-package interfaz;
+package interfaz2;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
@@ -11,8 +11,8 @@ public class ControlOperadorInicio implements ActionListener{
 	private Aplicacion frame;
 	private SkyManager modelo;
 	
-	public ControlOperadorInicio() {
-		this.frame = Aplicacion.getInstance();
+	public ControlOperadorInicio(Aplicacion frame) {
+		this.frame = frame;
 		this.vista = frame.getLogin();
 		this.modelo = SkyManager.getInstance();
 	}
