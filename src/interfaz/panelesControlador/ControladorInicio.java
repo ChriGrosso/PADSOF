@@ -1,4 +1,4 @@
-package interfaz;
+package interfaz.panelesControlador;
 
 import javax.swing.*;
 

@@ -6,6 +6,8 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import interfaz.panelesControlador.ControlControladorInicio;
+import interfaz.panelesControlador.ControladorInicio;
 import interfaz.panelesOperador.ControlOperadorInicio;
 import interfaz.panelesOperador.OperadorInicio;
 
