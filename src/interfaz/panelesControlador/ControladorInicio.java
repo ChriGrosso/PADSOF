@@ -1,4 +1,4 @@
-package interfaz.panelesControlador;
+/*package interfaz.panelesControlador;
 
 import javax.swing.*;
 
@@ -69,4 +69,90 @@ public class ControladorInicio extends JPanel {
 		busquedaVuelos.addActionListener(c);
 		gestionVuelos.addActionListener(c);
 	}
+}*/
+
+package interfaz.panelesControlador;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+
+public class ControladorInicio extends JPanel {
+    private static final long serialVersionUID = 1L;
+    private JButton notificaciones;
+    private JButton cerrarSesion;
+    private JButton busquedaVuelos;
+    private JButton gestionVuelos;
+
+    public ControladorInicio() {
+        setLayout(new BorderLayout());
+
+        // === MENU LATERALE ===
+        JPanel panelMenu = new JPanel();
+        panelMenu.setLayout(new BoxLayout(panelMenu, BoxLayout.Y_AXIS));
+        panelMenu.setBackground(new Color(45, 45, 45));
+
+        notificaciones = createMenuButton("🔔 Notificaciones");
+        cerrarSesion = createMenuButton("🔓 Cerrar Sesión");
+        JButton iconoAvion = new JButton(new ImageIcon("resources/plane_icon.png"));
+        iconoAvion.setEnabled(false);
+        iconoAvion.setBorderPainted(false);
+        iconoAvion.setContentAreaFilled(false);
+
+        panelMenu.add(Box.createVerticalStrut(20));
+        panelMenu.add(iconoAvion);
+        panelMenu.add(Box.createVerticalStrut(30));
+        panelMenu.add(notificaciones);
+        panelMenu.add(Box.createVerticalStrut(20));
+        panelMenu.add(cerrarSesion);
+
+        // === CONTENUTO CENTRALE ===
+        JPanel panelContenido = new JPanel();
+        panelContenido.setLayout(new GridBagLayout());
+        panelContenido.setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+
+        busquedaVuelos = createContentButton("🔍 Búsqueda Vuelos");
+        gestionVuelos = createContentButton("🛬 Gestión Vuelos");
+
+        panelContenido.add(busquedaVuelos, gbc);
+
+        gbc.gridx++;
+        panelContenido.add(gestionVuelos, gbc);
+
+        // === ASSEMBLA ===
+        add(panelMenu, BorderLayout.WEST);
+        add(panelContenido, BorderLayout.CENTER);
+    }
+
+    private JButton createMenuButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btn.setMaximumSize(new Dimension(180, 40));
+        btn.setFocusPainted(false);
+        btn.setBackground(new Color(66, 66, 66));
+        btn.setForeground(Color.WHITE);
+        btn.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        return btn;
+    }
+
+    private JButton createContentButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setPreferredSize(new Dimension(200, 80));
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("Arial", Font.BOLD, 14));
+        return btn;
+    }
+
+    public void setControlador(ActionListener c) {
+        notificaciones.addActionListener(c);
+        cerrarSesion.addActionListener(c);
+        busquedaVuelos.addActionListener(c);
+        gestionVuelos.addActionListener(c);
+    }
 }
+
