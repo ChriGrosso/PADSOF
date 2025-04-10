@@ -1,28 +1,45 @@
 package interfaz;
 
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import sistema.SkyManager;
+
+
 public class ControlControladorInicio implements ActionListener {
-    private JPanel vista;
-    private Aplicacion frame;
+	private Login vista;
+	private Aplicacion frame;
+	private SkyManager modelo;
+	
+	public ControlControladorInicio(Aplicacion frame) {
+		this.frame = frame;
+		this.vista = frame.getLogin();
+		this.modelo = SkyManager.getInstance();
+	}
 
-    public ControladorInicio(Aplicacion frame) {
-        this.frame = frame;
-        this.vista = frame.getControlControladorInicio();  // Recupera il pannello per il contollore
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("Cerrar Sesión")) {     // si se ha pulsado "Cerrar Sesión"
+			this.cerrarSesion();
+		}
+		else if (e.getActionCommand().equals("Notificaciones")) {     // si se ha pulsado "Notificaciones"
+			this.verNotificaciones();
+		}
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Ver Notificaciones")) {
-            // Gestisci evento Ver Notificaciones
-            System.out.println("Ver Notificaciones");
-        } else if (e.getActionCommand().equals("Gestión de Vuelos")) {
-            // Gestisci evento Gestione Vuelos
-            System.out.println("Gestión de Vuelos");
-        } else if (e.getActionCommand().equals("Búsqueda de Vuelos")) {
-            // Gestisci evento Ricerca Vuelos
-            System.out.println("Búsqueda de Vuelos");
-        }
-    }
+	
+	private void cerrarSesion() {
+		modelo.guardarDatos();
+		this.vista.setVisible(false);
+		CardLayout cl = (CardLayout) this.frame.getCartas().getLayout();
+		cl.show(frame.getCartas(), Aplicacion.LOGIN);
+	}
+	
+	private void verNotificaciones() {
+		modelo.guardarDatos();
+		this.vista.setVisible(false);
+		CardLayout cl = (CardLayout) this.frame.getCartas().getLayout();
+		cl.show(frame.getCartas(), Aplicacion.VER_NOTIFICACIONES);
+	}
 }

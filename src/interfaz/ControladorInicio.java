@@ -1,47 +1,72 @@
 package interfaz;
 
 import javax.swing.*;
+
+import sistema.SkyManager;
+
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class ControladorInicio extends JPanel {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+	private JButton notificaciones;
+	private JButton cerrarSesion;
+	private JButton busquedaVuelos;
+	private JButton gestionVuelos;
+	
+	public ControladorInicio() {
+		// Usar GridBagLayout para centrar componentes
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
 
-    public ControladorInicio() {
-        // Layout per il pannello
-        this.setLayout(new BorderLayout());
+        JLabel mensajeBienvenida = null;
+        // Crear Componentes
+        if(this.isShowing()) {
+        	mensajeBienvenida = new JLabel("Bienvenid@ " + SkyManager.getInstance().getUsuarioActual().getNombre());
+        }
+        notificaciones = new JButton("Notificaciones");
+        cerrarSesion = new JButton("Cerrar Sesión");
+        busquedaVuelos = new JButton("Buscar Vuelos");
+        gestionVuelos = new JButton("Gestionar Vuelos");
+        
+     // === Columna izquierda: Notificaciones y Cerrar Sesión ===
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        this.add(notificaciones, gbc);
 
-        // Creiamo la barra laterale
-        JPanel sidebarPanel = new JPanel();
-        sidebarPanel.setLayout(new BoxLayout(sidebarPanel, BoxLayout.Y_AXIS));
+        gbc.gridy++;
+        this.add(cerrarSesion, gbc);
 
-        // Aggiungiamo i pulsanti
-        JButton vuelosButton = new JButton("Gestión de Vuelos");
-        JButton busquedaButton = new JButton("Búsqueda de Vuelos");
-        JButton notificacionesButton = new JButton("Ver Notificaciones");
-        JButton logoutButton = new JButton("Cerrar Sesión");
+        // === Centro: Mensaje de bienvenida ===
+        if(this.isShowing()) {
+	        gbc.gridx = 1;
+	        gbc.gridy = 0;
+	        gbc.gridwidth = 2;
+	        gbc.anchor = GridBagConstraints.CENTER;
+			this.add(mensajeBienvenida, gbc);
+        }
 
-        // Aggiungiamo i listener agli eventi
-        vuelosButton.addActionListener(new ControladorInicio(frame));
-        busquedaButton.addActionListener(new ControladorInicio(frame));
-        notificacionesButton.addActionListener(new ControladorInicio(frame));
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Torna alla schermata di login
-                ((CardLayout) frame.getContentPane().getLayout()).show(frame.getContentPane(), Aplicacion.LOGIN);
-            }
-        });
+        // === Botones distribuidos centralmente en el espacio derecho ===
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        this.add(busquedaVuelos, gbc);
 
-        // Aggiungiamo i bottoni alla sidebar
-        sidebarPanel.add(vuelosButton);
-        sidebarPanel.add(busquedaButton);
-        sidebarPanel.add(notificacionesButton);
-        sidebarPanel.add(logoutButton);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        this.add(gestionVuelos, gbc);
+	}
 
-        // Aggiungiamo la sidebar e il contenuto principale
-        this.add(sidebarPanel, BorderLayout.WEST);
-        JPanel mainPanel = new JPanel();
-        mainPanel.add(new JLabel("Benvenuto nel Pannello del Controllore"));
-        this.add(mainPanel, BorderLayout.CENTER);
-    }
+	// método para asignar un controlador a los botones
+	public void setControlador(ActionListener c) {  
+		notificaciones.addActionListener(c);
+		cerrarSesion.addActionListener(c);
+		busquedaVuelos.addActionListener(c);
+		gestionVuelos.addActionListener(c);
+	}
 }
