@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.MonthDay;
@@ -608,6 +609,22 @@ public class SkyManager implements Serializable {
 	public Vuelo buscarVueloPorCodigo(String id) {
 		this.updateVuelos();
 		return this.vuelos.get(id);
+	}
+	
+	/**
+     * Busca los vuelos del mismo día.
+     * @return Vuelo/s encontrado/s o null si no hay.
+     */
+	public ArrayList<Vuelo> buscarVuelosDelDia() {
+		this.updateVuelos();
+		LocalDate hoy = LocalDate.now();
+		ArrayList<Vuelo> vuelos = new ArrayList<Vuelo>();
+		for(Vuelo v: this.getVuelos().values()) {
+			if(v.getHoraSalida().getDayOfYear() == hoy.getDayOfYear() && v.getHoraSalida().getYear() == hoy.getYear()) {
+				vuelos.add(v);
+			}
+		}
+		return vuelos;
 	}
 	
 	/**
