@@ -84,9 +84,11 @@ public class OperadorInicio extends JPanel {
         setScaledIcon(busquedaVuelos, "resources/searchFlights_icon.png");
         estadisticas = createContentButton("Estadísticas");
         setScaledIcon(estadisticas, "resources/statistics_icon.png");
-        facturas = createContentButton("📁 Ver Facturas");
-        gestionVuelos = createContentButton("🛬 Gestionar Vuelos");
-        gestionAviones = createContentButton("✈️ Gestionar Aviones");
+        facturas = createContentButton("Ver Facturas");
+        setScaledIcon(facturas, "resources/invoice_icon.png");
+        gestionVuelos = createContentButton("🛬Gestionar Vuelos");
+        gestionAviones = createContentButton("Gestionar Aviones");
+        setScaledIcon(gestionAviones, "resources/plane_icon.png");
 
         gbc.gridx = 0;
         panelContenido.add(busquedaVuelos, gbc);
