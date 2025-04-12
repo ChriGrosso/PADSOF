@@ -7,6 +7,10 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.time.MonthDay;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import aerolineas.*;
 import aeropuertos.*;
 import aviones.*;
@@ -21,7 +25,6 @@ import vuelos.Periodicidad;
 import vuelos.Vuelo;
 import vuelos.VueloPasajeros;
 import vuelos.VueloMercancias;
-import elementos.Finger;
 
 
 public class DemoApp {
@@ -34,6 +37,16 @@ public class DemoApp {
         }
         //obtener la instancia del sistema
         app = SkyManager.getInstance();
+        
+        //actualizar las pistas de despegue cada 5 minutos
+        Runnable tareaActualizarCola = () -> {
+			for(Pista pista: app.getPistas().values())
+			    if (pista.isDespegue()) {
+			        pista.actualizarColaVuelos();
+			    }
+		};
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+		scheduler.scheduleAtFixedRate(tareaActualizarCola, 0, 5, TimeUnit.MINUTES);
         
         //iniciar sesión como el gestor del sistema (generado automáticamente al crear la app)
         app.logIn("01020304A", "password123");
@@ -114,9 +127,11 @@ public class DemoApp {
         
       //Verificar que los datos se mantienen correctamente al guardarlos y cargarlos
         app.guardarDatos();
+        scheduler.shutdown();
         SkyManager app2 = SkyManager.getInstance() ;
         System.out.println("\n\n Instancia 2:\n");
         System.out.println(app2);
+        scheduler.shutdown();
     }
 
 

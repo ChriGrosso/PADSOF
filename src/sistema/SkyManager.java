@@ -15,7 +15,6 @@ import java.time.MonthDay;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-
 import aerolineas.Aerolinea;
 import aeropuertos.Aeropuerto;
 import aeropuertos.Direccion;
@@ -609,6 +608,55 @@ public class SkyManager implements Serializable {
 	public Vuelo buscarVueloPorCodigo(String id) {
 		this.updateVuelos();
 		return this.vuelos.get(id);
+	}
+	
+	/**
+     * Busca un vuelo por sus aeropuertos de origen.
+     * @param origen Aeropuerto de origen del vuelo.
+     * @return Vuelo/s encontrado/s o null si no hay.
+     */
+	public ArrayList<Vuelo> buscarVuelosPorOrigen(Aeropuerto origen) {
+		this.updateVuelos();
+		ArrayList<Vuelo> vuelosOrigen = new ArrayList<Vuelo>();
+		for(Vuelo v: this.getVuelos().values()) {
+			if(v.getOrigen().equals(origen)) {
+				vuelosOrigen.add(v);
+			}
+		}
+		return vuelosOrigen;
+	}
+	
+	/**
+     * Busca un vuelo por sus aeropuertos de destino.
+     * @param destino Aeropuerto de destino del vuelo.
+     * @return Vuelo/s encontrado/s o null si no hay.
+     */
+	public ArrayList<Vuelo> buscarVuelosPorDestino(Aeropuerto destino) {
+		this.updateVuelos();
+		ArrayList<Vuelo> vuelosDest = new ArrayList<Vuelo>();
+		for(Vuelo v: this.getVuelos().values()) {
+			if(v.getDestino().equals(destino)) {
+				vuelosDest.add(v);
+			}
+		}
+		return vuelosDest;
+	}
+	
+	/**
+     * Busca un vuelo por sus aeropuertos de origen y destino.
+     * @param origen Aeropuerto de origen del vuelo.
+     * @param destino Aeropuerto de destino del vuelo.
+     * @return Vuelo/s encontrado/s o null si no hay.
+     */
+	public ArrayList<Vuelo> buscarVuelosPorOrigen(Aeropuerto origen, Aeropuerto destino) {
+		this.updateVuelos();
+		ArrayList<Vuelo> vuelosOD = new ArrayList<Vuelo>();
+		for(Vuelo v: this.getVuelos().values()) {
+			if(v.getOrigen().equals(origen) && v.getDestino().equals(destino)) {
+				vuelosOD.add(v);
+			}
+		}
+		return vuelosOD;
 	}
 	
 	/**

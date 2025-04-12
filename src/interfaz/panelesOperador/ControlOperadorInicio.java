@@ -15,10 +15,10 @@ public class ControlOperadorInicio implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Cerrar Sesión")) {     // si se ha pulsado "Cerrar Sesión"
+		if (e.getActionCommand().equals("🔓 Cerrar Sesión")) {     // si se ha pulsado "Cerrar Sesión"
 			this.cerrarSesion();
 		}
-		else if (e.getActionCommand().equals("Notificaciones")) {     // si se ha pulsado "Notificaciones"
+		else if (e.getActionCommand().equals("🔔 Notificaciones")) {     // si se ha pulsado "Notificaciones"
 			this.verNotificaciones();
 		}
 	}
