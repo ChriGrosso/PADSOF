@@ -3,6 +3,7 @@ package interfaz;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import sistema.SkyManager;
@@ -52,7 +53,11 @@ public class ControlLogin implements ActionListener{
 		// obtener el usuario por el nif
 		Usuario user = this.modelo.getUsuarioActual();
 		if(user.esOperador()) { Aplicacion.getInstance().showOpInicio(); }
-		else if(user.esControlador()) { Aplicacion.getInstance().showContInicio(); }
+		else if(user.esControlador()) { 
+			Aplicacion.getInstance().setExtendedState(JFrame.MAXIMIZED_BOTH);
+			Aplicacion.getInstance().showContInicio();
+			 // schermo intero
+			}
 		else if(user.esGestor()) { Aplicacion.getInstance().showGestorInicio(); }
 		Aplicacion.getInstance().getLogin().update();
 		return;

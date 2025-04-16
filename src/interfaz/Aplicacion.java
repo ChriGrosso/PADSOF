@@ -50,7 +50,7 @@ public class Aplicacion extends JFrame{
 		//vistas
 		panelLogin = new Login();
 		panelOpInicio = new OperadorInicio();
-		panelContInicio = new ControladorInicio();
+		panelContInicio = new ControladorInicio(null);
 		
 		//controladores
 		ControlLogin controlLogin = new ControlLogin();

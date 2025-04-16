@@ -50,6 +50,13 @@ public class Login extends JPanel{
         gbc.gridy = 2;
         gbc.gridwidth = 2; // Para que el botón esté centrado
         this.add(login, gbc);
+        
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            javax.swing.JRootPane rootPane = javax.swing.SwingUtilities.getRootPane(this);
+            if (rootPane != null) {
+                rootPane.setDefaultButton(login);
+            }
+        });
 	}
 	
 	// método para asignar un controlador al botón
