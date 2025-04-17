@@ -10,7 +10,13 @@ import interfaz.panelesControlador.ControlControladorInicio;
 import interfaz.panelesControlador.ControladorInicio;
 import interfaz.panelesGestor.ControlGestorInicio;
 import interfaz.panelesGestor.GestorInicio;
+import interfaz.panelesOperador.ControlNuevoAvion;
+import interfaz.panelesOperador.ControlNuevoTipoAvion;
+import interfaz.panelesOperador.ControlOperadorGestionAviones;
 import interfaz.panelesOperador.ControlOperadorInicio;
+import interfaz.panelesOperador.NuevoAvion;
+import interfaz.panelesOperador.NuevoTipoAvion;
+import interfaz.panelesOperador.OperadorGestionAviones;
 import interfaz.panelesOperador.OperadorInicio;
 
 public class Aplicacion extends JFrame{
@@ -23,6 +29,9 @@ public class Aplicacion extends JFrame{
 	private OperadorInicio panelOpInicio;
 	private ControladorInicio panelContInicio;
 	private GestorInicio panelGestorInicio;
+	private OperadorGestionAviones panelOpAviones;
+	private NuevoAvion panelNuevoAvion;
+	private NuevoTipoAvion panelNuevoTipoAvion;
 	
 	// Declaramos el panel con las cartas JPanel cartas; 
 	private JPanel cartas;
@@ -40,6 +49,8 @@ public class Aplicacion extends JFrame{
 	final static String GESTOR_GESTION_VUELOS   = "Gestor Vuelos";
 	
 	final static String OP_GESTION_AVIONES   = "Operador Aviones";
+	final static String OP_NUEVO_AVION   = "Nuevo Avion";
+	final static String OP_NUEVO_TIPO_AVION   = "Nuevo Tipo Avion";
 	final static String OP_GESTION_VUELOS   = "Operador Vuelos";
 	final static String OP_FACTURAS   = "Operador Facturas";
 	final static String OP_ESTADISTICAS   = "Operador Estadisticas";
@@ -55,18 +66,27 @@ public class Aplicacion extends JFrame{
 		panelOpInicio = new OperadorInicio();
 		panelContInicio = new ControladorInicio(null);
 		panelGestorInicio = new GestorInicio();
+		panelOpAviones = new OperadorGestionAviones();
+		panelNuevoAvion = new NuevoAvion();
+		panelNuevoTipoAvion = new NuevoTipoAvion();
 		
 		//controladores
 		ControlLogin controlLogin = new ControlLogin();
 		ControlOperadorInicio controlOpInicio = new ControlOperadorInicio();
 		ControlControladorInicio controlContInicio = new ControlControladorInicio();
 		ControlGestorInicio controlGestorInicio = new ControlGestorInicio();
+		ControlOperadorGestionAviones controlOpAviones = new ControlOperadorGestionAviones();
+		ControlNuevoAvion controlNuevoAvion = new ControlNuevoAvion();
+		ControlNuevoTipoAvion controlNuevoTipoAvion = new ControlNuevoTipoAvion();
 		
 		// configurar las vistas con los controladores
 		panelLogin.setControlador(controlLogin);
 		panelOpInicio.setControlador(controlOpInicio);
 		panelContInicio.setControlador(controlContInicio);
 		panelGestorInicio.setControlador(controlGestorInicio);
+		panelOpAviones.setControlador(controlOpAviones);
+		panelNuevoAvion.setControlador(controlNuevoAvion);
+		panelNuevoTipoAvion.setControlador(controlNuevoTipoAvion);
 	
 		// Creamos el panel que contiene las cartas 
 		cartas = new JPanel(new CardLayout()); 
@@ -74,6 +94,9 @@ public class Aplicacion extends JFrame{
 		cartas.add(panelOpInicio,OP_INICIO);
 		cartas.add(panelContInicio,CONT_INICIO);
 		cartas.add(panelGestorInicio,GESTOR_INICIO);
+		cartas.add(panelOpAviones, OP_GESTION_AVIONES);
+		cartas.add(panelNuevoAvion, OP_NUEVO_AVION);
+		cartas.add(panelNuevoTipoAvion, OP_NUEVO_TIPO_AVION);
 		
 		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
@@ -112,12 +135,36 @@ public class Aplicacion extends JFrame{
 		return this.panelOpInicio;
 	}
 	
+	public OperadorGestionAviones getOpAviones() {
+		return this.panelOpAviones;
+	}
+	
+	public NuevoAvion getNuevoAvion() {
+		return this.panelNuevoAvion;
+	}
+	
+	public NuevoTipoAvion getNuevoTipoAvion() {
+		return this.panelNuevoTipoAvion;
+	}
+	
 	public ControladorInicio getContInicio() {
 		return this.panelContInicio;
 	}
 	
 	public void showOpInicio() {
 		((CardLayout)cartas.getLayout()).show(cartas, OP_INICIO);
+	}
+	
+	public void showOpAviones() {
+		((CardLayout)cartas.getLayout()).show(cartas, OP_GESTION_AVIONES);
+	}
+	
+	public void showNuevoAvion() {
+		((CardLayout)cartas.getLayout()).show(cartas, OP_NUEVO_AVION);
+	}
+	
+	public void showNuevoTipoAvion() {
+		((CardLayout)cartas.getLayout()).show(cartas, OP_NUEVO_TIPO_AVION);
 	}
 	
 	public void showContInicio() {

@@ -2,7 +2,6 @@ package interfaz.panelesOperador;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -13,23 +12,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import interfaz.elementosComunes.MenuLateral;
 import sistema.SkyManager;
 
 
 public class OperadorInicio extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    private JButton notificaciones;
-    private JButton cerrarSesion;
     private JButton busquedaVuelos;
     private JButton estadisticas;
     private JButton facturas;
@@ -41,24 +36,8 @@ public class OperadorInicio extends JPanel {
         setLayout(new BorderLayout());
 
         // === MENU LATERAL ===
-        JPanel panelMenu = new JPanel();
-        panelMenu.setLayout(new BoxLayout(panelMenu, BoxLayout.Y_AXIS));
-        panelMenu.setBackground(new Color(45, 45, 45));
-
-        notificaciones = createMenuButton("🔔 Notificaciones");
-        cerrarSesion = createMenuButton("🔓 Cerrar Sesión");
-
-        JButton iconoAvion = new JButton(new ImageIcon("resources/plane_icon.png")); // Asegúrate de tener este recurso
-        iconoAvion.setEnabled(false);
-        iconoAvion.setBorderPainted(false);
-        iconoAvion.setContentAreaFilled(false);
-
-        panelMenu.add(Box.createVerticalStrut(20));
-        panelMenu.add(iconoAvion);
-        panelMenu.add(Box.createVerticalStrut(30));
-        panelMenu.add(notificaciones);
-        panelMenu.add(Box.createVerticalStrut(20));
-        panelMenu.add(cerrarSesion);
+        MenuLateral menu = new MenuLateral("resources/logo_icon.png");
+        add(menu, BorderLayout.WEST);
 
         // === PANEL CENTRAL ===
         JPanel panelContenido = new JPanel();
@@ -80,13 +59,15 @@ public class OperadorInicio extends JPanel {
         gbc.gridwidth = 1;
         gbc.gridy++;
 
+        // Componentes
         busquedaVuelos = createContentButton("Buscar Vuelos");
         setScaledIcon(busquedaVuelos, "resources/searchFlights_icon.png");
         estadisticas = createContentButton("Estadísticas");
         setScaledIcon(estadisticas, "resources/statistics_icon.png");
         facturas = createContentButton("Ver Facturas");
         setScaledIcon(facturas, "resources/invoice_icon.png");
-        gestionVuelos = createContentButton("🛬Gestionar Vuelos");
+        gestionVuelos = createContentButton("Gestionar Vuelos");
+        setScaledIcon(gestionVuelos, "resources/flight_icon.png");
         gestionAviones = createContentButton("Gestionar Aviones");
         setScaledIcon(gestionAviones, "resources/plane_icon.png");
 
@@ -109,19 +90,7 @@ public class OperadorInicio extends JPanel {
         panelContenido.add(gestionAviones, gbc);
 
         // === ASSEMBLA ===
-        add(panelMenu, BorderLayout.WEST);
         add(panelContenido, BorderLayout.CENTER);
-    }
-
-    private JButton createMenuButton(String text) {
-        JButton btn = new JButton(text);
-        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btn.setMaximumSize(new Dimension(180, 40));
-        btn.setFocusPainted(false);
-        btn.setBackground(new Color(66, 66, 66));
-        btn.setForeground(Color.WHITE);
-        btn.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        return btn;
     }
 
     private JButton createContentButton(String text) {
@@ -175,8 +144,6 @@ public class OperadorInicio extends JPanel {
     
     // método para asignar un controlador a los botones
  	public void setControlador(ActionListener c) {  
- 		notificaciones.addActionListener(c);
- 		cerrarSesion.addActionListener(c);
  		busquedaVuelos.addActionListener(c);
  		estadisticas.addActionListener(c);
  		facturas.addActionListener(c);

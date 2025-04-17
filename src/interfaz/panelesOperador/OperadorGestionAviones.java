@@ -1,47 +1,44 @@
 package interfaz.panelesOperador;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import interfaz.elementosComunes.MenuLateral;
+
 public class OperadorGestionAviones extends JPanel{
 	private static final long serialVersionUID = 1L;
-	private JButton notificaciones;
-	private JButton cerrarSesion;
 	private JButton nuevoAvion;
 	private JButton nuevoTipoAv;
 	
 	public OperadorGestionAviones() {
-		// Usar GridBagLayout para centrar componentes
-        this.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+		 setLayout(new BorderLayout());
+
+	        // === MENU LATERAL ===
+		 MenuLateral menu = new MenuLateral("resources/logo_icon.png");
+	     add(menu, BorderLayout.WEST);
         
-        // Crear componentes
-        notificaciones = new JButton("Notificaciones");
-        cerrarSesion = new JButton("Cerrar Sesión");
         nuevoAvion = new JButton("Nuevo Avión");
         nuevoTipoAv = new JButton("Nuevo Tipo Avión");
         
-        // === Columna izquierda: Notificaciones y Cerrar Sesión ===
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        this.add(notificaciones, gbc);
-
-        gbc.gridy++;
-        this.add(cerrarSesion, gbc);
 	}
+	
 	
 	
 	// método para asignar un controlador a los botones
 	public void setControlador(ActionListener c) {  
-		notificaciones.addActionListener(c);
-		cerrarSesion.addActionListener(c);
 		nuevoAvion.addActionListener(c);
 		nuevoTipoAv.addActionListener(c);;
 	}

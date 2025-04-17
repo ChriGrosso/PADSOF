@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import interfaz.Aplicacion;
 import sistema.SkyManager;
 
+
 public class ControlOperadorInicio implements ActionListener{
 	private SkyManager modelo;
 	
@@ -21,9 +22,18 @@ public class ControlOperadorInicio implements ActionListener{
 		else if (e.getActionCommand().equals("🔔 Notificaciones")) {     // si se ha pulsado "Notificaciones"
 			this.verNotificaciones();
 		}
+		else if (e.getActionCommand().equals("Gestionar Aviones")) {     // si se ha pulsado "Notificaciones"
+			this.gestionarAviones();
+		}
 	}
 
 	
+	private void gestionarAviones() {
+		Aplicacion.getInstance().getOpInicio().setVisible(false);
+		Aplicacion.getInstance().showOpAviones();
+		
+	}
+
 	private void cerrarSesion() {
 		modelo.guardarDatos();
 		Aplicacion.getInstance().getOpInicio().setVisible(false);

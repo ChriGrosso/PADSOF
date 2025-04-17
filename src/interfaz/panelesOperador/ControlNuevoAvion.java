@@ -3,13 +3,13 @@ package interfaz.panelesOperador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import interfaz.Aplicacion;
 import sistema.SkyManager;
+import interfaz.Aplicacion;
 
-public class ControlOperadorGestionAviones implements ActionListener{
+public class ControlNuevoAvion implements ActionListener{
 	private SkyManager modelo;
 	
-	public ControlOperadorGestionAviones() {
+	public ControlNuevoAvion() {
 		this.modelo = SkyManager.getInstance();
 	}
 
@@ -21,12 +21,7 @@ public class ControlOperadorGestionAviones implements ActionListener{
 		else if (e.getActionCommand().equals("Notificaciones")) {     // si se ha pulsado "Notificaciones"
 			this.verNotificaciones();
 		}
-		else if (e.getActionCommand().equals("Nuevo Avión")) {     // si se ha pulsado "Notificaciones"
-			this.nuevoAvion();
-		}
-		else if (e.getActionCommand().equals("Nuevo Tipo Avión")) {     // si se ha pulsado "Notificaciones"
-			this.nuevoTipoAvion();
-		}
+		
 	}
 
 	
@@ -40,15 +35,5 @@ public class ControlOperadorGestionAviones implements ActionListener{
 		modelo.guardarDatos();
 		Aplicacion.getInstance().getOpAviones().setVisible(false);
 		Aplicacion.getInstance().showNotificaciones();
-	}
-	
-	private void nuevoAvion() {
-		Aplicacion.getInstance().getOpAviones().setVisible(false);
-		//Aplicacion.getInstance().showNuevoAvion();
-	}
-	
-	private void nuevoTipoAvion() {
-		Aplicacion.getInstance().getOpAviones().setVisible(false);
-		//Aplicacion.getInstance().showNuevoTipoAvion();
 	}
 }
