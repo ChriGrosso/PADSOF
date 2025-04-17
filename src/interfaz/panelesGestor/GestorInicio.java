@@ -133,8 +133,8 @@ public class GestorInicio extends JPanel{
                 int iconWidth = Math.min(192, btnWidth / 2);
                 int iconHeight = Math.min(192, btnHeight / 2);
                 if (imagePath.equals("resources/notification_icon.png")) {
-                	iconWidth = Math.min(btnWidth, btnWidth / 4);
-                    iconHeight = Math.min(iconHeight, btnHeight / 4);
+                	iconWidth = Math.min(btnWidth, btnWidth / 3);
+                    iconHeight = Math.min(iconHeight, btnHeight / 3);
                 }
                 if (iconWidth != iconHeight) {
                 	iconHeight = Math.min(iconHeight, btnWidth);
