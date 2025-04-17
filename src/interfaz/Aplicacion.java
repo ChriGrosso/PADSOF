@@ -108,7 +108,7 @@ public class Aplicacion extends JFrame{
 		
 		// configurar tamaño de la ventana principal
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(500, 400);	
+		this.setSize(600, 480);	
 		this.setLocationRelativeTo(null);
 	}
 	

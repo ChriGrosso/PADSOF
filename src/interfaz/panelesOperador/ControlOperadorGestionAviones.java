@@ -44,11 +44,11 @@ public class ControlOperadorGestionAviones implements ActionListener{
 	
 	private void nuevoAvion() {
 		Aplicacion.getInstance().getOpAviones().setVisible(false);
-		//Aplicacion.getInstance().showNuevoAvion();
+		Aplicacion.getInstance().showNuevoAvion();
 	}
 	
 	private void nuevoTipoAvion() {
 		Aplicacion.getInstance().getOpAviones().setVisible(false);
-		//Aplicacion.getInstance().showNuevoTipoAvion();
+		Aplicacion.getInstance().showNuevoTipoAvion();
 	}
 }

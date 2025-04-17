@@ -115,8 +115,8 @@ class AerolineaTest {
 
 	@Test
 	void testGetTiposAvion() {
-		assertTrue(a.getTiposAvion().contains(m));
-		assertTrue(a.getTiposAvion().contains(p));
+		assertTrue(a.getTiposAvion().containsValue(m));
+		assertTrue(a.getTiposAvion().containsValue(p));
 		assertEquals(2, a.getTiposAvion().size());
 	}
 
@@ -135,7 +135,7 @@ class AerolineaTest {
 	@Test
 	void testAddTipoAvion() {
 		a.addTipoAvion(m2);
-		assertTrue(a.getTiposAvion().contains(m2));
+		assertTrue(a.getTiposAvion().containsValue(m2));
 	}
 
 	@Test

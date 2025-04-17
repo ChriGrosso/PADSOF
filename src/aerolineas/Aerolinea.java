@@ -32,7 +32,7 @@ public class Aerolinea implements Serializable{
 	private String nombre;
 	private ArrayList<Vuelo> vuelos;
 	private HashMap<String, Avion> aviones;
-	private ArrayList<TipoAvion> tiposAviones;
+	private HashMap<String, TipoAvion> tiposAviones;
 	private HashMap<ClaveVueloElemento, Uso> historialUsos;
 	private EstadisticasVuelos estadisticasVuelos;
 	private ArrayList<Operador> operadores;
@@ -48,7 +48,7 @@ public class Aerolinea implements Serializable{
 		this.nombre = nombre;
 		this.vuelos = new ArrayList<Vuelo>();
 		this.aviones = new HashMap<String, Avion>();
-		this.tiposAviones = new ArrayList<TipoAvion>();
+		this.tiposAviones = new HashMap<String, TipoAvion>();
 		this.historialUsos = new HashMap<ClaveVueloElemento, Uso>();
 		this.estadisticasVuelos = new EstadisticasVuelos(this);
 		this.operadores = new ArrayList<Operador>();
@@ -113,7 +113,7 @@ public class Aerolinea implements Serializable{
      *
      * @return Lista de tipos de aviones de la aerolínea.
      */
-	public ArrayList<TipoAvion> getTiposAvion() {
+	public HashMap<String, TipoAvion> getTiposAvion() {
 		return this.tiposAviones;
 	}
 	
@@ -167,7 +167,7 @@ public class Aerolinea implements Serializable{
      * @return True si se ha podido hacer la operación correctamente, False sino.
      */
 	public boolean addAvion(Avion a) {
-		if(this.aviones.containsKey(a.getMatricula()) || !this.tiposAviones.contains(a.getTipoAvion())) {
+		if(this.aviones.containsKey(a.getMatricula()) || !this.tiposAviones.containsValue(a.getTipoAvion())) {
 			return false;
 		}
 		this.aviones.put(a.getMatricula(), a);
@@ -180,10 +180,11 @@ public class Aerolinea implements Serializable{
      * @return True si se ha podido hacer la operación correctamente, False sino.
      */
 	public boolean addTipoAvion(TipoAvion ta) {
-		if(this.tiposAviones.contains(ta)) {
+		if(this.tiposAviones.containsValue(ta)) {
 			return false;
 		}
-		this.tiposAviones.add(ta);
+		String clave = ta.getMarca() + "_" + ta.getModelo();
+		this.tiposAviones.put(clave, ta);
 		return true;
 	}
 	

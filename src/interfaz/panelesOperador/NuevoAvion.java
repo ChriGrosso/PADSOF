@@ -4,12 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -26,8 +30,6 @@ import javax.swing.SpinnerDateModel;
 
 public class NuevoAvion extends JPanel{
 	private static final long serialVersionUID = 1L;
-	private JButton notificaciones;
-	private JButton cerrarSesion;
 	private JButton registrarAvion;
 	private JTextField cmpMatricula;
 	private JTextField cmpMarca;
@@ -37,40 +39,34 @@ public class NuevoAvion extends JPanel{
 	JSpinner ultimaRev = new JSpinner(model);
 	private JRadioButton mercancias;
 	private JRadioButton pasajeros;
-	private JTextField capacidad;
 	private JRadioButton mercPeligrosas;
 	private JRadioButton mercNoPeligrosas;
+	ButtonGroup tipoAvion, tipoMerc;
+	private JButton botonVolver;
 	
 	public NuevoAvion() {
 		setLayout(new BorderLayout());
+		setBackground(Color.WHITE);
+		
+		// Crear el botón para ir al panel anterior
+        botonVolver = new JButton("Volver");
+        botonVolver.setPreferredSize(new Dimension(100, 40)); // Tamaño inicial del botón
+        botonVolver.setFocusPainted(false);
 
-        // === MENU LATERAL ===
-        JPanel panelMenu = new JPanel();
-        panelMenu.setLayout(new BoxLayout(panelMenu, BoxLayout.Y_AXIS));
-        panelMenu.setBackground(new Color(45, 45, 45));
+        // Contenedor en la esquina superior derecha
+        JPanel panelSuperiorDerecho = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelSuperiorDerecho.setOpaque(false); // Fondo transparente
+        panelSuperiorDerecho.add(botonVolver);
 
-        notificaciones = createMenuButton("🔔 Notificaciones");
-        cerrarSesion = createMenuButton("🔓 Cerrar Sesión");
-
-        JButton iconoAvion = new JButton(new ImageIcon("resources/plane_icon.png")); // Asegúrate de tener este recurso
-        iconoAvion.setEnabled(false);
-        iconoAvion.setBorderPainted(false);
-        iconoAvion.setContentAreaFilled(false);
-
-        panelMenu.add(Box.createVerticalStrut(20));
-        panelMenu.add(iconoAvion);
-        panelMenu.add(Box.createVerticalStrut(30));
-        panelMenu.add(notificaciones);
-        panelMenu.add(Box.createVerticalStrut(20));
-        panelMenu.add(cerrarSesion);
-        
-        // === PANEL CENTRAL (FORMULARIO) ===
-        JPanel panelContenido = new JPanel();
+        // Añadir el contenedor al panel principal
+        add(panelSuperiorDerecho, BorderLayout.NORTH);
+		
+		JPanel panelContenido = new JPanel();
         panelContenido.setLayout(new GridBagLayout());
         panelContenido.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 0;
         gbc.gridy = 0;
         
@@ -78,7 +74,8 @@ public class NuevoAvion extends JPanel{
         JLabel etiquetaMatricula = new JLabel("Matrícula:");
         JLabel etiquetaMarca = new JLabel("Marca del Avión:");
         JLabel etiquetaModelo = new JLabel("Modelo del Avión:");
-        JLabel etiquetaCap = new JLabel("Capacidad:");
+        JLabel etiquetaCompra = new JLabel("Fecha de compra:");
+        JLabel etiquetaRev = new JLabel("Fecha de última revisión:");
         cmpMatricula = new JTextField(15);
         cmpMarca = new JTextField(15);
         cmpModelo = new JTextField(15);
@@ -87,17 +84,15 @@ public class NuevoAvion extends JPanel{
         compra.setEditor(editor);
         JSpinner.DateEditor editor2 = new JSpinner.DateEditor(ultimaRev, "dd/MM/yyyy");
         ultimaRev.setEditor(editor2);
-        capacidad = new JTextField(15);
         mercancias = new JRadioButton("Mercancías");
         pasajeros = new JRadioButton("Pasajeros");
-        capacidad = new JTextField(15);
         mercPeligrosas = new JRadioButton("Puede llevar mercancías peligrosas");
         mercNoPeligrosas = new JRadioButton("No puede llevar mercancías peligrosas");
         // Fusionar ambas opciones de tipo de avión y de tipo de mercancias
-        ButtonGroup tipoAvion = new ButtonGroup();
+        tipoAvion = new ButtonGroup();
         tipoAvion.add(mercancias);
         tipoAvion.add(pasajeros);
-        ButtonGroup tipoMerc = new ButtonGroup();
+        tipoMerc = new ButtonGroup();
         tipoMerc.add(mercPeligrosas);
         tipoMerc.add(mercNoPeligrosas);
         registrarAvion = createContentButton("Registrar Avión");
@@ -124,22 +119,42 @@ public class NuevoAvion extends JPanel{
         
         gbc.gridx = 0;
         gbc.gridy++;
+        panelContenido.add(etiquetaCompra, gbc);
+        
+        gbc.gridx++;
+        panelContenido.add(compra, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelContenido.add(etiquetaRev, gbc);
+        
+        gbc.gridx++;
+        panelContenido.add(ultimaRev, gbc);
+        
+        gbc.gridx = -1;
+        gbc.gridy++;
         panelContenido.add(mercancias, gbc);
         
         gbc.gridx+=2;
         panelContenido.add(pasajeros, gbc);
+        
+        gbc.gridx = -1;
+        gbc.gridy++;
+        panelContenido.add(mercPeligrosas, gbc);
+        
+        gbc.gridx+=2;
+        panelContenido.add(mercNoPeligrosas, gbc);
+        
+        mercPeligrosas.setVisible(false);
+        mercNoPeligrosas.setVisible(false);
+        
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panelContenido.add(registrarAvion, gbc);
+        
+        add(panelContenido, BorderLayout.CENTER);
 	}
 	
-	private JButton createMenuButton(String text) {
-        JButton btn = new JButton(text);
-        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btn.setMaximumSize(new Dimension(180, 40));
-        btn.setFocusPainted(false);
-        btn.setBackground(new Color(66, 66, 66));
-        btn.setForeground(Color.WHITE);
-        btn.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        return btn;
-    }
 	
 	private JButton createContentButton(String text) {
         JButton btn = new JButton(text);
@@ -152,14 +167,84 @@ public class NuevoAvion extends JPanel{
 	
 	// método para asignar un controlador a los botones
 	public void setControlador(ActionListener c) {  
-	 	notificaciones.addActionListener(c);
-	 	cerrarSesion.addActionListener(c);
 	 	registrarAvion.addActionListener(c);
-	 	cmpMatricula.addActionListener(c);
-	 	cmpMarca.addActionListener(c);
-	 	cmpModelo.addActionListener(c);
 	 	mercancias.addActionListener(c);
 	 	pasajeros.addActionListener(c);
+	 	botonVolver.addActionListener(c);
 	 }
 	 	
+	// Obtener el texto del campo matrícula
+    public String getMatricula() {
+        return cmpMatricula.getText().trim();
+    }
+
+    // Obtener el texto del campo marca
+    public String getMarca() {
+        return cmpMarca.getText().trim();
+    }
+
+    // Obtener el texto del campo modelo
+    public String getModelo() {
+        return cmpModelo.getText().trim();
+    }
+
+    // Obtener la fecha seleccionada en el spinner "compra"
+    public LocalDate getFechaCompra() {
+    	Date date = (Date) compra.getValue(); // Obtener el valor como Date
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Convertir a LocalDate
+    }
+
+    // Obtener la fecha seleccionada en el spinner "última revisión"
+    public LocalDate getFechaUltimaRevision() {
+    	Date date = (Date) ultimaRev.getValue(); // Obtener el valor como Date
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Convertir a LocalDate
+    }
+
+    // Verificar si el avión es de tipo "Mercancías"
+    public boolean esMercancias() {
+        return mercancias.isSelected();
+    }
+
+    // Verificar si el avión es de tipo "Pasajeros"
+    public boolean esPasajeros() {
+        return pasajeros.isSelected();
+    }
+
+    // Verificar si el avión puede transportar mercancías peligrosas
+    public boolean esMercPeligrosas() {
+        return mercPeligrosas.isSelected();
+    }
+    
+    public JRadioButton getMercPeligrosas() {
+    	return mercPeligrosas;
+    }
+
+    // Verificar si el avión no puede transportar mercancías peligrosas
+    public boolean esMercNoPeligrosas() {
+        return mercNoPeligrosas.isSelected();
+    }
+    
+    public JRadioButton getMercNoPeligrosas() {
+    	return mercNoPeligrosas;
+    }
+
+
+	public void update() {
+		// Reiniciar campos de texto
+	    cmpMatricula.setText("");
+	    cmpMarca.setText("");
+	    cmpModelo.setText("");
+
+	    // Reiniciar spinners a las fechas actuales o iniciales
+	    compra.setValue(new Date()); // Fecha actual
+	    ultimaRev.setValue(new Date()); // Fecha actual
+
+	    // Desmarcar todos los radio buttons
+	    tipoAvion.clearSelection();
+	    tipoMerc.clearSelection();
+
+	    // Ocultar los radio buttons relacionados con mercancías peligrosas (si están visibles por algún evento)
+	    mercPeligrosas.setVisible(false);
+	    mercNoPeligrosas.setVisible(false);
+	}
 }

@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 
 import interfaz.elementosComunes.MenuLateral;
 import sistema.SkyManager;
+import usuarios.Usuario;
 
 
 public class OperadorInicio extends JPanel {
@@ -126,21 +127,13 @@ public class OperadorInicio extends JPanel {
         });
     }
     
-    public void actualizarBienvenida() {
-        var usuario = SkyManager.getInstance().getUsuarioActual();
-        if (usuario != null) {
-            bienvenida.setText("Bienvenid@ " + usuario.getNombre());
-        } else {
-            bienvenida.setText("Bienvenid@");
-        }
-    }
     
-    @Override
-    public void addNotify() {
-        super.addNotify();
-        actualizarBienvenida();
+    public void actualizarPantalla() {
+    	Usuario usuarioActual = SkyManager.getInstance().getUsuarioActual();
+    	if(usuarioActual != null) {
+    		bienvenida.setText("Bienvenid@ " + usuarioActual.getNombre());
+    	}
     }
-    
     
     // método para asignar un controlador a los botones
  	public void setControlador(ActionListener c) {  

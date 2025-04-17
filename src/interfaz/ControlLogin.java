@@ -52,7 +52,10 @@ public class ControlLogin implements ActionListener{
 		Aplicacion.getInstance().getLogin().setVisible(false);		
 		// obtener el usuario por el nif
 		Usuario user = this.modelo.getUsuarioActual();
-		if(user.esOperador()) { Aplicacion.getInstance().showOpInicio(); }
+		if(user.esOperador()) { 
+			Aplicacion.getInstance().getOpInicio().actualizarPantalla();
+			Aplicacion.getInstance().showOpInicio(); 
+		}
 		else if(user.esControlador()) { 
 			Aplicacion.getInstance().setExtendedState(JFrame.MAXIMIZED_BOTH);
 			Aplicacion.getInstance().showContInicio();

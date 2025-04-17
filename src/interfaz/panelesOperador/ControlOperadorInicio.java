@@ -29,6 +29,7 @@ public class ControlOperadorInicio implements ActionListener{
 
 	
 	private void gestionarAviones() {
+		Aplicacion.getInstance().getOpAviones().actualizarPantalla();
 		Aplicacion.getInstance().getOpInicio().setVisible(false);
 		Aplicacion.getInstance().showOpAviones();
 		
