@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 
 import interfaz.panelesControlador.ControlControladorInicio;
 import interfaz.panelesControlador.ControladorInicio;
+import interfaz.panelesGestor.ControlGestorInicio;
+import interfaz.panelesGestor.GestorInicio;
 import interfaz.panelesOperador.ControlOperadorInicio;
 import interfaz.panelesOperador.OperadorInicio;
 
@@ -20,6 +22,7 @@ public class Aplicacion extends JFrame{
 	private Login panelLogin;
 	private OperadorInicio panelOpInicio;
 	private ControladorInicio panelContInicio;
+	private GestorInicio panelGestorInicio;
 	
 	// Declaramos el panel con las cartas JPanel cartas; 
 	private JPanel cartas;
@@ -51,22 +54,26 @@ public class Aplicacion extends JFrame{
 		panelLogin = new Login();
 		panelOpInicio = new OperadorInicio();
 		panelContInicio = new ControladorInicio(null);
+		panelGestorInicio = new GestorInicio();
 		
 		//controladores
 		ControlLogin controlLogin = new ControlLogin();
 		ControlOperadorInicio controlOpInicio = new ControlOperadorInicio();
 		ControlControladorInicio controlContInicio = new ControlControladorInicio();
+		ControlGestorInicio controlGestorInicio = new ControlGestorInicio();
 		
 		// configurar las vistas con los controladores
 		panelLogin.setControlador(controlLogin);
 		panelOpInicio.setControlador(controlOpInicio);
 		panelContInicio.setControlador(controlContInicio);
+		panelGestorInicio.setControlador(controlGestorInicio);
 	
 		// Creamos el panel que contiene las cartas 
 		cartas = new JPanel(new CardLayout()); 
 		cartas.add(panelLogin,LOGIN);
 		cartas.add(panelOpInicio,OP_INICIO);
 		cartas.add(panelContInicio,CONT_INICIO);
+		cartas.add(panelGestorInicio,GESTOR_INICIO);
 		
 		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
