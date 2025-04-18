@@ -15,26 +15,38 @@ public class ControlGestorInicio implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String comando = e.getActionCommand().toLowerCase();
+        String comando = e.getActionCommand();
 
         switch (comando) {
-            case "cerrar sesión":
-            case "logout":
+            case "CERRAR_SESION":
                 cerrarSesion();
                 break;
 
-            case "notificaciones":
-            case "ver notificaciones":
+            case "NOTIFICACIONES":
                 verNotificaciones();
                 break;
 
-
-            case "buscar vuelos":
-                System.out.println("🔍 Navegar a búsqueda vuelos...");
+            case "BUSQUEDA_VUELOS":
+                System.out.println("Navegar a búsqueda vuelos...");
+                break;
+            case "GESTION_VUELOS":
+                System.out.println("Navegar a gestión vuelos...");
+                break;    
+            case "GESTION_AEROPUERTO":
+                System.out.println("Navegar a gestión aeropuerto...");
+                break;  
+            case "GESTION_FACTURAS":
+                System.out.println("Navegar a gestión facturas...");
+                break;
+            case "GESTION_USUARIOS":
+                verUsuarios();
+                break;
+            case "ESTADISTICAS":
+                System.out.println("Navegar a estadísticas...");
                 break;
 
             default:
-                System.out.println("⚠ Acción no reconocida: " + comando);
+                System.out.println("Comando desconocido:  " + comando);
         }
     }
 
@@ -46,5 +58,9 @@ public class ControlGestorInicio implements ActionListener {
     private void verNotificaciones() {
         modelo.guardarDatos();
         Aplicacion.getInstance().showNotificaciones();
+    }
+    
+    private void verUsuarios() {
+        Aplicacion.getInstance().showGestorGestionUsuarios();
     }
 }

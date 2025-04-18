@@ -8,7 +8,9 @@ import javax.swing.JPanel;
 
 import interfaz.panelesControlador.ControlControladorInicio;
 import interfaz.panelesControlador.ControladorInicio;
+import interfaz.panelesGestor.ControlGestorGestionUsuarios;
 import interfaz.panelesGestor.ControlGestorInicio;
+import interfaz.panelesGestor.GestorGestionUsuarios;
 import interfaz.panelesGestor.GestorInicio;
 import interfaz.panelesOperador.ControlNuevoAvion;
 import interfaz.panelesOperador.ControlNuevoTipoAvion;
@@ -32,6 +34,7 @@ public class Aplicacion extends JFrame{
 	private OperadorGestionAviones panelOpAviones;
 	private NuevoAvion panelNuevoAvion;
 	private NuevoTipoAvion panelNuevoTipoAvion;
+	private GestorGestionUsuarios panelGestorGestUsers;
 	
 	// Declaramos el panel con las cartas JPanel cartas; 
 	private JPanel cartas;
@@ -69,6 +72,7 @@ public class Aplicacion extends JFrame{
 		panelOpAviones = new OperadorGestionAviones();
 		panelNuevoAvion = new NuevoAvion();
 		panelNuevoTipoAvion = new NuevoTipoAvion();
+		panelGestorGestUsers = new GestorGestionUsuarios();
 		
 		//controladores
 		ControlLogin controlLogin = new ControlLogin();
@@ -78,6 +82,7 @@ public class Aplicacion extends JFrame{
 		ControlOperadorGestionAviones controlOpAviones = new ControlOperadorGestionAviones();
 		ControlNuevoAvion controlNuevoAvion = new ControlNuevoAvion();
 		ControlNuevoTipoAvion controlNuevoTipoAvion = new ControlNuevoTipoAvion();
+		ControlGestorGestionUsuarios controlGestorGestUsers = new ControlGestorGestionUsuarios();
 		
 		// configurar las vistas con los controladores
 		panelLogin.setControlador(controlLogin);
@@ -87,6 +92,7 @@ public class Aplicacion extends JFrame{
 		panelOpAviones.setControlador(controlOpAviones);
 		panelNuevoAvion.setControlador(controlNuevoAvion);
 		panelNuevoTipoAvion.setControlador(controlNuevoTipoAvion);
+		panelGestorGestUsers.setControlador(controlGestorGestUsers);
 	
 		// Creamos el panel que contiene las cartas 
 		cartas = new JPanel(new CardLayout()); 
@@ -97,6 +103,7 @@ public class Aplicacion extends JFrame{
 		cartas.add(panelOpAviones, OP_GESTION_AVIONES);
 		cartas.add(panelNuevoAvion, OP_NUEVO_AVION);
 		cartas.add(panelNuevoTipoAvion, OP_NUEVO_TIPO_AVION);
+		cartas.add(panelGestorGestUsers, GESTOR_GESTION_USUARIOS);
 		
 		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
@@ -151,6 +158,14 @@ public class Aplicacion extends JFrame{
 		return this.panelContInicio;
 	}
 	
+	public GestorInicio getGestorInicio() {
+		return this.panelGestorInicio;
+	}
+	
+	public GestorGestionUsuarios getGestorGestionUsuarios() {
+		return this.panelGestorGestUsers;
+	}
+	
 	public void showOpInicio() {
 		((CardLayout)cartas.getLayout()).show(cartas, OP_INICIO);
 	}
@@ -177,6 +192,10 @@ public class Aplicacion extends JFrame{
 	
 	public void showNotificaciones() {
 		((CardLayout)cartas.getLayout()).show(cartas, VER_NOTIFICACIONES);
+	}
+	
+	public void showGestorGestionUsuarios() {
+		((CardLayout)cartas.getLayout()).show(cartas, GESTOR_GESTION_USUARIOS);
 	}
 }
 

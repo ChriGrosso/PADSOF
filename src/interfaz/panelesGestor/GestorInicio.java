@@ -28,9 +28,7 @@ public class GestorInicio extends JPanel{
 	private JButton estadisticas;
 	
 	public GestorInicio() {
-		// Usar GridBagLayout para centrar componentes
 		setLayout(new BorderLayout());
-		
 		
 		// Panel lateral izquierdo
         JPanel panelLateral = new JPanel();
@@ -49,8 +47,8 @@ public class GestorInicio extends JPanel{
         cerrarSesion = new JButton("<html><center>Cerrar<br>Sesión</center></html>");
         formatoBotones(cerrarSesion);
         cerrarSesion.setPreferredSize(new Dimension(40, 130));
-        JButton btnAvion = new JButton("Sky Manager");
-        setScaledIcon(btnAvion, "resources/plane_icon.png");
+        JButton btnAvion = new JButton();
+        setScaledIcon(btnAvion, "resources/iconoSkyManagerInicio.png");
         btnAvion.setBackground(Color.RED);
         btnAvion.setForeground(Color.BLACK);
         btnAvion.setPreferredSize(new Dimension(100, 130));
@@ -109,7 +107,16 @@ public class GestorInicio extends JPanel{
 	}
 
 	// método para asignar un controlador a los botones
-	public void setControlador(ActionListener c) {  
+	public void setControlador(ActionListener c) {
+		notificaciones.setActionCommand("NOTIFICACIONES");
+		cerrarSesion.setActionCommand("CERRAR_SESION");
+		busquedaVuelos.setActionCommand("BUSQUEDA_VUELOS");
+		gestionVuelos.setActionCommand("GESTION_VUELOS");
+		gestionAeropuerto.setActionCommand("GESTION_AEROPUERTO");
+		gestionFacturas.setActionCommand("GESTION_FACTURAS");
+		gestionUsuarios.setActionCommand("GESTION_USUARIOS");
+		estadisticas.setActionCommand("ESTADISTICAS");
+		
 		notificaciones.addActionListener(c);
 		cerrarSesion.addActionListener(c);
 		busquedaVuelos.addActionListener(c);
@@ -136,10 +143,15 @@ public class GestorInicio extends JPanel{
                 	iconWidth = Math.min(btnWidth, btnWidth / 3);
                     iconHeight = Math.min(iconHeight, btnHeight / 3);
                 }
-                if (iconWidth != iconHeight) {
+                if ((iconWidth != iconHeight) && !imagePath.equals("resources/iconoSkyManagerInicio.png")) {
                 	iconHeight = Math.min(iconHeight, btnWidth);
                 	iconWidth = Math.min(iconHeight, btnWidth);
                 }
+                if (imagePath.equals("resources/iconoSkyManagerInicio.png")) {
+                	iconWidth = btnWidth;
+                    iconHeight = btnHeight;
+                }
+                
 
                 // Escalar manteniendo proporciones
                 Image scaledImage = originalIcon.getImage().getScaledInstance(
