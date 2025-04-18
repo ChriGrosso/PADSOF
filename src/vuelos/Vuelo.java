@@ -151,9 +151,9 @@ public abstract class Vuelo extends Observable implements Serializable{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		String vuelo = "Flight " + this.id + " (";
 		if(!this.compartido) {
-			vuelo += this.aerolinea.getFirst().getNombre();
+			vuelo += this.aerolinea.get(0).getNombre();
 		} else {
-			vuelo += this.aerolinea.getFirst().getNombre() + ", " + this.aerolinea.getLast().getNombre();
+			vuelo += this.aerolinea.get(0).getNombre() + ", " + this.aerolinea.get(this.aerolinea.size()-1).getNombre();
 		}
 		vuelo += ")\n" + "From: " + this.origen.getCiudadMasCercana() + " to " + this.destino.getCiudadMasCercana() 
 		         + "\n" + "Departure: " + this.horaSalida.format(formatter) + "\n" +

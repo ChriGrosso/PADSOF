@@ -4,14 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import interfaz.Aplicacion;
-import sistema.SkyManager;
 
 public class ControlGestorGestionUsuarios implements ActionListener {
-	private SkyManager modelo;
-
-    public ControlGestorGestionUsuarios() {
-        this.modelo = SkyManager.getInstance();
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -19,22 +13,14 @@ public class ControlGestorGestionUsuarios implements ActionListener {
         
         switch (comando) {
 		    case "ATRAS":
-		    	irAtras();
+		    	Aplicacion.getInstance().showGestorInicio();
 		        break;
 		    case "NUEVO_USUARIO":
-		        System.out.println("Navegar a ficha Nuevo Usuario()...");
+		    	Aplicacion.getInstance().showNuevoUsuario();
 		        break;
 		
 		    default:
 		        System.out.println("Comando desconocido:  " + comando);	
 	    }
     }
-    
-    private void irAtras() {
-        Aplicacion.getInstance().showGestorInicio();
-    }
-    /*
-    private void fichaNuevoUsuario() {
-        Aplicacion.getInstance().showNuevoUsuario();
-    }*/
 }

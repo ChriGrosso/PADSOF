@@ -10,8 +10,10 @@ import interfaz.panelesControlador.ControlControladorInicio;
 import interfaz.panelesControlador.ControladorInicio;
 import interfaz.panelesGestor.ControlGestorGestionUsuarios;
 import interfaz.panelesGestor.ControlGestorInicio;
+import interfaz.panelesGestor.ControlNuevoUsuario;
 import interfaz.panelesGestor.GestorGestionUsuarios;
 import interfaz.panelesGestor.GestorInicio;
+import interfaz.panelesGestor.NuevoUsuario;
 import interfaz.panelesOperador.ControlNuevoAvion;
 import interfaz.panelesOperador.ControlNuevoTipoAvion;
 import interfaz.panelesOperador.ControlNuevoVuelo;
@@ -50,6 +52,7 @@ public class Aplicacion extends JFrame{
 	private OperadorFacturas panelOpFacturas;
 	private PagarFactura panelPagarFactura;
 	private OperadorEstadisticas panelOpEstadisticas;
+	private NuevoUsuario panelNuevoUsuario;
 	
 	// Declaramos el panel con las cartas JPanel cartas; 
 	private JPanel cartas;
@@ -65,6 +68,7 @@ public class Aplicacion extends JFrame{
 	final static String GESTOR_GESTION_AEROPUERTO   = "Gestor Aeropuerto";
 	final static String GESTOR_ESTADISTICAS   = "Gestor Estadisticas";
 	final static String GESTOR_GESTION_VUELOS   = "Gestor Vuelos";
+	final static String GESTOR_NUEVO_USUARIO   = "Nuevo Usuario";
 	
 	final static String OP_GESTION_AVIONES   = "Operador Aviones";
 	final static String OP_NUEVO_AVION   = "Nuevo Avion";
@@ -90,6 +94,7 @@ public class Aplicacion extends JFrame{
 		panelNuevoAvion = new NuevoAvion();
 		panelNuevoTipoAvion = new NuevoTipoAvion();
 		panelGestorGestUsers = new GestorGestionUsuarios();
+		panelNuevoUsuario = new NuevoUsuario();
 		panelOpVuelos = new OperadorGestionVuelos();
 		panelNuevoVuelo = new NuevoVuelo();
 		panelOpFacturas = new OperadorFacturas();
@@ -105,6 +110,7 @@ public class Aplicacion extends JFrame{
 		ControlNuevoAvion controlNuevoAvion = new ControlNuevoAvion();
 		ControlNuevoTipoAvion controlNuevoTipoAvion = new ControlNuevoTipoAvion();
 		ControlGestorGestionUsuarios controlGestorGestUsers = new ControlGestorGestionUsuarios();
+		ControlNuevoUsuario controlNuevoUsuario = new ControlNuevoUsuario();
 		ControlOperadorGestionVuelos controlOpVuelos = new ControlOperadorGestionVuelos();
 		ControlNuevoVuelo controlNuevoVuelo = new ControlNuevoVuelo();
 		ControlOperadorFacturas controlOpFacturas = new ControlOperadorFacturas();
@@ -120,6 +126,7 @@ public class Aplicacion extends JFrame{
 		panelNuevoAvion.setControlador(controlNuevoAvion);
 		panelNuevoTipoAvion.setControlador(controlNuevoTipoAvion);
 		panelGestorGestUsers.setControlador(controlGestorGestUsers);
+		panelNuevoUsuario.setControlador(controlNuevoUsuario);
 		panelOpVuelos.setControlador(controlOpVuelos);
 		panelNuevoVuelo.setControlador(controlNuevoVuelo);
 		panelOpFacturas.setControlador(controlOpFacturas);
@@ -136,6 +143,7 @@ public class Aplicacion extends JFrame{
 		cartas.add(panelNuevoAvion, OP_NUEVO_AVION);
 		cartas.add(panelNuevoTipoAvion, OP_NUEVO_TIPO_AVION);
 		cartas.add(panelGestorGestUsers, GESTOR_GESTION_USUARIOS);
+		cartas.add(panelNuevoUsuario, GESTOR_NUEVO_USUARIO);
 		cartas.add(panelOpVuelos, OP_GESTION_VUELOS);
 		cartas.add(panelNuevoVuelo, OP_NUEVO_VUELO);
 		cartas.add(panelOpFacturas, OP_FACTURAS);
@@ -219,6 +227,10 @@ public class Aplicacion extends JFrame{
 		return this.panelGestorInicio;
 	}
 	
+	public NuevoUsuario getNuevoUsuario() {
+		return this.panelNuevoUsuario;
+	}
+	
 	public GestorGestionUsuarios getGestorGestionUsuarios() {
 		return this.panelGestorGestUsers;
 	}
@@ -273,6 +285,10 @@ public class Aplicacion extends JFrame{
 	
 	public void showGestorGestionUsuarios() {
 		((CardLayout)cartas.getLayout()).show(cartas, GESTOR_GESTION_USUARIOS);
+	}
+	
+	public void showNuevoUsuario() {
+		((CardLayout)cartas.getLayout()).show(cartas, GESTOR_NUEVO_USUARIO);
 	}
 }
 

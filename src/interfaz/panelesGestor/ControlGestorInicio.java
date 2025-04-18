@@ -39,7 +39,7 @@ public class ControlGestorInicio implements ActionListener {
                 System.out.println("Navegar a gestión facturas...");
                 break;
             case "GESTION_USUARIOS":
-                verUsuarios();
+            	Aplicacion.getInstance().showGestorGestionUsuarios();
                 break;
             case "ESTADISTICAS":
                 System.out.println("Navegar a estadísticas...");
@@ -60,7 +60,4 @@ public class ControlGestorInicio implements ActionListener {
         Aplicacion.getInstance().showNotificaciones();
     }
     
-    private void verUsuarios() {
-        Aplicacion.getInstance().showGestorGestionUsuarios();
-    }
 }

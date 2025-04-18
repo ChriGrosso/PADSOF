@@ -73,7 +73,7 @@ public class DemoApp {
         System.out.println("Notificaciones Gestor: "+g.getNotificaciones());
         Vuelo v = app.buscarVueloPorCodigo("VL0000");
         //asignamos el vuelo a una terminal y un controlador disponibles.
-        Terminal t = app.getTerminalesDisponibles(v).getFirst();
+        Terminal t = app.getTerminalesDisponibles(v).get(0);
         v.asignarTerminal(t);
         t.getControladores().get(0).asignarVuelo(v);
         
@@ -82,17 +82,17 @@ public class DemoApp {
         
         //Simulacion de que el vuelo se realice
         v.setEstVuelo(EstadoVuelo.ESPERANDO_PISTA_A);
-        v.asignarPista(app.getPistasDisponibles(v).getFirst());
-        v.asignarLocAterrizaje(app.getFingersDisponibles(v).getFirst());
+        v.asignarPista(app.getPistasDisponibles(v).get(0));
+        v.asignarLocAterrizaje(app.getFingersDisponibles(v).get(0));
         
         v.setEstVuelo(EstadoVuelo.ESPERANDO_ATERRIZAJE);
         v.setEstVuelo(EstadoVuelo.ATERRIZADO);
         
-        v.asignarPuerta(t.getPuertasDisponibles().getFirst());
+        v.asignarPuerta(t.getPuertasDisponibles().get(0));
         
         v.setEstVuelo(EstadoVuelo.DESEMBARQUE_INI);
         v.setEstVuelo(EstadoVuelo.DESEMBARQUE_FIN);
-        v.getAvion().asignarHangar(app.getHangaresDisponibles(v.getAvion()).getFirst());
+        v.getAvion().asignarHangar(app.getHangaresDisponibles(v.getAvion()).get(0));
         v.setEstVuelo(EstadoVuelo.EN_HANGAR);
         System.out.println(app);
         
