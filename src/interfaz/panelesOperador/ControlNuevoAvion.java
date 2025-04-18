@@ -3,15 +3,12 @@ package interfaz.panelesOperador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.Date;
-
 import javax.swing.JOptionPane;
 
 import aerolineas.Aerolinea;
 import aviones.Avion;
 import aviones.AvionMercancias;
 import aviones.AvionPasajeros;
-import aviones.TipoAvion;
 import sistema.SkyManager;
 import usuarios.Operador;
 import interfaz.Aplicacion;
@@ -25,13 +22,7 @@ public class ControlNuevoAvion implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Cerrar Sesión")) {     // si se ha pulsado "Cerrar Sesión"
-			this.cerrarSesion();
-		}
-		else if (e.getActionCommand().equals("Notificaciones")) {     // si se ha pulsado "Notificaciones"
-			this.verNotificaciones();
-		}
-		else if (e.getActionCommand().equals("Registrar Avión")) {     // si se ha pulsado "Registrar Avión"
+		if (e.getActionCommand().equals("Registrar Avión")) {     // si se ha pulsado "Registrar Avión"
 			this.registrarAvion();
 		}
 		else if (e.getActionCommand().equals("Mercancías")) {   
@@ -41,9 +32,6 @@ public class ControlNuevoAvion implements ActionListener{
 		else if (e.getActionCommand().equals("Pasajeros")) {   
 			Aplicacion.getInstance().getNuevoAvion().getMercPeligrosas().setVisible(false);
 			Aplicacion.getInstance().getNuevoAvion().getMercNoPeligrosas().setVisible(false);
-		}
-		else if (e.getActionCommand().equals("Volver")) {   
-			this.paginaAnterior();
 		}
 	}
 
@@ -111,7 +99,7 @@ public class ControlNuevoAvion implements ActionListener{
 			Avion av = new Avion(matricula, compra, avm, ultRev);
 			boolean res = a.addAvion(av);
 			if(!res) {
-				JOptionPane.showMessageDialog(Aplicacion.getInstance().getLogin(), "Fallo al registrar el avión en la aerolínea.\n La matrícula puede estar repetida.", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(Aplicacion.getInstance().getNuevoAvion(), "Fallo al registrar el avión en la aerolínea.\n La matrícula puede estar repetida.", "Error", JOptionPane.ERROR_MESSAGE);
 				Aplicacion.getInstance().getNuevoAvion().update(); 
 				return;
 			}
@@ -132,28 +120,10 @@ public class ControlNuevoAvion implements ActionListener{
 			}
 		}
 		
-		// Actualizar registro de la aerolínea y el sistema
+		// Actualizar registros de la aerolínea y el sistema
 		Aplicacion.getInstance().getOpAviones().actualizarPantalla();
-		JOptionPane.showMessageDialog(Aplicacion.getInstance().getLogin(), "Se ha realizado correctamente el registro del avión " + matricula + ".", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(Aplicacion.getInstance().getNuevoAvion(), "Se ha realizado correctamente el registro del avión " + matricula + ".", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
 		Aplicacion.getInstance().getNuevoAvion().update();
 		this.modelo.guardarDatos();
-	}
-
-	private void cerrarSesion() {
-		modelo.guardarDatos();
-		Aplicacion.getInstance().getNuevoAvion().setVisible(false);
-		Aplicacion.getInstance().showLogin();
-	}
-	
-	private void verNotificaciones() {
-		modelo.guardarDatos();
-		Aplicacion.getInstance().getNuevoAvion().setVisible(false);
-		Aplicacion.getInstance().showNotificaciones();
-	}
-	
-	private void paginaAnterior() {
-		modelo.guardarDatos();
-		Aplicacion.getInstance().getNuevoAvion().setVisible(false);
-		Aplicacion.getInstance().showOpAviones();
 	}
 }

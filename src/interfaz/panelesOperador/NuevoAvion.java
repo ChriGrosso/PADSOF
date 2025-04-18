@@ -2,24 +2,18 @@ package interfaz.panelesOperador;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,38 +22,30 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 
+import interfaz.Aplicacion;
+import interfaz.elementosComunes.BotonVolver;
+import sistema.SkyManager;
+
 public class NuevoAvion extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton registrarAvion;
-	private JTextField cmpMatricula;
-	private JTextField cmpMarca;
-	private JTextField cmpModelo;
+	private JTextField cmpMatricula, cmpMarca, cmpModelo;
 	SpinnerDateModel model = new SpinnerDateModel();
 	JSpinner compra = new JSpinner(model);
 	JSpinner ultimaRev = new JSpinner(model);
-	private JRadioButton mercancias;
-	private JRadioButton pasajeros;
-	private JRadioButton mercPeligrosas;
-	private JRadioButton mercNoPeligrosas;
+	private JRadioButton mercancias, pasajeros, mercPeligrosas, mercNoPeligrosas;
 	ButtonGroup tipoAvion, tipoMerc;
-	private JButton botonVolver;
 	
 	public NuevoAvion() {
 		setLayout(new BorderLayout());
 		setBackground(Color.WHITE);
-		
-		// Crear el botón para ir al panel anterior
-        botonVolver = new JButton("Volver");
-        botonVolver.setPreferredSize(new Dimension(100, 40)); // Tamaño inicial del botón
-        botonVolver.setFocusPainted(false);
 
         // Contenedor en la esquina superior derecha
-        JPanel panelSuperiorDerecho = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelSuperiorDerecho.setOpaque(false); // Fondo transparente
-        panelSuperiorDerecho.add(botonVolver);
+        BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
+        panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
 
         // Añadir el contenedor al panel principal
-        add(panelSuperiorDerecho, BorderLayout.NORTH);
+        add(panelSuperiorIzquierdo, BorderLayout.NORTH);
 		
 		JPanel panelContenido = new JPanel();
         panelContenido.setLayout(new GridBagLayout());
@@ -156,9 +142,16 @@ public class NuevoAvion extends JPanel{
 	}
 	
 	
+	private void paginaAnterior() {
+		SkyManager.getInstance().guardarDatos();
+		Aplicacion.getInstance().getNuevoAvion().setVisible(false);
+		Aplicacion.getInstance().showOpAviones();
+	}
+
+
 	private JButton createContentButton(String text) {
         JButton btn = new JButton(text);
-        btn.setPreferredSize(new Dimension(200, 80));
+        btn.setPreferredSize(new Dimension(120, 48));
         btn.setFocusPainted(false);
         btn.setFont(new Font("Arial", Font.BOLD, 14));
         return btn;
@@ -170,7 +163,6 @@ public class NuevoAvion extends JPanel{
 	 	registrarAvion.addActionListener(c);
 	 	mercancias.addActionListener(c);
 	 	pasajeros.addActionListener(c);
-	 	botonVolver.addActionListener(c);
 	 }
 	 	
 	// Obtener el texto del campo matrícula

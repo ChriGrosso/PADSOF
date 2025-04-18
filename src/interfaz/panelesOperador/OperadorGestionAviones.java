@@ -1,5 +1,6 @@
 package interfaz.panelesOperador;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -18,6 +19,8 @@ import javax.swing.table.DefaultTableModel;
 
 import aerolineas.Aerolinea;
 import aviones.Avion;
+import interfaz.Aplicacion;
+import interfaz.elementosComunes.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Operador;
 
@@ -28,10 +31,24 @@ public class OperadorGestionAviones extends JPanel{
 	
 	public OperadorGestionAviones() {
 		// Configurar el Layout
-        setLayout(new GridBagLayout());
+		setLayout(new BorderLayout());
         setBackground(Color.WHITE);
+        
+        // Contenedor en la esquina superior derecha
+        BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
+        panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
+
+        // Añadir el contenedor al panel principal
+        add(panelSuperiorIzquierdo, BorderLayout.NORTH);
+        
+        JPanel panelContenido = new JPanel();
+        panelContenido.setLayout(new GridBagLayout());
+        panelContenido.setBackground(Color.WHITE);
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Espaciado entre componentes
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
 
         // Título
         JLabel titulo = new JLabel("Gestión de Aviones");
@@ -41,7 +58,7 @@ public class OperadorGestionAviones extends JPanel{
         gbc.gridy = 0;
         gbc.gridwidth = 3; // Ocupa 3 columnas
         gbc.anchor = GridBagConstraints.CENTER;
-        add(titulo, gbc);
+        panelContenido.add(titulo, gbc);
 
         // Tabla
         tablaAviones = new JTable(); // La tabla se actualizará dinámicamente con los datos
@@ -52,7 +69,7 @@ public class OperadorGestionAviones extends JPanel{
         gbc.fill = GridBagConstraints.BOTH; // Expandir horizontal y verticalmente
         gbc.weightx = 1.0; // Permitir expansión horizontal
         gbc.weighty = 1.0; // Permitir expansión vertical
-        add(scrollPane, gbc);
+        panelContenido.add(scrollPane, gbc);
 
         // Botones debajo de la tabla
         gbc.gridwidth = 1; // Cada botón ocupa una columna
@@ -63,14 +80,14 @@ public class OperadorGestionAviones extends JPanel{
         nuevoAvion = new JButton("Nuevo Avión");
         gbc.gridx = 0;
         gbc.gridy = 2;
-        add(nuevoAvion, gbc);
+        panelContenido.add(nuevoAvion, gbc);
 
         nuevoTipoAv = new JButton("Nuevo Tipo Avión");
         gbc.gridx = 1;
         gbc.gridy = 2;
-        add(nuevoTipoAv, gbc);
+        panelContenido.add(nuevoTipoAv, gbc);
          
-        
+        add(panelContenido, BorderLayout.CENTER);
 	}
 	
 	
@@ -97,6 +114,14 @@ public class OperadorGestionAviones extends JPanel{
         tablaAviones.setModel(model);
         model.fireTableDataChanged();
 	}
+	
+	
+	private void paginaAnterior() {
+		SkyManager.getInstance().guardarDatos();
+		Aplicacion.getInstance().getOpAviones().setVisible(false);
+		Aplicacion.getInstance().showOpInicio();
+	}
+	
 	
 	// método para asignar un controlador a los botones
 	public void setControlador(ActionListener c) {  
