@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.MonthDay;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -58,8 +59,8 @@ class VueloPasajerosTest {
 		temp2.add(new Temporada(MonthDay.of(10, 9), LocalTime.of(5, 0), LocalTime.of(1, 0), MonthDay.of(2, 5)));
 		ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, temp1, Direccion.NORTE);
 		ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, temp2, Direccion.OESTE);
-		vp1 = new VueloPasajeros("H1894", ap1, ap2, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0), arrayA, true, 155, av, "V D");
-		vp2 = new VueloPasajeros("H1897", ap2, ap1, LocalDateTime.of(2025, 2, 11, 17, 50), LocalDateTime.of(2025, 2, 11, 20, 50), arrayA, false, 155, av, "V D");
+		vp1 = new VueloPasajeros(ap1, ap2, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0), arrayA, true, 155, av, "V D");
+		vp2 = new VueloPasajeros(ap2, ap1, LocalDateTime.of(2025, 2, 11, 17, 50), LocalDateTime.of(2025, 2, 11, 20, 50), arrayA, false, 155, av, "V D");
 		
 		a.addTipoAvion(p);
 		a.addAvion(av);
@@ -67,6 +68,10 @@ class VueloPasajerosTest {
 		a.addVuelo(vp2);
 	}
 
+	@AfterEach
+    void limpiar() {
+        vp1.resetGenId();
+    }
 
 	@Test
 	void testExceptionConstructor() {
@@ -79,7 +84,7 @@ class VueloPasajerosTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             // Aquí llamas al constructor o método que debe lanzar la excepción
             @SuppressWarnings("unused")
-			VueloPasajeros vp2 = new VueloPasajeros("H1893", ap1, ap2, timeSalida, timeLlegada, arrayA, false, 155, Periodicidad.NO_PERIODICO, av2);
+			VueloPasajeros vp2 = new VueloPasajeros(ap1, ap2, timeSalida, timeLlegada, arrayA, false, 155, Periodicidad.NO_PERIODICO, av2);
         });
 		
 		assertEquals("Un vuelo de pasajeros debe tener un avión para pasajeros", exception.getMessage());
@@ -100,7 +105,7 @@ class VueloPasajerosTest {
 
 	@Test
 	void testGetId() {
-		assertEquals("H1894", vp1.getId());
+		assertEquals("IBE0000", vp1.getId());
 	}
 
 	@Test

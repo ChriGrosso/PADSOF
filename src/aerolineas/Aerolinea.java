@@ -255,7 +255,7 @@ public class Aerolinea implements Serializable{
 		Vuelo nuevoV;
 		if(v.isVueloMercancias()) {
 			if(v.getPeriodicidad() == Periodicidad.DIARIO) {
-				nuevoV = new VueloMercancias(v.getId(), v.getOrigen(), v.getDestino(),
+				nuevoV = new VueloMercancias(v.getOrigen(), v.getDestino(),
 				v.getHoraSalida().plusDays(1), v.getHoraLlegada().plusDays(1), v.getAerolineas(), v.getLlegada(), ((VueloMercancias) v).getCarga(),
 				((VueloMercancias) v).getMercanciasPeligrosas(), v.getPeriodicidad(), v.getAvion());
 			} else {
@@ -266,13 +266,13 @@ public class Aerolinea implements Serializable{
 					day = v.getHoraSalida().getDayOfWeek();
 				}
 				int diasASumar = siguienteDia(day, v.getDiasAlternos());
-				nuevoV = new VueloMercancias(v.getId(), v.getOrigen(), v.getDestino(),
+				nuevoV = new VueloMercancias(v.getOrigen(), v.getDestino(),
 				v.getHoraSalida().plusDays(diasASumar), v.getHoraLlegada().plusDays(diasASumar), v.getAerolineas(), v.getLlegada(), ((VueloMercancias) v).getCarga(),
 				((VueloMercancias) v).getMercanciasPeligrosas(), v.getPeriodicidad(), v.getAvion());
 			}
 		} else {
 			if(v.getPeriodicidad() == Periodicidad.DIARIO) {
-				nuevoV = new VueloPasajeros(v.getId(), v.getOrigen(), v.getDestino(),
+				nuevoV = new VueloPasajeros(v.getOrigen(), v.getDestino(),
 				v.getHoraSalida().plusDays(1), v.getHoraLlegada().plusDays(1), v.getAerolineas(), v.getLlegada(), 
 				((VueloPasajeros) v).getNumPasajeros(), v.getPeriodicidad(), v.getAvion());
 			} else {
@@ -283,7 +283,7 @@ public class Aerolinea implements Serializable{
 					day = v.getHoraSalida().getDayOfWeek();
 				}
 				int diasASumar = siguienteDia(day, v.getDiasAlternos());
-				nuevoV = new VueloPasajeros(v.getId(), v.getOrigen(), v.getDestino(),
+				nuevoV = new VueloPasajeros(v.getOrigen(), v.getDestino(),
 				v.getHoraSalida().plusDays(diasASumar), v.getHoraLlegada().plusDays(diasASumar), v.getAerolineas(), v.getLlegada(), 
 				((VueloPasajeros) v).getNumPasajeros(), v.getPeriodicidad(), v.getAvion());
 			}

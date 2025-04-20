@@ -35,10 +35,10 @@ public class VueloPasajeros extends Vuelo{
      * @param avion El avión utilizado para el vuelo.
      * @throws IllegalArgumentException Si el avión no es del tipo AvionPasajeros.
      */
-	public VueloPasajeros(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+	public VueloPasajeros(Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolinea, boolean llegada, int numPasajeros, Periodicidad periodicidad,
 			Avion avion) {
-		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
+		super(origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
 		if((avion.getTipoAvion() instanceof AvionPasajeros) == false) {
 			throw new IllegalArgumentException("Un vuelo de pasajeros debe tener un avión para pasajeros");
 		}
@@ -60,9 +60,9 @@ public class VueloPasajeros extends Vuelo{
      * @param diasAlternos La periodicidad de días alternos del vuelo.
      * @throws IllegalArgumentException Si el avión no es del tipo AvionPasajeros.
      */
-	public VueloPasajeros(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+	public VueloPasajeros(Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolinea, boolean llegada, int numPasajeros, Avion avion, String diasAlternos) {
-		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, avion, diasAlternos);
+		super(origen, destino, horaSalida, horaLlegada, aerolinea, llegada, avion, diasAlternos);
 		if((avion.getTipoAvion() instanceof AvionPasajeros) == false) {
 			throw new IllegalArgumentException("Un vuelo de pasajeros debe tener un avión para pasajeros");
 		}

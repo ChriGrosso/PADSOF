@@ -30,6 +30,7 @@ import aeropuertos.Aeropuerto;
  */
 public abstract class Vuelo extends Observable implements Serializable{
 	private static final long serialVersionUID = 1L;
+	private static long genId = 0;
 	private String id;
 	private Aeropuerto origen;
 	private Aeropuerto destino;
@@ -66,9 +67,8 @@ public abstract class Vuelo extends Observable implements Serializable{
 	 * @param avion      Avión asignado al vuelo.
 	 * @throws IllegalArgumentException Si hay más de 2 aerolíneas (un vuelo puede ser compartido como máximo por 2).
 	 */
-	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+	public Vuelo(Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolineas, boolean llegada, Periodicidad periodicidad, Avion avion) {
-		this.id = id;
 		this.origen = origen;
 		this.destino = destino;
 		this.horaSalida = horaSalida;
@@ -77,9 +77,25 @@ public abstract class Vuelo extends Observable implements Serializable{
 		if(aerolineas.size() == 1) {
 			this.compartido = false;
 			this.aerolinea.addAll(aerolineas);
+			// Generar el ID con el código de la única aerolínea que hay
+			this.id = aerolineas.get(0).getId() + String.format("%04d", genId);
+			genId++;
+			if(genId == 10000) {
+				resetGenId();
+			}
 		} else if(aerolineas.size() == 2) {
 			this.compartido = true;
 			this.aerolinea.addAll(aerolineas);
+			// Generar el ID con el código de la aerolínea que POSEE EL AVIÓN DEL VUELO
+			for(Aerolinea a: aerolineas) {
+				if(a.getAviones().values().contains(avion)) {
+					this.id = a.getId() + String.format("%04d", genId);
+					genId++;
+					if(genId == 10000) {
+						resetGenId();
+					}
+				}
+			}
 		} else {
 			throw new IllegalArgumentException("Un vuelo solo puede ser compartido por 2 aerolineas\n");
 		}
@@ -106,7 +122,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 	 * @param diasAlternos Días en los que opera el vuelo.
 	 * @throws IllegalArgumentException Si la periodicidad no es DIAS_ALTERNOS o si hay más de 2 aerolíneas.
 	 */
-	public Vuelo(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+	public Vuelo(Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolineas, boolean llegada, Avion avion, String diasAlternos) {
 		this.diasAlternos = new ArrayList<DayOfWeek>();
 		for(String c: diasAlternos.split(" ")) {
@@ -118,7 +134,6 @@ public abstract class Vuelo extends Observable implements Serializable{
 			if(c.equals("S")) { this.diasAlternos.add(DayOfWeek.SATURDAY); }
 			if(c.equals("D")) { this.diasAlternos.add(DayOfWeek.SUNDAY); }
 		}
-		this.id = id;
 		this.origen = origen;
 		this.destino = destino;
 		this.horaSalida = horaSalida;
@@ -127,9 +142,25 @@ public abstract class Vuelo extends Observable implements Serializable{
 		if(aerolineas.size() == 1) {
 			this.compartido = false;
 			this.aerolinea.addAll(aerolineas);
+			// Generar el ID con el código de la única aerolínea que hay
+			this.id = aerolineas.get(0).getId() + String.format("%04d", genId);
+			genId++;
+			if(genId == 10000) {
+				resetGenId();
+			}
 		} else if(aerolineas.size() == 2) {
 			this.compartido = true;
 			this.aerolinea.addAll(aerolineas);
+			// Generar el ID con el código de la aerolínea que POSEE EL AVIÓN DEL VUELO
+			for(Aerolinea a: aerolineas) {
+				if(a.getAviones().values().contains(avion)) {
+					this.id = a.getId() + String.format("%04d", genId);
+					genId++;
+					if(genId == 10000) {
+						resetGenId();
+					}
+				}
+			}
 		} else {
 			throw new IllegalArgumentException("Un vuelo solo puede ser compartido por 2 aerolineas\n");
 		}
@@ -138,6 +169,15 @@ public abstract class Vuelo extends Observable implements Serializable{
 		this.periodicidad = Periodicidad.DIAS_ALTERNOS;
 		this.estVuelo = EstadoVuelo.EN_TIEMPO;
 		this.mapaElemClave = new HashMap<ElementoEstructural, ClaveVueloElemento>();
+	}
+	
+	
+	/**
+	 * Resetea a 0 el contador único de los id de todos los vuelos.
+	 *
+	 */
+	public void resetGenId() {
+		genId = 0;
 	}
 	
 	

@@ -74,10 +74,10 @@ class AerolineaTest {
 		ArrayList<Aerolinea> arrayA = new ArrayList<Aerolinea>();
 		arrayA.add(a);
 		
-		vm1 = new VueloMercancias("H1893", ap1, ap2, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0), arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, avm1);
-		vm2 = new VueloMercancias("H1899", ap2, ap1, LocalDateTime.of(2025, 2, 12, 14, 0), LocalDateTime.of(2025, 2, 12, 17, 0), arrayA, true, 155.64, false, Periodicidad.NO_PERIODICO, avm2);
-		vp1 = new VueloPasajeros("H1894", ap3, ap4, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0), arrayA, false, 155, Periodicidad.NO_PERIODICO, avp1);
-		vp2 = new VueloPasajeros("H1890", ap3, ap4, LocalDateTime.of(2025, 2, 12, 14, 0), LocalDateTime.of(2025, 2, 12, 17, 0), arrayA, true, 155, Periodicidad.NO_PERIODICO, avp2);
+		vm1 = new VueloMercancias(ap1, ap2, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0), arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, avm1);
+		vm2 = new VueloMercancias(ap2, ap1, LocalDateTime.of(2025, 2, 12, 14, 0), LocalDateTime.of(2025, 2, 12, 17, 0), arrayA, true, 155.64, false, Periodicidad.NO_PERIODICO, avm2);
+		vp1 = new VueloPasajeros(ap3, ap4, LocalDateTime.of(2025, 2, 11, 14, 0), LocalDateTime.of(2025, 2, 11, 17, 0), arrayA, false, 155, Periodicidad.NO_PERIODICO, avp1);
+		vp2 = new VueloPasajeros(ap3, ap4, LocalDateTime.of(2025, 2, 12, 14, 0), LocalDateTime.of(2025, 2, 12, 17, 0), arrayA, true, 155, Periodicidad.NO_PERIODICO, avp2);
 		
 		a.addTipoAvion(m);
 		a.addTipoAvion(p);

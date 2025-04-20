@@ -3,7 +3,6 @@ package interfaz.panelesOperador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -31,8 +30,9 @@ public class NuevoAvion extends JPanel{
 	private JButton registrarAvion;
 	private JTextField cmpMatricula, cmpMarca, cmpModelo;
 	SpinnerDateModel model = new SpinnerDateModel();
+	SpinnerDateModel model2 = new SpinnerDateModel();
 	JSpinner compra = new JSpinner(model);
-	JSpinner ultimaRev = new JSpinner(model);
+	JSpinner ultimaRev = new JSpinner(model2);
 	private JRadioButton mercancias, pasajeros, mercPeligrosas, mercNoPeligrosas;
 	ButtonGroup tipoAvion, tipoMerc;
 	

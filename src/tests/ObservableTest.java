@@ -55,7 +55,7 @@ class ObservableTest {
 		temp2.add(new Temporada(MonthDay.of(10, 9), LocalTime.of(5, 0), LocalTime.of(1, 0), MonthDay.of(2, 5)));
 		Aeropuerto ap1 = new Aeropuerto("Madrid Barajas", "MAD", "Madrid", "España", 15.6, +1, temp1, Direccion.NORTE);
 		Aeropuerto ap2 = new Aeropuerto("Londres-Heathrow", "LHR", "Londres", "Inglaterra", 20.8, +0, temp2, Direccion.OESTE);
-		vuelo = new VueloMercancias("H1893", ap1, ap2, timeSalida, timeLlegada, arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
+		vuelo = new VueloMercancias(ap1, ap2, timeSalida, timeLlegada, arrayA, false, 155.64, false, Periodicidad.NO_PERIODICO, av);
 		
 		u = new Gestor("01020304M", "Pepe", "password12");
 	}

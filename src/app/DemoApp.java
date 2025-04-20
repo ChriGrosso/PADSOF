@@ -71,7 +71,7 @@ public class DemoApp {
         
         //el gestor debe haber recibo las notificaciones de que debe asignar terminal y controlador a los vuelos
         System.out.println("Notificaciones Gestor: "+g.getNotificaciones());
-        Vuelo v = app.buscarVueloPorCodigo("VL0000");
+        Vuelo v = app.buscarVueloPorCodigo("AE0010000");
         //asignamos el vuelo a una terminal y un controlador disponibles.
         Terminal t = app.getTerminalesDisponibles(v).get(0);
         v.asignarTerminal(t);
@@ -245,7 +245,7 @@ public class DemoApp {
     	Avion avion = aerolineas.get(1).getAviones().get("AV-4532LM");
     	
     	//Vuelo de pasajeros de llegada
-    	Vuelo v1 = new VueloPasajeros("VL0000", aeropuertos.get(0), aeropuertos.get(2), LocalDateTime.of(2025, 5, 10, 14, 30), LocalDateTime.of(2025, 5, 10, 17, 45), 
+    	Vuelo v1 = new VueloPasajeros(aeropuertos.get(0), aeropuertos.get(2), LocalDateTime.of(2025, 5, 10, 14, 30), LocalDateTime.of(2025, 5, 10, 17, 45), 
     			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(0), aerolineas.get(1))), true, 150, Periodicidad.NO_PERIODICO, avion);
     	aerolineas.get(0).addVuelo(v1); 
     	aerolineas.get(1).addVuelo(v1);
@@ -255,7 +255,7 @@ public class DemoApp {
     	
     	//Vuelo de Mercancias de llegada
     	avion = aerolineas.get(2).getAviones().get("AV-1209QW");
-    	Vuelo v2 = new VueloMercancias("VL0001", aeropuertos.get(4), aeropuertos.get(3), LocalDateTime.of(2025, 4, 15, 12, 30), LocalDateTime.of(2025, 4, 15, 15, 45), 
+    	Vuelo v2 = new VueloMercancias(aeropuertos.get(4), aeropuertos.get(3), LocalDateTime.of(2025, 4, 15, 12, 30), LocalDateTime.of(2025, 4, 15, 15, 45), 
     			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(2))), false, 10, false, Periodicidad.NO_PERIODICO, avion);
     	aerolineas.get(2).addVuelo(v2);
     	app.registrarVuelo(v2);

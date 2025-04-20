@@ -37,10 +37,10 @@ public class VueloMercancias extends Vuelo {
      * @param avion El avión utilizado para el vuelo.
      * @throws IllegalArgumentException Si el avión no es del tipo AvionMercancias.
      */
-	public VueloMercancias(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+	public VueloMercancias(Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolinea, boolean llegada, double carga, boolean mercanciasPeligrosas, 
 			Periodicidad periodicidad, Avion avion) {
-		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
+		super(origen, destino, horaSalida, horaLlegada, aerolinea, llegada, periodicidad, avion);
 		if((avion.getTipoAvion() instanceof AvionMercancias) == false) {
 			throw new IllegalArgumentException("Un vuelo de mercancías debe tener un avión para mercancías");
 		}
@@ -64,10 +64,10 @@ public class VueloMercancias extends Vuelo {
      * @param diasAlternos
      * @throws IllegalArgumentException Si el avión no es del tipo AvionMercancias.
      */
-	public VueloMercancias(String id, Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
+	public VueloMercancias(Aeropuerto origen, Aeropuerto destino, LocalDateTime horaSalida, LocalDateTime horaLlegada, 
 			ArrayList<Aerolinea> aerolinea, boolean llegada, double carga, boolean mercanciasPeligrosas, 
 			Avion avion, String diasAlternos) {
-		super(id, origen, destino, horaSalida, horaLlegada, aerolinea, llegada, avion, diasAlternos);
+		super(origen, destino, horaSalida, horaLlegada, aerolinea, llegada, avion, diasAlternos);
 		if((avion.getTipoAvion() instanceof AvionMercancias) == false) {
 			throw new IllegalArgumentException("Un vuelo de mercancías debe tener un avión para mercancías");
 		}
