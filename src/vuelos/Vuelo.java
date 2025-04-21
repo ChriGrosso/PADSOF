@@ -51,7 +51,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 	private Terminal terminal;
 	private Puerta puerta;
 	private HashMap<ElementoEstructural, ClaveVueloElemento> mapaElemClave;
-	
+	private PeticionCompartir petComp;
 	
 	/**
 	 * Constructor de Vuelo con múltiples aerolíneas.
@@ -83,6 +83,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 			if(genId == 10000) {
 				resetGenId();
 			}
+			this.petComp = PeticionCompartir.NO_COMPARTIDO;
 		} else if(aerolineas.size() == 2) {
 			this.compartido = true;
 			this.aerolinea.addAll(aerolineas);
@@ -96,6 +97,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 					}
 				}
 			}
+			this.petComp = PeticionCompartir.COMPARTIDO;
 		} else {
 			throw new IllegalArgumentException("Un vuelo solo puede ser compartido por 2 aerolineas\n");
 		}
@@ -148,6 +150,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 			if(genId == 10000) {
 				resetGenId();
 			}
+			this.petComp = PeticionCompartir.NO_COMPARTIDO;
 		} else if(aerolineas.size() == 2) {
 			this.compartido = true;
 			this.aerolinea.addAll(aerolineas);
@@ -161,6 +164,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 					}
 				}
 			}
+			this.petComp = PeticionCompartir.COMPARTIDO;
 		} else {
 			throw new IllegalArgumentException("Un vuelo solo puede ser compartido por 2 aerolineas\n");
 		}
@@ -178,6 +182,38 @@ public abstract class Vuelo extends Observable implements Serializable{
 	 */
 	public void resetGenId() {
 		genId = 0;
+	}
+	
+	/**
+	 * Settear la constante generadora de ids de vuelos genId a un número en específico.
+	 *
+	 */
+	public static void setGenId(long id) {
+		genId = id;
+	}
+	
+	/**
+	 * Obtener la constante generadora de ids de vuelos genId.
+	 *
+	 */
+	public static long getGenId() {
+		return genId;
+	}
+	
+	/**
+	 * Settear el estado de la petición para compartir el vuelo
+	 *
+	 */
+	public void setPetComp(PeticionCompartir comp) {
+		this.petComp = comp;
+	}
+	
+	/**
+	 * Obtener el estado de la petición para compartir el vuelo, si la tiene.
+	 *
+	 */
+	public PeticionCompartir getPetComp() {
+		return this.petComp;
 	}
 	
 	
@@ -808,4 +844,5 @@ public abstract class Vuelo extends Observable implements Serializable{
 		puerta.setVuelo(this);
 		return true;
 	}
+	
 }

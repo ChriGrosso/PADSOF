@@ -65,6 +65,7 @@ public class SkyManager implements Serializable {
 	private HashMap<String, Hangar> hangares;
 	private HashMap<String, Factura> facturas;
 	private Usuario usuarioActual;
+	private long ultimoGenIdVuelo;  
 	
 	/**
      * Constructor privado para aplicar el patrón Singleton.
@@ -122,6 +123,7 @@ public class SkyManager implements Serializable {
      */
 	public void guardarDatos() {
 		try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("resources\\skyManagerDatos.dat"))) {
+			this.ultimoGenIdVuelo = Vuelo.getGenId();  // Guarda el valor actual
 			salida.writeObject(this);
 	    } catch (IOException e) {
 	        System.err.println("Error al guardar los datos: " + e.getMessage());
@@ -153,6 +155,8 @@ public class SkyManager implements Serializable {
 	        this.diasAntelacionProgVuelo = refDisco.diasAntelacionProgVuelo;
 	        this.rangoTiempoMinutosMostrarTerminalesAvion = refDisco.rangoTiempoMinutosMostrarTerminalesAvion;
 	        this.usuarioActual = null;
+	        this.ultimoGenIdVuelo = refDisco.ultimoGenIdVuelo;  // Restaurar
+	        Vuelo.setGenId(this.ultimoGenIdVuelo);              // Aplicarlo a Vuelo
 	        
 	    } catch (IOException | ClassNotFoundException e) {
 	    	System.err.println("Error al cargar los datos: " + e.getMessage());

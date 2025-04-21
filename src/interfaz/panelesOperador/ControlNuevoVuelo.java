@@ -3,7 +3,6 @@ package interfaz.panelesOperador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -219,7 +218,12 @@ public class ControlNuevoVuelo implements ActionListener{
 				return;
 			}
 			VueloMercancias vm = new VueloMercancias(aeO, aeD, salida, llegada, aerolineas, esLlegada, carga, peligrosas, periodicidad, av);
-			boolean res = a.addVuelo(vm);
+			boolean res = SkyManager.getInstance().registrarVuelo(vm);
+			if(!res) {
+				JOptionPane.showMessageDialog(Aplicacion.getInstance().getNuevoVuelo(), "El vuelo ya está registrado en el sistema o no se ha registrado con el mínimo de " + SkyManager.getInstance().getDiasAntelacionProgVuelo() + " dias de antelación.", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			res = a.addVuelo(vm);
 			if(!res) {
 				JOptionPane.showMessageDialog(Aplicacion.getInstance().getNuevoVuelo(), "El vuelo ya está registrado en " + a.getNombre() + ".", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
@@ -231,7 +235,6 @@ public class ControlNuevoVuelo implements ActionListener{
 					return;
 				}
 			} 
-			SkyManager.getInstance().registrarVuelo(vm);
 			JOptionPane.showMessageDialog(Aplicacion.getInstance().getNuevoAvion(), "Se ha realizado correctamente el registro del vuelo " + vm.getId() + ".", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
 		}
 		// Vuelo de pasajeros
@@ -246,7 +249,12 @@ public class ControlNuevoVuelo implements ActionListener{
 				return;
 			}
 			VueloPasajeros vp = new VueloPasajeros(aeO, aeD, salida, llegada, aerolineas, esLlegada, numP, periodicidad, av);
-			boolean res = a.addVuelo(vp);
+			boolean res = SkyManager.getInstance().registrarVuelo(vp);
+			if(!res) {
+				JOptionPane.showMessageDialog(Aplicacion.getInstance().getNuevoVuelo(), "El vuelo ya está registrado en el sistema o no se ha registrado con el mínimo de " + SkyManager.getInstance().getDiasAntelacionProgVuelo() + " dias de antelación.", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			res = a.addVuelo(vp);
 			if(!res) {
 				JOptionPane.showMessageDialog(Aplicacion.getInstance().getNuevoVuelo(), "El vuelo ya está registrado en " + a.getNombre() + ".", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
@@ -258,7 +266,6 @@ public class ControlNuevoVuelo implements ActionListener{
 					return;
 				}
 			} 
-			SkyManager.getInstance().registrarVuelo(vp);
 			JOptionPane.showMessageDialog(Aplicacion.getInstance().getNuevoAvion(), "Se ha realizado correctamente el registro del vuelo " + vp.getId() + ".", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
 		}
 		

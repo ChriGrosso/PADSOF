@@ -22,13 +22,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 
 import aerolineas.Aerolinea;
 import aviones.Avion;
 import interfaz.Aplicacion;
 import interfaz.elementosComunes.BotonVolver;
+import interfaz.elementosComunes.MultiLineCellRenderer;
 import sistema.SkyManager;
 import usuarios.Operador;
+import vuelos.PeticionCompartir;
 import vuelos.Vuelo;
 
 public class OperadorGestionVuelos extends JPanel{
@@ -69,7 +72,7 @@ public class OperadorGestionVuelos extends JPanel{
 		
 		// Tabla
         tablaVuelos = new JTable(); // La tabla se actualizará dinámicamente con los datos
-        tablaVuelos.setRowHeight(30); // Ajustar altura de las filas
+        tablaVuelos.setRowHeight(50); // Ajustar altura de las filas
         JScrollPane scrollPane = new JScrollPane(tablaVuelos);
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -96,7 +99,7 @@ public class OperadorGestionVuelos extends JPanel{
 
 	public void actualizarPantalla() {
 		// Colocar los nombres de las columnas de los aviones
-		String [] columnas = {"ID", "Origen", "Destino", "Avión", "Estado", "Compartido"};
+		String [] columnas = {"ID", "Origen", "Destino", "Avión", "Estado", "Compartido", "Compartir"};
 		// Recoger los datos de los aviones
 		Operador op = (Operador) SkyManager.getInstance().getUsuarioActual();
 		Aerolinea a = op.getAerolinea();
@@ -104,17 +107,20 @@ public class OperadorGestionVuelos extends JPanel{
 		
 		// Crear el modelo de tabla personalizado
         DefaultTableModel model = new DefaultTableModel(columnas, 0) {
-            @Override
+			private static final long serialVersionUID = 1L;
+
+			@Override
             public boolean isCellEditable(int row, int column) {
-                // Solo la última columna ("Compartido") será editable
-                return column == 5;
+                // Solo la última columna ("Compartir") será editable
+                return column == 6;
             }
         };
         
         // Rellenar el modelo con los datos de los vuelos
         for (Vuelo vuelo : vuelos) {
-            String compartido = null;
+            String compartido = null, compartirAccion = null;
             if (vuelo.getCompartido()) {
+            	// Encontrar la aerolinea con la que comparte
             	Aerolinea aux = null;
             	for(Aerolinea ae: vuelo.getAerolineas()) {
             		if(!a.equals(ae)) {
@@ -122,80 +128,140 @@ public class OperadorGestionVuelos extends JPanel{
             		}
             	}
             	compartido = "Compartido con " + aux.getNombre();
+            	compartirAccion = "No disponible";
             } else {
-            	compartido = "No compartido";
+            	if(vuelo.getPetComp() == PeticionCompartir.PETICION_ENVIADA) { 
+            		compartido = "Petición para\n compartir enviada";
+            		compartirAccion = "No disponible";
+            	}
+            	else { 
+            		compartido = "No compartido"; 
+            		compartirAccion = "Compartir";
+            	}
             }
         
 	        model.addRow(new Object[]{
 	        		vuelo.getId(),
-	                vuelo.getOrigen().getCiudadMasCercana() + " (" + vuelo.getOrigen().getDiferenciaHoraria() + ")",
-	                vuelo.getDestino().getCiudadMasCercana() + " (" + vuelo.getDestino().getDiferenciaHoraria() + ")",
+	                vuelo.getOrigen().getCiudadMasCercana() + " (" + vuelo.getOrigen().getDiferenciaHoraria() + ") " + vuelo.getHoraSalida() + "\n" + vuelo.getOrigen().getNombre(),
+	                vuelo.getDestino().getCiudadMasCercana() + " (" + vuelo.getDestino().getDiferenciaHoraria() + ") " + vuelo.getHoraLlegada() + "\n" + vuelo.getDestino().getNombre(),
 	                vuelo.getAvion().getMatricula(),
 	                vuelo.getEstVuelo(),
-	                compartido
+	                compartido,
+	                compartirAccion
 	        });
         }
         tablaVuelos.setModel(model);
+        tablaVuelos.getColumnModel().getColumn(0).setPreferredWidth(50); // ID
+        tablaVuelos.getColumnModel().getColumn(1).setPreferredWidth(150); // Origen
+        tablaVuelos.getColumnModel().getColumn(2).setPreferredWidth(150); // Destino
+        tablaVuelos.getColumnModel().getColumn(5).setPreferredWidth(150); // Compartido
+        tablaVuelos.getColumnModel().getColumn(1).setCellRenderer(new MultiLineCellRenderer()); // Origen
+        tablaVuelos.getColumnModel().getColumn(2).setCellRenderer(new MultiLineCellRenderer()); // Destino
 
-        // Renderizador y editor para la última columna (botón o mensaje)
-        tablaVuelos.getColumn("Compartido").setCellRenderer(new CompartidoRenderer());
-        tablaVuelos.getColumn("Compartido").setCellEditor(new CompartidoEditor(a));
+        // Editor y Renderizador para la última columna (botón)
+        tablaVuelos.getColumn("Compartir").setCellEditor(new CompartidoEditor());
+        tablaVuelos.getColumn("Compartir").setCellRenderer(new CompartidoRenderer());
 	}
 	
-	 // Renderizador personalizado para la columna "Compartido"
-    private static class CompartidoRenderer extends DefaultTableCellRenderer {
+	private static class CompartidoRenderer extends JPanel implements TableCellRenderer {
 		private static final long serialVersionUID = 1L;
+		private final JButton botonCompartir = new JButton("Compartir");
+	    private final JLabel mensaje = new JLabel();
 
-		@Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if (value instanceof JButton) {
-                return (JButton) value; // Renderizar el botón directamente
-            }
-            // Renderizar el texto (mensaje)
-            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        }
-    }
+	    public CompartidoRenderer() {
+	        setLayout(new BorderLayout());
+	        botonCompartir.setBackground(Color.cyan);
+	    }
+
+	    @Override
+	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+	                                                   boolean hasFocus, int row, int column) {
+	    	removeAll();
+	        if (value != null && "Compartir".equals(value.toString())) {
+	            add(botonCompartir, BorderLayout.CENTER);
+	        } else {
+	            mensaje.setText(value != null ? value.toString() : "");
+	            add(mensaje, BorderLayout.CENTER);
+	        }
+	        return this;
+	    }
+	}
     
- // Editor personalizado para la columna "Compartido"
+    // Editor personalizado para la columna "Compartido"
     private static class CompartidoEditor extends AbstractCellEditor implements TableCellEditor {
 		private static final long serialVersionUID = 1L;
-		private final Aerolinea aerolinea; // Aerolínea actual
-        private final JPanel panel;
+		private final JPanel panel;
         private final JButton botonCompartir;
         private final JLabel mensaje;
+        private Aerolinea aeSec; // Aerolínea secundaria seleccionada
 
-        public CompartidoEditor(Aerolinea aerolinea) {
-            this.aerolinea = aerolinea;
+        public CompartidoEditor() {
             this.panel = new JPanel(new BorderLayout());
             this.botonCompartir = new JButton("Compartir");
             this.mensaje = new JLabel();
 
-            botonCompartir.setBackground(Color.BLUE);
-            botonCompartir.setForeground(Color.WHITE);
-            botonCompartir.addActionListener(e -> {
-            // Acción para compartir el vuelo
-            int row = ((JTable) SwingUtilities.getAncestorOfClass(JTable.class, botonCompartir)).getSelectedRow();
-            String vueloId = (String) ((JTable) SwingUtilities.getAncestorOfClass(JTable.class, botonCompartir)).getValueAt(row, 0);
-            compartirVuelo(vueloId); // Lógica de compartir
-            fireEditingStopped(); // Notificar que terminó de editar
-        });}
+            botonCompartir.setBackground(Color.cyan);
+
+            botonCompartir.addActionListener(_ -> {
+                JTable table = (JTable) SwingUtilities.getAncestorOfClass(JTable.class, botonCompartir);
+                int row = table.getEditingRow();
+                String vueloId = (String) table.getValueAt(row, 0);
+                // BORRAR LUEGO
+                System.out.println("Vuelos disponibles: " + SkyManager.getInstance().getVuelos());
+                System.out.println("VueloId obtenido de la tabla: " + vueloId);
+                //
+                compartirVuelo(vueloId);
+                fireEditingStopped();
+            });
+        }
             private void compartirVuelo(String vueloId) {
-            	// Implementa la lógica para compartir el vuelo
-                System.out.println("Compartiendo vuelo con ID: " + vueloId);
-                JOptionPane.showMessageDialog(null, "El vuelo con ID " + vueloId + " ahora es compartido.");
+            	Vuelo v = SkyManager.getInstance().getVuelos().get(vueloId);
+
+                // Mostrar diálogo para seleccionar la aerolínea secundaria
+                String nombreAeSec = JOptionPane.showInputDialog(null, "Ingrese el nombre de la aerolínea con la que desea compartir el vuelo:");
+
+                if (nombreAeSec == null || nombreAeSec.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No se ingresó ninguna aerolínea.");
+                    return;
+                }
+
+                // Buscar la aerolínea por nombre
+                aeSec = SkyManager.getInstance().getAerolineas().get(nombreAeSec.trim()); 
+
+                if (aeSec == null) {
+                    JOptionPane.showMessageDialog(null, "No se encontró la aerolínea: " + nombreAeSec);
+                    return;
+                }
+
+                if (v.getCompartido() || aeSec.equals(v.getAerolinea())) {
+                    JOptionPane.showMessageDialog(null, "Este vuelo ya está compartido o pertenece a la misma aerolínea.");
+                    return;
+                }
+
+                // Crear mensaje de petición
+                String msg = "La aerolínea " + v.getAerolinea().getNombre()
+                        + " ha solicitado compartir su vuelo " + v.getId()
+                        + " con su aerolínea (" + aeSec.getNombre() + ")";
+
+                // Enviar la notificación a todos los operadores de esa aerolínea
+                for (Operador op : aeSec.getOperadores()) {
+                    SkyManager.getInstance().getUsuarioActual().enviarNotificacion(msg, op);
+                }
+                // Actualizar estado "Compartido" del vuelo a la espera de veredicto
+                v.setPetComp(PeticionCompartir.PETICION_ENVIADA);
+
+                JOptionPane.showMessageDialog(null, "Solicitud de compartir vuelo enviada a " + aeSec.getNombre());
 		    }
 			@Override
             public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-                panel.removeAll(); // Limpiar contenido previo
-                if (value.toString().startsWith("Compartido")) {
-                    // Si está compartido, mostrar el mensaje
-                    mensaje.setText(value.toString());
-                    panel.add(mensaje, BorderLayout.CENTER);
-                } else {
-                    // Si no está compartido, mostrar el botón
-                    panel.add(botonCompartir, BorderLayout.CENTER);
-                }
-                return panel;
+				panel.removeAll();
+			    if (value != null && "Compartir".equals(value.toString())) {
+			        panel.add(botonCompartir, BorderLayout.CENTER);
+			    } else {
+			        mensaje.setText(value != null ? value.toString() : "");
+			        panel.add(mensaje, BorderLayout.CENTER);
+			    }
+			    return panel;
             }
 			@Override
 			public Object getCellEditorValue() {
