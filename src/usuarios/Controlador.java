@@ -87,6 +87,7 @@ public class Controlador extends Usuario{
 		}
 		this.vuelosASuCargo.add(v);
 		v.addObserver(this);
+		v.setControladorAsignado(this);
 		return true;
 	}
 	

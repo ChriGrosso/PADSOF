@@ -2,7 +2,6 @@ package interfaz.panelesGestor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -16,10 +15,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import interfaz.elementosComunes.MenuLateral;
+
 public class GestorInicio extends JPanel{
 	private static final long serialVersionUID = 1L;
-	private JButton notificaciones;
-	private JButton cerrarSesion;
 	private JButton busquedaVuelos;
 	private JButton gestionVuelos;
 	private JButton gestionAeropuerto;
@@ -30,37 +29,13 @@ public class GestorInicio extends JPanel{
 	public GestorInicio() {
 		setLayout(new BorderLayout());
 		
-		// Panel lateral izquierdo
-        JPanel panelLateral = new JPanel();
-        panelLateral.setLayout(new GridLayout(3, 1, 80, 80));
-        panelLateral.setBackground(new Color(30, 30, 30));
-        panelLateral.setPreferredSize(new Dimension(150, getHeight()));
-        panelLateral.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Color.GRAY)); // línea divisoria
-        panelLateral.setBorder(BorderFactory.createEmptyBorder(80, 15, 40, 15));
-
-        // Botones laterales
-        notificaciones = new JButton();
-        setScaledIcon(notificaciones, "resources/notification_icon.png");
-        notificaciones.setBackground(Color.DARK_GRAY);
-        notificaciones.setForeground(Color.WHITE);
-        notificaciones.setPreferredSize(new Dimension(100, 130));
-        cerrarSesion = new JButton("<html><center>Cerrar<br>Sesión</center></html>");
-        formatoBotones(cerrarSesion);
-        cerrarSesion.setPreferredSize(new Dimension(40, 130));
-        JButton btnAvion = new JButton();
-        setScaledIcon(btnAvion, "resources/iconoSkyManagerInicio.png");
-        btnAvion.setBackground(Color.RED);
-        btnAvion.setForeground(Color.BLACK);
-        btnAvion.setPreferredSize(new Dimension(100, 130));
-
-        panelLateral.add(notificaciones);
-        panelLateral.add(cerrarSesion);
-        panelLateral.add(btnAvion);
+		// === MENU LATERAL ===
+        MenuLateral menu = new MenuLateral("resources/logo_icon.png");
 
         // Panel central
         JPanel panelCentral = new JPanel();
         panelCentral.setLayout(new GridLayout(2, 3, 30, 30));
-        panelCentral.setBackground(Color.BLACK);
+        panelCentral.setBackground(new Color(173, 216, 230));
         panelCentral.setBorder(BorderFactory.createEmptyBorder(80, 60, 80, 60));
 
         // Botones principales
@@ -95,21 +70,19 @@ public class GestorInicio extends JPanel{
         panelCentral.add(gestionVuelos);
 
         // Agregar los paneles
-        add(panelLateral, BorderLayout.WEST);
+        add(menu, BorderLayout.WEST);
         add(panelCentral, BorderLayout.CENTER);
    }
 		
 		
 	void formatoBotones(JButton boton) {
 		boton.setFont(new Font("Arial", Font.BOLD, 18));
-		boton.setBackground(Color.DARK_GRAY);
+		boton.setBackground(new Color(112, 128, 144));
 		boton.setForeground(Color.WHITE);
 	}
 
 	// método para asignar un controlador a los botones
 	public void setControlador(ActionListener c) {
-		notificaciones.setActionCommand("NOTIFICACIONES");
-		cerrarSesion.setActionCommand("CERRAR_SESION");
 		busquedaVuelos.setActionCommand("BUSQUEDA_VUELOS");
 		gestionVuelos.setActionCommand("GESTION_VUELOS");
 		gestionAeropuerto.setActionCommand("GESTION_AEROPUERTO");
@@ -117,8 +90,6 @@ public class GestorInicio extends JPanel{
 		gestionUsuarios.setActionCommand("GESTION_USUARIOS");
 		estadisticas.setActionCommand("ESTADISTICAS");
 		
-		notificaciones.addActionListener(c);
-		cerrarSesion.addActionListener(c);
 		busquedaVuelos.addActionListener(c);
 		gestionVuelos.addActionListener(c);
 		gestionAeropuerto.addActionListener(c);

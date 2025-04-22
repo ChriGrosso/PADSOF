@@ -20,6 +20,7 @@ import elementos.Puerta;
 import elementos.Terminal;
 import elementos.ZonaParking;
 import notificaciones.Observable;
+import usuarios.Controlador;
 import aeropuertos.Aeropuerto;
 
 /**
@@ -52,6 +53,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 	private Puerta puerta;
 	private HashMap<ElementoEstructural, ClaveVueloElemento> mapaElemClave;
 	private PeticionCompartir petComp;
+	private Controlador controladorAsignado = null;
 	
 	/**
 	 * Constructor de Vuelo con múltiples aerolíneas.
@@ -441,7 +443,29 @@ public abstract class Vuelo extends Observable implements Serializable{
 		return this.diasAlternos;
 	}
 	
+	/**
+	 * Obtiene el controlador asignado al vuelo.
+	 *
+	 * @return Controlador asignado.
+	*/
+	public Controlador getControladorAsignado() {
+		return this.controladorAsignado;
+	}
 	
+	/**
+	 * Asigna un controlador al vuelo.
+	 *
+	 * @return c Controlador a asignar.
+	*/
+	public void setControladorAsignado(Controlador c) {
+		this.controladorAsignado = c;
+	}
+	
+	/**
+	 * Asigna una terminal al vuelo.
+	 *
+	 * @param puerta Puerta a asignar.
+	 */
 	public void setTerminal(Terminal terminal) {
 		this.terminal = terminal;
 	}

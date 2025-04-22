@@ -27,12 +27,12 @@ public class GestorGestionUsuarios extends JPanel{
 	
 	public GestorGestionUsuarios() {
 		setLayout(new BorderLayout());
-		setBackground(Color.BLACK);
+		setBackground(new Color(173, 216, 230));
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 		
 		// Título
 	    JLabel titulo = new JLabel("Gestión de Usuarios", SwingConstants.CENTER);
-	    titulo.setForeground(Color.WHITE);
+	    titulo.setForeground(new Color(70, 130, 180));
 	    titulo.setFont(new Font("SansSerif", Font.BOLD, 24));
 	    titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
 	    add(titulo, BorderLayout.NORTH);
@@ -47,25 +47,25 @@ public class GestorGestionUsuarios extends JPanel{
 		}
 		
 		tabla = new JTable(modeloDatos);
-		tabla.setBackground(Color.DARK_GRAY);
-	    tabla.setForeground(Color.WHITE);
+		tabla.setBackground(Color.WHITE);
+	    tabla.setForeground(Color.BLACK);
 	    tabla.setFont(new Font("SansSerif", Font.PLAIN, 14));
 	    tabla.setRowHeight(25);
-	    tabla.setGridColor(Color.GRAY);
-	    tabla.getTableHeader().setBackground(Color.GRAY);
-	    tabla.getTableHeader().setForeground(Color.BLACK);
+	    tabla.setGridColor(new Color(75, 135, 185));
+	    tabla.getTableHeader().setBackground(new Color(70, 130, 180));
+	    tabla.getTableHeader().setForeground(Color.WHITE);
 	    tabla.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
 		 
 		// barra de scroll para la tabla 
 		JScrollPane scroll = new JScrollPane(tabla);
 		scroll.setPreferredSize(new Dimension(500, 150));
-		scroll.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		scroll.setBorder(BorderFactory.createLineBorder(new Color(112, 128, 144)));
 	    add(scroll, BorderLayout.CENTER);
 	    
 	    // Panel inferior para los botones
 	    JPanel panelInferior = new JPanel();
 	    panelInferior.setLayout(new BorderLayout());
-	    panelInferior.setBackground(Color.BLACK);
+	    panelInferior.setBackground(new Color(173, 216, 230));
 	    panelInferior.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 		  
 		//Añadir los botones
@@ -73,14 +73,14 @@ public class GestorGestionUsuarios extends JPanel{
 		nuevoUsuario = new JButton("Nuevo Usuario");
 		this.formatoBotones(nuevoUsuario, 200, 50);
 		JPanel panelNuevo = new JPanel(new FlowLayout(FlowLayout.CENTER));
-	    panelNuevo.setBackground(Color.BLACK);
+	    panelNuevo.setBackground(new Color(173, 216, 230));
 	    panelNuevo.add(nuevoUsuario);
 		
 		// Botón "Atrás" a la izquierda
 		atras = new JButton("Atrás");
 		this.formatoBotones(atras, 160, 50);
 		JPanel panelAtras = new JPanel(new FlowLayout(FlowLayout.LEFT));
-	    panelAtras.setBackground(Color.BLACK);
+	    panelAtras.setBackground(new Color(173, 216, 230));
 	    panelAtras.add(atras);
 		
 	    // Agregar subpaneles al panel inferior
@@ -95,7 +95,7 @@ public class GestorGestionUsuarios extends JPanel{
 		//boton.setBackground(Color.DARK_GRAY);
 		boton.setPreferredSize(new Dimension(ancho, alto));
 		boton.setForeground(Color.WHITE);
-	    boton.setBackground(new Color(255, 140, 0)); 
+	    boton.setBackground(new Color(70, 130, 180)); 
 	    boton.setFocusPainted(false);
 	    boton.setFont(new Font("SansSerif", Font.BOLD, 16));
 	    boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -109,13 +109,4 @@ public class GestorGestionUsuarios extends JPanel{
 		nuevoUsuario.addActionListener(c);
 		atras.addActionListener(c);
 	}
-	
-	void addFila(Object[] nuevaFila) {
-		modeloDatos.addRow(nuevaFila);
-	}
-	
-	void removeFila(int index) {
-		modeloDatos.removeRow(index);
-	}
-
 }

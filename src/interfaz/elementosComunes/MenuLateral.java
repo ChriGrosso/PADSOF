@@ -14,7 +14,7 @@ public class MenuLateral extends JPanel {
 
     public MenuLateral(String logoPath) {
         setLayout(new BorderLayout());
-        setBackground(new Color(45, 45, 45));
+        setBackground(new Color(70, 130, 180));
 
         // === LOGO ===
         ImageIcon icon = new ImageIcon(logoPath);
@@ -27,7 +27,7 @@ public class MenuLateral extends JPanel {
         logoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel topPanel = new JPanel();
-        topPanel.setBackground(new Color(45, 45, 45));
+        topPanel.setBackground(new Color(70, 130, 180));
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         topPanel.add(Box.createVerticalStrut(20));
         topPanel.add(logoButton);
@@ -35,9 +35,13 @@ public class MenuLateral extends JPanel {
 
         // === BOTTONI FISSI: Notifiche e Logout ===
         JButton notifiche = FabricaBotones.crearBotonMenu("Notifiche", "resources/notification_icon.png");
+        notifiche.setBackground(new Color(112, 128, 150));
+        notifiche.setForeground(Color.WHITE);
         notifiche.setActionCommand("NOTIFICHE");
 
         JButton logout = FabricaBotones.crearBotonMenu("Logout", "resources/logout_icon.png");
+        logout.setBackground(new Color(112, 128, 150));
+        logout.setForeground(Color.WHITE);
         logout.setActionCommand("LOGOUT");
 
         // Aggiunta listener interno
@@ -48,7 +52,7 @@ public class MenuLateral extends JPanel {
         bottoni.put("Logout", logout);
 
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setBackground(new Color(45, 45, 45));
+        bottomPanel.setBackground(new Color(70, 130, 180));
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
         bottomPanel.add(Box.createVerticalGlue());
         bottomPanel.add(notifiche);

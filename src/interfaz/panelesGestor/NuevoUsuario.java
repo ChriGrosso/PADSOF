@@ -2,7 +2,6 @@ package interfaz.panelesGestor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -10,28 +9,19 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableModel;
 
 import aerolineas.Aerolinea;
 import elementos.Terminal;
 import sistema.SkyManager;
-import usuarios.Usuario;
+
 
 public class NuevoUsuario extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -45,19 +35,19 @@ public class NuevoUsuario extends JPanel{
 	private JButton cancelar;
 	private JRadioButton operador;
 	private JRadioButton controlador;
-	//private JComboBox<String> aerolineas;
-	//private JComboBox<String> terminales;
+	private JComboBox<String> aerolineas;
+	private JComboBox<String> terminales;
 	
 	public NuevoUsuario() {
 		// Usar GridBagLayout para centrar componentes
         this.setLayout(new BorderLayout());
-        setBackground(Color.BLACK);
+        setBackground(new Color(173, 216, 230));
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 		
 		//panel central con los datos a completar
 		JPanel formulario = new JPanel(new GridBagLayout());
-		formulario.setBackground(Color.BLACK);
-		formulario.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+		formulario.setBackground(new Color(173, 216, 230));
+		formulario.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 2));
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(5, 5, 5, 5);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -67,7 +57,7 @@ public class NuevoUsuario extends JPanel{
 		// nombre
         gbc.gridx = 0; gbc.gridy = 0;
         JLabel labelNombre = new JLabel("Nombre");
-        labelNombre.setForeground(Color.WHITE);
+        labelNombre.setForeground(Color.BLACK);
         formulario.add(labelNombre, gbc);
         gbc.gridx = 1;
         campoNombre = new JTextField(15);
@@ -75,7 +65,7 @@ public class NuevoUsuario extends JPanel{
         //dni
         gbc.gridx = 0; gbc.gridy++;
         JLabel labelDni = new JLabel("DNI");
-        labelDni.setForeground(Color.WHITE);
+        labelDni.setForeground(Color.BLACK);
         formulario.add(labelDni, gbc);
         gbc.gridx = 1;
         campoDni = new JTextField(15);
@@ -83,7 +73,7 @@ public class NuevoUsuario extends JPanel{
         //contraseña
         gbc.gridx = 0; gbc.gridy++;
         JLabel labelPassword = new JLabel("Contraseña");
-        labelPassword.setForeground(Color.WHITE);
+        labelPassword.setForeground(Color.BLACK);
         formulario.add(labelPassword, gbc);
         gbc.gridx = 1;
         campoPassword = new JTextField(15);
@@ -92,16 +82,15 @@ public class NuevoUsuario extends JPanel{
         // Tipo
         gbc.gridx = 0; gbc.gridy++;
         JLabel labelTipo = new JLabel("Tipo");
-        labelTipo.setForeground(Color.WHITE);
+        labelTipo.setForeground(Color.BLACK);
         formulario.add(labelTipo, gbc);
         gbc.gridx = 1;
         operador = new JRadioButton("Operador");
         controlador = new JRadioButton("Controlador");
         operador.setOpaque(false);
         controlador.setOpaque(false);
-        operador.setForeground(Color.WHITE);
-        controlador.setForeground(Color.WHITE);
-        operador.setSelected(true);
+        operador.setForeground(Color.BLACK);
+        controlador.setForeground(Color.BLACK);
         // Crear un grupo para las opciones, para garantizar que solo se seleccione una
         ButtonGroup grupo = new ButtonGroup();
         // Añadir las opciones al grupo
@@ -109,16 +98,15 @@ public class NuevoUsuario extends JPanel{
         grupo.add(controlador);
         
         JPanel tipoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        tipoPanel.setBackground(Color.BLACK);
+        tipoPanel.setBackground(new Color(173, 216, 230));
         tipoPanel.add(operador);
         tipoPanel.add(controlador);
         formulario.add(tipoPanel, gbc);
         
-        /*
         // Aerolinea
         gbc.gridx = 0; gbc.gridy++;
         labelAerolinea = new JLabel("Aerolínea");
-        labelAerolinea.setForeground(Color.WHITE);
+        labelAerolinea.setForeground(Color.BLACK);
         formulario.add(labelAerolinea, gbc);
         gbc.gridx = 1;
         aerolineas = new JComboBox<String>();
@@ -131,7 +119,7 @@ public class NuevoUsuario extends JPanel{
         // Terminal
         gbc.gridx = 0; gbc.gridy++;
         labelTerminal = new JLabel("Terminal");
-        labelTerminal.setForeground(Color.WHITE);
+        labelTerminal.setForeground(Color.BLACK);
         formulario.add(labelTerminal, gbc);
         gbc.gridx = 1;
         terminales = new JComboBox<String>();
@@ -140,12 +128,14 @@ public class NuevoUsuario extends JPanel{
         	terminales.addItem(t.getId());
         }
         formulario.add(terminales, gbc);
- 		*/
+        
+        operador.setSelected(true);
+        this.mostrarAerolineas();
 	    
 	    // Panel inferior para los botones
 	    JPanel panelInferior = new JPanel();
 	    panelInferior.setLayout(new GridLayout(1, 2, 20, 0));
-	    panelInferior.setBackground(Color.BLACK);
+	    panelInferior.setBackground(new Color(173, 216, 230));
 	    panelInferior.setBorder(BorderFactory.createEmptyBorder(20, 150, 0, 150));
 		  
 		//Añadir los botones
@@ -166,7 +156,7 @@ public class NuevoUsuario extends JPanel{
 	
 	void formatoBotones(JButton boton) {
 		boton.setForeground(Color.WHITE);
-	    boton.setBackground(Color.DARK_GRAY); 
+	    boton.setBackground(new Color(70, 130, 180)); 
 	    boton.setFocusPainted(false);
 	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
 	}
@@ -199,7 +189,6 @@ public class NuevoUsuario extends JPanel{
 	    return campoNombre.getText().trim();
 	}
 	
-	/*
 	public void mostrarAerolineas() {
 		aerolineas.setVisible(true);
         labelAerolinea.setVisible(true);
@@ -213,7 +202,6 @@ public class NuevoUsuario extends JPanel{
         terminales.setVisible(true);
         labelTerminal.setVisible(true);
 	}
-	*/
 	
 	public boolean esOperadorSeleccionado() {
 	    return operador.isSelected();
@@ -223,7 +211,6 @@ public class NuevoUsuario extends JPanel{
 	    return controlador.isSelected();
 	}
 	
-	/*
 	// Obtener la aerolínea seleccionada del combo
 	public String getAerolineaSeleccionada() {
 	    return (String) aerolineas.getSelectedItem();
@@ -233,15 +220,15 @@ public class NuevoUsuario extends JPanel{
 	public String getTerminalSeleccionada() {
 	    return (String) terminales.getSelectedItem();
 	}
-	*/
+	
 	// método que actualiza el valor de los campos
 	public void limpiarCampos() {
 	    campoNombre.setText("");
 	    campoDni.setText("");
 	    campoPassword.setText("");
 	    
-	    //aerolineas.setSelectedIndex(0);
-	    //terminales.setSelectedIndex(0);
+	    aerolineas.setSelectedIndex(0);
+	    terminales.setSelectedIndex(0);
 	    
 	    campoNombre.grabFocus();
 	}

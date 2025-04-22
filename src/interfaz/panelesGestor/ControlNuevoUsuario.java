@@ -33,13 +33,13 @@ public class ControlNuevoUsuario implements ActionListener {
             	Aplicacion.getInstance().showGestorGestionUsuarios();
                 break;
 
-            /*case "OPERADOR":
+            case "OPERADOR":
             	nu.mostrarAerolineas();
                 break;
             case "CONTROLADOR":
 	            nu.mostrarTerminales();
                 break;    
-			*/
+			
             default:
                 System.out.println("Comando desconocido:  " + comando);
         }
@@ -49,24 +49,24 @@ public class ControlNuevoUsuario implements ActionListener {
     	NuevoUsuario nu = Aplicacion.getInstance().getNuevoUsuario();
     	Usuario nuevo;
     	String dni = nu.getDniUsuario();
-    	if (!esDniValido(dni)) {
-    		JOptionPane.showMessageDialog(null, "El DNI introducido no cumple el formato correcto");
-    		return;
-    	}
     	String nombre = nu.getNombreUsuario();
     	String contrasena = nu.getPasswordUsuario();
-    	//String aerolinea = nu.getAerolineaSeleccionada();
-    	//String terminal = nu.getTerminalSeleccionada();
+    	String aerolinea = nu.getAerolineaSeleccionada();
+    	String terminal = nu.getTerminalSeleccionada();
     	
     	if (dni.isBlank() || nombre.isBlank() || contrasena.isBlank() /*|| (aerolinea.isBlank() && terminal.isBlank())*/) {
     		JOptionPane.showMessageDialog(null, "Todos los campos deben estar completados para poder añadir un usuario");
+    		return;
+    	}
+    	else if (!esDniValido(dni)) {
+    		JOptionPane.showMessageDialog(null, "El DNI introducido no cumple el formato correcto");
     		return;
     	}
     	else if (modelo.getUsuarios().containsKey(dni)) {
     		JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese DNI");
     		return;
     	}
-    	/*
+    	
     	if (nu.esControladorSeleccionado()) {
     		nuevo = new Controlador(dni, nombre, contrasena, modelo.getTerminales().get(terminal));
     	} else { 
@@ -76,7 +76,7 @@ public class ControlNuevoUsuario implements ActionListener {
     	
     	modelo.registrarUsuario(nuevo);
      	modelo.guardarDatos();
-     	*/
+     	
         JOptionPane.showMessageDialog(null, "Usuario añadido correctamente");
         nu.limpiarCampos();
     }
