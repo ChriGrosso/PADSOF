@@ -61,7 +61,10 @@ public class ControlLogin implements ActionListener{
 			Aplicacion.getInstance().showContInicio();
 			 // schermo intero
 			}
-		else if(user.esGestor()) { Aplicacion.getInstance().showGestorInicio(); }
+		else if(user.esGestor()) { 
+			Aplicacion.getInstance().getGestorInicio().actualizarPantalla();
+			Aplicacion.getInstance().showGestorInicio(); 
+		}
 		Aplicacion.getInstance().getLogin().update();
 		return;
 	}

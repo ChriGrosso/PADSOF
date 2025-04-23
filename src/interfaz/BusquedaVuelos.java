@@ -1,4 +1,4 @@
-package interfaz.panelesGestor;
+package interfaz;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -15,23 +16,30 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import interfaz.elementosComunes.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Usuario;
 
-public class GestorGestionUsuarios extends JPanel{
+public class BusquedaVuelos extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton nuevoUsuario;
 	private JButton atras;
-	private DefaultTableModel modeloDatos;
 	private JTable tabla;
 	
-	public GestorGestionUsuarios() {
+	public BusquedaVuelos() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 		
+		// Contenedor en la esquina superior derecha
+        BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
+        panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
+
+        // Añadir el contenedor al panel principal
+        add(panelSuperiorIzquierdo, BorderLayout.NORTH);
+		
 		// Título
-	    JLabel titulo = new JLabel("Gestión de Usuarios", SwingConstants.CENTER);
+	    JLabel titulo = new JLabel("Búsqueda de Vuelos", SwingConstants.CENTER);
 	    titulo.setForeground(new Color(70, 130, 180));
 	    titulo.setFont(new Font("SansSerif", Font.BOLD, 24));
 	    titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
@@ -39,7 +47,7 @@ public class GestorGestionUsuarios extends JPanel{
 				
 		// Crear un array con el título de las columnas
 		String[] titulos = {"Nombre", "DNI", "Tipo de Usuario"};
-		modeloDatos = new DefaultTableModel(titulos, 0); 
+		DefaultTableModel modeloDatos = new DefaultTableModel(titulos, 0); 
 
 		for (Usuario u : SkyManager.getInstance().getUsuarios().values()) {
 		    Object[] fila = {u.getNombre(), u.getDni(), u.getClass().getSimpleName()};
@@ -107,4 +115,10 @@ public class GestorGestionUsuarios extends JPanel{
 		nuevoUsuario.addActionListener(c);
 		atras.addActionListener(c);
 	}
+	
+	private void paginaAnterior() {
+		SkyManager.getInstance().guardarDatos();
+		Aplicacion.getInstance().showGestorInicio();
+	}
+	
 }

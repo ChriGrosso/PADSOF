@@ -3,8 +3,11 @@ package interfaz.panelesGestor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -12,10 +15,13 @@ import java.awt.event.ComponentEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import interfaz.elementosComunes.MenuLateral;
+import sistema.SkyManager;
+import usuarios.Usuario;
 
 public class GestorInicio extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -25,18 +31,41 @@ public class GestorInicio extends JPanel{
 	private JButton gestionFacturas;
 	private JButton gestionUsuarios;
 	private JButton estadisticas;
+	private JLabel bienvenida;
 	
 	public GestorInicio() {
 		setLayout(new BorderLayout());
 		
 		// === MENU LATERAL ===
         MenuLateral menu = new MenuLateral("resources/logo_icon.png");
+        
+        // Mensaje bienvenida
+        JPanel panelGeneral = new JPanel();
+        panelGeneral.setLayout(new GridBagLayout());
+        panelGeneral.setBackground(new Color(173, 216, 230));
+        panelGeneral.setBorder(BorderFactory.createEmptyBorder(80, 60, 80, 60));
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+
+        // Bienvenida (si hay usuario)
+        bienvenida = new JLabel();
+        bienvenida.setFont(new Font("Arial", Font.BOLD, 18));
+        bienvenida.setForeground(new Color(112, 128, 144));
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelGeneral.add(bienvenida, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.gridy++;
 
         // Panel central
         JPanel panelCentral = new JPanel();
         panelCentral.setLayout(new GridLayout(2, 3, 30, 30));
         panelCentral.setBackground(new Color(173, 216, 230));
-        panelCentral.setBorder(BorderFactory.createEmptyBorder(80, 60, 80, 60));
+        panelCentral.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Botones principales
         gestionUsuarios = new JButton("Gestión Usuarios");
@@ -68,14 +97,18 @@ public class GestorInicio extends JPanel{
         formatoBotones(gestionVuelos);
         setScaledIcon(gestionVuelos, "resources/iconoGestionVuelos.png");
         panelCentral.add(gestionVuelos);
+        
+        gbc.gridy = 1;  // Mover una fila hacia abajo
+        gbc.gridwidth = 2;
+        panelGeneral.add(panelCentral, gbc);
 
         // Agregar los paneles
         add(menu, BorderLayout.WEST);
-        add(panelCentral, BorderLayout.CENTER);
+        add(panelGeneral, BorderLayout.CENTER);
    }
 		
 		
-	void formatoBotones(JButton boton) {
+	private void formatoBotones(JButton boton) {
 		boton.setFont(new Font("Arial", Font.BOLD, 18));
 		boton.setBackground(new Color(112, 128, 144));
 		boton.setForeground(Color.WHITE);
@@ -110,19 +143,10 @@ public class GestorInicio extends JPanel{
                 // Limitar el tamaño del icono (por ejemplo, máximo 64x64)
                 int iconWidth = Math.min(192, btnWidth / 2);
                 int iconHeight = Math.min(192, btnHeight / 2);
-                if (imagePath.equals("resources/notification_icon.png")) {
-                	iconWidth = Math.min(btnWidth, btnWidth / 3);
-                    iconHeight = Math.min(iconHeight, btnHeight / 3);
-                }
-                if ((iconWidth != iconHeight) && !imagePath.equals("resources/iconoSkyManagerInicio.png")) {
+                if ((iconWidth != iconHeight)) {
                 	iconHeight = Math.min(iconHeight, btnWidth);
                 	iconWidth = Math.min(iconHeight, btnWidth);
                 }
-                if (imagePath.equals("resources/iconoSkyManagerInicio.png")) {
-                	iconWidth = btnWidth;
-                    iconHeight = btnHeight;
-                }
-                
 
                 // Escalar manteniendo proporciones
                 Image scaledImage = originalIcon.getImage().getScaledInstance(
@@ -134,6 +158,13 @@ public class GestorInicio extends JPanel{
                 button.setVerticalTextPosition(SwingConstants.BOTTOM);
             }
         });
+    }
+	
+	public void actualizarPantalla() {
+    	Usuario usuarioActual = SkyManager.getInstance().getUsuarioActual();
+    	if(usuarioActual != null) {
+    		bienvenida.setText("Bienvenid@ " + usuarioActual.getNombre());
+    	}
     }
 
 }
