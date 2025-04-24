@@ -83,7 +83,7 @@ public class BusquedaVuelos extends JPanel{
        
 		gbc.gridx = 0; gbc.gridy = 2; 
 		tabla = new JTable();
-		setFilasTabla(null);
+		setFilasTabla(new ArrayList<Vuelo>());
 		tabla.setBackground(Color.WHITE);
 	    tabla.setForeground(Color.BLACK);
 	    tabla.setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -135,13 +135,6 @@ public class BusquedaVuelos extends JPanel{
 	    boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 	}
 	
-	// método para asignar un controlador a los botones
-	public void setControlador(ActionListener c) {  
-		botonBuscar.setActionCommand("BUSCAR");
-		
-		botonBuscar.addActionListener(c);
-	}
-	
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().showGestorInicio();
@@ -153,7 +146,7 @@ public class BusquedaVuelos extends JPanel{
 	}
 	
 	// Obtener el metodo de busqueda seleccionado del combo
-	public String getTerminalSeleccionada() {
+	public String getTipoBusquedaSeleccionado() {
 	    return (String) tiposBusqueda.getSelectedItem();
 	}
 	
@@ -166,4 +159,10 @@ public class BusquedaVuelos extends JPanel{
 	    campoBusqueda.grabFocus();
 	}
 	
+	// método para asignar un controlador a los botones
+	public void setControlador(ActionListener c) {  
+		botonBuscar.setActionCommand("BUSCAR");
+		
+		botonBuscar.addActionListener(c);
+	}
 }
