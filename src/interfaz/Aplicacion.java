@@ -6,7 +6,9 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import interfaz.panelesControlador.ControlControladorBusquedaVuelos;
 import interfaz.panelesControlador.ControlControladorInicio;
+import interfaz.panelesControlador.ControladorBusquedaVuelos;
 import interfaz.panelesControlador.ControladorInicio;
 import interfaz.panelesGestor.ControlGestorGestionUsuarios;
 import interfaz.panelesGestor.ControlGestorInicio;
@@ -53,6 +55,7 @@ public class Aplicacion extends JFrame{
 	private PagarFactura panelPagarFactura;
 	private OperadorEstadisticas panelOpEstadisticas;
 	private NuevoUsuario panelNuevoUsuario;
+	private ControladorBusquedaVuelos panelContBusqueda;
 	
 	// Declaramos el panel con las cartas JPanel cartas; 
 	private JPanel cartas;
@@ -81,6 +84,8 @@ public class Aplicacion extends JFrame{
 	
 	final static String CONT_GESTION_VUELOS   = "Controlador Vuelos";
 	
+	final static String CONT_BUSQUEDA   = "Controlador Busqueda Vuelos";
+	
 	
 	private Aplicacion() {
 		super("SkyManager");
@@ -100,6 +105,7 @@ public class Aplicacion extends JFrame{
 		panelOpFacturas = new OperadorFacturas();
 		panelPagarFactura = new PagarFactura();
 		panelOpEstadisticas = new OperadorEstadisticas();
+		panelContBusqueda = new ControladorBusquedaVuelos();
 		
 		//controladores
 		ControlLogin controlLogin = new ControlLogin();
@@ -116,6 +122,7 @@ public class Aplicacion extends JFrame{
 		ControlOperadorFacturas controlOpFacturas = new ControlOperadorFacturas();
 		ControlPagarFactura controlPagarFactura = new ControlPagarFactura();
 		ControlOperadorEstadisticas controlOpEst = new ControlOperadorEstadisticas();
+		ControlControladorBusquedaVuelos controlContBusqueda = new ControlControladorBusquedaVuelos(panelContBusqueda);
 		
 		// configurar las vistas con los controladores
 		panelLogin.setControlador(controlLogin);
@@ -132,6 +139,7 @@ public class Aplicacion extends JFrame{
 		panelOpFacturas.setControlador(controlOpFacturas);
 		panelPagarFactura.setControlador(controlPagarFactura);
 		panelOpEstadisticas.setControlador(controlOpEst);
+		panelContBusqueda.setControlador(controlContBusqueda);
 	
 		// Creamos el panel que contiene las cartas 
 		cartas = new JPanel(new CardLayout()); 
@@ -149,6 +157,7 @@ public class Aplicacion extends JFrame{
 		cartas.add(panelOpFacturas, OP_FACTURAS);
 		cartas.add(panelPagarFactura, OP_PAGAR_FACTURA);
 		cartas.add(panelOpEstadisticas, OP_ESTADISTICAS);
+		cartas.add(panelContBusqueda, CONT_BUSQUEDA);
 		
 		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
@@ -235,6 +244,10 @@ public class Aplicacion extends JFrame{
 		return this.panelGestorGestUsers;
 	}
 	
+	public ControladorBusquedaVuelos getControladorBusquedaVuelos() {
+		return this.panelContBusqueda;
+	}
+	
 	public void showOpInicio() {
 		((CardLayout)cartas.getLayout()).show(cartas, OP_INICIO);
 	}
@@ -289,6 +302,10 @@ public class Aplicacion extends JFrame{
 	
 	public void showNuevoUsuario() {
 		((CardLayout)cartas.getLayout()).show(cartas, GESTOR_NUEVO_USUARIO);
+	}
+	
+	public void showContBusquedaVuelos() {
+		((CardLayout)cartas.getLayout()).show(cartas, CONT_BUSQUEDA);
 	}
 }
 

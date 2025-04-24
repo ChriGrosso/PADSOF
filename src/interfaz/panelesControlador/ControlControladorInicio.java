@@ -28,13 +28,11 @@ public class ControlControladorInicio implements ActionListener {
                 break;
 
             case "gestión vuelos":
-                // aggiungi eventuale navigazione
-                System.out.println("➡ Navegar a gestión vuelos...");
+                gestionVuelos();
                 break;
 
             case "buscar vuelos":
-                // aggiungi eventuale navigazione
-                System.out.println("🔍 Navegar a búsqueda vuelos...");
+            	buscarVuelos();
                 break;
 
             default:
@@ -50,5 +48,15 @@ public class ControlControladorInicio implements ActionListener {
     private void verNotificaciones() {
         modelo.guardarDatos();
         Aplicacion.getInstance().showNotificaciones();
+    }
+    
+    private void gestionVuelos() {
+        modelo.guardarDatos();
+        Aplicacion.getInstance().showLogin();
+    }
+    
+    private void buscarVuelos() {
+        modelo.guardarDatos();
+        Aplicacion.getInstance().showContBusquedaVuelos();
     }
 }
