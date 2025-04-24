@@ -269,14 +269,17 @@ public class DemoApp {
         String idFactura = "FAC-" + aerolinea.getId() + "-" + hoy.toString();
         String logo = "./resources/logo.png";
 
-        Factura factura = new Factura(idFactura, 0.0, 0.0, hoy, aerolinea, logo);
+        Factura factura = new Factura(idFactura, 100.0, 0.0, hoy, aerolinea, logo);
 
         // Aggiunge tutti gli usi — sarà la Factura a filtrare quelli del mese precedente
         for (Uso uso : aerolinea.getArrayUsos()) {
             factura.addUso(uso);
         }
 
-        factura.calcularFactura(aerolinea); 
+        double total = factura.calcularFactura(aerolinea);
+        System.out.println(total);
+        factura.setTotal(total);
+        app.registrarFactura(factura);
 
         try {
             String path = "./resources/" + idFactura + ".pdf";

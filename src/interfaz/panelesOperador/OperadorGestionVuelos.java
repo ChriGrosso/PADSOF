@@ -19,7 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -206,10 +205,6 @@ public class OperadorGestionVuelos extends JPanel{
                 JTable table = (JTable) SwingUtilities.getAncestorOfClass(JTable.class, botonCompartir);
                 int row = table.getEditingRow();
                 String vueloId = (String) table.getValueAt(row, 0);
-                // BORRAR LUEGO
-                System.out.println("Vuelos disponibles: " + SkyManager.getInstance().getVuelos());
-                System.out.println("VueloId obtenido de la tabla: " + vueloId);
-                //
                 compartirVuelo(vueloId);
                 fireEditingStopped();
             });

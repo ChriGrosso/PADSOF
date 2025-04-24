@@ -214,4 +214,8 @@ public class Factura implements IInvoiceInfo, Serializable {
     public List<IResourceUsageInfo> getResourcePrices() {
         return rUsage;
     }
+    
+    public void setTotal(double total) {
+    	this.total = total;
+    }
 }

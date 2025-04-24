@@ -6,12 +6,14 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -43,52 +45,50 @@ public class OperadorInicio extends JPanel {
         // === PANEL CENTRAL ===
         JPanel panelContenido = new JPanel();
         panelContenido.setLayout(new GridBagLayout());
-        panelContenido.setBackground(Color.WHITE);
+        panelContenido.setBackground(new Color(173, 216, 230));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(20, 20, 20, 20);
         gbc.gridx = 0;
         gbc.gridy = 0;
+        
+        // Subpanel central para los botones
+        JPanel subPanelCentral = new JPanel();
+        subPanelCentral.setLayout(new GridLayout(2, 3, 30, 30));
+        subPanelCentral.setBackground(new Color(173, 216, 230));
+        subPanelCentral.setBorder(BorderFactory.createEmptyBorder(80, 60, 80, 60));
 
-        // Bienvenida (si hay usuario)
+        // Bienvenida a usuario
         bienvenida = new JLabel();
-        bienvenida.setFont(new Font("Arial", Font.BOLD, 18));
+        bienvenida.setFont(new Font("Arial", Font.BOLD, 22));
+        bienvenida.setForeground(new Color(112, 128, 144)); 
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         panelContenido.add(bienvenida, gbc);
 
-        gbc.gridwidth = 1;
-        gbc.gridy++;
+        //gbc.gridwidth = 1;
 
         // Componentes
         busquedaVuelos = createContentButton("Buscar Vuelos");
-        setScaledIcon(busquedaVuelos, "resources/searchFlights_icon.png");
+        setScaledIcon(busquedaVuelos, "resources/iconoBusquedaVuelos.png");
         estadisticas = createContentButton("Estadísticas");
-        setScaledIcon(estadisticas, "resources/statistics_icon.png");
-        facturas = createContentButton("Ver Facturas");
-        setScaledIcon(facturas, "resources/invoice_icon.png");
+        setScaledIcon(estadisticas, "resources/iconoEstadisticas.png");
+        facturas = createContentButton("Gestionar Facturas");
+        setScaledIcon(facturas, "resources/iconoFacturas.png");
         gestionVuelos = createContentButton("Gestionar Vuelos");
-        setScaledIcon(gestionVuelos, "resources/flight_icon.png");
+        setScaledIcon(gestionVuelos, "resources/iconoGestionVuelos.png");
         gestionAviones = createContentButton("Gestionar Aviones");
-        setScaledIcon(gestionAviones, "resources/plane_icon.png");
+        setScaledIcon(gestionAviones, "resources/iconoGestionAviones.png");
 
-        gbc.gridx = 0;
-        panelContenido.add(busquedaVuelos, gbc);
-
-        gbc.gridx = 1;
-        panelContenido.add(estadisticas, gbc);
-
-        gbc.gridx = 0;
+        subPanelCentral.add(busquedaVuelos);
+        subPanelCentral.add(estadisticas);
+        subPanelCentral.add(facturas, gbc);
+        subPanelCentral.add(gestionVuelos, gbc);
+        subPanelCentral.add(gestionAviones, gbc);
+        
         gbc.gridy++;
-        panelContenido.add(facturas, gbc);
-
-        gbc.gridx = 1;
-        panelContenido.add(gestionVuelos, gbc);
-
         gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.gridwidth = 2;
-        panelContenido.add(gestionAviones, gbc);
+        panelContenido.add(subPanelCentral, gbc);
 
         // === ASSEMBLA ===
         add(panelContenido, BorderLayout.CENTER);
@@ -96,9 +96,9 @@ public class OperadorInicio extends JPanel {
 
     private JButton createContentButton(String text) {
         JButton btn = new JButton(text);
-        btn.setPreferredSize(new Dimension(200, 80));
-        btn.setFocusPainted(false);
-        btn.setFont(new Font("Arial", Font.BOLD, 14));
+        btn.setBackground(new Color(112, 128, 144));
+		btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Arial", Font.BOLD, 18));
         return btn;
     }
     
@@ -112,8 +112,21 @@ public class OperadorInicio extends JPanel {
                 int btnHeight = button.getHeight();
 
                 // Limitar el tamaño del icono (por ejemplo, máximo 64x64)
-                int iconWidth = Math.min(64, btnWidth / 5);
-                int iconHeight = Math.min(64, btnHeight / 4);
+                int iconWidth = Math.min(192, btnWidth / 2);
+                int iconHeight = Math.min(192, btnHeight / 2);
+                if (imagePath.equals("resources/notification_icon.png")) {
+                	iconWidth = Math.min(btnWidth, btnWidth / 3);
+                    iconHeight = Math.min(iconHeight, btnHeight / 3);
+                }
+                if ((iconWidth != iconHeight) && !imagePath.equals("resources/iconoSkyManagerInicio.png")) {
+                	iconHeight = Math.min(iconHeight, btnWidth);
+                	iconWidth = Math.min(iconHeight, btnWidth);
+                }
+                if (imagePath.equals("resources/iconoSkyManagerInicio.png")) {
+                	iconWidth = btnWidth;
+                    iconHeight = btnHeight;
+                }
+                
 
                 // Escalar manteniendo proporciones
                 Image scaledImage = originalIcon.getImage().getScaledInstance(

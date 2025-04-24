@@ -28,6 +28,9 @@ public class ControlOperadorInicio implements ActionListener{
 		else if (e.getActionCommand().equals("Gestionar Vuelos")) {     // si se ha pulsado "Notificaciones"
 			this.gestionarVuelos();
 		}
+		else if (e.getActionCommand().equals("Gestionar Facturas")) {     // si se ha pulsado "Notificaciones"
+			this.gestionarFacturas();
+		}
 	}
 
 	
@@ -41,6 +44,12 @@ public class ControlOperadorInicio implements ActionListener{
 		Aplicacion.getInstance().getOpVuelos().actualizarPantalla();
 		Aplicacion.getInstance().getOpInicio().setVisible(false);
 		Aplicacion.getInstance().showOpVuelos();
+	}
+	
+	private void gestionarFacturas() {
+		Aplicacion.getInstance().getOpFacturas().actualizarPantalla();
+		Aplicacion.getInstance().getOpInicio().setVisible(false);
+		Aplicacion.getInstance().showOpFacturas();
 	}
 
 	private void cerrarSesion() {
