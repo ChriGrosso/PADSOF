@@ -57,6 +57,6 @@ public class ControlControladorInicio implements ActionListener {
     
     private void buscarVuelos() {
         modelo.guardarDatos();
-        Aplicacion.getInstance().showContBusquedaVuelos();
+        Aplicacion.getInstance().showBusquedaVuelos();
     }
 }
