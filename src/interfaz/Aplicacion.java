@@ -6,14 +6,16 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import interfaz.panelesControlador.ControlControladorBusquedaVuelos;
 import interfaz.panelesControlador.ControlControladorInicio;
-import interfaz.panelesControlador.ControladorBusquedaVuelos;
 import interfaz.panelesControlador.ControladorInicio;
+import interfaz.panelesGestor.ControlGestorEstadisticas;
 import interfaz.panelesGestor.ControlGestorGestionUsuarios;
+import interfaz.panelesGestor.ControlGestorGestionVuelos;
 import interfaz.panelesGestor.ControlGestorInicio;
 import interfaz.panelesGestor.ControlNuevoUsuario;
+import interfaz.panelesGestor.GestorEstadisticas;
 import interfaz.panelesGestor.GestorGestionUsuarios;
+import interfaz.panelesGestor.GestorGestionVuelos;
 import interfaz.panelesGestor.GestorInicio;
 import interfaz.panelesGestor.NuevoUsuario;
 import interfaz.panelesOperador.ControlNuevoAvion;
@@ -55,7 +57,9 @@ public class Aplicacion extends JFrame{
 	private PagarFactura panelPagarFactura;
 	private OperadorEstadisticas panelOpEstadisticas;
 	private NuevoUsuario panelNuevoUsuario;
-	private ControladorBusquedaVuelos panelContBusqueda;
+	private BusquedaVuelos panelBusquedaVuelos;
+	private GestorGestionVuelos panelGestorGestionVuelos;
+	private GestorEstadisticas panelGestorEstadisticas;
 	
 	// Declaramos el panel con las cartas JPanel cartas; 
 	private JPanel cartas;
@@ -82,10 +86,7 @@ public class Aplicacion extends JFrame{
 	final static String OP_PAGAR_FACTURA   = "Pagar Factura";
 	final static String OP_ESTADISTICAS   = "Operador Estadisticas";
 	
-	final static String CONT_GESTION_VUELOS   = "Controlador Vuelos";
-	
-	final static String CONT_BUSQUEDA   = "Controlador Busqueda Vuelos";
-	
+	final static String CONT_GESTION_VUELOS   = "Controlador Vuelos";	
 	
 	private Aplicacion() {
 		super("SkyManager");
@@ -105,7 +106,9 @@ public class Aplicacion extends JFrame{
 		panelOpFacturas = new OperadorFacturas();
 		panelPagarFactura = new PagarFactura();
 		panelOpEstadisticas = new OperadorEstadisticas();
-		panelContBusqueda = new ControladorBusquedaVuelos();
+		panelBusquedaVuelos = new BusquedaVuelos();
+		panelGestorGestionVuelos = new GestorGestionVuelos();
+		panelGestorEstadisticas = new GestorEstadisticas();
 		
 		//controladores
 		ControlLogin controlLogin = new ControlLogin();
@@ -122,7 +125,9 @@ public class Aplicacion extends JFrame{
 		ControlOperadorFacturas controlOpFacturas = new ControlOperadorFacturas();
 		ControlPagarFactura controlPagarFactura = new ControlPagarFactura();
 		ControlOperadorEstadisticas controlOpEst = new ControlOperadorEstadisticas();
-		ControlControladorBusquedaVuelos controlContBusqueda = new ControlControladorBusquedaVuelos(panelContBusqueda);
+		ControlBusquedaVuelos controlBusquedaVuelos = new ControlBusquedaVuelos();
+		ControlGestorGestionVuelos controlGestorGestionVuelos = new ControlGestorGestionVuelos();
+		ControlGestorEstadisticas controlGestorEstadisticas = new ControlGestorEstadisticas();
 		
 		// configurar las vistas con los controladores
 		panelLogin.setControlador(controlLogin);
@@ -139,7 +144,9 @@ public class Aplicacion extends JFrame{
 		panelOpFacturas.setControlador(controlOpFacturas);
 		panelPagarFactura.setControlador(controlPagarFactura);
 		panelOpEstadisticas.setControlador(controlOpEst);
-		panelContBusqueda.setControlador(controlContBusqueda);
+		panelBusquedaVuelos.setControlador(controlBusquedaVuelos);
+		panelGestorGestionVuelos.setControlador(controlGestorGestionVuelos);
+		panelGestorEstadisticas.setControlador(controlGestorEstadisticas);
 	
 		// Creamos el panel que contiene las cartas 
 		cartas = new JPanel(new CardLayout()); 
@@ -157,7 +164,9 @@ public class Aplicacion extends JFrame{
 		cartas.add(panelOpFacturas, OP_FACTURAS);
 		cartas.add(panelPagarFactura, OP_PAGAR_FACTURA);
 		cartas.add(panelOpEstadisticas, OP_ESTADISTICAS);
-		cartas.add(panelContBusqueda, CONT_BUSQUEDA);
+		cartas.add(panelBusquedaVuelos, BUSQUEDA_VUELOS);
+		cartas.add(panelGestorGestionVuelos, GESTOR_GESTION_VUELOS);
+		cartas.add(panelGestorEstadisticas, GESTOR_ESTADISTICAS);
 		
 		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
@@ -244,8 +253,16 @@ public class Aplicacion extends JFrame{
 		return this.panelGestorGestUsers;
 	}
 	
-	public ControladorBusquedaVuelos getControladorBusquedaVuelos() {
-		return this.panelContBusqueda;
+	public BusquedaVuelos getBusquedaVuelos() {
+		return this.panelBusquedaVuelos;
+	}
+	
+	public GestorGestionVuelos getGestorGestionVuelos() {
+		return this.panelGestorGestionVuelos;
+	}
+	
+	public GestorEstadisticas getGestorEstadisticas() {
+		return this.panelGestorEstadisticas;
 	}
 	
 	public void showOpInicio() {
@@ -304,8 +321,16 @@ public class Aplicacion extends JFrame{
 		((CardLayout)cartas.getLayout()).show(cartas, GESTOR_NUEVO_USUARIO);
 	}
 	
-	public void showContBusquedaVuelos() {
-		((CardLayout)cartas.getLayout()).show(cartas, CONT_BUSQUEDA);
+	public void showBusquedaVuelos() {
+		((CardLayout)cartas.getLayout()).show(cartas, BUSQUEDA_VUELOS);
+	}
+	
+	public void showGestorGestionVuelos() {
+		((CardLayout)cartas.getLayout()).show(cartas, GESTOR_GESTION_VUELOS);
+	}
+	
+	public void showGestorEstadisticas() {
+		((CardLayout)cartas.getLayout()).show(cartas, GESTOR_ESTADISTICAS);
 	}
 }
 
