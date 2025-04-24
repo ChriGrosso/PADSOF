@@ -24,7 +24,6 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import aerolineas.Aerolinea;
-import aviones.Avion;
 import interfaz.Aplicacion;
 import interfaz.elementosComunes.BotonVolver;
 import interfaz.elementosComunes.MultiLineCellRenderer;

@@ -180,9 +180,18 @@ public class OperadorFacturas extends JPanel{
 	        botonPagado.setBackground(Color.cyan);
 
             botonPagar.addActionListener(_ -> {
-            	SkyManager.getInstance().guardarDatos();
-        		Aplicacion.getInstance().getOpFacturas().setVisible(false);
-        		Aplicacion.getInstance().showPagarFactura();
+            	JTable table = (JTable) SwingUtilities.getAncestorOfClass(JTable.class, botonPagar);
+                int row = table.getEditingRow();
+                String factId = (String) table.getValueAt(row, 0);
+                Factura fact = SkyManager.getInstance().getFacturas().get(factId);
+            	// Mostrar diálogo para seleccionar la aerolínea secundaria
+                String cardNum = JOptionPane.showInputDialog(null, "Ingrese el número de tarjeta para pagar esta factura:");
+
+                if (cardNum == null || cardNum.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No se ingresó ningún número de tarjeta.");
+                    return;
+                }
+                fact.pagar(cardNum);
                 fireEditingStopped();
             });
         }
