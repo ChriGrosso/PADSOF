@@ -52,7 +52,7 @@ public class ControlControladorInicio implements ActionListener {
     
     private void gestionVuelos() {
         modelo.guardarDatos();
-        Aplicacion.getInstance().showLogin();
+        Aplicacion.getInstance().showControladorGestionVuelos();
     }
     
     private void buscarVuelos() {

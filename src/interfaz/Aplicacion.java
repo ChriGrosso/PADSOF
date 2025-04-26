@@ -6,7 +6,9 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import interfaz.panelesControlador.ControlControladorGestionVuelos;
 import interfaz.panelesControlador.ControlControladorInicio;
+import interfaz.panelesControlador.ControladorGestionVuelos;
 import interfaz.panelesControlador.ControladorInicio;
 import interfaz.panelesGestor.ControlGestorEstadisticas;
 import interfaz.panelesGestor.ControlGestorGestionUsuarios;
@@ -60,6 +62,7 @@ public class Aplicacion extends JFrame{
 	private BusquedaVuelos panelBusquedaVuelos;
 	private GestorGestionVuelos panelGestorGestionVuelos;
 	private GestorEstadisticas panelGestorEstadisticas;
+	private ControladorGestionVuelos panelControladorGestionVuelos;
 	
 	// Declaramos el panel con las cartas JPanel cartas; 
 	private JPanel cartas;
@@ -85,7 +88,8 @@ public class Aplicacion extends JFrame{
 	final static String OP_FACTURAS   = "Operador Facturas";
 	final static String OP_ESTADISTICAS   = "Operador Estadisticas";
 	
-	final static String CONT_GESTION_VUELOS   = "Controlador Vuelos";	
+	final static String CONT_GESTION_VUELOS   = "Controlador Vuelos";
+	final static String CONTROLADOR_GESTION_VUELOS = "Controlador Gestion Vuelos";
 	
 	private Aplicacion() {
 		super("SkyManager");
@@ -108,6 +112,7 @@ public class Aplicacion extends JFrame{
 		panelBusquedaVuelos = new BusquedaVuelos();
 		panelGestorGestionVuelos = new GestorGestionVuelos();
 		panelGestorEstadisticas = new GestorEstadisticas();
+		panelControladorGestionVuelos = new ControladorGestionVuelos();
 		
 		//controladores
 		ControlLogin controlLogin = new ControlLogin();
@@ -127,6 +132,8 @@ public class Aplicacion extends JFrame{
 		ControlBusquedaVuelos controlBusquedaVuelos = new ControlBusquedaVuelos();
 		ControlGestorGestionVuelos controlGestorGestionVuelos = new ControlGestorGestionVuelos();
 		ControlGestorEstadisticas controlGestorEstadisticas = new ControlGestorEstadisticas();
+		ControlControladorGestionVuelos controlControladorGestionVuelos = new ControlControladorGestionVuelos(panelControladorGestionVuelos);
+
 		
 		// configurar las vistas con los controladores
 		panelLogin.setControlador(controlLogin);
@@ -146,6 +153,7 @@ public class Aplicacion extends JFrame{
 		panelBusquedaVuelos.setControlador(controlBusquedaVuelos);
 		panelGestorGestionVuelos.setControlador(controlGestorGestionVuelos);
 		panelGestorEstadisticas.setControlador(controlGestorEstadisticas);
+		panelControladorGestionVuelos.setControlador(controlControladorGestionVuelos);
 	
 		// Creamos el panel que contiene las cartas 
 		cartas = new JPanel(new CardLayout()); 
@@ -166,6 +174,8 @@ public class Aplicacion extends JFrame{
 		cartas.add(panelBusquedaVuelos, BUSQUEDA_VUELOS);
 		cartas.add(panelGestorGestionVuelos, GESTOR_GESTION_VUELOS);
 		cartas.add(panelGestorEstadisticas, GESTOR_ESTADISTICAS);
+		cartas.add(panelControladorGestionVuelos, CONTROLADOR_GESTION_VUELOS);
+		cartas.add(panelControladorGestionVuelos, CONTROLADOR_GESTION_VUELOS);
 		
 		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
@@ -326,6 +336,10 @@ public class Aplicacion extends JFrame{
 	
 	public void showGestorEstadisticas() {
 		((CardLayout)cartas.getLayout()).show(cartas, GESTOR_ESTADISTICAS);
+	}
+	
+	public void showControladorGestionVuelos() {
+	    ((CardLayout) cartas.getLayout()).show(cartas, CONTROLADOR_GESTION_VUELOS);
 	}
 }
 

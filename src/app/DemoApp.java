@@ -164,7 +164,7 @@ public class DemoApp {
     	//3 pistas
     	Pista p1 = new Pista("PS0000", LocalDate.now(), false, 1500);
     	app.registrarPista(p1);
-    	Pista p2 = new Pista("PS0001", LocalDate.now(), true, 1500);
+    	Pista p2 = new Pista("PS0001", LocalDate.now(), false, 1500);
     	app.registrarPista(p2);
     	Pista p3 = new Pista("PS0002", LocalDate.now(), true, 1500);
     	app.registrarPista(p3);
