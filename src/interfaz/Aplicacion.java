@@ -26,7 +26,6 @@ import interfaz.panelesOperador.ControlOperadorFacturas;
 import interfaz.panelesOperador.ControlOperadorGestionAviones;
 import interfaz.panelesOperador.ControlOperadorGestionVuelos;
 import interfaz.panelesOperador.ControlOperadorInicio;
-import interfaz.panelesOperador.ControlPagarFactura;
 import interfaz.panelesOperador.NuevoAvion;
 import interfaz.panelesOperador.NuevoTipoAvion;
 import interfaz.panelesOperador.NuevoVuelo;
@@ -35,7 +34,6 @@ import interfaz.panelesOperador.OperadorFacturas;
 import interfaz.panelesOperador.OperadorGestionAviones;
 import interfaz.panelesOperador.OperadorGestionVuelos;
 import interfaz.panelesOperador.OperadorInicio;
-import interfaz.panelesOperador.PagarFactura;
 
 public class Aplicacion extends JFrame{
 	private static final long serialVersionUID = 1L;

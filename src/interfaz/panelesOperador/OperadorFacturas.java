@@ -192,6 +192,8 @@ public class OperadorFacturas extends JPanel{
                     return;
                 }
                 fact.pagar(cardNum);
+                // Actualizar la tabla
+                ((OperadorFacturas) SwingUtilities.getAncestorOfClass(OperadorFacturas.class, table)).actualizarPantalla();
                 fireEditingStopped();
             });
         }

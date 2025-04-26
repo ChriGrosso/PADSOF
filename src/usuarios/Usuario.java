@@ -164,7 +164,7 @@ public abstract class Usuario implements Observer, Serializable{
 		if (u == null) {
             throw new IllegalArgumentException("El usuario destinatario no puede ser nulo.");
         }
-		u.notificaciones.add(new Notificacion(mensaje, u));
+		u.notificaciones.add(new Notificacion(mensaje, this));
 	}
 	
 	/**

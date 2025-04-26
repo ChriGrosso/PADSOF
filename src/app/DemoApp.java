@@ -255,7 +255,7 @@ public class DemoApp {
     	
     	//Vuelo de Mercancias de llegada
     	avion = aerolineas.get(2).getAviones().get("AV-1209QW");
-    	Vuelo v2 = new VueloMercancias(aeropuertos.get(4), aeropuertos.get(3), LocalDateTime.of(2025, 4, 15, 12, 30), LocalDateTime.of(2025, 4, 15, 15, 45), 
+    	Vuelo v2 = new VueloMercancias(aeropuertos.get(4), aeropuertos.get(3), LocalDateTime.of(2025, 5, 15, 12, 30), LocalDateTime.of(2025, 5, 15, 15, 45), 
     			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(2))), false, 10, false, Periodicidad.NO_PERIODICO, avion);
     	aerolineas.get(2).addVuelo(v2);
     	app.registrarVuelo(v2);
