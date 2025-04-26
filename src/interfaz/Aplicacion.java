@@ -22,7 +22,6 @@ import interfaz.panelesOperador.ControlNuevoAvion;
 import interfaz.panelesOperador.ControlNuevoTipoAvion;
 import interfaz.panelesOperador.ControlNuevoVuelo;
 import interfaz.panelesOperador.ControlOperadorEstadisticas;
-import interfaz.panelesOperador.ControlOperadorFacturas;
 import interfaz.panelesOperador.ControlOperadorGestionAviones;
 import interfaz.panelesOperador.ControlOperadorGestionVuelos;
 import interfaz.panelesOperador.ControlOperadorInicio;
@@ -109,7 +108,6 @@ public class Aplicacion extends JFrame{
 		
 		//controladores
 		ControlLogin controlLogin = new ControlLogin();
-		ControlNotificaciones controlNotificaciones = new ControlNotificaciones();
 		ControlOperadorInicio controlOpInicio = new ControlOperadorInicio();
 		ControlControladorInicio controlContInicio = new ControlControladorInicio();
 		ControlGestorInicio controlGestorInicio = new ControlGestorInicio();
@@ -120,7 +118,6 @@ public class Aplicacion extends JFrame{
 		ControlNuevoUsuario controlNuevoUsuario = new ControlNuevoUsuario();
 		ControlOperadorGestionVuelos controlOpVuelos = new ControlOperadorGestionVuelos();
 		ControlNuevoVuelo controlNuevoVuelo = new ControlNuevoVuelo();
-		ControlOperadorFacturas controlOpFacturas = new ControlOperadorFacturas();
 		ControlOperadorEstadisticas controlOpEst = new ControlOperadorEstadisticas();
 		ControlBusquedaVuelos controlBusquedaVuelos = new ControlBusquedaVuelos();
 		ControlGestorGestionVuelos controlGestorGestionVuelos = new ControlGestorGestionVuelos();
@@ -128,7 +125,6 @@ public class Aplicacion extends JFrame{
 		
 		// configurar las vistas con los controladores
 		panelLogin.setControlador(controlLogin);
-		panelNotificaciones.setControlador(controlNotificaciones);
 		panelOpInicio.setControlador(controlOpInicio);
 		panelContInicio.setControlador(controlContInicio);
 		panelGestorInicio.setControlador(controlGestorInicio);
@@ -139,7 +135,6 @@ public class Aplicacion extends JFrame{
 		panelNuevoUsuario.setControlador(controlNuevoUsuario);
 		panelOpVuelos.setControlador(controlOpVuelos);
 		panelNuevoVuelo.setControlador(controlNuevoVuelo);
-		panelOpFacturas.setControlador(controlOpFacturas);
 		panelOpEstadisticas.setControlador(controlOpEst);
 		panelBusquedaVuelos.setControlador(controlBusquedaVuelos);
 		panelGestorGestionVuelos.setControlador(controlGestorGestionVuelos);

@@ -27,11 +27,8 @@ import aerolineas.Aerolinea;
 import facturas.Factura;
 import interfaz.Aplicacion;
 import interfaz.elementosComunes.BotonVolver;
-import interfaz.elementosComunes.MultiLineCellRenderer;
 import sistema.SkyManager;
 import usuarios.Operador;
-import vuelos.PeticionCompartir;
-import vuelos.Vuelo;
 
 public class OperadorFacturas extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -217,11 +214,6 @@ public class OperadorFacturas extends JPanel{
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getOpFacturas().setVisible(false);
 		Aplicacion.getInstance().showOpInicio();
-	}
-
-	public void setControlador(ControlOperadorFacturas controlOpFacturas) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

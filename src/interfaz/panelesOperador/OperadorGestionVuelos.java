@@ -240,7 +240,6 @@ public class OperadorGestionVuelos extends JPanel{
                 // Enviar la notificación a todos los operadores de esa aerolínea
                 for (Operador op : aeSec.getOperadores()) {
                     SkyManager.getInstance().getUsuarioActual().enviarNotificacion(msg, op);
-                    System.out.println(op.getNotificaciones());
                 }
                 // Actualizar estado "Compartido" del vuelo a la espera de veredicto
                 v.setPetComp(PeticionCompartir.PETICION_ENVIADA);
