@@ -16,24 +16,26 @@ public class ControlOperadorInicio implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("🔓 Cerrar Sesión")) {     // si se ha pulsado "Cerrar Sesión"
-			this.cerrarSesion();
-		}
-		else if (e.getActionCommand().equals("🔔 Notificaciones")) {     // si se ha pulsado "Notificaciones"
-			this.verNotificaciones();
-		}
-		else if (e.getActionCommand().equals("Gestionar Aviones")) {     // si se ha pulsado "Notificaciones"
+		if (e.getActionCommand().equals("Gestionar Aviones")) {     
 			this.gestionarAviones();
 		}
-		else if (e.getActionCommand().equals("Gestionar Vuelos")) {     // si se ha pulsado "Notificaciones"
+		else if (e.getActionCommand().equals("Gestionar Vuelos")) {     
 			this.gestionarVuelos();
 		}
-		else if (e.getActionCommand().equals("Gestionar Facturas")) {     // si se ha pulsado "Notificaciones"
+		else if (e.getActionCommand().equals("Gestionar Facturas")) {     
 			this.gestionarFacturas();
+		}
+		else if (e.getActionCommand().equals("Buscar Vuelos")) {     
+			this.buscarVuelos();
 		}
 	}
 
 	
+	private void buscarVuelos() {
+		Aplicacion.getInstance().getOpInicio().setVisible(false);
+		Aplicacion.getInstance().showBusquedaVuelos();
+	}
+
 	private void gestionarAviones() {
 		Aplicacion.getInstance().getOpAviones().actualizarPantalla();
 		Aplicacion.getInstance().getOpInicio().setVisible(false);
@@ -50,17 +52,5 @@ public class ControlOperadorInicio implements ActionListener{
 		Aplicacion.getInstance().getOpFacturas().actualizarPantalla();
 		Aplicacion.getInstance().getOpInicio().setVisible(false);
 		Aplicacion.getInstance().showOpFacturas();
-	}
-
-	private void cerrarSesion() {
-		modelo.guardarDatos();
-		Aplicacion.getInstance().getOpInicio().setVisible(false);
-		Aplicacion.getInstance().showLogin();
-	}
-	
-	private void verNotificaciones() {
-		modelo.guardarDatos();
-		Aplicacion.getInstance().getOpInicio().setVisible(false);
-		Aplicacion.getInstance().showNotificaciones();
 	}
 }

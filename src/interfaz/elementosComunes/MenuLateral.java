@@ -34,7 +34,7 @@ public class MenuLateral extends JPanel {
         topPanel.add(Box.createVerticalStrut(30));
 
         // === BOTTONI FISSI: Notifiche e Logout ===
-        JButton notifiche = FabricaBotones.crearBotonMenu("Notifiche", "resources/notification_icon.png");
+        JButton notifiche = FabricaBotones.crearBotonMenu("Notificaciones", "resources/notification_icon.png");
         notifiche.setBackground(new Color(112, 128, 150));
         notifiche.setForeground(Color.WHITE);
         notifiche.setActionCommand("NOTIFICHE");
@@ -70,6 +70,7 @@ public class MenuLateral extends JPanel {
     }
 
     private void verNotifiche() {
+    	Aplicacion.getInstance().getNotificaciones().actualizarPantalla();
         Aplicacion.getInstance().showNotificaciones();
     }
 

@@ -869,4 +869,20 @@ public abstract class Vuelo extends Observable implements Serializable{
 		return true;
 	}
 	
+	public boolean compartirVuelo(Aerolinea aeSec) {
+		if(this.compartido || this.aerolinea.size() == 2 || this.petComp != PeticionCompartir.PETICION_ENVIADA) { 
+			this.petComp = PeticionCompartir.NO_COMPARTIDO;
+			return false; 
+		}
+		this.aerolinea.add(aeSec);
+		aeSec.addVuelo(this);
+		this.compartido = true;
+		this.petComp = PeticionCompartir.COMPARTIDO;
+		return true;
+	}
+	
+	public boolean rechazarCompartirVuelo() { 
+		this.petComp = PeticionCompartir.NO_COMPARTIDO;
+		return true;
+	}
 }
