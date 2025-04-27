@@ -55,4 +55,9 @@ public class AvionPasajeros extends TipoAvion {
 	public double getCapacidad() {
 		return this.numPlazas;
 	}
+	
+	@Override
+	public String toString() {
+	    return "Pasajeros";
+	}
 }

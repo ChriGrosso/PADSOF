@@ -58,4 +58,9 @@ public class AvionMercancias extends TipoAvion{
 	public boolean isMercancias() {
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+	    return "Mercancias";
+	}
 }

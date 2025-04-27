@@ -95,7 +95,7 @@ public class Aplicacion extends JFrame{
 		panelLogin = new Login();
 		panelNotificaciones = new Notificaciones();
 		panelOpInicio = new OperadorInicio();
-		panelContInicio = new ControladorInicio(null);
+		panelContInicio = new ControladorInicio();
 		panelGestorInicio = new GestorInicio();
 		panelOpAviones = new OperadorGestionAviones();
 		panelNuevoAvion = new NuevoAvion();
