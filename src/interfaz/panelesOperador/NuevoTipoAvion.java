@@ -6,8 +6,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,7 +30,8 @@ public class NuevoTipoAvion extends JPanel{
 	
 	public NuevoTipoAvion() {
 		setLayout(new BorderLayout());
-		setBackground(Color.WHITE);
+		setBackground(new Color(173, 216, 230));
+		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 
         // Contenedor en la esquina superior derecha
         BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
@@ -38,7 +42,8 @@ public class NuevoTipoAvion extends JPanel{
 		
 		JPanel panelContenido = new JPanel();
         panelContenido.setLayout(new GridBagLayout());
-        panelContenido.setBackground(Color.WHITE);
+        panelContenido.setBackground(new Color(173, 216, 230));
+        panelContenido.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 2));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -47,12 +52,19 @@ public class NuevoTipoAvion extends JPanel{
         
         // Crear Componentes
         JLabel etiquetaCap = new JLabel("Capacidad (Mercancía en [Tn], Pasajeros en [nº personas]):");
+        etiquetaCap.setForeground(Color.BLACK);
         JLabel etiquetaMarca = new JLabel("Marca:");
+        etiquetaMarca.setForeground(Color.BLACK);
         JLabel etiquetaModelo = new JLabel("Modelo:");
+        etiquetaModelo.setForeground(Color.BLACK);
         JLabel etiquetaAutonomia = new JLabel("Máxima autonomía [km]:");
+        etiquetaAutonomia.setForeground(Color.BLACK);
         JLabel etiquetaAnchura = new JLabel("Anchura del avión [m]:");
+        etiquetaAnchura.setForeground(Color.BLACK);
         JLabel etiquetaAltura = new JLabel("Altura del avión [m]:");
+        etiquetaAltura.setForeground(Color.BLACK);
         JLabel etiquetaLargo = new JLabel("Largo del avión [m]:");
+        etiquetaLargo.setForeground(Color.BLACK);
         capacidadM = new JTextField(15);
         capacidadP = new JTextField(15);
         cmpMarca = new JTextField(15);
@@ -62,9 +74,13 @@ public class NuevoTipoAvion extends JPanel{
         cmpAnchura = new JTextField(15);
         cmpLargo = new JTextField(15);
         mercancias = new JRadioButton("Mercancías");
+        mercancias.setBackground(new Color(173, 216, 230));
         pasajeros = new JRadioButton("Pasajeros");
-        mercPeligrosas = new JRadioButton("Puede llevar mercancías peligrosas");
-        mercNoPeligrosas = new JRadioButton("No puede llevar mercancías peligrosas");
+        pasajeros.setBackground(new Color(173, 216, 230));
+        mercPeligrosas = new JRadioButton("Lleva mercancías peligrosas");
+        mercPeligrosas.setBackground(new Color(173, 216, 230));
+        mercNoPeligrosas = new JRadioButton("No lleva mercancías peligrosas");
+        mercNoPeligrosas.setBackground(new Color(173, 216, 230));
         // Fusionar ambas opciones de tipo de avión y de tipo de mercancias
         tipoAvion = new ButtonGroup();
         tipoAvion.add(mercancias);
@@ -143,11 +159,19 @@ public class NuevoTipoAvion extends JPanel{
         mercPeligrosas.setVisible(false);
         mercNoPeligrosas.setVisible(false);
         
-        gbc.gridx = 0;
-        gbc.gridy++;
-        panelContenido.add(registrarTipoAvion, gbc);
-        
         add(panelContenido, BorderLayout.CENTER);
+        
+        // Panel inferior para los botones
+	    JPanel panelInferior = new JPanel();
+	    panelInferior.setLayout(new GridLayout(1, 2, 20, 0));
+	    panelInferior.setBackground(new Color(173, 216, 230));
+	    panelInferior.setBorder(BorderFactory.createEmptyBorder(20, 150, 0, 150));
+		  
+		//Añadir el botón de registro
+        formatoBotones(registrarTipoAvion);
+        panelInferior.add(registrarTipoAvion, gbc);
+        
+        add(panelInferior, BorderLayout.SOUTH);
 	}
 	
 	
@@ -165,6 +189,13 @@ public class NuevoTipoAvion extends JPanel{
         btn.setFont(new Font("Arial", Font.BOLD, 14));
         return btn;
     }
+	
+	void formatoBotones(JButton boton) {
+		boton.setForeground(Color.WHITE);
+	    boton.setBackground(new Color(70, 130, 180)); 
+	    boton.setFocusPainted(false);
+	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
+	}
 	
 	
 	public void setControlador(ActionListener c) {

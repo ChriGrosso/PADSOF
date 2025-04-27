@@ -3,6 +3,7 @@ package interfaz.panelesOperador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,11 +29,8 @@ import aerolineas.Aerolinea;
 import facturas.Factura;
 import interfaz.Aplicacion;
 import interfaz.elementosComunes.BotonVolver;
-import interfaz.elementosComunes.MultiLineCellRenderer;
 import sistema.SkyManager;
 import usuarios.Operador;
-import vuelos.PeticionCompartir;
-import vuelos.Vuelo;
 
 public class OperadorFacturas extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -40,7 +39,8 @@ public class OperadorFacturas extends JPanel{
 	public OperadorFacturas() {
 		// Configurar el Layout
 		setLayout(new BorderLayout());
-		setBackground(Color.WHITE);
+		setBackground(new Color(173, 216, 230));
+		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 				        
 		// Contenedor en la esquina superior derecha
 		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
@@ -62,6 +62,7 @@ public class OperadorFacturas extends JPanel{
 		JLabel titulo = new JLabel("Gestión de Facturas");
 		titulo.setFont(new Font("Arial", Font.BOLD, 24));
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
+		titulo.setForeground(new Color(70, 130, 180));
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 3; // Ocupa 3 columnas
@@ -70,15 +71,26 @@ public class OperadorFacturas extends JPanel{
 				
 		// Tabla
 		tablaFacturas = new JTable(); // La tabla se actualizará dinámicamente con los datos
+		tablaFacturas.setBackground(Color.WHITE);
+		tablaFacturas.setForeground(Color.BLACK);
+		tablaFacturas.setGridColor(new Color(75, 135, 185));
+		tablaFacturas.getTableHeader().setBackground(new Color(70, 130, 180));
+		tablaFacturas.getTableHeader().setForeground(Color.WHITE);
+		tablaFacturas.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		tablaFacturas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
 		tablaFacturas.setRowHeight(25); // Ajustar altura de las filas
-		JScrollPane scrollPane = new JScrollPane(tablaFacturas);
+        
+		JScrollPane scroll = new JScrollPane(tablaFacturas);
+		scroll.setPreferredSize(new Dimension(500, 150));
+		scroll.setBorder(BorderFactory.createLineBorder(new Color(112, 128, 144)));
+	    add(scroll, BorderLayout.CENTER);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 3; // Ocupa todo el ancho
 		gbc.fill = GridBagConstraints.BOTH; // Expandir horizontal y verticalmente
 		gbc.weightx = 1.0; // Permitir expansión horizontal
 		gbc.weighty = 1.0; // Permitir expansión vertical
-		panelContenido.add(scrollPane, gbc);
+		panelContenido.add(scroll, gbc);
 		        
 		add(panelContenido, BorderLayout.CENTER);
 	}
@@ -217,11 +229,6 @@ public class OperadorFacturas extends JPanel{
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getOpFacturas().setVisible(false);
 		Aplicacion.getInstance().showOpInicio();
-	}
-
-	public void setControlador(ControlOperadorFacturas controlOpFacturas) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

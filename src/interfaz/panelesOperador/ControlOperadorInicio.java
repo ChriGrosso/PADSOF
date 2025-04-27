@@ -28,9 +28,18 @@ public class ControlOperadorInicio implements ActionListener{
 		else if (e.getActionCommand().equals("Buscar Vuelos")) {     
 			this.buscarVuelos();
 		}
+		else if (e.getActionCommand().equals("Estadísticas")) {     
+			this.mostrarEstadisticas();
+		}
 	}
 
 	
+	private void mostrarEstadisticas() {
+		Aplicacion.getInstance().getOpEstadisticas().actualizarPantalla();
+		Aplicacion.getInstance().getOpInicio().setVisible(false);
+		Aplicacion.getInstance().showOpEstadisticas();
+	}
+
 	private void buscarVuelos() {
 		Aplicacion.getInstance().getOpInicio().setVisible(false);
 		Aplicacion.getInstance().showBusquedaVuelos();

@@ -234,8 +234,4 @@ public class Notificaciones extends JPanel{
 		Aplicacion.getInstance().getNotificaciones().setVisible(false);
 		Aplicacion.getInstance().showOpInicio();
 	}
-
-	public void setControlador(ActionListener c) {  
-		//...
-	}
 }

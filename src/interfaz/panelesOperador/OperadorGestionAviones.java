@@ -2,6 +2,7 @@ package interfaz.panelesOperador;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,6 +10,7 @@ import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,7 +34,8 @@ public class OperadorGestionAviones extends JPanel{
 	public OperadorGestionAviones() {
 		// Configurar el Layout
 		setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+		setBackground(new Color(173, 216, 230));
+		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
         
         // Contenedor en la esquina superior derecha
         BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
@@ -54,6 +57,7 @@ public class OperadorGestionAviones extends JPanel{
         JLabel titulo = new JLabel("Gestión de Aviones");
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
+        titulo.setForeground(new Color(70, 130, 180));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 3; // Ocupa 3 columnas
@@ -62,14 +66,26 @@ public class OperadorGestionAviones extends JPanel{
 
         // Tabla
         tablaAviones = new JTable(); // La tabla se actualizará dinámicamente con los datos
-        JScrollPane scrollPane = new JScrollPane(tablaAviones);
+        tablaAviones.setBackground(Color.WHITE);
+        tablaAviones.setForeground(Color.BLACK);
+        tablaAviones.setGridColor(new Color(75, 135, 185));
+        tablaAviones.getTableHeader().setBackground(new Color(70, 130, 180));
+        tablaAviones.getTableHeader().setForeground(Color.WHITE);
+        tablaAviones.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        tablaAviones.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
+        tablaAviones.setRowHeight(25); // Ajustar altura de las filas
+        
+        JScrollPane scroll = new JScrollPane(tablaAviones);
+        scroll.setPreferredSize(new Dimension(500, 150));
+		scroll.setBorder(BorderFactory.createLineBorder(new Color(112, 128, 144)));
+	    add(scroll, BorderLayout.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3; // Ocupa todo el ancho
         gbc.fill = GridBagConstraints.BOTH; // Expandir horizontal y verticalmente
         gbc.weightx = 1.0; // Permitir expansión horizontal
         gbc.weighty = 1.0; // Permitir expansión vertical
-        panelContenido.add(scrollPane, gbc);
+        panelContenido.add(scroll, gbc);
 
         // Botones debajo de la tabla
         gbc.gridwidth = 1; // Cada botón ocupa una columna
@@ -80,11 +96,13 @@ public class OperadorGestionAviones extends JPanel{
         nuevoAvion = new JButton("Nuevo Avión");
         gbc.gridx = 0;
         gbc.gridy = 2;
+        formatoBotones(nuevoAvion, 200, 50);
         panelContenido.add(nuevoAvion, gbc);
 
         nuevoTipoAv = new JButton("Nuevo Tipo Avión");
         gbc.gridx = 1;
         gbc.gridy = 2;
+        formatoBotones(nuevoTipoAv, 200, 50);
         panelContenido.add(nuevoTipoAv, gbc);
          
         add(panelContenido, BorderLayout.CENTER);
@@ -120,6 +138,15 @@ public class OperadorGestionAviones extends JPanel{
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getOpAviones().setVisible(false);
 		Aplicacion.getInstance().showOpInicio();
+	}
+	
+	private void formatoBotones(JButton boton,  int ancho, int alto) {
+		boton.setPreferredSize(new Dimension(ancho, alto));
+		boton.setForeground(Color.WHITE);
+	    boton.setBackground(new Color(5, 10, 20)); 
+	    boton.setFocusPainted(false);
+	    boton.setFont(new Font("SansSerif", Font.BOLD, 16));
+	    boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 	}
 	
 	
