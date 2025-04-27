@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -33,13 +33,12 @@ import interfaz.Aplicacion;
 import interfaz.elementosComunes.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Operador;
-import usuarios.Usuario;
 
 public class NuevoVuelo extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton registrarVuelo;
 	JComboBox<String> mat = new JComboBox<>();
-	private JTextField matricula, aeS, origen, destino, carga, numP;
+	private JTextField aeS, origen, destino, carga, numP;
 	SpinnerDateModel model = new SpinnerDateModel(new Date(), null, null, java.util.Calendar.MINUTE);
 	SpinnerDateModel model2 = new SpinnerDateModel(new Date(), null, null, java.util.Calendar.MINUTE);
 	JSpinner salida = new JSpinner(model);
@@ -55,14 +54,15 @@ public class NuevoVuelo extends JPanel{
     JCheckBox viernes = new JCheckBox("Viernes"); 
     JCheckBox sabado = new JCheckBox("Sábado");
     JCheckBox domingo = new JCheckBox("Domingo");
-    JPanel panelCheckbox = new JPanel(new GridLayout(7,1));
+    JPanel panelCheckbox = new JPanel(new GridLayout(4,2));
     JLabel etiquetaAeS = new JLabel("Nombre Aerolínea Secundaria:");
     JLabel etiquetaCarga = new JLabel("Carga [Tn]:");
     JLabel etiquetaPasajeros = new JLabel("Número de pasajeros:");
 	
 	public NuevoVuelo() {
 		setLayout(new BorderLayout());
-		setBackground(Color.WHITE);
+		setBackground(new Color(173, 216, 230));
+		setBorder(BorderFactory.createEmptyBorder(60, 60, 40, 60));
 
         // Contenedor en la esquina superior derecha
         BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
@@ -73,7 +73,8 @@ public class NuevoVuelo extends JPanel{
 		
 		JPanel panelContenido = new JPanel();
         panelContenido.setLayout(new GridBagLayout());
-        panelContenido.setBackground(Color.WHITE);
+        panelContenido.setBackground(new Color(173, 216, 230));
+        panelContenido.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 2));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -82,30 +83,43 @@ public class NuevoVuelo extends JPanel{
         
         // Crear Componentes
         JLabel etiquetaMatricula = new JLabel("Matrícula del avión:");
+        etiquetaMatricula.setForeground(Color.BLACK);
         JLabel etiquetaOrigen = new JLabel("Nombre Aeropuerto de Origen:");
+        etiquetaOrigen.setForeground(Color.BLACK);
         JLabel etiquetaDestino = new JLabel("Nombre Aeropuerto de Destino:");
+        etiquetaDestino.setForeground(Color.BLACK);
         JLabel etiquetaSalida = new JLabel("Fecha y hora de salida:");
+        etiquetaSalida.setForeground(Color.BLACK);
         JLabel etiquetaLlegada = new JLabel("Fecha y hora de llegada:");
+        etiquetaLlegada.setForeground(Color.BLACK);
         JLabel etiquetaPeriodo = new JLabel("Periodicidad del vuelo:");
-        matricula = new JTextField(15);
+        etiquetaPeriodo.setForeground(Color.BLACK);
         origen = new JTextField(15);
         destino = new JTextField(15);
         aeS = new JTextField(15);
         carga = new JTextField(15);
         numP = new JTextField(15);
-        // Mostrar solo la fecha, no la hora
+        // Mostrar la fecha Y la hora
         JSpinner.DateEditor editor = new JSpinner.DateEditor(salida, "dd/MM/yyyy HH:mm");
         salida.setEditor(editor);
         JSpinner.DateEditor editor2 = new JSpinner.DateEditor(llegada, "dd/MM/yyyy HH:mm");
         llegada.setEditor(editor2);
         mercancias = new JRadioButton("Mercancías");
+        mercancias.setBackground(new Color(173, 216, 230));
         pasajeros = new JRadioButton("Pasajeros");
+        pasajeros.setBackground(new Color(173, 216, 230));
         mercPeligrosas = new JRadioButton("Lleva mercancías peligrosas");
+        mercPeligrosas.setBackground(new Color(173, 216, 230));
         mercNoPeligrosas = new JRadioButton("No lleva mercancías peligrosas");
+        mercNoPeligrosas.setBackground(new Color(173, 216, 230));
         comp = new JRadioButton("Vuelo Compartido");
+        comp.setBackground(new Color(173, 216, 230));
         noComp = new JRadioButton("Vuelo No Compartido");
+        noComp.setBackground(new Color(173, 216, 230));
         llega = new JRadioButton("Vuelo de Llegada");
+        llega.setBackground(new Color(173, 216, 230));
         sale = new JRadioButton("Vuelo de Salida");
+        sale.setBackground(new Color(173, 216, 230));
         // Fusionar ambas opciones de tipo de avión y de tipo de mercancias
         tipoAvion = new ButtonGroup();
         tipoAvion.add(mercancias);
@@ -120,7 +134,6 @@ public class NuevoVuelo extends JPanel{
         esLlegada.add(llega);
         esLlegada.add(sale);
         // Panel con todas las opciones para para vuelos alternos 
-        panelCheckbox.setPreferredSize(new Dimension(240, 80));
         panelCheckbox.add(new JLabel("Selecciona los días que operará el vuelo:")); 
         panelCheckbox.add(lunes); 
         panelCheckbox.add(martes); 
@@ -129,6 +142,14 @@ public class NuevoVuelo extends JPanel{
         panelCheckbox.add(viernes); 
         panelCheckbox.add(sabado); 
         panelCheckbox.add(domingo); 
+        panelCheckbox.setBackground(new Color(173, 216, 230));
+        lunes.setBackground(new Color(173, 216, 230));
+        martes.setBackground(new Color(173, 216, 230));
+        miercoles.setBackground(new Color(173, 216, 230));
+        jueves.setBackground(new Color(173, 216, 230));
+        viernes.setBackground(new Color(173, 216, 230));
+        sabado.setBackground(new Color(173, 216, 230));
+        domingo.setBackground(new Color(173, 216, 230));
         // Panel periodicidad
         periodicidad.setSelectedIndex(-1); // Sin ninguna opción seleccionada por defecto
         registrarVuelo = createContentButton("Registrar Vuelo");
@@ -236,11 +257,19 @@ public class NuevoVuelo extends JPanel{
         
         panelCheckbox.setVisible(false);
         
-        gbc.gridx = 0;
-        gbc.gridy++;
-        panelContenido.add(registrarVuelo, gbc);
-        
         add(panelContenido, BorderLayout.CENTER);
+        
+        // Panel inferior para los botones
+	    JPanel panelInferior = new JPanel();
+	    panelInferior.setLayout(new GridLayout(1, 2, 20, 0));
+	    panelInferior.setBackground(new Color(173, 216, 230));
+	    panelInferior.setBorder(BorderFactory.createEmptyBorder(20, 150, 0, 150));
+		  
+		//Añadir el botón de registro
+        formatoBotones(registrarVuelo);
+        panelInferior.add(registrarVuelo, gbc);
+        
+        add(panelInferior, BorderLayout.SOUTH);
 	}
 
 	
@@ -258,6 +287,13 @@ public class NuevoVuelo extends JPanel{
         btn.setFont(new Font("Arial", Font.BOLD, 14));
         return btn;
     }
+	
+	void formatoBotones(JButton boton) {
+		boton.setForeground(Color.WHITE);
+	    boton.setBackground(new Color(70, 130, 180)); 
+	    boton.setFocusPainted(false);
+	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
+	}
 	
 	
 	public void setControlador(ActionListener c) {
@@ -433,7 +469,6 @@ public class NuevoVuelo extends JPanel{
 	
 	public void update() {
 		// Reiniciar campos de texto
-	    matricula.setText("");
 	    origen.setText("");
 	    destino.setText("");
 	    aeS.setText("");

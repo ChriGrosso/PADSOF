@@ -25,7 +25,7 @@ public class BotonVolver extends JPanel{
         volver = new JButton();
         volver.setPreferredSize(new Dimension(60, 40)); // Tamaño inicial del botón
         volver.setFocusPainted(false);
-        volver.setBackground(Color.BLUE); // Color de fondo azul
+        volver.setBackground(new Color(70, 130, 180)); // Color de fondo azul
 
         // Añadir el logo al botón
         ImageIcon icon = new ImageIcon(logoPath);

@@ -3,6 +3,7 @@ package interfaz.panelesOperador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,7 +12,9 @@ import java.awt.event.ActionListener;
 import java.util.Collection;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,6 +32,7 @@ import interfaz.elementosComunes.BotonVolver;
 import interfaz.elementosComunes.MultiLineCellRenderer;
 import sistema.SkyManager;
 import usuarios.Operador;
+import vuelos.EstadoVuelo;
 import vuelos.PeticionCompartir;
 import vuelos.Vuelo;
 
@@ -40,7 +44,8 @@ public class OperadorGestionVuelos extends JPanel{
 	public OperadorGestionVuelos() {
 		// Configurar el Layout
 		setLayout(new BorderLayout());
-		setBackground(Color.WHITE);
+		setBackground(new Color(173, 216, 230));
+		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 		        
 		// Contenedor en la esquina superior derecha
 		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
@@ -62,6 +67,7 @@ public class OperadorGestionVuelos extends JPanel{
 		JLabel titulo = new JLabel("Gestión de Vuelos");
 		titulo.setFont(new Font("Arial", Font.BOLD, 24));
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
+	    titulo.setForeground(new Color(70, 130, 180));
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 3; // Ocupa 3 columnas
@@ -70,15 +76,26 @@ public class OperadorGestionVuelos extends JPanel{
 		
 		// Tabla
         tablaVuelos = new JTable(); // La tabla se actualizará dinámicamente con los datos
+        tablaVuelos.setBackground(Color.WHITE);
+		tablaVuelos.setForeground(Color.BLACK);
+		tablaVuelos.setGridColor(new Color(75, 135, 185));
+		tablaVuelos.getTableHeader().setBackground(new Color(70, 130, 180));
+		tablaVuelos.getTableHeader().setForeground(Color.WHITE);
+		tablaVuelos.setFont(new Font("SansSerif", Font.PLAIN, 14));
+		tablaVuelos.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
         tablaVuelos.setRowHeight(50); // Ajustar altura de las filas
-        JScrollPane scrollPane = new JScrollPane(tablaVuelos);
+        
+        JScrollPane scroll = new JScrollPane(tablaVuelos);
+        scroll.setPreferredSize(new Dimension(500, 150));
+		scroll.setBorder(BorderFactory.createLineBorder(new Color(112, 128, 144)));
+	    add(scroll, BorderLayout.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3; // Ocupa todo el ancho
         gbc.fill = GridBagConstraints.BOTH; // Expandir horizontal y verticalmente
         gbc.weightx = 1.0; // Permitir expansión horizontal
         gbc.weighty = 1.0; // Permitir expansión vertical
-        panelContenido.add(scrollPane, gbc);
+        panelContenido.add(scroll, gbc);
 
         // Botones debajo de la tabla
         gbc.gridwidth = 1; // Cada botón ocupa una columna
@@ -89,6 +106,7 @@ public class OperadorGestionVuelos extends JPanel{
         nuevoVuelo = new JButton("Nuevo Vuelo");
         gbc.gridx = 0;
         gbc.gridy = 2;
+        formatoBotones(nuevoVuelo, 200, 50);
         panelContenido.add(nuevoVuelo, gbc);
         
         add(panelContenido, BorderLayout.CENTER);
@@ -97,7 +115,7 @@ public class OperadorGestionVuelos extends JPanel{
 
 	public void actualizarPantalla() {
 		// Colocar los nombres de las columnas de los aviones
-		String [] columnas = {"ID", "Origen", "Destino", "Avión", "Estado", "Compartido", "Compartir"};
+		String [] columnas = {"ID", "Origen", "Destino", "Avión", "Estado", "Compartido", "Compartir", "Cambiar Estado"};
 		// Recoger los datos de los aviones
 		Operador op = (Operador) SkyManager.getInstance().getUsuarioActual();
 		Aerolinea a = op.getAerolinea();
@@ -109,14 +127,14 @@ public class OperadorGestionVuelos extends JPanel{
 
 			@Override
             public boolean isCellEditable(int row, int column) {
-                // Solo la última columna ("Compartir") será editable
-                return column == 6;
+                // Solo las últimas columnas ("Compartir" y "Cambiar Estado") será editable
+                return column == 6 || column == 7;
             }
         };
         
         // Rellenar el modelo con los datos de los vuelos
         for (Vuelo vuelo : vuelos) {
-            String compartido = null, compartirAccion = null;
+            String compartido = null, compartirAccion = null, cambiarEst = null;
             if (vuelo.getCompartido()) {
             	// Encontrar la aerolinea con la que comparte
             	Aerolinea aux = null;
@@ -127,7 +145,8 @@ public class OperadorGestionVuelos extends JPanel{
             	}
             	compartido = "Compartido con " + aux.getNombre();
             	compartirAccion = "No disponible";
-            } else {
+            } 
+            else {
             	if(vuelo.getPetComp() == PeticionCompartir.PETICION_ENVIADA) { 
             		compartido = "Petición para\n compartir enviada";
             		compartirAccion = "No disponible";
@@ -135,8 +154,10 @@ public class OperadorGestionVuelos extends JPanel{
             	else { 
             		compartido = "No compartido"; 
             		compartirAccion = "Compartir";
-            	}
             }
+            if(vuelo.getHoraLlegadaEfectiva() == null) { cambiarEst = "Cambiar Estado"; }
+            else { cambiarEst = "Vuelo Finalizado"; }
+         }
         
 	        model.addRow(new Object[]{
 	        		vuelo.getId(),
@@ -145,20 +166,32 @@ public class OperadorGestionVuelos extends JPanel{
 	                vuelo.getAvion().getMatricula(),
 	                vuelo.getEstVuelo(),
 	                compartido,
-	                compartirAccion
+	                compartirAccion,
+	                cambiarEst
 	        });
         }
         tablaVuelos.setModel(model);
-        tablaVuelos.getColumnModel().getColumn(0).setPreferredWidth(50); // ID
-        tablaVuelos.getColumnModel().getColumn(1).setPreferredWidth(150); // Origen
-        tablaVuelos.getColumnModel().getColumn(2).setPreferredWidth(150); // Destino
-        tablaVuelos.getColumnModel().getColumn(5).setPreferredWidth(150); // Compartido
+        tablaVuelos.getColumnModel().getColumn(0).setMinWidth(70);  // ID
+        tablaVuelos.getColumnModel().getColumn(0).setMaxWidth(70);  
+        tablaVuelos.getColumnModel().getColumn(3).setMinWidth(70);  // Avión
+        tablaVuelos.getColumnModel().getColumn(3).setMaxWidth(70);
+        tablaVuelos.getColumnModel().getColumn(4).setMinWidth(150);  // Estado
+        tablaVuelos.getColumnModel().getColumn(4).setMaxWidth(150);
+        tablaVuelos.getColumnModel().getColumn(5).setMinWidth(240); // Compartido
+        tablaVuelos.getColumnModel().getColumn(5).setMaxWidth(240); 
+        tablaVuelos.getColumnModel().getColumn(6).setMinWidth(95);  // Botón Compartir
+        tablaVuelos.getColumnModel().getColumn(6).setMaxWidth(95); 
+        tablaVuelos.getColumnModel().getColumn(7).setMinWidth(95);  // Botón Modificar Est.
+        tablaVuelos.getColumnModel().getColumn(7).setMaxWidth(95);
         tablaVuelos.getColumnModel().getColumn(1).setCellRenderer(new MultiLineCellRenderer()); // Origen
         tablaVuelos.getColumnModel().getColumn(2).setCellRenderer(new MultiLineCellRenderer()); // Destino
+        tablaVuelos.getColumnModel().getColumn(7).setCellRenderer(new MultiLineCellRenderer()); // Botón Modificar Est.
 
-        // Editor y Renderizador para la última columna (botón)
+        // Editor y Renderizador para las últimas columnas (botones)
         tablaVuelos.getColumn("Compartir").setCellEditor(new CompartidoEditor());
         tablaVuelos.getColumn("Compartir").setCellRenderer(new CompartidoRenderer());
+        tablaVuelos.getColumn("Cambiar Estado").setCellEditor(new ModificarEstEditor());
+        tablaVuelos.getColumn("Cambiar Estado").setCellRenderer(new ModificarEstRenderer());
 	}
 	
 	private static class CompartidoRenderer extends JPanel implements TableCellRenderer {
@@ -178,7 +211,7 @@ public class OperadorGestionVuelos extends JPanel{
 	        if (value != null && "Compartir".equals(value.toString())) {
 	            add(botonCompartir, BorderLayout.CENTER);
 	        } else {
-	            mensaje.setText(value != null ? value.toString() : "");
+	            mensaje.setText("No disponible");
 	            add(mensaje, BorderLayout.CENTER);
 	        }
 	        return this;
@@ -254,11 +287,103 @@ public class OperadorGestionVuelos extends JPanel{
 			    if (value != null && "Compartir".equals(value.toString())) {
 			        panel.add(botonCompartir, BorderLayout.CENTER);
 			    } else {
-			        mensaje.setText(value != null ? value.toString() : "");
+			        mensaje.setText("No disponible");
 			        panel.add(mensaje, BorderLayout.CENTER);
 			    }
 			    return panel;
             }
+			@Override
+			public Object getCellEditorValue() {
+				return null; // El valor no cambia directamente desde el editor
+			}
+    }
+    
+    
+    private static class ModificarEstRenderer extends JPanel implements TableCellRenderer {
+		private static final long serialVersionUID = 1L;
+		private final JButton botonModificar = new JButton("<html>Modificar<br>Estado</html>");
+	    private final JLabel mensaje = new JLabel();
+
+	    public ModificarEstRenderer() {
+	        setLayout(new BorderLayout());
+	        botonModificar.setBackground(Color.cyan);
+	    }
+
+	    @Override
+	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+	                                                   boolean hasFocus, int row, int column) {
+	    	removeAll();
+	        if (value != null && "Cambiar Estado".equals(value.toString())) {
+	            add(botonModificar, BorderLayout.CENTER);
+	        } else {
+	            mensaje.setText("<html>Vuelo<br>Finalizado</html>");
+	            add(mensaje, BorderLayout.CENTER);
+	        }
+	        return this;
+	    }
+	}
+    
+    // Editor personalizado para la columna "Compartido"
+    private static class ModificarEstEditor extends AbstractCellEditor implements TableCellEditor {
+		private static final long serialVersionUID = 1L;
+		private final JPanel panel;
+        private final JButton botonModificar;
+        private final JLabel mensaje;
+
+        public ModificarEstEditor() {
+            this.panel = new JPanel(new BorderLayout());
+            this.botonModificar = new JButton("<html>Modificar<br>Estado</html>");
+            this.mensaje = new JLabel();
+
+            botonModificar.setBackground(Color.cyan);
+
+            botonModificar.addActionListener(_ -> {
+                JTable table = (JTable) SwingUtilities.getAncestorOfClass(JTable.class, botonModificar);
+                int row = table.getEditingRow();
+                String vueloId = (String) table.getValueAt(row, 0);
+                mostrarSelectorEstado(vueloId);
+                fireEditingStopped();
+            });
+        }
+        private void mostrarSelectorEstado(String vueloId) {
+            Vuelo v = SkyManager.getInstance().getVuelos().get(vueloId);
+
+            if (v.getHoraLlegadaEfectiva() != null) {
+                JOptionPane.showMessageDialog(null, "El vuelo ya ha finalizado.");
+                return;
+            }
+
+            // Crear el JComboBox con todos los estados posibles
+            EstadoVuelo[] estados = EstadoVuelo.values();
+            JComboBox<EstadoVuelo> combo = new JComboBox<>(estados);
+            combo.setSelectedItem(v.getEstVuelo()); // Poner el estado actual seleccionado
+
+            int option = JOptionPane.showConfirmDialog(
+                    null,
+                    combo,
+                    "Selecciona el nuevo estado del vuelo",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (option == JOptionPane.OK_OPTION) {
+                EstadoVuelo nuevoEstado = (EstadoVuelo) combo.getSelectedItem();
+                v.setEstVuelo(nuevoEstado);
+                JOptionPane.showMessageDialog(null, "Estado cambiado a: " + nuevoEstado);
+                Aplicacion.getInstance().getOpVuelos().actualizarPantalla();
+            }
+        }
+	        @Override
+	        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+				panel.removeAll();
+			    if (value != null && "Cambiar Estado".equals(value.toString())) {
+			        panel.add(botonModificar, BorderLayout.CENTER);
+			    } else {
+			        mensaje.setText("<html>Vuelo<br>Finalizado</html>");
+			        panel.add(mensaje, BorderLayout.CENTER);
+			    }
+			    return panel;
+	        }
 			@Override
 			public Object getCellEditorValue() {
 				return null; // El valor no cambia directamente desde el editor
@@ -272,6 +397,14 @@ public class OperadorGestionVuelos extends JPanel{
 		Aplicacion.getInstance().showOpInicio();
 	}
 	
+	private void formatoBotones(JButton boton,  int ancho, int alto) {
+		boton.setPreferredSize(new Dimension(ancho, alto));
+		boton.setForeground(Color.WHITE);
+	    boton.setBackground(new Color(5, 10, 20)); 
+	    boton.setFocusPainted(false);
+	    boton.setFont(new Font("SansSerif", Font.BOLD, 16));
+	    boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+	}
 	
 	public void setControlador(ActionListener c) {
 		nuevoVuelo.addActionListener(c);
