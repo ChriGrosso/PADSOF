@@ -15,13 +15,16 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import interfaz.Aplicacion;
+import interfaz.elementosComunes.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Usuario;
+import usuarios.Controlador;
+import usuarios.Operador;
 
 public class GestorGestionUsuarios extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton nuevoUsuario;
-	private JButton atras;
 	private DefaultTableModel modeloDatos;
 	private JTable tabla;
 	
@@ -30,20 +33,31 @@ public class GestorGestionUsuarios extends JPanel{
 		setBackground(new Color(173, 216, 230));
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 		
-		// Título
+		JPanel panelSuperiorIzquierdo = new JPanel();
+		panelSuperiorIzquierdo.setLayout(new BorderLayout());
+		panelSuperiorIzquierdo.setBackground(new Color(173, 216, 230));
+		
+		// Contenedor en la esquina superior derecha
+        BotonVolver panelAtras = new BotonVolver("resources/atras_icon.png");
+        panelAtras.setControladorVolver(_ -> paginaAnterior());
+
+        // Título
 	    JLabel titulo = new JLabel("Gestión de Usuarios", SwingConstants.CENTER);
 	    titulo.setForeground(new Color(70, 130, 180));
 	    titulo.setFont(new Font("SansSerif", Font.BOLD, 24));
 	    titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
-	    add(titulo, BorderLayout.NORTH);
+	    
+	    // Añadir el contenedor al panel superior
+        panelSuperiorIzquierdo.add(panelAtras, BorderLayout.NORTH);
+	    panelSuperiorIzquierdo.add(titulo, BorderLayout.AFTER_LAST_LINE);
+	    add(panelSuperiorIzquierdo, BorderLayout.NORTH);
 				
 		// Crear un array con el título de las columnas
-		String[] titulos = {"Nombre", "DNI", "Tipo de Usuario"};
+		String[] titulos = {"Nombre", "DNI", "Tipo de Usuario", "Aerolínea/Terminal"};
 		modeloDatos = new DefaultTableModel(titulos, 0); 
 
 		for (Usuario u : SkyManager.getInstance().getUsuarios().values()) {
-		    Object[] fila = {u.getNombre(), u.getDni(), u.getClass().getSimpleName()};
-		    modeloDatos.addRow(fila);
+			addFila(u);
 		}
 		
 		tabla = new JTable(modeloDatos);
@@ -76,15 +90,6 @@ public class GestorGestionUsuarios extends JPanel{
 	    panelNuevo.setBackground(new Color(173, 216, 230));
 	    panelNuevo.add(nuevoUsuario);
 		
-		// Botón "Atrás" a la izquierda
-		atras = new JButton("Atrás");
-		this.formatoBotones(atras, 160, 50);
-		JPanel panelAtras = new JPanel(new FlowLayout(FlowLayout.LEFT));
-	    panelAtras.setBackground(new Color(173, 216, 230));
-	    panelAtras.add(atras);
-		
-	    // Agregar subpaneles al panel inferior
-	    panelInferior.add(panelAtras, BorderLayout.WEST);
 	    panelInferior.add(panelNuevo, BorderLayout.CENTER);
 		
 	    add(panelInferior, BorderLayout.SOUTH);
@@ -102,9 +107,26 @@ public class GestorGestionUsuarios extends JPanel{
 	// método para asignar un controlador a los botones
 	public void setControlador(ActionListener c) {  
 		nuevoUsuario.setActionCommand("NUEVO_USUARIO");
-		atras.setActionCommand("ATRAS");
 		
 		nuevoUsuario.addActionListener(c);
-		atras.addActionListener(c);
+	}
+	
+	private void paginaAnterior() {
+		SkyManager.getInstance().guardarDatos();
+		Aplicacion.getInstance().showGestorInicio();
+	}
+	
+	public void addFila(Usuario u) {
+		String s;
+		if (u.esOperador() == true) { 
+			s = ((Operador)u).getAerolinea().getId(); 
+		} else if(u.esControlador() == true) {
+			s = ((Controlador)u).getTerminal().getId(); 
+		} else s = "";
+		Object[] fila = {u.getNombre(), u.getDni(), u.getClass().getSimpleName(), s};
+	    modeloDatos.addRow(fila);
+	    if (tabla != null) {
+	    	tabla.repaint();
+	    }
 	}
 }

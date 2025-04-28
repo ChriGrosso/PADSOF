@@ -37,7 +37,7 @@ public class GestorInicio extends JPanel{
 		setLayout(new BorderLayout());
 		
 		// === MENU LATERAL ===
-        MenuLateral menu = new MenuLateral("resources/logo_icon.png");
+        MenuLateral menu = new MenuLateral("resources/logo_icon.png", true);
         
         // Mensaje bienvenida
         JPanel panelGeneral = new JPanel();

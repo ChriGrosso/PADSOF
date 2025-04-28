@@ -8,7 +8,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,35 +40,37 @@ public class GestorGestionVuelos extends JPanel{
 	public GestorGestionVuelos() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
-		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
+		setBorder(BorderFactory.createEmptyBorder(0, 60, 60, 60));
+		
+		JPanel panelSuperiorIzquierdo = new JPanel();
+		panelSuperiorIzquierdo.setLayout(new BorderLayout());
+		panelSuperiorIzquierdo.setBackground(new Color(173, 216, 230));
 		
 		// Contenedor en la esquina superior derecha
-        BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
-        panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
+        BotonVolver panelAtras = new BotonVolver("resources/atras_icon.png");
+        panelAtras.setControladorVolver(_ -> paginaAnterior());
 
-        // Añadir el contenedor al panel principal
-        add(panelSuperiorIzquierdo, BorderLayout.NORTH);
+        // Título
+	    JLabel titulo = new JLabel("Gestión de Vuelos", SwingConstants.CENTER);
+	    titulo.setForeground(new Color(70, 130, 180));
+	    titulo.setFont(new Font("SansSerif", Font.BOLD, 24));
+	    titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+	    
+	    // Añadir el contenedor al panel superior
+        panelSuperiorIzquierdo.add(panelAtras, BorderLayout.NORTH);
+	    panelSuperiorIzquierdo.add(titulo, BorderLayout.AFTER_LAST_LINE);
+	    add(panelSuperiorIzquierdo, BorderLayout.NORTH);
 		
 		
         JPanel panelContenido = new JPanel();
         panelContenido.setLayout(new GridBagLayout());
-        panelContenido.setBackground(Color.WHITE);
+        panelContenido.setBackground(new Color(173, 216, 230));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 0;
         gbc.gridy = 0;
-		
-		// Título
-	    JLabel titulo = new JLabel("Gestión de Vuelos", SwingConstants.CENTER);
-	    titulo.setForeground(new Color(70, 130, 180));
-	    titulo.setFont(new Font("Arial", Font.BOLD, 24));
-        titulo.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 3; // Ocupa 3 columnas
-        gbc.anchor = GridBagConstraints.CENTER;
-        panelContenido.add(titulo, gbc);
+
 	    
 		// tabla
 		tablaVuelos = new JTable();
@@ -90,12 +91,13 @@ public class GestorGestionVuelos extends JPanel{
 	    gbc.weightx = 1.0; // Permitir expansión horizontal
 	    gbc.weighty = 1.0; // Permitir expansión vertical
 	    panelContenido.add(scroll, gbc);
+	    actualizarPantalla();
 		    
 	    add(panelContenido, BorderLayout.CENTER);
 	}
 	
 	public void actualizarPantalla() {
-		String[] titulos = {"ID Vuelo", "Origen", "Destino", "Fecha", "Aerolinea", "Estado", "Terminal", "Operador"};
+		String[] titulos = {"ID Vuelo", "Origen", "Destino", "Aerolinea", "Estado", "Terminal", "Operador"};
 
 		DefaultTableModel model = new DefaultTableModel(titulos, 0) {
 			private static final long serialVersionUID = 1L;
@@ -110,14 +112,13 @@ public class GestorGestionVuelos extends JPanel{
 			String aerolineas = a.get(0).getId();
 			if (a.size() == 2) aerolineas += ", " + a.get(1).getId();
 
-			Object terminal = v.getTerminal() == null ? "Asignar" : v.getTerminal();
-			Object operador = (v.getControladorAsignado() == null && v.getTerminal() != null) ? "Asignar" : v.getControladorAsignado();
+			Object terminal = v.getTerminal() == null ? "Asignar" : v.getTerminal().getId();
+			Object operador = (v.getControladorAsignado() == null && v.getTerminal() != null) ? "Asignar" : v.getControladorAsignado().getDni();
 
 			Object[] fila = {
 				v.getId(), 
-				v.getOrigen().getCodigo(), 
-				v.getDestino().getCodigo(), 
-				v.getHoraSalida() + " - " + v.getHoraLlegada(), 
+				v.getOrigen().getCodigo()+", "+ v.getHoraSalida(), 
+				v.getDestino().getCodigo()+", "+ v.getHoraLlegada(), 
 				aerolineas, 
 				v.getEstVuelo(), 
 				terminal, 
@@ -169,49 +170,76 @@ public class GestorGestionVuelos extends JPanel{
 			boton.setBackground(Color.LIGHT_GRAY);
 
 			boton.addActionListener(_ -> {
-				JTable table = (JTable) SwingUtilities.getAncestorOfClass(JTable.class, boton);
-				int row = table.getEditingRow();
-				String vueloId = (String) table.getValueAt(row, 0);
-				Vuelo vuelo = SkyManager.getInstance().getVuelos().get(vueloId);
+			    JTable table = (JTable) SwingUtilities.getAncestorOfClass(JTable.class, boton);
+			    int row = table.getEditingRow();
+			    String vueloId = (String) table.getValueAt(row, 0);
+			    Vuelo vuelo = SkyManager.getInstance().getVuelos().get(vueloId);
 
-				if ("terminal".equals(tipo)) {
-					// Mostrar terminales disponibles
-					List<Terminal> disponibles = SkyManager.getInstance().getTerminalesDisponibles(vuelo);
-					Terminal seleccion = (Terminal) JOptionPane.showInputDialog( null, "Seleccione una terminal:", "Asignar Terminal", 
-							JOptionPane.QUESTION_MESSAGE, null, disponibles.toArray(), disponibles.get(0));
+			    if ("terminal".equals(tipo)) {
+			        // Mostrar terminales disponibles
+			        List<Terminal> disponibles = SkyManager.getInstance().getTerminalesDisponibles(vuelo);
+			        List<String> terminales = new ArrayList<>();
+			        for (Terminal l: disponibles) {
+			            terminales.add(l.getId());
+			        }
 
-					if (seleccion != null) {
-					    vuelo.asignarTerminal(seleccion);
-					    JOptionPane.showMessageDialog(null, "Terminal asignada: " + seleccion.getId());
-					}
-				} else if ("operador".equals(tipo)) {
-					if (vuelo.getTerminal() == null) {
-						JOptionPane.showMessageDialog(null, "Debe asignar una terminal antes de asignar un operador.");
-						fireEditingCanceled();
-						return;
-					}
+			        if (terminales.isEmpty()) {
+			            JOptionPane.showMessageDialog(null, "No hay terminales disponibles.");
+			            fireEditingCanceled();
+			            return;
+			        }
 
-					// Obtener controladores disponibles desde la terminal del vuelo
-					List<Controlador> disponibles = vuelo.getTerminal().getControladores();
+			        String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione una terminal:", "Asignar Terminal", 
+			                JOptionPane.QUESTION_MESSAGE, null, terminales.toArray(), terminales.get(0));
 
-					if (disponibles == null || disponibles.isEmpty()) {
-						JOptionPane.showMessageDialog(null, "No hay controladores disponibles en la terminal asignada.");
-						fireEditingCanceled();
-						return;
-					}
+			        if (seleccion != null) {
+			            vuelo.asignarTerminal(SkyManager.getInstance().getTerminales().get(seleccion));
+			            JOptionPane.showMessageDialog(null, "Terminal asignada: " + seleccion);
 
-					// Mostrar diálogo para seleccionar controlador
-					Controlador seleccion = (Controlador) JOptionPane.showInputDialog(null, "Seleccione un controlador:", "Asignar Operador",
-						JOptionPane.QUESTION_MESSAGE, null, disponibles.toArray(), disponibles.get(0));
+			            // ACTUALIZAR CELDA
+			            table.setValueAt(seleccion, row, table.getColumn("Terminal").getModelIndex());
+			            table.repaint();
+			            fireEditingStopped();
+			        } else {
+			            fireEditingCanceled(); // Usuario canceló
+			        }
+			    } 
+			    else if ("operador".equals(tipo)) {
+			        if (vuelo.getTerminal() == null) {
+			            JOptionPane.showMessageDialog(null, "Debe asignar una terminal antes de asignar un operador.");
+			            fireEditingCanceled();
+			            return;
+			        }
 
-					if (seleccion != null) {
-						vuelo.setControladorAsignado(seleccion); // Asigna el controlador al vuelo
-						JOptionPane.showMessageDialog(null, "Controlador asignado: " + seleccion.getNombre());
-					}
-				}
+			        List<Controlador> disponibles = vuelo.getTerminal().getControladores();
+			        List<String> controladores = new ArrayList<>();
+			        for (Controlador c: disponibles) {
+			            controladores.add(c.getDni());
+			        }
 
-				fireEditingStopped();
+			        if (disponibles == null || disponibles.isEmpty()) {
+			            JOptionPane.showMessageDialog(null, "No hay controladores disponibles en la terminal asignada.");
+			            fireEditingCanceled();
+			            return;
+			        }
+
+			        String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione un controlador:", "Asignar Operador",
+			            JOptionPane.QUESTION_MESSAGE, null, controladores.toArray(), controladores.get(0));
+
+			        if (seleccion != null) {
+			            vuelo.setControladorAsignado((Controlador)SkyManager.getInstance().getUsuarios().get(seleccion));
+			            JOptionPane.showMessageDialog(null, "Controlador asignado: " + seleccion);
+
+			            // ACTUALIZAR CELDA
+			            table.setValueAt(seleccion, row, table.getColumn("Operador").getModelIndex());
+			            table.repaint();
+			            fireEditingStopped();
+			        } else {
+			            fireEditingCanceled();
+			        }
+			    }
 			});
+
 		}
 
 		@Override
@@ -235,20 +263,6 @@ public class GestorGestionVuelos extends JPanel{
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().showGestorInicio();
-	}
-	
-	private void formatoBotones(JButton boton,  int ancho, int alto) {
-		boton.setPreferredSize(new Dimension(ancho, alto));
-		boton.setForeground(Color.WHITE);
-	    boton.setBackground(new Color(5, 10, 20)); 
-	    boton.setFocusPainted(false);
-	    boton.setFont(new Font("SansSerif", Font.BOLD, 16));
-	    boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-	}
-	
-	// método para asignar un controlador a los botones
-	public void setControlador(ActionListener c) {  
-		
 	}
 
 }

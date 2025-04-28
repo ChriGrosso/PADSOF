@@ -11,6 +11,7 @@ import java.util.Map;
 public class MenuLateral extends JPanel {
     private static final long serialVersionUID = 1L;
     private Map<String, JButton> bottoni = new LinkedHashMap<>();
+    private Boolean gestor = false;
 
     public MenuLateral(String logoPath) {
         setLayout(new BorderLayout());
@@ -63,6 +64,11 @@ public class MenuLateral extends JPanel {
         add(topPanel, BorderLayout.NORTH);
         add(bottomPanel, BorderLayout.SOUTH);
     }
+    
+    public MenuLateral(String logoPath, Boolean gestor) {
+    	super();
+    	this.gestor = gestor;
+    }
 
     private void cerrarSesion() {
         SkyManager.getInstance().guardarDatos();
@@ -71,7 +77,11 @@ public class MenuLateral extends JPanel {
 
     private void verNotifiche() {
     	Aplicacion.getInstance().getNotificaciones().actualizarPantalla();
-        Aplicacion.getInstance().showNotificaciones();
+    	if (gestor == false) {
+    		Aplicacion.getInstance().showNotificaciones();
+    	} else {
+    		Aplicacion.getInstance().showGestorNotificaciones();
+    	}
     }
 
     public JButton getBottone(String nome) {

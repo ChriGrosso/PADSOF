@@ -7,12 +7,12 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,21 +37,23 @@ public class Notificaciones extends JPanel{
 	private JTable tablaNotificaciones;
 	
 	public Notificaciones() {
-        setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+		setLayout(new BorderLayout());
+		setBackground(new Color(173, 216, 230));
+        setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
         BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
         panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
         add(panelSuperiorIzquierdo, BorderLayout.NORTH);
 
         JPanel panelContenido = new JPanel(new GridBagLayout());
-        panelContenido.setBackground(Color.WHITE);
+        panelContenido.setBackground(new Color(173, 216, 230));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
         JLabel titulo = new JLabel("Notificaciones");
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
+        titulo.setForeground(new Color(70, 130, 180));
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -60,6 +62,8 @@ public class Notificaciones extends JPanel{
 
         tablaNotificaciones = new JTable();
         tablaNotificaciones.setRowHeight(50);
+        tablaNotificaciones.getTableHeader().setBackground(new Color(70, 130, 180));
+	    tablaNotificaciones.getTableHeader().setForeground(Color.WHITE);
         JScrollPane scrollPane = new JScrollPane(tablaNotificaciones);
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -229,9 +233,13 @@ public class Notificaciones extends JPanel{
         }
     }
 
-	private void paginaAnterior() {
+	public void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getNotificaciones().setVisible(false);
 		Aplicacion.getInstance().showOpInicio();
 	}
+	
+	public void addPanelConfiguracionGestor(JPanel p) {
+    	add(p, BorderLayout.SOUTH);
+    }
 }

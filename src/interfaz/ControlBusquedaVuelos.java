@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import interfaz.panelesGestor.NuevoUsuario;
 import sistema.SkyManager;
 import vuelos.Vuelo;
 
@@ -20,7 +19,6 @@ public class ControlBusquedaVuelos implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
-        NuevoUsuario nu = Aplicacion.getInstance().getNuevoUsuario();
 
         switch (comando) {
             case "BUSCAR":
@@ -62,9 +60,10 @@ public class ControlBusquedaVuelos implements ActionListener {
             break;
         default:
         	JOptionPane.showMessageDialog(null, "Debe seleccionar el tipo de búsqueda a realizar");
-    }
-    
-    	
+        }
+    	System.out.println(modelo.getVuelos());
+    	System.out.println(vuelos);
+    	bv.setFilasTabla(vuelos);
     	
     }
 }

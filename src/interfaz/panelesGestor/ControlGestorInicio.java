@@ -12,10 +12,10 @@ public class ControlGestorInicio implements ActionListener {
 
         switch (comando) {
             case "BUSQUEDA_VUELOS":
-                System.out.println("Navegar a búsqueda vuelos...");
+            	Aplicacion.getInstance().showBusquedaVuelos();
                 break;
             case "GESTION_VUELOS":
-                System.out.println("Navegar a gestión vuelos...");
+            	Aplicacion.getInstance().showGestorGestionVuelos();
                 break;    
             case "GESTION_AEROPUERTO":
             	Aplicacion.getInstance().showGestorGestionAeropuerto();
@@ -27,7 +27,7 @@ public class ControlGestorInicio implements ActionListener {
             	Aplicacion.getInstance().showGestorGestionUsuarios();
                 break;
             case "ESTADISTICAS":
-                System.out.println("Navegar a estadísticas...");
+            	Aplicacion.getInstance().showGestorEstadisticas();
                 break;
 
             default:

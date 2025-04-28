@@ -37,29 +37,41 @@ public class BusquedaVuelos extends JPanel{
 	public BusquedaVuelos() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
-		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
+		setBorder(BorderFactory.createEmptyBorder(0, 60, 60, 60));
+		
+		JPanel panelSuperiorIzquierdo = new JPanel();
+		panelSuperiorIzquierdo.setLayout(new BorderLayout());
+		panelSuperiorIzquierdo.setBackground(new Color(173, 216, 230));
 		
 		// Boton atrás en la esquina superior derecha
-        BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
-        panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
-
-        // Añadir el contenedor al panel principal
-        add(panelSuperiorIzquierdo, BorderLayout.NORTH);
+        BotonVolver panelAtras = new BotonVolver("resources/atras_icon.png");
+        panelAtras.setControladorVolver(_ -> paginaAnterior());
 		
 		// Título
 	    JLabel titulo = new JLabel("Búsqueda de Vuelos", SwingConstants.CENTER);
 	    titulo.setForeground(new Color(70, 130, 180));
 	    titulo.setFont(new Font("SansSerif", Font.BOLD, 24));
 	    titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
-	    add(titulo, BorderLayout.NORTH);
+	    
+	    // Añadir el contenedor al panel superior
+        panelSuperiorIzquierdo.add(panelAtras, BorderLayout.NORTH);
+	    panelSuperiorIzquierdo.add(titulo, BorderLayout.AFTER_LAST_LINE);
+	    add(panelSuperiorIzquierdo, BorderLayout.NORTH);
 	    
 	    // Panel con el contenido
+	    JPanel panelContenido = new JPanel();
+	    panelContenido.setLayout(new BorderLayout());
+	    panelContenido.setBackground(new Color(173, 216, 230));
+	    
         JPanel panelGeneral = new JPanel();
         panelGeneral.setLayout(new GridBagLayout());
         panelGeneral.setBackground(new Color(173, 216, 230));
+        panelGeneral.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 2));
         
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = new Insets(5, 5, 5, 5);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.WEST;
         gbc.gridx = 0;
         gbc.gridy = 0;
 	    
@@ -98,29 +110,37 @@ public class BusquedaVuelos extends JPanel{
 		scroll.setPreferredSize(new Dimension(500, 150));
 		scroll.setBorder(BorderFactory.createLineBorder(new Color(112, 128, 144)));
 	    
-		add(panelGeneral, BorderLayout.CENTER);
-		add(scroll, BorderLayout.AFTER_LAST_LINE);
+		panelContenido.add(panelGeneral, BorderLayout.NORTH);
+		panelContenido.add(scroll, BorderLayout.CENTER);
+		add(panelContenido, BorderLayout.CENTER);
 	}
 	
 	public void setFilasTabla(ArrayList<Vuelo> vuelos) {
 		String[] titulos = {"ID Vuelo", "Origen", "Destino", "Estado", "Terminal", "Fecha", "Aerolinea", "ID Avión"};
 		DefaultTableModel modeloDatos = new DefaultTableModel(titulos, 0);
 		
+		if (vuelos == null || vuelos.isEmpty()) {
+			tabla.setModel(modeloDatos);
+			return;
+		}
+		
 		for (Vuelo v : vuelos) {
-			Terminal t = v.getTerminal();
-			String terminal = "No asignada";
-			if (t != null) {
-				terminal = t.getId();
+			if (v != null) {
+				Terminal t = v.getTerminal();
+				String terminal = "No asignada";
+				if (t != null) {
+					terminal = t.getId();
+				}
+				String fecha = v.getHoraLlegada()+" - "+v.getHoraSalida();
+				if (v.getLlegada()) {
+					fecha = v.getHoraSalida()+" - "+v.getHoraLlegada();
+				}
+				ArrayList<Aerolinea> a = v.getAerolineas();
+				String aerolineas = a.get(0).getId();
+				if (a.size() == 2) { aerolineas += ", "+a.get(1).getId();}
+			    Object[] fila = {v.getId(), v.getOrigen().getCodigo(), v.getDestino().getCodigo(), v.getEstVuelo(), terminal, fecha, aerolineas, v.getAvion().getId()};
+			    modeloDatos.addRow(fila);
 			}
-			String fecha = v.getHoraLlegada()+" - "+v.getHoraSalida();
-			if (v.getLlegada()) {
-				fecha = v.getHoraSalida()+" - "+v.getHoraLlegada();
-			}
-			ArrayList<Aerolinea> a = v.getAerolineas();
-			String aerolineas = a.get(0).getId();
-			if (a.size() == 2) { aerolineas += ", "+a.get(1).getId();}
-		    Object[] fila = {v.getId(), v.getOrigen().getCodigo(), v.getDestino().getCodigo(), v.getEstVuelo(), terminal, fecha, aerolineas, v.getAvion().getId()};
-		    modeloDatos.addRow(fila);
 		}
 		
 		tabla.setModel(modeloDatos);
@@ -131,12 +151,12 @@ public class BusquedaVuelos extends JPanel{
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
 	    boton.setFocusPainted(false);
-	    boton.setFont(new Font("SansSerif", Font.BOLD, 12));
-	    boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
 	}
 	
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
+		limpiarCampos();
 		Aplicacion.getInstance().showGestorInicio();
 	}
 	
@@ -154,7 +174,7 @@ public class BusquedaVuelos extends JPanel{
 	public void limpiarCampos() {
 	    campoBusqueda.setText("");
 	    
-	    setFilasTabla(null);
+	    setFilasTabla(new ArrayList<Vuelo>());
 	    tiposBusqueda.setSelectedIndex(0);
 	    campoBusqueda.grabFocus();
 	}

@@ -47,6 +47,7 @@ public class ControlNuevoUsuario implements ActionListener {
 
     private void aceptar() {
     	NuevoUsuario nu = Aplicacion.getInstance().getNuevoUsuario();
+    	GestorGestionUsuarios gest = Aplicacion.getInstance().getGestorGestionUsuarios();
     	Usuario nuevo;
     	String dni = nu.getDniUsuario();
     	String nombre = nu.getNombreUsuario();
@@ -76,6 +77,7 @@ public class ControlNuevoUsuario implements ActionListener {
     	
     	modelo.registrarUsuario(nuevo);
      	modelo.guardarDatos();
+     	gest.addFila(nuevo);
      	
         JOptionPane.showMessageDialog(null, "Usuario añadido correctamente");
         nu.limpiarCampos();
