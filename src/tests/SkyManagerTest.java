@@ -314,14 +314,14 @@ class SkyManagerTest {
 	void testBuscarVuelosPorHoraLlegada() {
 		skyManager.registrarAerolinea(a);
         skyManager.registrarVuelo(vuelo);
-        assertTrue(skyManager.buscarVuelosPorHoraLlegada(vuelo.getHoraLlegada()).size()>0);
+        assertTrue(skyManager.buscarVuelosPorHoraLlegada(vuelo.getHoraLlegada().toLocalTime()).size()>0);
 	}
 
 	@Test
 	void testBuscarVuelosPorHoraSalida() {
 		skyManager.registrarAerolinea(a);
         skyManager.registrarVuelo(vuelo);
-        assertTrue(skyManager.buscarVuelosPorHoraSalida(vuelo.getHoraSalida()).size()>0);
+        assertTrue(skyManager.buscarVuelosPorHoraSalida(vuelo.getHoraSalida().toLocalTime()).size()>0);
 	}
 
 	@Test

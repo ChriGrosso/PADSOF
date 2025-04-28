@@ -184,7 +184,7 @@ public class Aplicacion extends JFrame{
 		cartas.add(panelControladorGestionVuelos, CONTROLADOR_GESTION_VUELOS);
 		cartas.add(panelGestorGestionAeropuerto, GESTOR_GESTION_AEROPUERTO);
 		cartas.add(panelGestorNotificaciones, GESTOR_NOTIFICACIONES);
-		cartas.add(panelGestorNotificaciones, CONFIGURACION_NOTIFICACIONES);
+		cartas.add(panelConfiguracionNotificaciones, CONFIGURACION_NOTIFICACIONES);
 		
 		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);

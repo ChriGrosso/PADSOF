@@ -2,6 +2,9 @@ package interfaz;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -34,6 +37,7 @@ public class ControlBusquedaVuelos implements ActionListener {
     	ArrayList<Vuelo> vuelos = new ArrayList<>();
     	BusquedaVuelos bv = Aplicacion.getInstance().getBusquedaVuelos();
     	String contenido = bv.getContenidoCampoBusqueda();
+    	LocalTime hora;
     	
     	String tipo = bv.getTipoBusquedaSeleccionado();
     	switch (tipo) {
@@ -53,10 +57,12 @@ public class ControlBusquedaVuelos implements ActionListener {
         	vuelos = modelo.buscarVuelosPorTerminal(modelo.getTerminales().get(contenido));
             break;
         case "Hora de Llegada":
-        	//vuelos = modelo.buscarVuelosPorHoraLlegada();
+        	hora = parsearHoraUsuario(contenido);
+        	vuelos = modelo.buscarVuelosPorHoraLlegada(hora);
             break;
         case "Hora de Salida":
-            buscar();
+        	hora = parsearHoraUsuario(contenido);
+        	vuelos = modelo.buscarVuelosPorHoraSalida(hora);
             break;
         default:
         	JOptionPane.showMessageDialog(null, "Debe seleccionar el tipo de búsqueda a realizar");
@@ -65,5 +71,15 @@ public class ControlBusquedaVuelos implements ActionListener {
     	System.out.println(vuelos);
     	bv.setFilasTabla(vuelos);
     	
+    }
+    
+    private LocalTime parsearHoraUsuario(String horaUsuario) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        try {
+            return LocalTime.parse(horaUsuario, formatter);
+        } catch (DateTimeParseException e) {
+        	JOptionPane.showMessageDialog(null, "Formato de hora inválido. Usa el formato HH:mm (por ejemplo, 14:45).");
+            return null;
+        }
     }
 }

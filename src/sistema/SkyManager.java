@@ -712,41 +712,45 @@ public class SkyManager implements Serializable {
 	}
 	
 	/**
-     * Busca vuelos que tengan una hora de llegada específica.
-     * 
-     * @param hLlegada Hora de llegada de los vuelos a buscar.
-     * @return Una lista de vuelos que coinciden con la hora de llegada indicada.
-     */
-	public ArrayList<Vuelo> buscarVuelosPorHoraLlegada(LocalDateTime hLlegada) {
-		this.updateVuelos();
-		ArrayList<Vuelo> vuelosHLlegada = new ArrayList<Vuelo>();
-		Collection<Vuelo> vuelos = this.vuelos.values();
-		
-		for(Vuelo v: vuelos) {
-			if (v.getHoraLlegada().equals(hLlegada)) {
-				vuelosHLlegada.add(v);
-			}
-		}
-		return vuelosHLlegada;		
+	 * Busca vuelos que tengan una hora de llegada específica (solo hora y minuto, sin segundos).
+	 * 
+	 * @param hLlegada Hora de llegada de los vuelos a buscar.
+	 * @return Una lista de vuelos que coinciden con la hora de llegada indicada.
+	 */
+	public ArrayList<Vuelo> buscarVuelosPorHoraLlegada(LocalTime hLlegada) {
+	    this.updateVuelos();
+	    ArrayList<Vuelo> vuelosHLlegada = new ArrayList<>();
+	    Collection<Vuelo> vuelos = this.vuelos.values();
+	    
+	    for (Vuelo v : vuelos) {
+	        LocalTime horaLlegadaVuelo = v.getHoraLlegada().toLocalTime().withSecond(0).withNano(0);
+	        LocalTime horaBuscada = hLlegada.withSecond(0).withNano(0);
+	        if (horaLlegadaVuelo.getHour() == horaBuscada.getHour() && horaLlegadaVuelo.getMinute() == horaBuscada.getMinute()) {
+	            vuelosHLlegada.add(v);
+	        }
+	    }
+	    return vuelosHLlegada;
 	}
-	
+
 	/**
-     * Busca vuelos que tengan una hora de salida específica.
-     * 
-     * @param hSalida Hora de salida de los vuelos a buscar.
-     * @return Una lista de vuelos que coinciden con la hora de salida indicada.
-     */
-	public ArrayList<Vuelo> buscarVuelosPorHoraSalida(LocalDateTime hSalida) {
-		this.updateVuelos();
-		ArrayList<Vuelo> vuelosHSalida = new ArrayList<Vuelo>();
-		Collection<Vuelo> vuelos = this.vuelos.values();
-		
-		for(Vuelo v: vuelos) {
-			if (v.getHoraSalida().equals(hSalida)) {
-				vuelosHSalida.add(v);
-			}
-		}
-		return vuelosHSalida;	
+	 * Busca vuelos que tengan una hora de salida específica (solo hora y minuto, sin segundos).
+	 * 
+	 * @param hSalida Hora de salida de los vuelos a buscar.
+	 * @return Una lista de vuelos que coinciden con la hora de salida indicada.
+	 */
+	public ArrayList<Vuelo> buscarVuelosPorHoraSalida(LocalTime hSalida) {
+	    this.updateVuelos();
+	    ArrayList<Vuelo> vuelosHSalida = new ArrayList<>();
+	    Collection<Vuelo> vuelos = this.vuelos.values();
+	    
+	    for (Vuelo v : vuelos) {
+	        LocalTime horaSalidaVuelo = v.getHoraSalida().toLocalTime().withSecond(0).withNano(0);
+	        LocalTime horaBuscada = hSalida.withSecond(0).withNano(0);
+	        if (horaSalidaVuelo.getHour() == horaBuscada.getHour() && horaSalidaVuelo.getMinute() == horaBuscada.getMinute()) {
+	            vuelosHSalida.add(v);
+	        }
+	    }
+	    return vuelosHSalida;
 	}
 	
 	/**
