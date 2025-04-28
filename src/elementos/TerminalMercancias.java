@@ -28,6 +28,11 @@ public class TerminalMercancias extends Terminal {
         super(id, fchRegistro, numeroPuertas, prefijoPuerta);
         this.setCapacidadToneladas(capacidadToneladas);
     }
+    
+    public TerminalMercancias(LocalDate fchRegistro, int numeroPuertas, String[] prefijos) {
+        super(generarNuevoId(), fchRegistro, numeroPuertas, prefijos);
+    }
+
 
 
     /**

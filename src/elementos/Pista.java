@@ -15,10 +15,12 @@ import vuelos.Vuelo;
 public class Pista extends ElementoEstructural {
     private static final long serialVersionUID = 1L;
 
+    private static int contador = 0; 			//Contatore statico
     private boolean despegue;              // Indica si la pista es para despegue (true) o aterrizaje (false)
     private double longitud;                  // Longitud de la pista en metros
     private ArrayList<Vuelo> vuelosQueSirve; // Cola de vuelos esperando para usar la pista
     private Vuelo usando;                  // Vuelo que está utilizando la pista actualmente
+    
 
     /**
      * Constructor de la pista.
@@ -32,6 +34,25 @@ public class Pista extends ElementoEstructural {
         this.setDespegue(despegue);
         this.setLongitud(longitud);
         this.vuelosQueSirve = new ArrayList<>();
+    }
+    
+    public static void setContador(int nuevoValor) {
+        contador = nuevoValor;
+    }
+    
+ // === Costruttore aggiornato ===
+    public Pista(LocalDate fchRegistro, boolean despegue, double longitud) {
+        super(generarNuevoId(), 0, fchRegistro);
+        this.setDespegue(despegue);
+        this.setLongitud(longitud);
+        this.vuelosQueSirve = new ArrayList<>();
+    }
+    
+ // === Generazione ID automatica ===
+    private static String generarNuevoId() {
+        String id = String.format("PS%04d", contador);
+        contador++;
+        return id;
     }
 
     /**
@@ -124,5 +145,10 @@ public class Pista extends ElementoEstructural {
         Vuelo siguiente = this.vuelosQueSirve.get(0);
         this.usando = siguiente;
         this.vuelosQueSirve.remove(0);
+    }
+    
+    @Override
+    public String toString() {
+        return "Pista " + getId() + " (" + (isDespegue() ? "Despegue" : "Aterrizaje") + ", " + getLongitud() + " m)";
     }
 }

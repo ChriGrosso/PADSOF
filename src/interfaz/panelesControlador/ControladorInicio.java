@@ -2,6 +2,8 @@ package interfaz.panelesControlador;
 
 import interfaz.elementosComunes.FabricaBotones;
 import interfaz.elementosComunes.MenuLateral;
+import sistema.SkyManager;
+import usuarios.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -105,6 +107,13 @@ public class ControladorInicio extends JPanel {
  		busquedaVuelos.addActionListener(c);
  		gestionVuelos.addActionListener(c);
  	}
+
+ 	public void actualizarPantalla() {
+    	Usuario usuarioActual = SkyManager.getInstance().getUsuarioActual();
+    	if(usuarioActual != null) {
+    		bienvenida.setText("Bienvenid@ " + usuarioActual.getNombre());
+    	}
+    }
 }
 
 

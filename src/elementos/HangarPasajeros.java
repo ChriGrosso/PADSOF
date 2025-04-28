@@ -24,4 +24,9 @@ public class HangarPasajeros extends Hangar {
                            int numPlazas, double alturaPlaza, double anchuraPlaza, double largoPlaza) {
         super(id, costeph, fchRegistro, numPlazas, alturaPlaza, anchuraPlaza, largoPlaza);
     }
+    
+    public HangarPasajeros(LocalDate fechaRegistro, int numPlazas, double alturaPlaza, double anchuraPlaza, double largoPlaza) {
+        super(generarNuevoId(), 0.0, fechaRegistro, numPlazas, alturaPlaza, anchuraPlaza, largoPlaza);
+    }
+
 }

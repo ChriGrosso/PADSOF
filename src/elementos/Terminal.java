@@ -17,7 +17,8 @@ import vuelos.Vuelo;
  */
 public abstract class Terminal extends ElementoEstructural {
     private static final long serialVersionUID = 1L;
-
+    
+    private static int contador = 0;
     private int numeroPuertas;                          // Número total de puertas
     private String prefijoPuerta;                       // Prefijo que se usa para nombrar las puertas (ej. "A", "T", etc.)
     private HashMap<String, Puerta> puertas;            // Mapa de código -> puerta
@@ -46,6 +47,35 @@ public abstract class Terminal extends ElementoEstructural {
             this.puertas.put(nomP, p);
         }
     }
+    
+    public Terminal(String id, LocalDate fchRegistro, int numeroPuertas, String[] prefijos) {
+        super(id, 0, fchRegistro); // id, costo (0 perché gestito diversamente), data di registrazione
+        this.numeroPuertas = numeroPuertas;
+        this.puertas = new HashMap<>();
+        this.vuelos = new ArrayList<>();
+        this.controladores = new ArrayList<>();
+
+        for (String prefijo : prefijos) {
+            prefijo = prefijo.trim(); // Eliminiamo eventuali spazi
+            for (int i = 1; i <= numeroPuertas; i++) {
+                String nombrePuerta = prefijo + i;
+                Puerta puerta = new Puerta(nombrePuerta, fchRegistro);
+                this.puertas.put(nombrePuerta, puerta);
+            }
+        }
+    }
+    
+    public static String generarNuevoId() {
+        String id = String.format("T%04d", contador);
+        contador++;
+        return id;
+    }
+    
+    public static void setContador(int nuevoValor) {
+        contador = nuevoValor;
+    }
+
+
     
     /**
      * Método para saber si una terminal es de mercancias o no

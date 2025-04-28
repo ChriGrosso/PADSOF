@@ -43,4 +43,10 @@ public class HangarMercancias extends Hangar {
     public void setMaterialesPeligrosos(boolean materialesPeligrosos) {
         this.materialesPeligrosos = materialesPeligrosos;
     }
+    
+    public HangarMercancias(LocalDate fechaRegistro, int numPlazas, double alturaPlaza, double anchuraPlaza, double largoPlaza, boolean materialesPeligrosos) {
+        super(generarNuevoId(), 0.0, fechaRegistro, numPlazas, alturaPlaza, anchuraPlaza, largoPlaza);
+        this.materialesPeligrosos = materialesPeligrosos;
+    }
+
 }

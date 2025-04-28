@@ -187,6 +187,14 @@ public class Aeropuerto implements Serializable{
     public void setDireccion(Direccion direccion) {
         this.direccion = direccion;
     }
+
+	public void setNombre(String nombre2) {
+		this.nombre=nombre2;
+		
+	}
+	
+	
+
     
 
 

@@ -66,6 +66,16 @@ public class SkyManager implements Serializable {
 	private HashMap<String, Factura> facturas;
 	private Usuario usuarioActual;
 	private long ultimoGenIdVuelo;  
+	// --- Costos Base y Costos por Hora ---
+	private double costoBaseFactura;
+	private double costoHoraPista;
+	private double costoHoraTerminal;
+	private double costoHoraFinger;
+	private double costoHoraHangar;
+	private double costoHoraAutobus;
+	private Aeropuerto aeropuertoPropio;
+
+
 	
 	/**
      * Constructor privado para aplicar el patrón Singleton.
@@ -157,6 +167,12 @@ public class SkyManager implements Serializable {
 	        this.usuarioActual = null;
 	        this.ultimoGenIdVuelo = refDisco.ultimoGenIdVuelo;  // Restaurar
 	        Vuelo.setGenId(this.ultimoGenIdVuelo);              // Aplicarlo a Vuelo
+	        actualizarContadorPistas();
+	        actualizarContadorTerminales();
+	        actualizarContadorFingers();
+	        actualizarContadorHangars();
+	        actualizarContadorZonaParking();
+	        
 	        
 	    } catch (IOException | ClassNotFoundException e) {
 	    	System.err.println("Error al cargar los datos: " + e.getMessage());
@@ -926,5 +942,174 @@ public class SkyManager implements Serializable {
 		 return s;
 	 }
 	 
+	 private void actualizarContadorPistas() {
+		    int max = 0;
+		    for (String id : pistas.keySet()) {
+		        if (id.startsWith("PS")) {
+		            try {
+		                int num = Integer.parseInt(id.substring(2));
+		                if (num >= max) {
+		                    max = num + 1; // Prossimo disponibile
+		                }
+		            } catch (NumberFormatException ignored) {}
+		        }
+		    }
+		    Pista.setContador(max);
+		}
+	 
+	 public void actualizarContadorTerminales() {
+		    int max = 0;
+		    for (Terminal t : terminales.values()) {
+		        try {
+		            String idNumStr = t.getId().substring(1); // Rimuove la "T"
+		            int num = Integer.parseInt(idNumStr);
+		            if (num > max) {
+		                max = num;
+		            }
+		        } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
+		            // In caso di errore sul parsing, ignoriamo quel terminale
+		        }
+		    }
+		    Terminal.setContador(max + 1);
+		}
+	 
+	 public void actualizarContadorFingers() {
+		    int max = 0;
+		    for (Finger f : fingers.values()) {
+		        try {
+		            String idNumStr = f.getId().substring(1); // Rimuove la "F"
+		            int num = Integer.parseInt(idNumStr);
+		            if (num > max) {
+		                max = num;
+		            }
+		        } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
+		            // Ignora ID malformati
+		        }
+		    }
+		    Finger.setContador(max + 1);
+		}
+	 
+	 public void actualizarContadorHangars() {
+		    int max = 0;
+		    for (Hangar h : hangares.values()) {
+		        try {
+		            String idNumStr = h.getId().substring(1); // Rimuove "H"
+		            int num = Integer.parseInt(idNumStr);
+		            if (num > max) {
+		                max = num;
+		            }
+		        } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
+		            // Ignora errori
+		        }
+		    }
+		    Hangar.setContador(max + 1);
+		}
+	 
+	 public void actualizarContadorZonaParking() {
+		    int max = 0;
+		    for (ZonaParking zp : zonasParking.values()) {
+		        try {
+		            String idNumStr = zp.getId().substring(2); // Rimuove "ZP"
+		            int num = Integer.parseInt(idNumStr);
+		            if (num > max) {
+		                max = num;
+		            }
+		        } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
+		            // Ignora errori
+		        }
+		    }
+		    ZonaParking.setContador(max + 1);
+		}
+	 
+	// --- Costos Base y Costos por Hora ---
+	 public double getCostoBaseFactura() {
+	     return costoBaseFactura;
+	 }
+
+	 public void setCostoBaseFactura(double costoBaseFactura) {
+	     this.costoBaseFactura = costoBaseFactura;
+	 }
+
+	 public double getCostoHoraPista() {
+	     return costoHoraPista;
+	 }
+
+	 public void setCostoHoraPista(double costoHoraPista) {
+	     this.costoHoraPista = costoHoraPista;
+	 }
+
+	 public double getCostoHoraTerminal() {
+	     return costoHoraTerminal;
+	 }
+
+	 public void setCostoHoraTerminal(double costoHoraTerminal) {
+	     this.costoHoraTerminal = costoHoraTerminal;
+	 }
+
+	 public double getCostoHoraFinger() {
+	     return costoHoraFinger;
+	 }
+
+	 public void setCostoHoraFinger(double costoHoraFinger) {
+	     this.costoHoraFinger = costoHoraFinger;
+	 }
+
+	 public double getCostoHoraHangar() {
+	     return costoHoraHangar;
+	 }
+
+	 public void setCostoHoraHangar(double costoHoraHangar) {
+	     this.costoHoraHangar = costoHoraHangar;
+	 }
+
+	 public double getCostoHoraAutobus() {
+	     return costoHoraAutobus;
+	 }
+
+	 public void setCostoHoraAutobus(double costoHoraAutobus) {
+	     this.costoHoraAutobus = costoHoraAutobus;
+	 }
+
+	// --- Métodos para actualizar el coste por hora de los elementos ---
+
+	 public void actualizarCosteHoraPistas(double nuevoCoste) {
+	     for (Pista pista : pistas.values()) {
+	         pista.setCostePorHora(nuevoCoste);
+	     }
+	 }
+
+	 public void actualizarCosteHoraTerminales(double nuevoCoste) {
+	     for (Terminal terminal : terminales.values()) {
+	         terminal.setCostePorHora(nuevoCoste);
+	     }
+	 }
+
+	 public void actualizarCosteHoraFingers(double nuevoCoste) {
+	     for (Finger finger : fingers.values()) {
+	         finger.setCostePorHora(nuevoCoste);
+	     }
+	 }
+
+	 public void actualizarCosteHoraHangares(double nuevoCoste) {
+	     for (Hangar hangar : hangares.values()) {
+	         hangar.setCostePorHora(nuevoCoste);
+	     }
+	 }
+	 
+	 public Aeropuerto getAeropuertoPropio() {
+		    return aeropuertoPropio;
+		}
+
+		public void setAeropuertoPropio(Aeropuerto aeropuertoPropio) {
+		    this.aeropuertoPropio = aeropuertoPropio;
+		}
+
+
+	 
+
+	 
+	
+
+
 	
 }

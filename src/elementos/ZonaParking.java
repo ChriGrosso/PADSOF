@@ -18,6 +18,18 @@ public class ZonaParking extends LocalizacionAterrizaje {
     private double anchuraPlaza;   // Anchura máxima permitida por plaza
     private double largoPlaza;     // Largo máximo permitido por plaza
     private ArrayList<Vuelo> vuelos;
+    private static int contador = 0;
+
+    private static String generarNuevoId() {
+        String id = String.format("ZP%04d", contador);
+        contador++;
+        return id;
+    }
+
+    public static void setContador(int nuevoContador) {
+        contador = nuevoContador;
+    }
+
 
     /**
      * Constructor de la zona de parking.
@@ -38,6 +50,16 @@ public class ZonaParking extends LocalizacionAterrizaje {
         this.largoPlaza = largoPlaza;
         this.vuelos = new ArrayList<Vuelo>();
     }
+    
+    public ZonaParking(int numPlazas, double alturaPlaza, double anchuraPlaza, double largoPlaza) {
+        super(generarNuevoId(), 0.0, LocalDate.now());
+        this.numPlazas = numPlazas;
+        this.alturaPlaza = alturaPlaza;
+        this.anchuraPlaza = anchuraPlaza;
+        this.largoPlaza = largoPlaza;
+        this.vuelos = new ArrayList<>();
+    }
+
 
     /**
      * Devuelve el número de plazas ocupadas (no implementado aún).

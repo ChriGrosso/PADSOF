@@ -14,6 +14,7 @@ import vuelos.Vuelo;
 public class Finger extends LocalizacionAterrizaje {
     private static final long serialVersionUID = 1L;
 
+    private static int contador = 0;
     private double alturaMax; // Altura máxima permitida para que un avión use este finger
     private Vuelo vuelo;
 
@@ -29,6 +30,21 @@ public class Finger extends LocalizacionAterrizaje {
         this.setAlturaMax(alturaMax);
     }
 
+    private static String generarNuevoId() {
+        String id = String.format("F%04d", contador);
+        contador++;
+        return id;
+    }
+
+    public static void setContador(int nuevoContador) {
+        contador = nuevoContador;
+    }
+    
+    public Finger(double alturaMax) {
+        super(generarNuevoId(), 0.0, LocalDate.now()); // costo/h = 0.0 (lo puoi cambiare se vuoi), data = oggi
+        this.alturaMax = alturaMax;
+    }
+    
     /**
      * Indica si el finger está en uso actualmente.
      *  

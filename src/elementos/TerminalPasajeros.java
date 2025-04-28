@@ -29,6 +29,11 @@ public class TerminalPasajeros extends Terminal {
         super(id, fchRegistro, numeroPuertas, prefijoPuerta);
         this.setCapacidadPersonas(capacidadPersonas);
     }
+    
+    public TerminalPasajeros(LocalDate fchRegistro, int numeroPuertas, String[] prefijos) {
+        super(generarNuevoId(), fchRegistro, numeroPuertas, prefijos);
+    }
+
 
 
     /**

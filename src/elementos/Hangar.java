@@ -20,6 +20,19 @@ public abstract class Hangar extends ElementoEstructural {
     private double anchuraPlaza;   // Anchura máxima permitida por plaza
     private double largoPlaza;     // Largo máximo permitido por plaza
     private ArrayList<Avion> aviones;
+    
+    private static int contador = 0;
+
+    protected static String generarNuevoId() {
+        String id = String.format("H%04d", contador);
+        contador++;
+        return id;
+    }
+
+    public static void setContador(int nuevoContador) {
+        contador = nuevoContador;
+    }
+
 
     /**
      * Constructor de Hangar.

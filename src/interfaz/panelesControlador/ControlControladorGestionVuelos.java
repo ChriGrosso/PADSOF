@@ -70,12 +70,17 @@ public class ControlControladorGestionVuelos implements ActionListener, MouseLis
         }
 
         vista.getTabla().setModel(model);
+	     
+        // Configura renderers ed editors
+	    vista.getTabla().getColumn("Pista Asignada").setCellRenderer(new PistaRenderer());
+	    vista.getTabla().getColumn("Gestionar Pista").setCellRenderer(new GestionarPistaRenderer());
+	    vista.getTabla().getColumn("Gestionar Pista").setCellEditor(new GestionarPistaEditor());
+	    vista.getTabla().getColumn("Estado").setCellEditor(new DefaultCellEditor(new JComboBox<>(EstadoVuelo.values())));
+	
+	    // 👉 Adatta automaticamente larghezza colonne
+	    ajustarAnchoColumnas(vista.getTabla());
 
-        vista.getTabla().getColumn("Pista Asignada").setCellRenderer(new PistaRenderer());
-        vista.getTabla().getColumn("Gestionar Pista").setCellRenderer(new GestionarPistaRenderer());
-        vista.getTabla().getColumn("Gestionar Pista").setCellEditor(new GestionarPistaEditor());
-
-        vista.getTabla().getColumn("Estado").setCellEditor(new DefaultCellEditor(new JComboBox<>(EstadoVuelo.values())));
+        
     }
 
     @Override
@@ -147,8 +152,8 @@ public class ControlControladorGestionVuelos implements ActionListener, MouseLis
 
     // Editor per il bottone "Gestionar Pista"
     private static class GestionarPistaEditor extends AbstractCellEditor implements TableCellEditor {
-		private static final long serialVersionUID = 1L;
-		private final JPanel panel = new JPanel(new BorderLayout());
+        private static final long serialVersionUID = 1L;
+        private final JPanel panel = new JPanel(new BorderLayout());
         private final JButton boton = new JButton("Asignar/Modificar");
 
         public GestionarPistaEditor() {
@@ -165,8 +170,7 @@ public class ControlControladorGestionVuelos implements ActionListener, MouseLis
                     return;
                 }
 
-                List<Pista> disponibles;
-                disponibles = SkyManager.getInstance().getPistasDisponibles(vuelo);
+                List<Pista> disponibles = SkyManager.getInstance().getPistasDisponibles(vuelo);
 
                 disponibles = disponibles.stream()
                         .filter(p -> p != null)
@@ -184,10 +188,24 @@ public class ControlControladorGestionVuelos implements ActionListener, MouseLis
                         JOptionPane.QUESTION_MESSAGE, null, disponibles.toArray(), disponibles.get(0));
 
                 if (seleccion != null) {
+                    // Se il volo ha già una pista assegnata, liberiamo quella precedente
+                    Pista pistaActual = vuelo.getPista();
+                    if (pistaActual != null) {
+                        if (pistaActual.getUsando() == vuelo) {
+                            pistaActual.actualizarColaVuelos(); // libera o passa al prossimo
+                        } else {
+                            pistaActual.getVuelos().remove(vuelo); // se era in coda, rimuove
+                        }
+                    }
+
+                    // Ora assegniamo la nuova pista
                     vuelo.asignarPista(seleccion);
+                    seleccion.addVuelo(vuelo);
+
                     JOptionPane.showMessageDialog(null, "Pista asignada: " + seleccion.getId());
                     fireEditingStopped();
-                    // Aggiorna visualizzazione
+
+                    // Aggiorna la visualizzazione
                     SwingUtilities.invokeLater(() -> Aplicacion.getInstance().showControladorGestionVuelos());
                 }
             });
@@ -203,6 +221,18 @@ public class ControlControladorGestionVuelos implements ActionListener, MouseLis
         @Override
         public Object getCellEditorValue() {
             return null;
+        }
+    }
+    
+    private void ajustarAnchoColumnas(JTable table) {
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            int width = 15; // Larghezza minima
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer renderer = table.getCellRenderer(row, column);
+                Component comp = table.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width + 10, width); // 10 pixel di margine
+            }
+            table.getColumnModel().getColumn(column).setPreferredWidth(width);
         }
     }
 }

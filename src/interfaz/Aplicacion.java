@@ -6,16 +6,19 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import aeropuertos.Aeropuerto;
 import interfaz.panelesControlador.ControlControladorGestionVuelos;
 import interfaz.panelesControlador.ControlControladorInicio;
 import interfaz.panelesControlador.ControladorGestionVuelos;
 import interfaz.panelesControlador.ControladorInicio;
 import interfaz.panelesGestor.ControlGestorEstadisticas;
+import interfaz.panelesGestor.ControlGestorGestionAeropuerto;
 import interfaz.panelesGestor.ControlGestorGestionUsuarios;
 import interfaz.panelesGestor.ControlGestorGestionVuelos;
 import interfaz.panelesGestor.ControlGestorInicio;
 import interfaz.panelesGestor.ControlNuevoUsuario;
 import interfaz.panelesGestor.GestorEstadisticas;
+import interfaz.panelesGestor.GestorGestionAeropuerto;
 import interfaz.panelesGestor.GestorGestionUsuarios;
 import interfaz.panelesGestor.GestorGestionVuelos;
 import interfaz.panelesGestor.GestorInicio;
@@ -60,9 +63,11 @@ public class Aplicacion extends JFrame{
 	private GestorGestionVuelos panelGestorGestionVuelos;
 	private GestorEstadisticas panelGestorEstadisticas;
 	private ControladorGestionVuelos panelControladorGestionVuelos;
+	private GestorGestionAeropuerto panelGestorGestionAeropuerto;
 	
 	// Declaramos el panel con las cartas JPanel cartas; 
 	private JPanel cartas;
+
 	final static String LOGIN = "Login"; 
 	final static String GESTOR_INICIO   = "Gestor Inicio";
 	final static String CONT_INICIO   = "Controlador Inicio";
@@ -110,6 +115,7 @@ public class Aplicacion extends JFrame{
 		panelGestorGestionVuelos = new GestorGestionVuelos();
 		panelGestorEstadisticas = new GestorEstadisticas();
 		panelControladorGestionVuelos = new ControladorGestionVuelos();
+		panelGestorGestionAeropuerto = new GestorGestionAeropuerto();
 		
 		//controladores
 		ControlLogin controlLogin = new ControlLogin();
@@ -128,6 +134,7 @@ public class Aplicacion extends JFrame{
 		ControlGestorGestionVuelos controlGestorGestionVuelos = new ControlGestorGestionVuelos();
 		ControlGestorEstadisticas controlGestorEstadisticas = new ControlGestorEstadisticas();
 		ControlControladorGestionVuelos controlControladorGestionVuelos = new ControlControladorGestionVuelos(panelControladorGestionVuelos);
+		ControlGestorGestionAeropuerto controlGestorGestAeropuerto = new ControlGestorGestionAeropuerto(panelGestorGestionAeropuerto);
 
 		
 		// configurar las vistas con los controladores
@@ -147,7 +154,8 @@ public class Aplicacion extends JFrame{
 		panelGestorGestionVuelos.setControlador(controlGestorGestionVuelos);
 		panelGestorEstadisticas.setControlador(controlGestorEstadisticas);
 		panelControladorGestionVuelos.setControlador(controlControladorGestionVuelos);
-	
+		panelGestorGestionAeropuerto.setControlador(controlGestorGestAeropuerto);
+		
 		// Creamos el panel que contiene las cartas 
 		cartas = new JPanel(new CardLayout()); 
 		cartas.add(panelLogin,LOGIN);
@@ -168,7 +176,7 @@ public class Aplicacion extends JFrame{
 		cartas.add(panelGestorGestionVuelos, GESTOR_GESTION_VUELOS);
 		cartas.add(panelGestorEstadisticas, GESTOR_ESTADISTICAS);
 		cartas.add(panelControladorGestionVuelos, CONTROLADOR_GESTION_VUELOS);
-		cartas.add(panelControladorGestionVuelos, CONTROLADOR_GESTION_VUELOS);
+		cartas.add(panelGestorGestionAeropuerto, GESTOR_GESTION_AEROPUERTO);
 		
 		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
@@ -333,6 +341,10 @@ public class Aplicacion extends JFrame{
 	
 	public void showControladorGestionVuelos() {
 	    ((CardLayout) cartas.getLayout()).show(cartas, CONTROLADOR_GESTION_VUELOS);
+	}
+	
+	public void showGestorGestionAeropuerto() {
+		((CardLayout) cartas.getLayout()).show(cartas, GESTOR_GESTION_AEROPUERTO);
 	}
 }
 

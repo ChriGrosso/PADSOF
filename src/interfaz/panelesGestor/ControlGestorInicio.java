@@ -18,7 +18,7 @@ public class ControlGestorInicio implements ActionListener {
                 System.out.println("Navegar a gestión vuelos...");
                 break;    
             case "GESTION_AEROPUERTO":
-                System.out.println("Navegar a gestión aeropuerto...");
+            	Aplicacion.getInstance().showGestorGestionAeropuerto();
                 break;  
             case "GESTION_FACTURAS":
                 System.out.println("Navegar a gestión facturas...");
