@@ -38,7 +38,7 @@ public class OperadorGestionAviones extends JPanel{
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
         
         // Contenedor en la esquina superior derecha
-        BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
+        BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras.png");
         panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
 
         // Añadir el contenedor al panel principal
@@ -121,8 +121,13 @@ public class OperadorGestionAviones extends JPanel{
 		// Rellenar la matriz con los datos de los aviones
 		for (Avion avion: aviones) {
 		    datos[i][0] = avion.getMatricula();         
-		    datos[i][1] = String.valueOf(avion.getFechaCompra());   
-		    datos[i][2] = String.valueOf(avion.getFechaUltimaRevision());  
+		    datos[i][1] = String.valueOf(avion.getFechaCompra()); 
+		    if(avion.getFechaUltimaRevision() == null) {
+		    	datos[i][2] = "No registrado";
+		    }
+		    else {
+		    	datos[i][2] = String.valueOf(avion.getFechaUltimaRevision()); 
+		    } 
 		    datos[i][3] = avion.getTipoAvion().getMarca() + " " + avion.getTipoAvion().getModelo();
 		    datos[i][4] = String.valueOf(avion.getEstadoAvion());     
 		    i++;

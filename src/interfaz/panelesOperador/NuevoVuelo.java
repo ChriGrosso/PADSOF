@@ -65,7 +65,7 @@ public class NuevoVuelo extends JPanel{
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 40, 60));
 
         // Contenedor en la esquina superior derecha
-        BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
+        BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras.png");
         panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
 
         // Añadir el contenedor al panel principal

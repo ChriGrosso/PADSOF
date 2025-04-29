@@ -48,7 +48,7 @@ public class OperadorGestionVuelos extends JPanel{
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 		        
 		// Contenedor en la esquina superior derecha
-		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
+		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras.png");
 		panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
 
 		// Añadir el contenedor al panel principal
@@ -81,8 +81,7 @@ public class OperadorGestionVuelos extends JPanel{
 		tablaVuelos.setGridColor(new Color(75, 135, 185));
 		tablaVuelos.getTableHeader().setBackground(new Color(70, 130, 180));
 		tablaVuelos.getTableHeader().setForeground(Color.WHITE);
-		tablaVuelos.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		tablaVuelos.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
+		tablaVuelos.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
         tablaVuelos.setRowHeight(50); // Ajustar altura de las filas
         
         JScrollPane scroll = new JScrollPane(tablaVuelos);
@@ -200,7 +199,9 @@ public class OperadorGestionVuelos extends JPanel{
 	    private final JLabel mensaje = new JLabel();
 
 	    public CompartidoRenderer() {
+	    	setBackground(Color.WHITE);
 	        setLayout(new BorderLayout());
+	        setAlignmentX(Component.CENTER_ALIGNMENT);
 	        botonCompartir.setBackground(Color.cyan);
 	    }
 
@@ -228,6 +229,7 @@ public class OperadorGestionVuelos extends JPanel{
 
         public CompartidoEditor() {
             this.panel = new JPanel(new BorderLayout());
+            panel.setBackground(Color.WHITE);
             this.botonCompartir = new JButton("Compartir");
             this.mensaje = new JLabel();
 
@@ -305,8 +307,10 @@ public class OperadorGestionVuelos extends JPanel{
 	    private final JLabel mensaje = new JLabel();
 
 	    public ModificarEstRenderer() {
+	    	setBackground(Color.WHITE);
 	        setLayout(new BorderLayout());
 	        botonModificar.setBackground(Color.cyan);
+	        mensaje.setBackground(Color.WHITE);
 	    }
 
 	    @Override
@@ -332,6 +336,7 @@ public class OperadorGestionVuelos extends JPanel{
 
         public ModificarEstEditor() {
             this.panel = new JPanel(new BorderLayout());
+            panel.setBackground(Color.WHITE);
             this.botonModificar = new JButton("<html>Modificar<br>Estado</html>");
             this.mensaje = new JLabel();
 

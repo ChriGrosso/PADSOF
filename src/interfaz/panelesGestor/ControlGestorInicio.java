@@ -15,6 +15,7 @@ public class ControlGestorInicio implements ActionListener {
             	Aplicacion.getInstance().showBusquedaVuelos();
                 break;
             case "GESTION_VUELOS":
+            	Aplicacion.getInstance().getGestorGestionVuelos().actualizarPantalla();
             	Aplicacion.getInstance().showGestorGestionVuelos();
                 break;    
             case "GESTION_AEROPUERTO":

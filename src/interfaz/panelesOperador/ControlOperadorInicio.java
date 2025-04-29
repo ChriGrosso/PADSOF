@@ -4,14 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import interfaz.Aplicacion;
-import sistema.SkyManager;
 
 
 public class ControlOperadorInicio implements ActionListener{
-	private SkyManager modelo;
 	
 	public ControlOperadorInicio() {
-		this.modelo = SkyManager.getInstance();
 	}
 
 	@Override

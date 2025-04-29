@@ -7,8 +7,9 @@ import javax.swing.JTextArea;
 import javax.swing.table.TableCellRenderer;
 
 public class MultiLineCellRenderer extends JTextArea implements TableCellRenderer {
+	private static final long serialVersionUID = 1L;
 
-    public MultiLineCellRenderer() {
+	public MultiLineCellRenderer() {
         setLineWrap(true);
         setWrapStyleWord(true);
         setOpaque(true); // Necesario para que el fondo se pinte bien

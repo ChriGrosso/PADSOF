@@ -4,13 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import interfaz.Aplicacion;
-import sistema.SkyManager;
 
 public class ControlOperadorGestionAviones implements ActionListener{
-	private SkyManager modelo;
 	
 	public ControlOperadorGestionAviones() {
-		this.modelo = SkyManager.getInstance();
 	}
 
 	@Override

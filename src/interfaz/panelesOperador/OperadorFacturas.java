@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -43,7 +45,7 @@ public class OperadorFacturas extends JPanel{
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 				        
 		// Contenedor en la esquina superior derecha
-		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
+		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras.png");
 		panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
 
 		// Añadir el contenedor al panel principal
@@ -138,7 +140,7 @@ public class OperadorFacturas extends JPanel{
 	        model.addRow(new Object[]{
 	        		f.getId(),
 	        		String.valueOf(f.getFechaEmision()),
-	                f.getTotal(),
+	                f.getTotal() + " €",
 	                estado, 
 	                pagado,
 	                accion
@@ -155,12 +157,12 @@ public class OperadorFacturas extends JPanel{
 	private static class PagadoRenderer extends JPanel implements TableCellRenderer {
 		private static final long serialVersionUID = 1L;
 		private final JButton botonPagar = new JButton("Pagar");
-		private final JButton botonPagado = new JButton("Pagado");
+		private final JLabel pagado = new JLabel("Pagado");
 
 	    public PagadoRenderer() {
 	        setLayout(new BorderLayout());
+	        setBackground(Color.WHITE);
 	        botonPagar.setBackground(Color.cyan);
-	        botonPagado.setBackground(Color.cyan);
 	    }
 
 	    @Override
@@ -170,7 +172,7 @@ public class OperadorFacturas extends JPanel{
 	        if (value != null && "Pagar".equals(value.toString())) {
 	            add(botonPagar, BorderLayout.CENTER);
 	        } else {
-	        	add(botonPagado, BorderLayout.CENTER);
+	        	add(pagado, BorderLayout.CENTER);
 	        }
 	        return this;
 	    }
@@ -181,15 +183,15 @@ public class OperadorFacturas extends JPanel{
 		private static final long serialVersionUID = 1L;
 		private final JPanel panel;
 		private final JButton botonPagar;
-		private final JButton botonPagado;
+		private final JLabel pagado;
 
         public PagadoEditor() {
             this.panel = new JPanel(new BorderLayout());
             this.botonPagar = new JButton("Pagar");
-            this.botonPagado = new JButton("Pagado");
+            this.pagado = new JLabel("Pagado");
 
             botonPagar.setBackground(Color.cyan);
-	        botonPagado.setBackground(Color.cyan);
+	        panel.setBackground(Color.WHITE);
 
             botonPagar.addActionListener(_ -> {
             	JTable table = (JTable) SwingUtilities.getAncestorOfClass(JTable.class, botonPagar);
@@ -203,7 +205,23 @@ public class OperadorFacturas extends JPanel{
                     JOptionPane.showMessageDialog(null, "No se ingresó ningún número de tarjeta.");
                     return;
                 }
-                fact.pagar(cardNum);
+                // Redirigir System.err temporalmente a un stream de memoria
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                PrintStream ps = new PrintStream(baos);
+                PrintStream originalErr = System.err;
+                System.setErr(ps);
+
+                boolean res = fact.pagar(cardNum);
+
+                // Restaurar System.err original
+                System.err.flush();
+                System.setErr(originalErr);
+
+                if (!res) {
+                    String errorMsg = baos.toString();
+                    JOptionPane.showMessageDialog(Aplicacion.getInstance().getOpFacturas(), errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 // Actualizar la tabla
                 ((OperadorFacturas) SwingUtilities.getAncestorOfClass(OperadorFacturas.class, table)).actualizarPantalla();
                 fireEditingStopped();
@@ -215,7 +233,7 @@ public class OperadorFacturas extends JPanel{
 			    if (value != null && "Pagar".equals(value.toString())) {
 			        panel.add(botonPagar, BorderLayout.CENTER);
 			    } else {
-			    	panel.add(botonPagado, BorderLayout.CENTER);
+			    	panel.add(pagado, BorderLayout.CENTER);
 			    }
 			    return panel;
             }

@@ -91,7 +91,6 @@ public class GestorGestionVuelos extends JPanel{
 	    gbc.weightx = 1.0; // Permitir expansión horizontal
 	    gbc.weighty = 1.0; // Permitir expansión vertical
 	    panelContenido.add(scroll, gbc);
-	    actualizarPantalla();
 		    
 	    add(panelContenido, BorderLayout.CENTER);
 	}
