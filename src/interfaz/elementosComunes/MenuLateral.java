@@ -71,11 +71,7 @@ public class MenuLateral extends JPanel {
 
     private void verNotifiche() {
     	Aplicacion.getInstance().getNotificaciones().actualizarPantalla();
-    	if (SkyManager.getInstance().getUsuarioActual().esGestor()) {
-    		Aplicacion.getInstance().showGestorNotificaciones();
-    	} else {
-    		Aplicacion.getInstance().showNotificaciones();
-    	}
+    	Aplicacion.getInstance().showNotificaciones();
     }
 
     public JButton getBottone(String nome) {

@@ -35,6 +35,8 @@ import usuarios.Usuario;
 public class Notificaciones extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JTable tablaNotificaciones;
+	private JPanel panelInferior; 
+	private JButton botonConfiguracion;
 	
 	public Notificaciones() {
 		setLayout(new BorderLayout());
@@ -74,6 +76,24 @@ public class Notificaciones extends JPanel{
         panelContenido.add(scrollPane, gbc);
 
         add(panelContenido, BorderLayout.CENTER);
+        
+        // Panel inferior para boton de configurar
+	    panelInferior = new JPanel();
+	    panelInferior.setLayout(new BorderLayout());
+	    panelInferior.setBackground(new Color(173, 216, 230));
+	    panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 80, 10, 80));
+		  
+		//Añadir los botones
+	    // Botón "Nuevo Usuario" centrado
+		botonConfiguracion = new JButton("Configurar Notificaciones");
+		this.formatoBotones(botonConfiguracion);
+		botonConfiguracion.addActionListener(_ -> {
+			Aplicacion.getInstance().showConfiguracionNotificaciones();
+		}) ;
+		
+	    panelInferior.add(botonConfiguracion, BorderLayout.CENTER);
+		add(panelInferior, BorderLayout.SOUTH);
+		panelInferior.setVisible(false);
     }
 	
 	public void actualizarPantalla() {
@@ -115,6 +135,12 @@ public class Notificaciones extends JPanel{
         tablaNotificaciones.getColumn("Notificación").setCellRenderer(new MultiLineRenderer());
         tablaNotificaciones.getColumn("Estado").setCellRenderer(new NotificacionRenderer());
         tablaNotificaciones.getColumn("Estado").setCellEditor(new NotificacionEditor(notificaciones));
+        
+        if (SkyManager.getInstance().getUsuarioActual().esGestor()==true) {
+			panelInferior.setVisible(true);
+		} else {
+			panelInferior.setVisible(false);
+		}
     }
 	
 	private static class MultiLineRenderer extends JLabel implements TableCellRenderer {
@@ -236,10 +262,19 @@ public class Notificaciones extends JPanel{
 	public void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getNotificaciones().setVisible(false);
-		Aplicacion.getInstance().showOpInicio();
+		if (SkyManager.getInstance().getUsuarioActual().esGestor()==true) {
+			Aplicacion.getInstance().showGestorInicio();
+		} else if (SkyManager.getInstance().getUsuarioActual().esControlador()==true) {
+			Aplicacion.getInstance().showContInicio();
+		} else {
+			Aplicacion.getInstance().showOpInicio();
+		}
 	}
 	
-	public void addPanelConfiguracionGestor(JPanel p) {
-    	add(p, BorderLayout.SOUTH);
-    }
+	void formatoBotones(JButton boton) {
+		boton.setForeground(Color.WHITE);
+	    boton.setBackground(new Color(70, 130, 180)); 
+	    boton.setFocusPainted(false);
+	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
+	}
 }

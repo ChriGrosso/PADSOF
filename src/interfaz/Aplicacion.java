@@ -15,14 +15,12 @@ import interfaz.panelesGestor.ControlConfiguracionNotificaciones;
 import interfaz.panelesGestor.ControlGestorGestionAeropuerto;
 import interfaz.panelesGestor.ControlGestorGestionUsuarios;
 import interfaz.panelesGestor.ControlGestorInicio;
-import interfaz.panelesGestor.ControlGestorNotificaciones;
 import interfaz.panelesGestor.ControlNuevoUsuario;
 import interfaz.panelesGestor.GestorEstadisticas;
 import interfaz.panelesGestor.GestorGestionAeropuerto;
 import interfaz.panelesGestor.GestorGestionUsuarios;
 import interfaz.panelesGestor.GestorGestionVuelos;
 import interfaz.panelesGestor.GestorInicio;
-import interfaz.panelesGestor.GestorNotificaciones;
 import interfaz.panelesGestor.NuevoUsuario;
 import interfaz.panelesOperador.ControlNuevoAvion;
 import interfaz.panelesOperador.ControlNuevoTipoAvion;
@@ -65,7 +63,6 @@ public class Aplicacion extends JFrame{
 	private GestorEstadisticas panelGestorEstadisticas;
 	private ControladorGestionVuelos panelControladorGestionVuelos;
 	private GestorGestionAeropuerto panelGestorGestionAeropuerto;
-	private GestorNotificaciones panelGestorNotificaciones;
 	private ConfiguracionNotificaciones panelConfiguracionNotificaciones;
 	
 	// Declaramos el panel con las cartas JPanel cartas; 
@@ -84,7 +81,6 @@ public class Aplicacion extends JFrame{
 	final static String GESTOR_ESTADISTICAS   = "Gestor Estadisticas";
 	final static String GESTOR_GESTION_VUELOS   = "Gestor Vuelos";
 	final static String GESTOR_NUEVO_USUARIO   = "Nuevo Usuario";
-	final static String GESTOR_NOTIFICACIONES   = "Gestor Notificaciones";
 	final static String CONFIGURACION_NOTIFICACIONES   = "Configuracion Notificaciones";
 	
 	final static String OP_GESTION_AVIONES   = "Operador Aviones";
@@ -121,7 +117,6 @@ public class Aplicacion extends JFrame{
 		panelGestorEstadisticas = new GestorEstadisticas();
 		panelControladorGestionVuelos = new ControladorGestionVuelos();
 		panelGestorGestionAeropuerto = new GestorGestionAeropuerto();
-		panelGestorNotificaciones = new GestorNotificaciones();
 		panelConfiguracionNotificaciones = new ConfiguracionNotificaciones();
 		
 		//controladores
@@ -140,7 +135,6 @@ public class Aplicacion extends JFrame{
 		ControlBusquedaVuelos controlBusquedaVuelos = new ControlBusquedaVuelos();
 		ControlControladorGestionVuelos controlControladorGestionVuelos = new ControlControladorGestionVuelos(panelControladorGestionVuelos);
 		ControlGestorGestionAeropuerto controlGestorGestAeropuerto = new ControlGestorGestionAeropuerto(panelGestorGestionAeropuerto);
-		ControlGestorNotificaciones controlGestorNotificaciones = new ControlGestorNotificaciones();
 		ControlConfiguracionNotificaciones controlConfiguracionNotificaciones = new ControlConfiguracionNotificaciones();
 				
 		// configurar las vistas con los controladores
@@ -159,7 +153,6 @@ public class Aplicacion extends JFrame{
 		panelBusquedaVuelos.setControlador(controlBusquedaVuelos);
 		panelControladorGestionVuelos.setControlador(controlControladorGestionVuelos);
 		panelGestorGestionAeropuerto.setControlador(controlGestorGestAeropuerto);
-		panelGestorNotificaciones.setControlador(controlGestorNotificaciones);
 		panelConfiguracionNotificaciones.setControlador(controlConfiguracionNotificaciones);
 		
 		// Creamos el panel que contiene las cartas 
@@ -183,7 +176,6 @@ public class Aplicacion extends JFrame{
 		cartas.add(panelGestorEstadisticas, GESTOR_ESTADISTICAS);
 		cartas.add(panelControladorGestionVuelos, CONTROLADOR_GESTION_VUELOS);
 		cartas.add(panelGestorGestionAeropuerto, GESTOR_GESTION_AEROPUERTO);
-		cartas.add(panelGestorNotificaciones, GESTOR_NOTIFICACIONES);
 		cartas.add(panelConfiguracionNotificaciones, CONFIGURACION_NOTIFICACIONES);
 		
 		// Mostramos una carta (por defecto LOGIN)
@@ -283,9 +275,6 @@ public class Aplicacion extends JFrame{
 		return this.panelGestorEstadisticas;
 	}
 	
-	public GestorNotificaciones getGestorNotificaciones() {
-		return this.panelGestorNotificaciones;
-	}
 	
 	public ConfiguracionNotificaciones getConfiguracionNotificaciones() {
 		return this.panelConfiguracionNotificaciones;
@@ -361,10 +350,6 @@ public class Aplicacion extends JFrame{
 	
 	public void showGestorGestionAeropuerto() {
 		((CardLayout) cartas.getLayout()).show(cartas, GESTOR_GESTION_AEROPUERTO);
-	}
-	
-	public void showGestorNotificaciones() {
-		((CardLayout) cartas.getLayout()).show(cartas, GESTOR_NOTIFICACIONES);
 	}
 	
 	public void showConfiguracionNotificaciones() {

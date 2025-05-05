@@ -157,7 +157,13 @@ public class BusquedaVuelos extends JPanel{
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		limpiarCampos();
-		Aplicacion.getInstance().showGestorInicio();
+		if (SkyManager.getInstance().getUsuarioActual().esGestor()==true) {
+			Aplicacion.getInstance().showGestorInicio();
+		} else if (SkyManager.getInstance().getUsuarioActual().esControlador()==true) {
+			Aplicacion.getInstance().showContInicio();
+		} else {
+			Aplicacion.getInstance().showOpInicio();
+		}
 	}
 	
 	// método que devuelve el continido que buscar (contenido del campoBusqueda JTextField)
