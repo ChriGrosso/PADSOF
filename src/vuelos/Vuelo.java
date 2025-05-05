@@ -179,41 +179,47 @@ public abstract class Vuelo extends Observable implements Serializable{
 	
 	
 	/**
-	 * Resetea a 0 el contador único de los id de todos los vuelos.
-	 *
-	 */
+     * Resetea a 0 el contador único de los IDs de todos los vuelos.
+     * 
+     * Este método es útil, por ejemplo, en escenarios de pruebas o reinicios del sistema
+     * donde se desea reiniciar la numeración de los vuelos.
+     */
 	public void resetGenId() {
 		genId = 0;
 	}
 	
 	/**
-	 * Settear la constante generadora de ids de vuelos genId a un número en específico.
-	 *
-	 */
+     * Establece un valor específico para el generador de IDs de vuelos.
+     * 
+     * @param id El nuevo valor que se desea asignar al generador de IDs.
+     */
 	public static void setGenId(long id) {
 		genId = id;
 	}
 	
 	/**
-	 * Obtener la constante generadora de ids de vuelos genId.
-	 *
-	 */
+     * Obtiene el valor actual del generador de IDs de vuelos.
+     * 
+     * @return El valor actual del generador de IDs.
+     */
 	public static long getGenId() {
 		return genId;
 	}
 	
 	/**
-	 * Settear el estado de la petición para compartir el vuelo
-	 *
-	 */
+     * Establece el estado de la petición para compartir el vuelo.
+     * 
+     * @param comp El nuevo estado de la petición de compartición.
+     */
 	public void setPetComp(PeticionCompartir comp) {
 		this.petComp = comp;
 	}
 	
 	/**
-	 * Obtener el estado de la petición para compartir el vuelo, si la tiene.
-	 *
-	 */
+     * Obtiene el estado actual de la petición para compartir el vuelo.
+     * 
+     * @return El estado actual de la petición de compartición.
+     */
 	public PeticionCompartir getPetComp() {
 		return this.petComp;
 	}
@@ -869,6 +875,14 @@ public abstract class Vuelo extends Observable implements Serializable{
 		return true;
 	}
 	
+	/**
+     * Intenta compartir el vuelo con una aerolínea secundaria, validando que el vuelo 
+     * no esté ya compartido, que no tenga ya dos aerolíneas asociadas y que haya una 
+     * petición de compartir pendiente.
+     *
+     * @param aeSec La aerolínea secundaria con la que se desea compartir el vuelo.
+     * @return true si el vuelo fue compartido correctamente, false si no fue posible.
+     */
 	public boolean compartirVuelo(Aerolinea aeSec) {
 		if(this.compartido || this.aerolinea.size() == 2 || this.petComp != PeticionCompartir.PETICION_ENVIADA) { 
 			this.petComp = PeticionCompartir.NO_COMPARTIDO;
@@ -881,6 +895,11 @@ public abstract class Vuelo extends Observable implements Serializable{
 		return true;
 	}
 	
+	/**
+     * Rechaza la petición de compartir el vuelo, cambiando el estado de la petición.
+     *
+     * @return true siempre, indicando que la operación se realizó correctamente.
+     */
 	public boolean rechazarCompartirVuelo() { 
 		this.petComp = PeticionCompartir.NO_COMPARTIDO;
 		return true;
