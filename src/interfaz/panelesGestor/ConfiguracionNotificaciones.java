@@ -107,7 +107,7 @@ public class ConfiguracionNotificaciones extends JPanel{
 	
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
-		Aplicacion.getInstance().showGestorNotificaciones();
+		Aplicacion.getInstance().showNotificaciones();
 	}
 	
 	
