@@ -1,238 +1,142 @@
 package interfaz.panelesControlador;
 
-import interfaz.Aplicacion;
 import sistema.SkyManager;
 import vuelos.Vuelo;
 import vuelos.EstadoVuelo;
-import aviones.AvionPasajeros;
-import aviones.AvionMercancias;
 import elementos.Pista;
+import interfaz.Aplicacion;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import java.awt.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class ControlControladorGestionVuelos implements ActionListener, MouseListener {
+public class ControlControladorGestionVuelos implements ActionListener {
     private ControladorGestionVuelos vista;
     private SkyManager modelo;
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private Vuelo voloSelezionato;
 
     public ControlControladorGestionVuelos(ControladorGestionVuelos vista) {
         this.vista = vista;
         this.modelo = SkyManager.getInstance();
-        inizializza();
+        inizializzaControlli();
+        aggiornaTabella();
     }
 
-    private void inizializza() {
-        vista.getBotonVolver().setControladorVolver(e -> Aplicacion.getInstance().showContInicio());
-        vista.getTabla().addMouseListener(this);
-        actualizarPantalla();
-    }
+    private void inizializzaControlli() {
+        vista.getBotonVolver().setControladorVolver(e -> vista.mostraVistaPrincipale());
 
-    public void actualizarPantalla() {
-        String[] columnas = {"ID", "Origen", "Destino", "Fecha", "Tipo Avión", "Estado", "Pista Asignada", "Gestionar Pista"};
-        DefaultTableModel model = new DefaultTableModel(columnas, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == 5 || column == 7;
+        vista.getBotonModificar().addActionListener(e -> {
+            int row = vista.getTabla().getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(null, "Seleziona un volo da modificare.");
+                return;
             }
-        };
+            String idVolo = (String) vista.getTabla().getValueAt(row, 0);
+            voloSelezionato = modelo.getVuelos().get(idVolo);
+            if (voloSelezionato == null) return;
 
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            // Stato selezionabili dinamici
+            aggiornaComboStati();
+
+            vista.getComboPistas().removeAllItems();
+            for (Pista pista : modelo.getPistasDisponibles(voloSelezionato)) {
+                vista.getComboPistas().addItem(pista.getId());
+            }
+
+            if (voloSelezionato.getPista() != null) {
+                String idPista = voloSelezionato.getPista().getId();
+                if (((DefaultComboBoxModel<String>) vista.getComboPistas().getModel()).getIndexOf(idPista) == -1) {
+                    vista.getComboPistas().addItem(idPista);
+                }
+                vista.getComboPistas().setSelectedItem(idPista);
+            }
+
+            vista.mostraFormModifica();
+        });
+
+        vista.getBotonGuardar().addActionListener(e -> {
+            if (voloSelezionato == null) return;
+
+            String nuovoStato = (String) vista.getComboEstado().getSelectedItem();
+            voloSelezionato.setEstVuelo(EstadoVuelo.valueOf(nuovoStato));
+
+            String selezionePista = (String) vista.getComboPistas().getSelectedItem();
+            if (selezionePista != null) {
+                Pista nuovaPista = modelo.getPistas().get(selezionePista);
+                if (nuovaPista != null) {
+                    // Rimuovi dalla vecchia pista
+                    Pista attuale = voloSelezionato.getPista();
+                    if (attuale != null) {
+                        attuale.getVuelos().remove(voloSelezionato);
+                        if (attuale.getUsando() == voloSelezionato) attuale.actualizarColaVuelos();
+                    }
+
+                    // Assegna nuova pista
+                    voloSelezionato.asignarPista(nuovaPista);
+                    nuovaPista.addVuelo(voloSelezionato);
+
+                    // Aggiorna stato automaticamente
+                    if (voloSelezionato.getEstVuelo() == EstadoVuelo.ESPERANDO_PISTA_D) {
+                        voloSelezionato.setEstVuelo(EstadoVuelo.ESPERANDO_DESPEGUE);
+                    } else if (voloSelezionato.getEstVuelo() == EstadoVuelo.ESPERANDO_PISTA_A) {
+                        voloSelezionato.setEstVuelo(EstadoVuelo.ESPERANDO_ATERRIZAJE);
+                    }
+                }
+            }
+
+            SkyManager.getInstance().guardarDatos();
+            voloSelezionato = null;
+            aggiornaTabella();
+            vista.mostraVistaPrincipale();
+        });
+
+        vista.getBotonCancelar().addActionListener(e -> {
+            voloSelezionato = null;
+            vista.mostraVistaPrincipale();
+        });
+    }
+
+    private void aggiornaComboStati() {
+        vista.getComboEstado().removeAllItems();
+        vista.getComboEstado().addItem(EstadoVuelo.EN_VUELO.name());
+        vista.getComboEstado().addItem(EstadoVuelo.EN_HANGAR.name());
+
+        if (voloSelezionato.getOrigen().equals(modelo.getAeropuertoPropio())) {
+            vista.getComboEstado().addItem(EstadoVuelo.ESPERANDO_PISTA_D.name());
+        } else {
+            vista.getComboEstado().addItem(EstadoVuelo.ESPERANDO_PISTA_A.name());
+        }
+
+        vista.getComboEstado().setSelectedItem(voloSelezionato.getEstVuelo().name());
+    }
+
+    public void aggiornaTabella() {
+        String[] colonne = {"ID", "Origen", "Destino", "Fecha", "Tipo Avión", "Estado", "Pista Asignata"};
+        vista.getModelo().setDataVector(new Object[0][0], colonne);
 
         for (Vuelo v : modelo.getVuelos().values()) {
-            String tipoAvion = (v.getAvion().getTipoAvion() instanceof AvionPasajeros) ? "Pasajeros" :
-                               (v.getAvion().getTipoAvion() instanceof AvionMercancias) ? "Mercancias" : "Otro";
-
-            String pistaAsignada = (v.getPista() != null) ? v.getPista().getId() : "No Asignada";
-
-            String fechaFormateada = v.getHoraSalida().format(dateFormatter) + " - " + v.getHoraLlegada().format(dateFormatter);
-
-            Object[] fila = {
+            String tipo = v.getAvion().getTipoAvion().getClass().getSimpleName().contains("Pasajeros") ? "Pasajeros" : "Mercancias";
+            String pista = (v.getPista() != null) ? v.getPista().getId() : "No Asignata";
+            Object[] row = {
                 v.getId(),
                 v.getOrigen().getCodigo(),
                 v.getDestino().getCodigo(),
-                fechaFormateada,
-                tipoAvion,
+                v.getHoraSalida().toString(),
+                tipo,
                 v.getEstVuelo().toString(),
-                pistaAsignada,
-                "Asignar/Modificar"
+                pista
             };
-            model.addRow(fila);
-        }
-
-        vista.getTabla().setModel(model);
-	     
-        // Configura renderers ed editors
-	    vista.getTabla().getColumn("Pista Asignada").setCellRenderer(new PistaRenderer());
-	    vista.getTabla().getColumn("Gestionar Pista").setCellRenderer(new GestionarPistaRenderer());
-	    vista.getTabla().getColumn("Gestionar Pista").setCellEditor(new GestionarPistaEditor());
-	    vista.getTabla().getColumn("Estado").setCellEditor(new DefaultCellEditor(new JComboBox<>(EstadoVuelo.values())));
-	
-	    // 👉 Adatta automaticamente larghezza colonne
-	    ajustarAnchoColumnas(vista.getTabla());
-
-        
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {}
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        int row = vista.getTabla().getSelectedRow();
-        int column = vista.getTabla().getSelectedColumn();
-        if (row != -1 && column == 5) { // Cambio di stato
-            String idVuelo = (String) vista.getTabla().getValueAt(row, 0);
-            Vuelo vuelo = modelo.getVuelos().get(idVuelo);
-            if (vuelo != null) {
-                String nuevoEstado = (String) vista.getTabla().getValueAt(row, 5);
-                vuelo.setEstVuelo(EstadoVuelo.valueOf(nuevoEstado));
-                JOptionPane.showMessageDialog(null, "Estado actualizado a: " + nuevoEstado);
-                actualizarPantalla(); // Ricarica tabella
-            }
+            vista.getModelo().addRow(row);
         }
     }
 
-    @Override public void mousePressed(MouseEvent e) {}
-    @Override public void mouseReleased(MouseEvent e) {}
-    @Override public void mouseEntered(MouseEvent e) {}
-    @Override public void mouseExited(MouseEvent e) {}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
-    // Renderer per "Pista Asignada"
-    private static class PistaRenderer extends JLabel implements TableCellRenderer {
-		private static final long serialVersionUID = 1L;
-
-		public PistaRenderer() {
-            setOpaque(true);
-            setHorizontalAlignment(SwingConstants.CENTER);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                        boolean hasFocus, int row, int column) {
-            String text = (String) value;
-            setText(text);
-            if ("No Asignada".equals(text)) {
-                setFont(getFont().deriveFont(Font.BOLD));
-            } else {
-                setFont(getFont().deriveFont(Font.PLAIN));
-            }
-            setBackground(isSelected ? table.getSelectionBackground() : Color.WHITE);
-            return this;
-        }
-    }
-
-    // Renderer per il bottone "Gestionar Pista"
-    private static class GestionarPistaRenderer extends JPanel implements TableCellRenderer {
-		private static final long serialVersionUID = 1L;
-		private final JButton boton = new JButton("Asignar/Modificar");
-
-        public GestionarPistaRenderer() {
-            setLayout(new BorderLayout());
-            boton.setBackground(Color.LIGHT_GRAY);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                        boolean hasFocus, int row, int column) {
-            removeAll();
-            add(boton, BorderLayout.CENTER);
-            return this;
-        }
-    }
-
-    // Editor per il bottone "Gestionar Pista"
-    private static class GestionarPistaEditor extends AbstractCellEditor implements TableCellEditor {
-        private static final long serialVersionUID = 1L;
-        private final JPanel panel = new JPanel(new BorderLayout());
-        private final JButton boton = new JButton("Asignar/Modificar");
-
-        public GestionarPistaEditor() {
-            boton.setBackground(Color.LIGHT_GRAY);
-            boton.addActionListener(_ -> {
-                JTable table = (JTable) SwingUtilities.getAncestorOfClass(JTable.class, boton);
-                int row = table.getEditingRow();
-                String idVuelo = (String) table.getValueAt(row, 0);
-                Vuelo vuelo = SkyManager.getInstance().getVuelos().get(idVuelo);
-
-                if (vuelo == null) {
-                    JOptionPane.showMessageDialog(null, "Error: vuelo no encontrado.");
-                    fireEditingCanceled();
-                    return;
-                }
-
-                List<Pista> disponibles = SkyManager.getInstance().getPistasDisponibles(vuelo);
-
-                disponibles = disponibles.stream()
-                        .filter(p -> p != null)
-                        .sorted((p1, p2) -> p1.getId().compareTo(p2.getId()))
-                        .collect(Collectors.toList());
-
-                if (disponibles.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No hay pistas disponibles.");
-                    fireEditingCanceled();
-                    return;
-                }
-
-                Pista seleccion = (Pista) JOptionPane.showInputDialog(
-                        null, "Seleccione una pista:", "Asignar Pista",
-                        JOptionPane.QUESTION_MESSAGE, null, disponibles.toArray(), disponibles.get(0));
-
-                if (seleccion != null) {
-                    // Se il volo ha già una pista assegnata, liberiamo quella precedente
-                    Pista pistaActual = vuelo.getPista();
-                    if (pistaActual != null) {
-                        if (pistaActual.getUsando() == vuelo) {
-                            pistaActual.actualizarColaVuelos(); // libera o passa al prossimo
-                        } else {
-                            pistaActual.getVuelos().remove(vuelo); // se era in coda, rimuove
-                        }
-                    }
-
-                    // Ora assegniamo la nuova pista
-                    vuelo.asignarPista(seleccion);
-                    seleccion.addVuelo(vuelo);
-
-                    JOptionPane.showMessageDialog(null, "Pista asignada: " + seleccion.getId());
-                    fireEditingStopped();
-
-                    // Aggiorna la visualizzazione
-                    SwingUtilities.invokeLater(() -> Aplicacion.getInstance().showControladorGestionVuelos());
-                }
-            });
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            panel.removeAll();
-            panel.add(boton, BorderLayout.CENTER);
-            return panel;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return null;
-        }
-    }
-    
-    private void ajustarAnchoColumnas(JTable table) {
-        for (int column = 0; column < table.getColumnCount(); column++) {
-            int width = 15; // Larghezza minima
-            for (int row = 0; row < table.getRowCount(); row++) {
-                TableCellRenderer renderer = table.getCellRenderer(row, column);
-                Component comp = table.prepareRenderer(renderer, row, column);
-                width = Math.max(comp.getPreferredSize().width + 10, width); // 10 pixel di margine
-            }
-            table.getColumnModel().getColumn(column).setPreferredWidth(width);
-        }
-    }
+	public void tornaIndietro() {
+		Aplicacion.getInstance().showContInicio();
+	}
 }
