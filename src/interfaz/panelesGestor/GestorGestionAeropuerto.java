@@ -3,6 +3,10 @@ package interfaz.panelesGestor;
 import javax.swing.*;
 
 import aeropuertos.Direccion;
+import interfaz.Aplicacion;
+import interfaz.elementosComunes.BotonVolver;
+import sistema.SkyManager;
+
 
 import java.awt.*;
 
@@ -27,26 +31,43 @@ public class GestorGestionAeropuerto extends JPanel {
     private JTextField campoCostoHoraFinger;
     private JTextField campoCostoHoraHangar;
     private JTextField campoCostoHoraAutobus;
+    
+
 
 
     public GestorGestionAeropuerto() {
         setLayout(new BorderLayout());
+        setBackground(new Color(173, 216, 230));
+        setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 
-     // Parte superiore: Panel con boton Volver
-        JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        botonVolver = new JButton("Atrás"); // o "Volver" come preferisci
-        botonVolver.setIcon(new ImageIcon("resources/icons/atras_icon.png")); // ✅ icona
-        botonVolver.setBackground(new Color(135, 206, 250)); // ✅ colore sfondo
-        botonVolver.setFocusPainted(false); // ✅ niente focus brutto
-        botonVolver.setBorderPainted(false); // ✅ niente bordo brutto
-        botonVolver.setContentAreaFilled(true); // ✅ area interna colorata
-        botonVolver.setPreferredSize(new java.awt.Dimension(120, 35)); // ✅ dimensione coerente
-        panelSuperior.add(botonVolver);
-        add(panelSuperior, BorderLayout.NORTH);
+        // Pannello superiore (bottone + titolo)
+        JPanel panelSuperiore = new JPanel(new BorderLayout());
+        panelSuperiore.setBackground(new Color(173, 216, 230));
 
-        // Parte centrale: TabbedPane
+        // Bottone "Volver"
+        BotonVolver panelAtras = new BotonVolver("resources/atras_icon.png");
+        panelAtras.setControladorVolver(_ -> {
+            SkyManager.getInstance().guardarDatos();
+            Aplicacion.getInstance().showGestorInicio();
+        });
+        panelSuperiore.add(panelAtras, BorderLayout.NORTH);
+
+        // Titolo
+        JLabel titolo = new JLabel("Gestión de Aeropuerto", SwingConstants.CENTER);
+        titolo.setForeground(new Color(70, 130, 180));
+        titolo.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titolo.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        panelSuperiore.add(titolo, BorderLayout.AFTER_LAST_LINE);
+
+        add(panelSuperiore, BorderLayout.NORTH);
+
+        // TabbedPane (parte centrale)
         tabbedPane = new JTabbedPane();
-        
+        tabbedPane.setFont(new Font("SansSerif", Font.BOLD, 14));
+        tabbedPane.setBackground(Color.WHITE);
+        tabbedPane.setForeground(new Color(70, 130, 180));
+        tabbedPane.setBorder(BorderFactory.createLineBorder(new Color(112, 128, 144)));
+
         panelFingers = new JPanel(new CardLayout());
         panelZonasParking = new JPanel(new CardLayout());
         panelHangares = new JPanel(new CardLayout());
@@ -55,10 +76,7 @@ public class GestorGestionAeropuerto extends JPanel {
         panelPistas = new JPanel(new CardLayout());
         panelTerminales = new JPanel(new CardLayout());
         panelPuertas = new JPanel(new CardLayout());
-        
-        
 
-        
         tabbedPane.addTab("Pistas", panelPistas);
         tabbedPane.addTab("Terminales", panelTerminales);
         tabbedPane.addTab("Fingers", panelFingers);
@@ -68,9 +86,13 @@ public class GestorGestionAeropuerto extends JPanel {
         tabbedPane.addTab("Aeropuerto Propio", panelAeropuertoPropio);
         tabbedPane.addTab("Puertas", panelPuertas);
 
+        JPanel centro = new JPanel(new BorderLayout());
+        centro.setBackground(new Color(173, 216, 230));
+        centro.add(tabbedPane, BorderLayout.CENTER);
 
-        add(tabbedPane, BorderLayout.CENTER);
+        add(centro, BorderLayout.CENTER);
     }
+
     
  // Getter per i campi del formulario Aeropuerto Propio
     public JTextField getCampoCodigoAeropuerto() {

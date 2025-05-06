@@ -1,4 +1,6 @@
 package interfaz.panelesGestor;
+import java.awt.Color;
+import javax.swing.SwingConstants;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -22,7 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
+import interfaz.util.NonEditableTableModel;
 
 import aeropuertos.Aeropuerto;
 import aeropuertos.Direccion;
@@ -60,10 +62,7 @@ public class ControlGestorGestionAeropuerto {
                 mostrarTabAeropuertoPropio();
             }
         });
-        vista.getBotonVolver().addActionListener(e ->  {
-        	SkyManager.getInstance().guardarDatos();
-        	Aplicacion.getInstance().showGestorInicio();
-        });
+    	
         inicializarPanelPistas();
         inicializarPanelFingers();
         inicializarPanelHangar();
@@ -74,12 +73,12 @@ public class ControlGestorGestionAeropuerto {
         inicializarPanelAeropuertoPropio();
     }
     
-    private void inicializarPanelPistas() {
+   private void inicializarPanelPistas() {
         JPanel panelLista = new JPanel(new BorderLayout());
         JPanel panelFormulario = new JPanel(new GridBagLayout());
 
         // Componenti per lista
-        JTable tablaPistas = new JTable(new DefaultTableModel(new Object[]{"ID", "Tipo", "Longitud"}, 0));
+        JTable tablaPistas = new JTable(new NonEditableTableModel(new Object[]{"ID", "Tipo", "Longitud"}, 0));
         JScrollPane scrollPane = new JScrollPane(tablaPistas);
 
         JPanel barraBotones = new JPanel();
@@ -91,8 +90,11 @@ public class ControlGestorGestionAeropuerto {
         barraBotones.add(botonAñadir);
         barraBotones.add(botonModificar);
         barraBotones.add(botonEliminar);
+        personalizarBoton(botonAñadir);
+        personalizarBoton(botonModificar);
+        personalizarBoton(botonEliminar);
 
-        panelLista.add(barraBotones, BorderLayout.NORTH);
+        panelLista.add(barraBotones, BorderLayout.SOUTH);
         panelLista.add(scrollPane, BorderLayout.CENTER);
 
         // Componenti per formulario
@@ -107,7 +109,9 @@ public class ControlGestorGestionAeropuerto {
         JTextField campoLongitud = new JTextField(10);
 
         JButton botonGuardar = new JButton("Guardar");
+        personalizarBoton(botonGuardar);
         JButton botonCancelar = new JButton("Cancelar");
+        personalizarBoton(botonCancelar);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5,5,5);
@@ -133,7 +137,7 @@ public class ControlGestorGestionAeropuerto {
         SkyManager modelo = SkyManager.getInstance();
 
         // Carichiamo le piste già esistenti
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaPistas.getModel();
+        NonEditableTableModel modeloTabla = (NonEditableTableModel) tablaPistas.getModel();
         for (Pista p : modelo.getPistas().values()) {
             modeloTabla.addRow(new Object[]{
                 p.getId(),
@@ -184,7 +188,7 @@ public class ControlGestorGestionAeropuerto {
             }
 
             modelo.getPistas().remove(id);
-            ((DefaultTableModel) tablaPistas.getModel()).removeRow(fila);
+            ((NonEditableTableModel) tablaPistas.getModel()).removeRow(fila);
             JOptionPane.showMessageDialog(null, "Pista eliminada correctamente.");
         });
 
@@ -214,7 +218,7 @@ public class ControlGestorGestionAeropuerto {
                 // NUEVA PISTA
                 Pista nuevaPista = new Pista(LocalDate.now(), despegue, longitud);
                 modelo.getPistas().put(nuevaPista.getId(), nuevaPista);
-                ((DefaultTableModel) tablaPistas.getModel()).addRow(new Object[]{
+                ((NonEditableTableModel) tablaPistas.getModel()).addRow(new Object[]{
                     nuevaPista.getId(),
                     nuevaPista.isDespegue() ? "Despegue" : "Aterrizaje",
                     nuevaPista.getLongitud()
@@ -239,7 +243,7 @@ public class ControlGestorGestionAeropuerto {
         JPanel panelFormulario = new JPanel(new GridBagLayout());
 
         // Componenti per lista
-        JTable tablaTerminales = new JTable(new DefaultTableModel(new Object[]{"ID", "Tipo", "Puertas"}, 0));
+        JTable tablaTerminales = new JTable(new NonEditableTableModel(new Object[]{"ID", "Tipo", "Puertas"}, 0));
         JScrollPane scrollPane = new JScrollPane(tablaTerminales);
 
         JPanel barraBotones = new JPanel();
@@ -274,7 +278,9 @@ public class ControlGestorGestionAeropuerto {
         JTextField campoPrefijosPuertas = new JTextField(10);
 
         JButton botonGuardar = new JButton("Guardar");
+        personalizarBoton(botonGuardar);
         JButton botonCancelar = new JButton("Cancelar");
+        personalizarBoton(botonCancelar);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5,5,5);
@@ -289,8 +295,13 @@ public class ControlGestorGestionAeropuerto {
         gbc.gridx = 0; gbc.gridy = 2; panelFormulario.add(labelPrefijosPuertas, gbc);
         gbc.gridx = 1; gbc.gridy = 2; gbc.gridwidth = 2; panelFormulario.add(campoPrefijosPuertas, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 3; panelFormulario.add(botonGuardar, gbc);
-        gbc.gridx = 1; gbc.gridy = 3; panelFormulario.add(botonCancelar, gbc);
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelBotones.add(botonGuardar);
+        panelBotones.add(botonCancelar);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        panelFormulario.add(panelBotones, gbc);
 
         // CardLayout su panelTerminales
         JPanel panelTerminales = vista.getPanelTerminales();
@@ -304,7 +315,7 @@ public class ControlGestorGestionAeropuerto {
         SkyManager modelo = SkyManager.getInstance();
 
         // Carichiamo terminali esistenti
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaTerminales.getModel();
+        NonEditableTableModel modeloTabla = (NonEditableTableModel) tablaTerminales.getModel();
         for (Terminal t : modelo.getTerminales().values()) {
             String tipo = (t instanceof TerminalPasajeros) ? "Pasajeros" : "Mercancias";
             modeloTabla.addRow(new Object[]{
@@ -365,7 +376,7 @@ public class ControlGestorGestionAeropuerto {
             }
 
             modelo.getTerminales().remove(id);
-            ((DefaultTableModel) tablaTerminales.getModel()).removeRow(fila);
+            ((NonEditableTableModel) tablaTerminales.getModel()).removeRow(fila);
             JOptionPane.showMessageDialog(null, "Terminal eliminado correctamente.");
         });
 
@@ -407,7 +418,7 @@ public class ControlGestorGestionAeropuerto {
                     nuevoTerminal = new TerminalMercancias(LocalDate.now(), numeroPuertas, prefijos);
                 }
                 modelo.getTerminales().put(nuevoTerminal.getId(), nuevoTerminal);
-                ((DefaultTableModel) tablaTerminales.getModel()).addRow(new Object[]{
+                ((NonEditableTableModel) tablaTerminales.getModel()).addRow(new Object[]{
                     nuevoTerminal.getId(),
                     (nuevoTerminal instanceof TerminalPasajeros) ? "Pasajeros" : "Mercancias",
                     nuevoTerminal.getPuertas().size()
@@ -427,7 +438,7 @@ public class ControlGestorGestionAeropuerto {
     private void inicializarPanelPuertas() {
         JPanel panelLista = new JPanel(new BorderLayout());
 
-        JTable tablaPuertas = new JTable(new DefaultTableModel(new Object[]{"Código", "Estado"}, 0));
+        JTable tablaPuertas = new JTable(new NonEditableTableModel(new Object[]{"Código", "Estado"}, 0));
         JScrollPane scrollPane = new JScrollPane(tablaPuertas);
 
         JPanel barraBotones = new JPanel();
@@ -451,7 +462,7 @@ public class ControlGestorGestionAeropuerto {
         SkyManager modelo = SkyManager.getInstance();
 
         // Carichiamo tutte le puertas
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaPuertas.getModel();
+        NonEditableTableModel modeloTabla = (NonEditableTableModel) tablaPuertas.getModel();
         for (Terminal t : modelo.getTerminales().values()) {
             for (Puerta p : t.getPuertas().values()) {
                 modeloTabla.addRow(new Object[]{
@@ -496,7 +507,7 @@ public class ControlGestorGestionAeropuerto {
 
             // Elimina
             terminalEncontrado.getPuertas().remove(codPuerta);
-            ((DefaultTableModel) tablaPuertas.getModel()).removeRow(fila);
+            ((NonEditableTableModel) tablaPuertas.getModel()).removeRow(fila);
             JOptionPane.showMessageDialog(null, "Puerta eliminada correctamente.");
         });
     }
@@ -505,7 +516,7 @@ public class ControlGestorGestionAeropuerto {
         JPanel panelLista = new JPanel(new BorderLayout());
         JPanel panelFormulario = new JPanel(new GridBagLayout());
 
-        JTable tablaFingers = new JTable(new DefaultTableModel(new Object[]{"ID", "Altura Máxima", "Estado"}, 0));
+        JTable tablaFingers = new JTable(new NonEditableTableModel(new Object[]{"ID", "Altura Máxima", "Estado"}, 0));
         JScrollPane scrollPane = new JScrollPane(tablaFingers);
 
         JPanel barraBotones = new JPanel();
@@ -530,7 +541,9 @@ public class ControlGestorGestionAeropuerto {
         JTextField campoAlturaMaxima = new JTextField(10);
 
         JButton botonGuardar = new JButton("Guardar");
+        personalizarBoton(botonGuardar);
         JButton botonCancelar = new JButton("Cancelar");
+        personalizarBoton(botonCancelar);
 
         personalizarBoton(botonGuardar);
         personalizarBoton(botonCancelar);
@@ -541,8 +554,13 @@ public class ControlGestorGestionAeropuerto {
         gbc.gridx = 0; gbc.gridy = 0; panelFormulario.add(labelAlturaMaxima, gbc);
         gbc.gridx = 1; gbc.gridy = 0; gbc.gridwidth = 2; panelFormulario.add(campoAlturaMaxima, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1; panelFormulario.add(botonGuardar, gbc);
-        gbc.gridx = 1; gbc.gridy = 1; panelFormulario.add(botonCancelar, gbc);
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelBotones.add(botonGuardar);
+        panelBotones.add(botonCancelar);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        panelFormulario.add(panelBotones, gbc);
 
         JPanel panelFingers = vista.getPanelFingers();
         panelFingers.add(panelLista, "listaFingers");
@@ -555,7 +573,7 @@ public class ControlGestorGestionAeropuerto {
         SkyManager modelo = SkyManager.getInstance();
 
         // Caricare fingers esistenti
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaFingers.getModel();
+        NonEditableTableModel modeloTabla = (NonEditableTableModel) tablaFingers.getModel();
         for (Finger f : modelo.getFingers().values()) {
             modeloTabla.addRow(new Object[]{
                 f.getId(),
@@ -603,7 +621,7 @@ public class ControlGestorGestionAeropuerto {
             }
 
             modelo.getFingers().remove(id);
-            ((DefaultTableModel) tablaFingers.getModel()).removeRow(fila);
+            ((NonEditableTableModel) tablaFingers.getModel()).removeRow(fila);
             JOptionPane.showMessageDialog(null, "Finger eliminado correctamente.");
         });
 
@@ -631,7 +649,7 @@ public class ControlGestorGestionAeropuerto {
                 // NUEVO FINGER
                 Finger nuevoFinger = new Finger(alturaMax);
                 modelo.getFingers().put(nuevoFinger.getId(), nuevoFinger);
-                ((DefaultTableModel) tablaFingers.getModel()).addRow(new Object[]{
+                ((NonEditableTableModel) tablaFingers.getModel()).addRow(new Object[]{
                     nuevoFinger.getId(),
                     nuevoFinger.getAlturaMax(),
                     "Libre"
@@ -652,7 +670,7 @@ public class ControlGestorGestionAeropuerto {
         JPanel panelLista = new JPanel(new BorderLayout());
         JPanel panelFormulario = new JPanel(new GridBagLayout());
 
-        JTable tablaHangars = new JTable(new DefaultTableModel(new Object[]{"ID", "Tipo", "Plazas", "Dimensiones", "Materiales Peligrosos"}, 0));
+        JTable tablaHangars = new JTable(new NonEditableTableModel(new Object[]{"ID", "Tipo", "Plazas", "Dimensiones", "Materiales Peligrosos"}, 0));
         JScrollPane scrollPane = new JScrollPane(tablaHangars);
 
         JPanel barraBotones = new JPanel();
@@ -695,7 +713,9 @@ public class ControlGestorGestionAeropuerto {
         JCheckBox chkMaterialesPeligrosos = new JCheckBox("Permitir Materiales Peligrosos");
 
         JButton botonGuardar = new JButton("Guardar");
+        personalizarBoton(botonGuardar);
         JButton botonCancelar = new JButton("Cancelar");
+        personalizarBoton(botonCancelar);
 
         personalizarBoton(botonGuardar);
         personalizarBoton(botonCancelar);
@@ -721,8 +741,13 @@ public class ControlGestorGestionAeropuerto {
 
         gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 3; panelFormulario.add(chkMaterialesPeligrosos, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 6; panelFormulario.add(botonGuardar, gbc);
-        gbc.gridx = 1; gbc.gridy = 6; panelFormulario.add(botonCancelar, gbc);
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelBotones.add(botonGuardar);
+        panelBotones.add(botonCancelar);
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        panelFormulario.add(panelBotones, gbc);
 
         JPanel panelHangar = vista.getPanelHangares();
         panelHangar.add(panelLista, "listaHangars");
@@ -735,7 +760,7 @@ public class ControlGestorGestionAeropuerto {
         SkyManager modelo = SkyManager.getInstance();
 
         // Caricare hangars esistenti
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaHangars.getModel();
+        NonEditableTableModel modeloTabla = (NonEditableTableModel) tablaHangars.getModel();
         for (Hangar h : modelo.getHangares().values()) {
             modeloTabla.addRow(new Object[]{
                 h.getId(),
@@ -799,7 +824,7 @@ public class ControlGestorGestionAeropuerto {
             }
 
             modelo.getHangares().remove(id);
-            ((DefaultTableModel) tablaHangars.getModel()).removeRow(fila);
+            ((NonEditableTableModel) tablaHangars.getModel()).removeRow(fila);
             JOptionPane.showMessageDialog(null, "Hangar eliminado correctamente.");
         });
 
@@ -876,7 +901,7 @@ public class ControlGestorGestionAeropuerto {
         JPanel panelLista = new JPanel(new BorderLayout());
         JPanel panelFormulario = new JPanel(new GridBagLayout());
 
-        JTable tablaZonaParking = new JTable(new DefaultTableModel(new Object[]{"ID", "Plazas", "Dimensiones", "Plazas Ocupadas"}, 0));
+        JTable tablaZonaParking = new JTable(new NonEditableTableModel(new Object[]{"ID", "Plazas", "Dimensiones", "Plazas Ocupadas"}, 0));
         JScrollPane scrollPane = new JScrollPane(tablaZonaParking);
 
         JPanel barraBotones = new JPanel();
@@ -910,7 +935,9 @@ public class ControlGestorGestionAeropuerto {
         JTextField campoLargo = new JTextField(10);
 
         JButton botonGuardar = new JButton("Guardar");
+        personalizarBoton(botonGuardar);
         JButton botonCancelar = new JButton("Cancelar");
+        personalizarBoton(botonCancelar);
 
         personalizarBoton(botonGuardar);
         personalizarBoton(botonCancelar);
@@ -930,8 +957,13 @@ public class ControlGestorGestionAeropuerto {
         gbc.gridx = 0; gbc.gridy = 3; panelFormulario.add(labelLargo, gbc);
         gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoLargo, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 4; panelFormulario.add(botonGuardar, gbc);
-        gbc.gridx = 1; panelFormulario.add(botonCancelar, gbc);
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelBotones.add(botonGuardar);
+        panelBotones.add(botonCancelar);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        panelFormulario.add(panelBotones, gbc);
 
         JPanel panelZonaParking = vista.getPanelZonasParking();
         panelZonaParking.add(panelLista, "listaZonaParking");
@@ -944,7 +976,7 @@ public class ControlGestorGestionAeropuerto {
         SkyManager modelo = SkyManager.getInstance();
 
         // Caricare zona parking esistenti
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaZonaParking.getModel();
+        NonEditableTableModel modeloTabla = (NonEditableTableModel) tablaZonaParking.getModel();
         for (ZonaParking zp : modelo.getZonasParking().values()) {
             modeloTabla.addRow(new Object[]{
                 zp.getId(),
@@ -998,7 +1030,7 @@ public class ControlGestorGestionAeropuerto {
             }
 
             modelo.getZonasParking().remove(id);
-            ((DefaultTableModel) tablaZonaParking.getModel()).removeRow(fila);
+            ((NonEditableTableModel) tablaZonaParking.getModel()).removeRow(fila);
             JOptionPane.showMessageDialog(null, "Zona de parking eliminada correctamente.");
         });
 
@@ -1061,7 +1093,7 @@ public class ControlGestorGestionAeropuerto {
         JPanel panelLista = new JPanel(new BorderLayout());
         JPanel panelFormulario = new JPanel(new GridBagLayout());
 
-        JTable tablaAeropuertos = new JTable(new DefaultTableModel(
+        JTable tablaAeropuertos = new JTable(new NonEditableTableModel(
                 new Object[]{"Código", "Nombre", "País", "Ciudad", "Distancia (km)", "GMT", "Dirección"}, 0));
         JScrollPane scrollPane = new JScrollPane(tablaAeropuertos);
 
@@ -1104,7 +1136,9 @@ public class ControlGestorGestionAeropuerto {
         JComboBox<Direccion> comboDireccion = new JComboBox<>(Direccion.values());
 
         JButton botonGuardar = new JButton("Guardar");
+        personalizarBoton(botonGuardar);
         JButton botonCancelar = new JButton("Cancelar");
+        personalizarBoton(botonCancelar);
 
         personalizarBoton(botonGuardar);
         personalizarBoton(botonCancelar);
@@ -1133,8 +1167,13 @@ public class ControlGestorGestionAeropuerto {
         gbc.gridx = 0; gbc.gridy = 6; panelFormulario.add(labelDireccion, gbc);
         gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(comboDireccion, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 7; panelFormulario.add(botonGuardar, gbc);
-        gbc.gridx = 1; panelFormulario.add(botonCancelar, gbc);
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelBotones.add(botonGuardar);
+        panelBotones.add(botonCancelar);
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.gridwidth = 2;
+        panelFormulario.add(panelBotones, gbc);
 
         JPanel panelAeropuertos = vista.getPanelAeropuertosExternos();
         panelAeropuertos.add(panelLista, "listaAeropuertos");
@@ -1146,7 +1185,7 @@ public class ControlGestorGestionAeropuerto {
         // ACCESSO MODELLO
         SkyManager modelo = SkyManager.getInstance();
 
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaAeropuertos.getModel();
+        NonEditableTableModel modeloTabla = (NonEditableTableModel) tablaAeropuertos.getModel();
         for (Aeropuerto a : modelo.getAeropuertosExternos().values()) {
             modeloTabla.addRow(new Object[]{
                 a.getCodigo(),
@@ -1218,7 +1257,7 @@ public class ControlGestorGestionAeropuerto {
             }
 
             modelo.getAeropuertosExternos().remove(codigo);
-            ((DefaultTableModel) tablaAeropuertos.getModel()).removeRow(fila);
+            ((NonEditableTableModel) tablaAeropuertos.getModel()).removeRow(fila);
             JOptionPane.showMessageDialog(null, "Aeropuerto eliminado correctamente.");
         });
 
@@ -1378,6 +1417,7 @@ public class ControlGestorGestionAeropuerto {
         // Botón Guardar Cambios
         JButton botonGuardar = new JButton("Guardar Cambios");
         personalizarBoton(botonGuardar);
+        personalizarBoton(botonGuardar);
         gbc.gridx = 0; gbc.gridy = 16; gbc.gridwidth = 2;
         panel.add(botonGuardar, gbc);
 
@@ -1430,6 +1470,7 @@ public class ControlGestorGestionAeropuerto {
 			campoCostoFinger.setText(String.valueOf(modelo.getCostoHoraFinger()));
 			campoCostoHangar.setText(String.valueOf(modelo.getCostoHoraHangar()));
 			campoCostoAutobus.setText(String.valueOf(modelo.getCostoHoraAutobus()));
+			
 			}
 		    
     private void guardarDatosAeroPropio(SkyManager modelo,
@@ -1466,6 +1507,7 @@ public class ControlGestorGestionAeropuerto {
 		modelo.actualizarCosteHoraHangares(modelo.getCostoHoraHangar());
 		
 		JOptionPane.showMessageDialog(null, "Datos guardados correctamente.");
+		modelo.guardarDatos();
     }
     
     public void mostrarTabAeropuertoPropio() {

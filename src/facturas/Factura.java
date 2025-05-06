@@ -10,35 +10,36 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import aerolineas.*;
-import elementos.*;
-import aviones.*;
-import sistema.*;
+import aerolineas.Aerolinea;
+import aviones.TipoAvion;
+import elementos.Uso;
+import sistema.SkyManager;
 import vuelos.Vuelo;
 
 /**
  * Clase que representa una factura generada para una aerolínea,
- * incluyendo los servicios utilizados, precios y métodos de pago.
+ * incluyendo servicios utilizados, precios y métodos de pago.
+ * Implementa IInvoiceInfo para la integración con el sistema de facturación.
  * 
- * @author Christian Grosso - christian.grosso@estudiante.uam.es  
+ * @author Christian Grosso
  */
 public class Factura implements IInvoiceInfo, Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String id; // Identificador único de la factura
-    private double precioBase; // Precio base sin servicios ni sobrecargas
-    private double total; // Precio total final (puede incluir sobrecargas)
-    private LocalDate fechaEmision; // Fecha en la que se genera la factura
-    private LocalDate fechaPago = null; // Fecha en la que se realiza el pago
-    private boolean pagado = false; // Estado del pago
-    private Aerolinea aerolinea; // Aerolínea asociada a la factura
-    private List<IResourceUsageInfo> rUsage = new ArrayList<>(); // Recursos utilizados (para cálculo automático)
-    private List<Uso> serviciosUsados = new ArrayList<>(); // Servicios utilizados por la aerolínea
-    private double sobrecarga = 0; // Coste extra adicional
-    private String logo; // Ruta del logo de la compañía
-    /**
-     * Constructor de Factura con los campos esenciales.
-     */
+    private String id;
+    private double precioBase;
+    private double total;
+    private LocalDate fechaEmision;
+    private LocalDate fechaPago = null;
+    private boolean pagado = false;
+
+    private Aerolinea aerolinea;
+    private List<Uso> serviciosUsados = new ArrayList<>();
+    private List<IResourceUsageInfo> rUsage = new ArrayList<>();
+    private double sobrecarga = 0;
+    private String logo;
+
+    // === Costruttore ===
     public Factura(String id, double precioBase, double total, LocalDate fechaEmision, Aerolinea aerolinea, String logo) {
         this.id = id;
         this.precioBase = precioBase;
@@ -47,35 +48,27 @@ public class Factura implements IInvoiceInfo, Serializable {
         this.aerolinea = aerolinea;
         this.logo = logo;
     }
-    
+
+    // === Aggiunta di un servizio utilizzato ===
     public void addUso(Uso uso) {
         this.serviciosUsados.add(uso);
         this.rUsage.add(uso);
     }
 
+    // === Generazione file PDF della fattura ===
     public void generarFactura(String path) throws NonExistentFileException, UnsupportedImageTypeException {
         File outputDirectory = new File(path).getParentFile();
-        
-        // Verifica se la cartella di destinazione esiste
         if (!outputDirectory.exists() || !outputDirectory.isDirectory()) {
             throw new NonExistentFileException("La carpeta de destino no existe.");
         }
-
-        // Procedi con la creazione della fattura (se il percorso è valido)
         InvoiceSystem.createInvoice(this, path);
     }
 
-
-    /**
-     * Calcula el coste total basado en los servicios usados.
-     * @param a Aerolínea a la que pertenece la factura
-     * @return coste total de los servicios
-     */
+    // === Calcolo del totale della fattura per il mese precedente ===
     public double calcularFactura(Aerolinea a) {
         this.aerolinea = a;
         SkyManager sm = SkyManager.getInstance();
 
-        // Calcolo intervallo del mese precedente
         LocalDate inizioMese = this.fechaEmision.minusMonths(1).withDayOfMonth(1);
         LocalDate fineMese = inizioMese.withDayOfMonth(inizioMese.lengthOfMonth());
 
@@ -87,30 +80,21 @@ public class Factura implements IInvoiceInfo, Serializable {
         for (Uso u : this.serviciosUsados) {
             LocalDate dataUso = u.getHoraUso().toLocalDate();
             if (!dataUso.isBefore(inizioMese) && !dataUso.isAfter(fineMese)) {
-                // Calcolo surcharge in base al tipo di aereo
                 TipoAvion tipo = u.getAeronave().getTipoAvion();
-                if (tipo != null && tipo.isMercancias()) {
-                    totalSurcharge += sm.getCosteExtraMercancias();
-                } else {
-                    totalSurcharge += sm.getCosteExtraPasajeros();
-                }
+                totalSurcharge += (tipo != null && tipo.isMercancias()) 
+                    ? sm.getCosteExtraMercancias() 
+                    : sm.getCosteExtraPasajeros();
 
-                // Calcolo ore d’uso del servizio
                 totalUso += u.calcularCosteUso();
-
-                // Aggiunge a lista per PDF
                 this.rUsage.add(u);
             }
         }
-        for(Vuelo v: this.aerolinea.getVuelos()) {
-        	if (!v.getHoraSalida().toLocalDate().isBefore(inizioMese) && !v.getHoraSalida().toLocalDate().isAfter(fineMese)) {
-        		// Calcolo costi base
-                if (!v.getLlegada()) {
-                    totalBase += sm.getCosteBaseSalida();
-                } else {
-                    totalBase += sm.getCosteBaseLlegada();
-                }
-        	}
+
+        for (Vuelo v : this.aerolinea.getVuelos()) {
+            LocalDate salida = v.getHoraSalida().toLocalDate();
+            if (!salida.isBefore(inizioMese) && !salida.isAfter(fineMese)) {
+                totalBase += v.getLlegada() ? sm.getCosteBaseLlegada() : sm.getCosteBaseSalida();
+            }
         }
 
         this.precioBase = totalBase;
@@ -119,14 +103,7 @@ public class Factura implements IInvoiceInfo, Serializable {
         return this.total;
     }
 
-
-
-    /**
-     * Intenta realizar el pago usando un número de tarjeta.
-     * Lanza errores si el número no es válido, si hay problemas de conexión o si el banco rechaza el pago.
-     * @param cardNumber número de tarjeta de crédito
-     * @return true si el pago se realiza con éxito, false en caso contrario
-     */
+    // === Metodo per il pagamento ===
     public boolean pagar(String cardNumber) {
         try {
             TeleChargeAndPaySystem.charge(cardNumber, this.getAirline(), this.getPrice(), true);
@@ -134,88 +111,71 @@ public class Factura implements IInvoiceInfo, Serializable {
             this.fechaPago = LocalDate.now();
             return true;
         } catch (OrderRejectedException e) {
-            if (e instanceof InvalidCardNumberException) {
-                System.err.println("Número de tarjeta no válido: " + e.getMessage());
-            } else if (e instanceof FailedInternetConnectionException) {
-                System.err.println("Error de conexión: " + e.getMessage());
-            } else {
-                System.err.println("Orden rechazada: " + e.getMessage());
-            }
+            System.err.println("Error al pagar: " + e.getMessage());
             return false;
         }
     }
     
-    
-    // Getters básicos
+    public static Factura generarFacturaMensual(Aerolinea aerolinea) {
+        LocalDate hoy = LocalDate.now();
+        String idFactura = "FAC-" + aerolinea.getId() + "-" + hoy;
+        String logo = "./resources/logo.png";
 
+        // Crea la nuova factura
+        Factura factura = new Factura(idFactura, 0.0, 0.0, hoy, aerolinea, logo);
+
+        // Aggiunge tutti gli usi dell'aerolinea (la factura filtrerà internamente quelli rilevanti)
+        for (Uso uso : aerolinea.getArrayUsos()) {
+            factura.addUso(uso);
+        }
+
+        // Calcola totale e registra
+        double total = factura.calcularFactura(aerolinea);
+        factura.setTotal(total);
+
+        // Registra in SkyManager
+        SkyManager.getInstance().registrarFactura(factura);
+
+        // Genera PDF
+        try {
+            String path = "./resources/" + idFactura + ".pdf";
+            factura.generarFactura(path);
+            System.out.println("Factura mensual generada: " + path);
+        } catch (Exception e) {
+            System.err.println("Error al generar la factura: " + e.getMessage());
+        }
+		return factura;
+    }
+
+
+    // === Getter base ===
     public String getId() { return id; }
     public double getTotal() { return total; }
     public LocalDate getFechaEmision() { return fechaEmision; }
-    public boolean isPagado() { return pagado; }
     public LocalDate getFechaPago() { return fechaPago; }
+    public boolean isPagado() { return pagado; }
+    public Aerolinea getAerolinea() { return aerolinea; }
 
-    // Métodos del contrato IInvoiceInfo
+    // === Setter per test o correzioni ===
+    public void setTotal(double total) { this.total = total; }
 
-    @Override
-    public String getAirline() {
-        return this.aerolinea.getNombre();
-    }
+    // === Implementazione IInvoiceInfo ===
+    @Override public String getAirline() { return aerolinea.getNombre(); }
+    @Override public double getBasePrice() { return precioBase; }
+    @Override public String getCompanyName() { return "SkyManager"; }
+    @Override public String getInvoiceDate() { return fechaEmision.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")); }
+    @Override public String getInvoiceIdentifier() { return id; }
 
-    @Override
-    public double getBasePrice() {
-        return this.precioBase;
-    }
-
-    @Override
-    public String getCompanyName() {
-        return "SkyManager"; // Nombre de la compañía facturadora
-    }
-
-    /**
-     * Devuelve la fecha de la factura en formato "dd/MM/yyyy".
-     */
-    @Override
-    public String getInvoiceDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return this.fechaEmision.format(formatter);
-    }
-    @Override
-    public String getInvoiceIdentifier() {
-        return this.getId();
-    }
-
-    /**
-     * Calcula el precio total incluyendo los recursos utilizados y la sobrecarga.
-     */
     @Override
     public double getPrice() {
-        double total = this.precioBase + this.sobrecarga;
-
-        for (Uso uso : this.serviciosUsados) {
+        double total = precioBase + sobrecarga;
+        for (Uso uso : serviciosUsados) {
             total += uso.calcularCosteUso();
         }
-
         return total;
     }
 
-
-
-    @Override
-    public double getSurcharge() {
-        return sobrecarga;
-    }
-
-    @Override
-    public String getCompanyLogo() {
-        return logo;
-    }
-
-    @Override
-    public List<IResourceUsageInfo> getResourcePrices() {
-        return rUsage;
-    }
-    
-    public void setTotal(double total) {
-    	this.total = total;
-    }
+    @Override public double getSurcharge() { return sobrecarga; }
+    @Override public String getCompanyLogo() { return logo; }
+    @Override public List<IResourceUsageInfo> getResourcePrices() { return rUsage; }
 }

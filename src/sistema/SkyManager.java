@@ -67,13 +67,12 @@ public class SkyManager implements Serializable {
 	private Usuario usuarioActual;
 	private long ultimoGenIdVuelo;  
 	// --- Costos Base y Costos por Hora ---
-	private double costoBaseFactura;
-	private double costoHoraPista;
-	private double costoHoraTerminal;
-	private double costoHoraFinger;
-	private double costoHoraHangar;
-	private double costoHoraAutobus;
-	private Aeropuerto aeropuertoPropio;
+	private double costoBaseFactura = 0;
+	private double costoHoraPista = 0;
+	private double costoHoraTerminal = 0;
+	private double costoHoraFinger = 0;
+	private double costoHoraHangar = 0;
+	private double costoHoraAutobus = 0;
 
 
 	
@@ -149,7 +148,6 @@ public class SkyManager implements Serializable {
 	        SkyManager refDisco = (SkyManager) entrada.readObject();
 	        this.aerolineas = (refDisco.aerolineas!= null) ? refDisco.aerolineas : new HashMap<String, Aerolinea>();
 	        this.aeropuertosExternos = (refDisco.aeropuertosExternos!= null) ? refDisco.aeropuertosExternos : new HashMap<String, Aeropuerto>();
-	        this.costeBaseLlegada = refDisco.costeExtraMercancias;
 	        this.costeBaseSalida = refDisco.costeBaseSalida;
 	        this.costeExtraMercancias = refDisco.costeExtraMercancias;
 	        this.costeExtraPasajeros = refDisco.costeExtraPasajeros;
@@ -172,6 +170,17 @@ public class SkyManager implements Serializable {
 	        actualizarContadorFingers();
 	        actualizarContadorHangars();
 	        actualizarContadorZonaParking();
+	        this.costeBaseLlegada = refDisco.costeBaseLlegada; // Correzione
+	        this.costeBaseSalida = refDisco.costeBaseSalida;
+	        this.costeExtraMercancias = refDisco.costeExtraMercancias;
+	        this.costeExtraPasajeros = refDisco.costeExtraPasajeros;
+
+	        this.costoBaseFactura = refDisco.costoBaseFactura;
+	        this.costoHoraPista = refDisco.costoHoraPista;
+	        this.costoHoraTerminal = refDisco.costoHoraTerminal;
+	        this.costoHoraFinger = refDisco.costoHoraFinger;
+	        this.costoHoraHangar = refDisco.costoHoraHangar;
+	        this.costoHoraAutobus = refDisco.costoHoraAutobus;
 	        
 	        
 	    } catch (IOException | ClassNotFoundException e) {
@@ -1101,11 +1110,11 @@ public class SkyManager implements Serializable {
 	 }
 	 
 	 public Aeropuerto getAeropuertoPropio() {
-		    return aeropuertoPropio;
+		    return informacionPropia;
 		}
 
-		public void setAeropuertoPropio(Aeropuerto aeropuertoPropio) {
-		    this.aeropuertoPropio = aeropuertoPropio;
+	public void setAeropuertoPropio(Aeropuerto aeropuertoPropio) {
+		    this.informacionPropia = aeropuertoPropio;
 		}
 
 

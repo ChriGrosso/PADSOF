@@ -22,7 +22,7 @@ public class ControlGestorInicio implements ActionListener {
             	Aplicacion.getInstance().showGestorGestionAeropuerto();
                 break;  
             case "GESTION_FACTURAS":
-                System.out.println("Navegar a gestión facturas...");
+                Aplicacion.getInstance().showGestorGestionFacturas();
                 break;
             case "GESTION_USUARIOS":
             	Aplicacion.getInstance().showGestorGestionUsuarios();
