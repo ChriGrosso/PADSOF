@@ -79,10 +79,11 @@ public class ControlGestorGestionAeropuerto {
 
         // Componenti per lista
         JTable tablaPistas = new JTable(new NonEditableTableModel(new Object[]{"ID", "Tipo", "Longitud"}, 0));
+        personalizarTabla(tablaPistas);
         JScrollPane scrollPane = new JScrollPane(tablaPistas);
 
         JPanel barraBotones = new JPanel();
-        barraBotones.setLayout(new FlowLayout(FlowLayout.LEFT));
+        barraBotones.setLayout(new FlowLayout(FlowLayout.CENTER));
         JButton botonAñadir = new JButton("Añadir");
         JButton botonModificar = new JButton("Modificar");
         JButton botonEliminar = new JButton("Eliminar");
@@ -244,6 +245,7 @@ public class ControlGestorGestionAeropuerto {
 
         // Componenti per lista
         JTable tablaTerminales = new JTable(new NonEditableTableModel(new Object[]{"ID", "Tipo", "Puertas"}, 0));
+        personalizarTabla(tablaTerminales);
         JScrollPane scrollPane = new JScrollPane(tablaTerminales);
 
         JPanel barraBotones = new JPanel();
@@ -439,6 +441,7 @@ public class ControlGestorGestionAeropuerto {
         JPanel panelLista = new JPanel(new BorderLayout());
 
         JTable tablaPuertas = new JTable(new NonEditableTableModel(new Object[]{"Código", "Estado"}, 0));
+        personalizarTabla(tablaPuertas);
         JScrollPane scrollPane = new JScrollPane(tablaPuertas);
 
         JPanel barraBotones = new JPanel();
@@ -517,6 +520,7 @@ public class ControlGestorGestionAeropuerto {
         JPanel panelFormulario = new JPanel(new GridBagLayout());
 
         JTable tablaFingers = new JTable(new NonEditableTableModel(new Object[]{"ID", "Altura Máxima", "Estado"}, 0));
+        personalizarTabla(tablaFingers);
         JScrollPane scrollPane = new JScrollPane(tablaFingers);
 
         JPanel barraBotones = new JPanel();
@@ -671,6 +675,7 @@ public class ControlGestorGestionAeropuerto {
         JPanel panelFormulario = new JPanel(new GridBagLayout());
 
         JTable tablaHangars = new JTable(new NonEditableTableModel(new Object[]{"ID", "Tipo", "Plazas", "Dimensiones", "Materiales Peligrosos"}, 0));
+        personalizarTabla(tablaHangars);
         JScrollPane scrollPane = new JScrollPane(tablaHangars);
 
         JPanel barraBotones = new JPanel();
@@ -902,6 +907,7 @@ public class ControlGestorGestionAeropuerto {
         JPanel panelFormulario = new JPanel(new GridBagLayout());
 
         JTable tablaZonaParking = new JTable(new NonEditableTableModel(new Object[]{"ID", "Plazas", "Dimensiones", "Plazas Ocupadas"}, 0));
+        personalizarTabla(tablaZonaParking);
         JScrollPane scrollPane = new JScrollPane(tablaZonaParking);
 
         JPanel barraBotones = new JPanel();
@@ -1095,6 +1101,7 @@ public class ControlGestorGestionAeropuerto {
 
         JTable tablaAeropuertos = new JTable(new NonEditableTableModel(
                 new Object[]{"Código", "Nombre", "País", "Ciudad", "Distancia (km)", "GMT", "Dirección"}, 0));
+        personalizarTabla(tablaAeropuertos);
         JScrollPane scrollPane = new JScrollPane(tablaAeropuertos);
 
         JPanel barraBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -1349,7 +1356,7 @@ public class ControlGestorGestionAeropuerto {
 
         gbc.gridwidth = 1;
         gbc.gridx = 0; gbc.gridy = 1; panel.add(new JLabel("Código (3 letras):"), gbc);
-        JTextField campoCodigo = new JTextField(10);
+        JLabel campoCodigo = new JLabel();
         gbc.gridx = 1; panel.add(campoCodigo, gbc);
 
         gbc.gridx = 0; gbc.gridy = 2; panel.add(new JLabel("Nombre Aeropuerto:"), gbc);
@@ -1432,7 +1439,7 @@ public class ControlGestorGestionAeropuerto {
 
         // ACCIONES
         botonGuardar.addActionListener(e -> {
-            guardarDatosAeroPropio(modelo, campoCodigo, campoNombre, campoPais, campoCiudad,
+            guardarDatosAeroPropio(modelo, campoNombre, campoPais, campoCiudad,
                                    campoDistancia, campoGMT, comboDireccion,
                                    campoCostoBase, campoCostoPista, campoCostoTerminal,
                                    campoCostoFinger, campoCostoHangar, campoCostoAutobus);
@@ -1444,7 +1451,7 @@ public class ControlGestorGestionAeropuerto {
     }
     
     private void cargarDatosAeroPropio(SkyManager modelo,
-            JTextField campoCodigo, JTextField campoNombre, JTextField campoPais, JTextField campoCiudad,
+            JLabel campoCodigo, JTextField campoNombre, JTextField campoPais, JTextField campoCiudad,
             JTextField campoDistancia, JTextField campoGMT, JComboBox<Direccion> comboDireccion,
             JTextField campoCostoBase, JTextField campoCostoPista, JTextField campoCostoTerminal,
             JTextField campoCostoFinger, JTextField campoCostoHangar, JTextField campoCostoAutobus) {
@@ -1473,8 +1480,7 @@ public class ControlGestorGestionAeropuerto {
 			
 			}
 		    
-    private void guardarDatosAeroPropio(SkyManager modelo,
-	    JTextField campoCodigo, JTextField campoNombre, JTextField campoPais, JTextField campoCiudad,
+    private void guardarDatosAeroPropio(SkyManager modelo, JTextField campoNombre, JTextField campoPais, JTextField campoCiudad,
 	    JTextField campoDistancia, JTextField campoGMT, JComboBox<Direccion> comboDireccion,
 	    JTextField campoCostoBase, JTextField campoCostoPista, JTextField campoCostoTerminal,
 	    JTextField campoCostoFinger, JTextField campoCostoHangar, JTextField campoCostoAutobus) {
@@ -1483,7 +1489,6 @@ public class ControlGestorGestionAeropuerto {
 		Aeropuerto aeropuerto = SkyManager.getInstance().getAeropuertoPropio();
 	
 		if (aeropuerto != null) {
-		aeropuerto.setCodigo(campoCodigo.getText().trim().toUpperCase());
 		aeropuerto.setNombre(campoNombre.getText().trim());
 		aeropuerto.setPais(campoPais.getText().trim());
 		aeropuerto.setCiudadMasCercana(campoCiudad.getText().trim());
@@ -1527,9 +1532,9 @@ public class ControlGestorGestionAeropuerto {
                               vista.getCampoCostoHoraFinger(),
                               vista.getCampoCostoHoraHangar(),
                               vista.getCampoCostoHoraAutobus());
-
         ((CardLayout) vista.getPanelAeropuertoPropio().getLayout())
                 .show(vista.getPanelAeropuertoPropio(), "panelDatosAeropuertoPropio");
+
     }
 
 
@@ -1544,6 +1549,18 @@ public class ControlGestorGestionAeropuerto {
         boton.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14)); // Font coerente con il resto
         boton.setPreferredSize(new java.awt.Dimension(120, 40));           // Dimensioni uniformi
     }
+    
+    private void personalizarTabla(JTable tabla) {
+        tabla.setBackground(Color.WHITE);
+        tabla.setForeground(Color.BLACK);
+        tabla.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        tabla.setRowHeight(25);
+        tabla.setGridColor(new Color(75, 135, 185));
+        tabla.getTableHeader().setBackground(new Color(70, 130, 180));
+        tabla.getTableHeader().setForeground(Color.WHITE);
+        tabla.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
+    }
+
 
 
 

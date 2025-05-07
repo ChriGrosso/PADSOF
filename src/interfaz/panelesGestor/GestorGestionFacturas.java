@@ -56,6 +56,7 @@ public class GestorGestionFacturas extends JPanel {
         String[] columnas = {"ID", "Aerolinea", "Importe (€)", "Fecha", "Pagado"};
         modeloTabla = new NonEditableTableModel(columnas, 0);
         tablaFacturas = new JTable(modeloTabla);
+        personalizarTabla(tablaFacturas);
         scrollTabla = new JScrollPane(tablaFacturas);
         panelPrincipal.add(scrollTabla, BorderLayout.CENTER);
 
@@ -97,5 +98,16 @@ public class GestorGestionFacturas extends JPanel {
 	public void setControlador(ControlGestorGestionFacturas controlGestorGestionFacturas) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private void personalizarTabla(JTable tabla) {
+	    tabla.setBackground(Color.WHITE);
+	    tabla.setForeground(Color.BLACK);
+	    tabla.setFont(new Font("SansSerif", Font.PLAIN, 14));
+	    tabla.setRowHeight(25);
+	    tabla.setGridColor(new Color(75, 135, 185));
+	    tabla.getTableHeader().setBackground(new Color(70, 130, 180));
+	    tabla.getTableHeader().setForeground(Color.WHITE);
+	    tabla.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
 	}
 }

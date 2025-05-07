@@ -146,7 +146,7 @@ public class DemoApp {
     	app.setCosteBaseSalida(35);
     	app.setCosteExtraMercancias(25);
     	app.setCosteExtraPasajeros(10);
-    	app.setDiasAntelacionProgVuelo(3);
+    	app.setDiasAntelacionProgVuelo(1);
     	
     	//Configurar infraestructura aeropuerto
     	//2 terminales con 2 puertas cada una
@@ -245,7 +245,7 @@ public class DemoApp {
     	Avion avion = aerolineas.get(1).getAviones().get("AV-4532LM");
     	
     	//Vuelo de pasajeros de llegada
-    	Vuelo v1 = new VueloPasajeros(aeropuertos.get(0), aeropuertos.get(2), LocalDateTime.of(2025, 5, 10, 14, 30), LocalDateTime.of(2025, 5, 10, 17, 45), 
+    	Vuelo v1 = new VueloPasajeros(aeropuertos.get(0), aeropuertos.get(2), LocalDateTime.of(2025, 5, 30, 14, 30), LocalDateTime.of(2025, 5, 30, 17, 45), 
     			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(0), aerolineas.get(1))), true, 150, Periodicidad.NO_PERIODICO, avion);
     	aerolineas.get(0).addVuelo(v1); 
     	aerolineas.get(1).addVuelo(v1);
@@ -255,7 +255,7 @@ public class DemoApp {
     	
     	//Vuelo de Mercancias de llegada
     	avion = aerolineas.get(2).getAviones().get("AV-1209QW");
-    	Vuelo v2 = new VueloMercancias(aeropuertos.get(4), aeropuertos.get(3), LocalDateTime.of(2025, 5, 15, 12, 30), LocalDateTime.of(2025, 5, 15, 15, 45), 
+    	Vuelo v2 = new VueloMercancias(aeropuertos.get(4), aeropuertos.get(3), LocalDateTime.of(2025, 5, 30, 12, 30), LocalDateTime.of(2025, 5, 30, 15, 45), 
     			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(2))), false, 10, false, Periodicidad.NO_PERIODICO, avion);
     	aerolineas.get(2).addVuelo(v2);
     	app.registrarVuelo(v2);

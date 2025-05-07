@@ -18,7 +18,7 @@ public class GestorGestionAeropuerto extends JPanel {
     private JPanel panelPistas, panelTerminales, panelFingers, panelZonasParking, panelHangares, panelAeropuertosExternos, panelAeropuertoPropio;
     private JPanel panelPuertas;
     
-    private JTextField campoCodigoAeropuerto;
+    private JLabel labelCodigoAeropuerto;
     private JTextField campoNombreAeropuerto;
     private JTextField campoPaisAeropuerto;
     private JTextField campoCiudadAeropuerto;
@@ -95,9 +95,14 @@ public class GestorGestionAeropuerto extends JPanel {
 
     
  // Getter per i campi del formulario Aeropuerto Propio
-    public JTextField getCampoCodigoAeropuerto() {
-        return campoCodigoAeropuerto;
+    public JLabel getCampoCodigoAeropuerto() {
+        return labelCodigoAeropuerto;
     }
+    
+    public void setCampoCodigoAeropuerto(JLabel label) {
+        this.labelCodigoAeropuerto = label;
+    }
+
 
     public JTextField getCampoNombreAeropuerto() {
         return campoNombreAeropuerto;
