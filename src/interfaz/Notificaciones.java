@@ -26,7 +26,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import aerolineas.Aerolinea;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import notificaciones.Notificacion;
 import sistema.SkyManager;
 import usuarios.Operador;

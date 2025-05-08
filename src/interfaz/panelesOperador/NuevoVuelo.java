@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 
 import interfaz.Aplicacion;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Operador;
 

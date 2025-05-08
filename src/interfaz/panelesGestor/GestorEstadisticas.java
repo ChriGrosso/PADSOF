@@ -10,7 +10,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import interfaz.Aplicacion;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 
 public class GestorEstadisticas extends JPanel {

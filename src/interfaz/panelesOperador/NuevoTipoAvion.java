@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import interfaz.Aplicacion;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 
 public class NuevoTipoAvion extends JPanel{

@@ -16,7 +16,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import interfaz.Aplicacion;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Usuario;
 import usuarios.Controlador;

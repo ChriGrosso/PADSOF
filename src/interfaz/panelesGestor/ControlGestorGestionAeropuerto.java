@@ -1,6 +1,5 @@
 package interfaz.panelesGestor;
 import java.awt.Color;
-import javax.swing.SwingConstants;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -16,6 +15,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,7 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import interfaz.util.NonEditableTableModel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import aeropuertos.Aeropuerto;
 import aeropuertos.Direccion;
@@ -38,12 +38,28 @@ import elementos.Terminal;
 import elementos.TerminalMercancias;
 import elementos.TerminalPasajeros;
 import elementos.ZonaParking;
-import interfaz.Aplicacion;
+import interfaz.util.NonEditableTableModel;
 import sistema.SkyManager;
+
+/**
+ * Clase ControlGestorGestionAeropuerto - Controlador encargado de gestionar
+ * todas las acciones relacionadas con la administración del aeropuerto propio
+ * y sus elementos (pistas, terminales, hangares, zonas de parking, etc.).
+ *
+ * Contiene lógica para inicializar formularios, cargar tablas, validar entradas,
+ * y actualizar el modelo SkyManager con los datos proporcionados por el usuario.
+ * Utiliza diseños CardLayout para alternar entre vistas de lista y formularios.
+ *
+ * @author Christian Grosso - christian.grosso@estudiante.uam.es
+ */
 
 public class ControlGestorGestionAeropuerto {
     private GestorGestionAeropuerto vista;
 
+    /**
+     * Constructor que recibe la vista principal y lanza la inicialización de todos los paneles.
+     * @param vista instancia de la clase vista que contiene todos los paneles.
+     */
     public ControlGestorGestionAeropuerto(GestorGestionAeropuerto vista) {
         this.vista = vista;
         inizializza();
@@ -51,8 +67,10 @@ public class ControlGestorGestionAeropuerto {
         
     }
 
+    /**
+     * Método principal que inicializa todos los paneles funcionales del aeropuerto.
+     */
     private void inizializza() {
-    	
     	vista.getTabbedPane().addChangeListener(e -> {
             JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
             int selectedIndex = sourceTabbedPane.getSelectedIndex();
@@ -73,172 +91,215 @@ public class ControlGestorGestionAeropuerto {
         inicializarPanelAeropuertoPropio();
     }
     
-   private void inicializarPanelPistas() {
-        JPanel panelLista = new JPanel(new BorderLayout());
-        JPanel panelFormulario = new JPanel(new GridBagLayout());
-
-        // Componenti per lista
-        JTable tablaPistas = new JTable(new NonEditableTableModel(new Object[]{"ID", "Tipo", "Longitud"}, 0));
-        personalizarTabla(tablaPistas);
-        JScrollPane scrollPane = new JScrollPane(tablaPistas);
-
-        JPanel barraBotones = new JPanel();
-        barraBotones.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JButton botonAñadir = new JButton("Añadir");
-        JButton botonModificar = new JButton("Modificar");
-        JButton botonEliminar = new JButton("Eliminar");
-
-        barraBotones.add(botonAñadir);
-        barraBotones.add(botonModificar);
-        barraBotones.add(botonEliminar);
-        personalizarBoton(botonAñadir);
-        personalizarBoton(botonModificar);
-        personalizarBoton(botonEliminar);
-
-        panelLista.add(barraBotones, BorderLayout.SOUTH);
-        panelLista.add(scrollPane, BorderLayout.CENTER);
-
-        // Componenti per formulario
-        JLabel labelTipo = new JLabel("Tipo:");
-        JRadioButton radioDespegue = new JRadioButton("Despegue", true);
-        JRadioButton radioAterrizaje = new JRadioButton("Aterrizaje");
-        ButtonGroup grupoTipo = new ButtonGroup();
-        grupoTipo.add(radioDespegue);
-        grupoTipo.add(radioAterrizaje);
-
-        JLabel labelLongitud = new JLabel("Longitud (m):");
-        JTextField campoLongitud = new JTextField(10);
-
-        JButton botonGuardar = new JButton("Guardar");
-        personalizarBoton(botonGuardar);
-        JButton botonCancelar = new JButton("Cancelar");
-        personalizarBoton(botonCancelar);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,5,5,5);
-        gbc.gridx = 0; gbc.gridy = 0; panelFormulario.add(labelTipo, gbc);
-        gbc.gridx = 1; gbc.gridy = 0; panelFormulario.add(radioDespegue, gbc);
-        gbc.gridx = 2; gbc.gridy = 0; panelFormulario.add(radioAterrizaje, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 1; panelFormulario.add(labelLongitud, gbc);
-        gbc.gridx = 1; gbc.gridy = 1; gbc.gridwidth = 2; panelFormulario.add(campoLongitud, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2; panelFormulario.add(botonGuardar, gbc);
-        gbc.gridx = 1; gbc.gridy = 2; panelFormulario.add(botonCancelar, gbc);
-
-        // CardLayout su panelPistas
-        JPanel panelPistas = vista.getPanelPistas();
-        panelPistas.add(panelLista, "listaPistas");
-        panelPistas.add(panelFormulario, "formularioPistas");
-
-        CardLayout cardLayout = (CardLayout) panelPistas.getLayout();
-        cardLayout.show(panelPistas, "listaPistas");
-
-        // ACCESSO AL MODELLO
-        SkyManager modelo = SkyManager.getInstance();
-
-        // Carichiamo le piste già esistenti
-        NonEditableTableModel modeloTabla = (NonEditableTableModel) tablaPistas.getModel();
-        for (Pista p : modelo.getPistas().values()) {
-            modeloTabla.addRow(new Object[]{
-                p.getId(),
-                p.isDespegue() ? "Despegue" : "Aterrizaje",
-                p.getLongitud()
-            });
-        }
-
-        // Variabile per sapere se stiamo modificando
-        final Pista[] pistaSeleccionada = {null};
-
-        // EVENTI
-        botonAñadir.addActionListener(e -> {
-            campoLongitud.setText("");
-            radioDespegue.setSelected(true);
-            pistaSeleccionada[0] = null;
-            cardLayout.show(panelPistas, "formularioPistas");
-        });
-
-        botonModificar.addActionListener(e -> {
-            int fila = tablaPistas.getSelectedRow();
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(null, "Seleccione una pista para modificar.");
-                return;
-            }
-            String id = (String) tablaPistas.getValueAt(fila, 0);
-            pistaSeleccionada[0] = modelo.getPistas().get(id);
-            if (pistaSeleccionada[0] != null) {
-                radioDespegue.setSelected(pistaSeleccionada[0].isDespegue());
-                radioAterrizaje.setSelected(!pistaSeleccionada[0].isDespegue());
-                campoLongitud.setText(String.valueOf(pistaSeleccionada[0].getLongitud()));
-                cardLayout.show(panelPistas, "formularioPistas");
-            }
-        });
-
-        botonEliminar.addActionListener(e -> {
-            int fila = tablaPistas.getSelectedRow();
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(null, "Seleccione una pista para eliminar.");
-                return;
-            }
-            String id = (String) tablaPistas.getValueAt(fila, 0);
-            Pista pista = modelo.getPistas().get(id);
-
-            if (pista.enUso() || !pista.getVuelos().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No se puede eliminar: la pista está en uso o tiene vuelos asignados.");
-                return;
-            }
-
-            modelo.getPistas().remove(id);
-            ((NonEditableTableModel) tablaPistas.getModel()).removeRow(fila);
-            JOptionPane.showMessageDialog(null, "Pista eliminada correctamente.");
-        });
-
-        botonCancelar.addActionListener(e -> {
-            cardLayout.show(panelPistas, "listaPistas");
-        });
-
-        botonGuardar.addActionListener(e -> {
-            String longitudStr = campoLongitud.getText().trim();
-            if (longitudStr.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Por favor, ingrese la longitud.");
-                return;
-            }
-
-            double longitud;
-            try {
-                longitud = Double.parseDouble(longitudStr);
-                if (longitud <= 0) throw new NumberFormatException();
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "La longitud debe ser un número positivo.");
-                return;
-            }
-
-            boolean despegue = radioDespegue.isSelected();
-
-            if (pistaSeleccionada[0] == null) {
-                // NUEVA PISTA
-                Pista nuevaPista = new Pista(LocalDate.now(), despegue, longitud);
-                modelo.getPistas().put(nuevaPista.getId(), nuevaPista);
-                ((NonEditableTableModel) tablaPistas.getModel()).addRow(new Object[]{
-                    nuevaPista.getId(),
-                    nuevaPista.isDespegue() ? "Despegue" : "Aterrizaje",
-                    nuevaPista.getLongitud()
-                });
-            } else {
-                // MODIFICAR EXISTENTE
-                pistaSeleccionada[0].setDespegue(despegue);
-                pistaSeleccionada[0].setLongitud(longitud);
-
-                int fila = tablaPistas.getSelectedRow();
-                tablaPistas.setValueAt(despegue ? "Despegue" : "Aterrizaje", fila, 1);
-                tablaPistas.setValueAt(longitud, fila, 2);
-            }
-
-            pistaSeleccionada[0] = null;
-            cardLayout.show(panelPistas, "listaPistas");
-        });
-    }
+    /**
+     * Inicializa el panel de gestión de pistas dentro de la interfaz de gestión del aeropuerto.
+     * Configura tanto la vista de lista como el formulario de edición/inserción de pistas,
+     * y asigna los correspondientes eventos a los botones de acción.
+     *
+     * Se crean componentes gráficos para mostrar la lista de pistas existentes,
+     * así como un formulario que permite añadir o modificar pistas, definiendo
+     * tipo (despegue/aterrizaje) y longitud.
+     *
+     * Los botones permiten al usuario:
+     * <ul>
+     *   <li>Añadir una nueva pista</li>
+     *   <li>Modificar una pista seleccionada</li>
+     *   <li>Eliminar una pista (si no está en uso)</li>
+     *   <li>Cancelar la edición</li>
+     *   <li>Guardar una nueva pista o una modificación</li>
+     * </ul>
+     *
+     * También se encarga de cargar las pistas ya existentes desde el modelo {@code SkyManager}
+     * y mostrarlas en una tabla no editable.
+     *
+     * @author Christian Grosso - christian.grosso@estudiante.uam.es
+     */
+    private void inicializarPanelPistas() {
+	    JPanel panelLista = new JPanel(new BorderLayout());
+	    JPanel panelFormulario = new JPanel(new GridBagLayout());
+	
+	    // Componenti per lista
+	    JTable tablaPistas = new JTable(new NonEditableTableModel(new Object[]{"ID", "Tipo", "Longitud"}, 0));
+	    personalizarTabla(tablaPistas);
+	    JScrollPane scrollPane = new JScrollPane(tablaPistas);
+	
+	    JPanel barraBotones = new JPanel();
+	    barraBotones.setLayout(new FlowLayout(FlowLayout.CENTER));
+	    JButton botonAñadir = new JButton("Añadir");
+	    JButton botonModificar = new JButton("Modificar");
+	    JButton botonEliminar = new JButton("Eliminar");
+	
+	    barraBotones.add(botonAñadir);
+	    barraBotones.add(botonModificar);
+	    barraBotones.add(botonEliminar);
+	    personalizarBoton(botonAñadir);
+	    personalizarBoton(botonModificar);
+	    personalizarBoton(botonEliminar);
+	
+	    panelLista.add(barraBotones, BorderLayout.SOUTH);
+	    panelLista.add(scrollPane, BorderLayout.CENTER);
+	
+	    // Componenti per formulario
+	    JLabel labelTipo = new JLabel("Tipo:");
+	    JRadioButton radioDespegue = new JRadioButton("Despegue", true);
+	    JRadioButton radioAterrizaje = new JRadioButton("Aterrizaje");
+	    ButtonGroup grupoTipo = new ButtonGroup();
+	    grupoTipo.add(radioDespegue);
+	    grupoTipo.add(radioAterrizaje);
+	
+	    JLabel labelLongitud = new JLabel("Longitud (m):");
+	    JTextField campoLongitud = new JTextField(10);
+	
+	    JButton botonGuardar = new JButton("Guardar");
+	    personalizarBoton(botonGuardar);
+	    JButton botonCancelar = new JButton("Cancelar");
+	    personalizarBoton(botonCancelar);
+	
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.insets = new Insets(5,5,5,5);
+	    gbc.gridx = 0; gbc.gridy = 0; panelFormulario.add(labelTipo, gbc);
+	    gbc.gridx = 1; gbc.gridy = 0; panelFormulario.add(radioDespegue, gbc);
+	    gbc.gridx = 2; gbc.gridy = 0; panelFormulario.add(radioAterrizaje, gbc);
+	
+	    gbc.gridx = 0; gbc.gridy = 1; panelFormulario.add(labelLongitud, gbc);
+	    gbc.gridx = 1; gbc.gridy = 1; gbc.gridwidth = 2; panelFormulario.add(campoLongitud, gbc);
+	
+	    gbc.gridx = 0; gbc.gridy = 2; panelFormulario.add(botonGuardar, gbc);
+	    gbc.gridx = 1; gbc.gridy = 2; panelFormulario.add(botonCancelar, gbc);
+	
+	    // CardLayout su panelPistas
+	    JPanel panelPistas = vista.getPanelPistas();
+	    panelPistas.add(panelLista, "listaPistas");
+	    panelPistas.add(panelFormulario, "formularioPistas");
+	
+	    CardLayout cardLayout = (CardLayout) panelPistas.getLayout();
+	    cardLayout.show(panelPistas, "listaPistas");
+	
+	    // ACCESSO AL MODELLO
+	    SkyManager modelo = SkyManager.getInstance();
+	
+	    // Carichiamo le piste già esistenti
+	    NonEditableTableModel modeloTabla = (NonEditableTableModel) tablaPistas.getModel();
+	    for (Pista p : modelo.getPistas().values()) {
+	        modeloTabla.addRow(new Object[]{
+	            p.getId(),
+	            p.isDespegue() ? "Despegue" : "Aterrizaje",
+	            p.getLongitud()
+	        });
+	    }
+	
+	    // Variabile per sapere se stiamo modificando
+	    final Pista[] pistaSeleccionada = {null};
+	
+	    // EVENTI
+	    botonAñadir.addActionListener(_ -> {
+	        campoLongitud.setText("");
+	        radioDespegue.setSelected(true);
+	        pistaSeleccionada[0] = null;
+	        cardLayout.show(panelPistas, "formularioPistas");
+	    });
+	
+	    botonModificar.addActionListener(_ -> {
+	        int fila = tablaPistas.getSelectedRow();
+	        if (fila == -1) {
+	            JOptionPane.showMessageDialog(null, "Seleccione una pista para modificar.");
+	            return;
+	        }
+	        String id = (String) tablaPistas.getValueAt(fila, 0);
+	        pistaSeleccionada[0] = modelo.getPistas().get(id);
+	        if (pistaSeleccionada[0] != null) {
+	            radioDespegue.setSelected(pistaSeleccionada[0].isDespegue());
+	            radioAterrizaje.setSelected(!pistaSeleccionada[0].isDespegue());
+	            campoLongitud.setText(String.valueOf(pistaSeleccionada[0].getLongitud()));
+	            cardLayout.show(panelPistas, "formularioPistas");
+	        }
+	    });
+	
+	    botonEliminar.addActionListener(_ -> {
+	        int fila = tablaPistas.getSelectedRow();
+	        if (fila == -1) {
+	            JOptionPane.showMessageDialog(null, "Seleccione una pista para eliminar.");
+	            return;
+	        }
+	        String id = (String) tablaPistas.getValueAt(fila, 0);
+	        Pista pista = modelo.getPistas().get(id);
+	
+	        if (pista.enUso() || !pista.getVuelos().isEmpty()) {
+	            JOptionPane.showMessageDialog(null, "No se puede eliminar: la pista está en uso o tiene vuelos asignados.");
+	            return;
+	        }
+	
+	        modelo.getPistas().remove(id);
+	        ((NonEditableTableModel) tablaPistas.getModel()).removeRow(fila);
+	        JOptionPane.showMessageDialog(null, "Pista eliminada correctamente.");
+	    });
+	
+	    botonCancelar.addActionListener(_ -> {
+	        cardLayout.show(panelPistas, "listaPistas");
+	    });
+	
+	    botonGuardar.addActionListener(_ -> {
+	        String longitudStr = campoLongitud.getText().trim();
+	        if (longitudStr.isEmpty()) {
+	            JOptionPane.showMessageDialog(null, "Por favor, ingrese la longitud.");
+	            return;
+	        }
+	
+	        double longitud;
+	        try {
+	            longitud = Double.parseDouble(longitudStr);
+	            if (longitud <= 0) throw new NumberFormatException();
+	        } catch (NumberFormatException ex) {
+	            JOptionPane.showMessageDialog(null, "La longitud debe ser un número positivo.");
+	            return;
+	        }
+	
+	        boolean despegue = radioDespegue.isSelected();
+	
+	        if (pistaSeleccionada[0] == null) {
+	            // NUEVA PISTA
+	            Pista nuevaPista = new Pista(LocalDate.now(), despegue, longitud);
+	            modelo.getPistas().put(nuevaPista.getId(), nuevaPista);
+	            ((NonEditableTableModel) tablaPistas.getModel()).addRow(new Object[]{
+	                nuevaPista.getId(),
+	                nuevaPista.isDespegue() ? "Despegue" : "Aterrizaje",
+	                nuevaPista.getLongitud()
+	            });
+	        } else {
+	            // MODIFICAR EXISTENTE
+	            pistaSeleccionada[0].setDespegue(despegue);
+	            pistaSeleccionada[0].setLongitud(longitud);
+	
+	            int fila = tablaPistas.getSelectedRow();
+	            tablaPistas.setValueAt(despegue ? "Despegue" : "Aterrizaje", fila, 1);
+	            tablaPistas.setValueAt(longitud, fila, 2);
+	        }
+	
+	        pistaSeleccionada[0] = null;
+	        cardLayout.show(panelPistas, "listaPistas");
+	    });
+	}
     
+    /**
+     * Inicializa el panel correspondiente a la gestión de terminales en el aeropuerto.
+     * Define la vista principal de lista y el formulario de creación/modificación de terminales.
+     *
+     * Los terminales pueden ser de tipo "Pasajeros" o "Mercancías", y se configuran 
+     * especificando el número de puertas por cada prefijo. Durante la edición, no se permite 
+     * cambiar el tipo ni los prefijos ya definidos.
+     *
+     * Funcionalidades disponibles:
+     * <ul>
+     *   <li>Añadir un nuevo terminal con sus puertas generadas automáticamente.</li>
+     *   <li>Modificar el número de puertas de un terminal existente (no los prefijos ni el tipo).</li>
+     *   <li>Eliminar un terminal si no contiene puertas asignadas.</li>
+     *   <li>Cancelar la edición o la creación.</li>
+     * </ul>
+     *
+     * Los datos se cargan directamente desde el modelo {@code SkyManager} y se representan en una tabla.
+     *
+     * @author Christian Grosso - christian.grosso@estudiante.uam.es
+     */
     private void inicializarPanelTerminales() {
         JPanel panelLista = new JPanel(new BorderLayout());
         JPanel panelFormulario = new JPanel(new GridBagLayout());
@@ -330,7 +391,7 @@ public class ControlGestorGestionAeropuerto {
         final Terminal[] terminalSeleccionado = {null};
 
         // EVENTI
-        botonAñadir.addActionListener(e -> {
+        botonAñadir.addActionListener(_ -> {
             campoNumeroPuertas.setText("");
             campoPrefijosPuertas.setText("");
             rdbtnPasajeros.setSelected(true);
@@ -341,7 +402,7 @@ public class ControlGestorGestionAeropuerto {
             cardLayout.show(panelTerminales, "formularioTerminales");
         });
 
-        botonModificar.addActionListener(e -> {
+        botonModificar.addActionListener(_ -> {
             int fila = tablaTerminales.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione un terminal para modificar.");
@@ -363,7 +424,7 @@ public class ControlGestorGestionAeropuerto {
             }
         });
 
-        botonEliminar.addActionListener(e -> {
+        botonEliminar.addActionListener(_ -> {
             int fila = tablaTerminales.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione un terminal para eliminar.");
@@ -382,11 +443,11 @@ public class ControlGestorGestionAeropuerto {
             JOptionPane.showMessageDialog(null, "Terminal eliminado correctamente.");
         });
 
-        botonCancelar.addActionListener(e -> {
+        botonCancelar.addActionListener(_ -> {
             cardLayout.show(panelTerminales, "listaTerminales");
         });
 
-        botonGuardar.addActionListener(e -> {
+        botonGuardar.addActionListener(_ -> {
             String numeroPuertasStr = campoNumeroPuertas.getText().trim();
             String prefijosStr = campoPrefijosPuertas.getText().trim();
 
@@ -437,6 +498,24 @@ public class ControlGestorGestionAeropuerto {
         });
     }
     
+    /**
+     * Inicializa el panel de gestión de puertas, mostrando una tabla con todas las puertas
+     * disponibles en los terminales del aeropuerto y permitiendo su eliminación.
+     *
+     * Las puertas se listan con su código y estado actual ("Ocupada" o "Libre").
+     * Solo es posible eliminar puertas que no estén en uso. La eliminación se refleja 
+     * tanto visualmente en la tabla como en la estructura de datos interna del terminal correspondiente.
+     *
+     * Funcionalidades disponibles:
+     * <ul>
+     *   <li>Visualizar todas las puertas agrupadas por terminal.</li>
+     *   <li>Eliminar una puerta si está libre.</li>
+     * </ul>
+     *
+     * Los datos se obtienen dinámicamente desde el modelo {@code SkyManager} y sus terminales registrados.
+     *
+     * @author Christian Grosso - christian.grosso@estudiante.uam.es
+     */
     private void inicializarPanelPuertas() {
         JPanel panelLista = new JPanel(new BorderLayout());
 
@@ -476,7 +555,7 @@ public class ControlGestorGestionAeropuerto {
         }
 
         // EVENTO
-        botonEliminar.addActionListener(e -> {
+        botonEliminar.addActionListener(_ -> {
             int fila = tablaPuertas.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione una puerta para eliminar.");
@@ -515,6 +594,23 @@ public class ControlGestorGestionAeropuerto {
         });
     }
     
+    /**
+     * Inicializa el panel de gestión de fingers en la interfaz gráfica.
+     *
+     * Este método configura dos vistas: una lista de fingers existentes en una tabla
+     * y un formulario para añadir o modificar un finger. Permite al usuario:
+     * <ul>
+     *   <li>Visualizar la lista de fingers con su altura máxima y estado (ocupado o libre)</li>
+     *   <li>Añadir un nuevo finger especificando su altura máxima</li>
+     *   <li>Modificar la altura de un finger existente</li>
+     *   <li>Eliminar un finger, siempre que no esté en uso</li>
+     * </ul>
+     *
+     * Todos los cambios se reflejan en el modelo {@link SkyManager} y se actualiza
+     * la tabla en consecuencia. Se utiliza un {@link CardLayout} para cambiar entre
+     * la vista de lista y el formulario de edición.
+     */
+
     private void inicializarPanelFingers() {
         JPanel panelLista = new JPanel(new BorderLayout());
         JPanel panelFormulario = new JPanel(new GridBagLayout());
@@ -589,13 +685,13 @@ public class ControlGestorGestionAeropuerto {
         final Finger[] fingerSeleccionado = {null};
 
         // EVENTI
-        botonAñadir.addActionListener(e -> {
+        botonAñadir.addActionListener(_ -> {
             campoAlturaMaxima.setText("");
             fingerSeleccionado[0] = null;
             cardLayout.show(panelFingers, "formularioFingers");
         });
 
-        botonModificar.addActionListener(e -> {
+        botonModificar.addActionListener(_ -> {
             int fila = tablaFingers.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione un finger para modificar.");
@@ -609,7 +705,7 @@ public class ControlGestorGestionAeropuerto {
             }
         });
 
-        botonEliminar.addActionListener(e -> {
+        botonEliminar.addActionListener(_ -> {
             int fila = tablaFingers.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione un finger para eliminar.");
@@ -629,11 +725,11 @@ public class ControlGestorGestionAeropuerto {
             JOptionPane.showMessageDialog(null, "Finger eliminado correctamente.");
         });
 
-        botonCancelar.addActionListener(e -> {
+        botonCancelar.addActionListener(_ -> {
             cardLayout.show(panelFingers, "listaFingers");
         });
 
-        botonGuardar.addActionListener(e -> {
+        botonGuardar.addActionListener(_ -> {
             String alturaStr = campoAlturaMaxima.getText().trim();
             if (alturaStr.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Por favor, ingrese la altura máxima.");
@@ -670,6 +766,27 @@ public class ControlGestorGestionAeropuerto {
         });
     }
 
+    /**
+     * Inicializa el panel de gestión de Hangares,
+     * permitiendo visualizar, añadir, modificar y eliminar hangares existentes.
+     * 
+     * Cada finger se muestra con su ID, altura máxima permitida y su estado actual 
+     * ("Libre" o "Ocupado"). El formulario asociado permite definir o actualizar
+     * la altura máxima del finger.
+     * 
+     * Funcionalidades:
+     * <ul>
+     *   <li>Visualizar todos los hangares registrados en el sistema.</li>
+     *   <li>Añadir un nuevo hangar especificando su altura máxima.</li>
+     *   <li>Modificar la altura máxima de un hangar existente.</li>
+     *   <li>Eliminar un hangar siempre que no esté ocupado.</li>
+     * </ul>
+     * 
+     * Los datos se gestionan a través del modelo {@code SkyManager}, que centraliza
+     * la información de infraestructura del aeropuerto.
+     * 
+     * @author Christian Grosso - christian.grosso@estudiante.uam.es
+     */
     private void inicializarPanelHangar() {
         JPanel panelLista = new JPanel(new BorderLayout());
         JPanel panelFormulario = new JPanel(new GridBagLayout());
@@ -779,7 +896,7 @@ public class ControlGestorGestionAeropuerto {
         final Hangar[] hangarSeleccionado = {null};
 
         // EVENTI
-        botonAñadir.addActionListener(e -> {
+        botonAñadir.addActionListener(_ -> {
             campoNumPlazas.setText("");
             campoAltura.setText("");
             campoAnchura.setText("");
@@ -790,7 +907,7 @@ public class ControlGestorGestionAeropuerto {
             cardLayout.show(panelHangar, "formularioHangars");
         });
 
-        botonModificar.addActionListener(e -> {
+        botonModificar.addActionListener(_ -> {
             int fila = tablaHangars.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione un hangar para modificar.");
@@ -814,7 +931,7 @@ public class ControlGestorGestionAeropuerto {
             }
         });
 
-        botonEliminar.addActionListener(e -> {
+        botonEliminar.addActionListener(_ -> {
             int fila = tablaHangars.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione un hangar para eliminar.");
@@ -833,11 +950,11 @@ public class ControlGestorGestionAeropuerto {
             JOptionPane.showMessageDialog(null, "Hangar eliminado correctamente.");
         });
 
-        botonCancelar.addActionListener(e -> {
+        botonCancelar.addActionListener(_ -> {
             cardLayout.show(panelHangar, "listaHangars");
         });
 
-        botonGuardar.addActionListener(e -> {
+        botonGuardar.addActionListener(_ -> {
             String numPlazasStr = campoNumPlazas.getText().trim();
             String alturaStr = campoAltura.getText().trim();
             String anchuraStr = campoAnchura.getText().trim();
@@ -902,6 +1019,27 @@ public class ControlGestorGestionAeropuerto {
         });
     }
     
+    /**
+     * Inicializa el panel de gestión de Zonas de Parking, permitiendo visualizar,
+     * añadir, modificar y eliminar zonas donde los aviones pueden estacionarse.
+     * 
+     * Cada zona incluye información sobre el número de plazas disponibles, sus
+     * dimensiones (altura, anchura, largo) y cuántas de esas plazas están ocupadas
+     * actualmente.
+     * 
+     * Funcionalidades:
+     * <ul>
+     *   <li>Visualización de todas las zonas de parking existentes.</li>
+     *   <li>Creación de una nueva zona especificando plazas y dimensiones.</li>
+     *   <li>Modificación de los parámetros de una zona ya existente.</li>
+     *   <li>Eliminación de zonas vacías (sin vuelos asignados).</li>
+     * </ul>
+     * 
+     * La información se gestiona a través del modelo {@code SkyManager}, 
+     * que centraliza todos los datos del aeropuerto.
+     * 
+     * @author Christian Grosso - christian.grosso@estudiante.uam.es
+     */
     private void inicializarPanelZonaParking() {
         JPanel panelLista = new JPanel(new BorderLayout());
         JPanel panelFormulario = new JPanel(new GridBagLayout());
@@ -995,7 +1133,7 @@ public class ControlGestorGestionAeropuerto {
         final ZonaParking[] zonaSeleccionada = {null};
 
         // EVENTI
-        botonAñadir.addActionListener(e -> {
+        botonAñadir.addActionListener(_ -> {
             campoNumPlazas.setText("");
             campoAltura.setText("");
             campoAnchura.setText("");
@@ -1004,7 +1142,7 @@ public class ControlGestorGestionAeropuerto {
             cardLayout.show(panelZonaParking, "formularioZonaParking");
         });
 
-        botonModificar.addActionListener(e -> {
+        botonModificar.addActionListener(_ -> {
             int fila = tablaZonaParking.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione una zona para modificar.");
@@ -1021,7 +1159,7 @@ public class ControlGestorGestionAeropuerto {
             }
         });
 
-        botonEliminar.addActionListener(e -> {
+        botonEliminar.addActionListener(_ -> {
             int fila = tablaZonaParking.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione una zona para eliminar.");
@@ -1040,11 +1178,11 @@ public class ControlGestorGestionAeropuerto {
             JOptionPane.showMessageDialog(null, "Zona de parking eliminada correctamente.");
         });
 
-        botonCancelar.addActionListener(e -> {
+        botonCancelar.addActionListener(_ -> {
             cardLayout.show(panelZonaParking, "listaZonaParking");
         });
 
-        botonGuardar.addActionListener(e -> {
+        botonGuardar.addActionListener(_ -> {
             String numPlazasStr = campoNumPlazas.getText().trim();
             String alturaStr = campoAltura.getText().trim();
             String anchuraStr = campoAnchura.getText().trim();
@@ -1095,6 +1233,28 @@ public class ControlGestorGestionAeropuerto {
         });
     }
     
+    /**
+     * Inicializa el panel de gestión de Aeropuertos Externos, permitiendo visualizar,
+     * añadir, modificar y eliminar aeropuertos con los que el aeropuerto principal
+     * puede interactuar (vuelos de llegada/salida).
+     * 
+     * Cada aeropuerto incluye datos como código (3 letras), nombre, país, ciudad,
+     * distancia a la ciudad más cercana, zona horaria (GMT) y dirección cardinal.
+     * 
+     * Funcionalidades:
+     * <ul>
+     *   <li>Visualización de aeropuertos externos registrados.</li>
+     *   <li>Creación de nuevos aeropuertos con validación de código y campos obligatorios.</li>
+     *   <li>Modificación de datos existentes (excepto el código, que es único).</li>
+     *   <li>Eliminación de aeropuertos si no están vinculados a vuelos.</li>
+     *   <li>Import de aeropuertos de fichero externo</li>
+     * </ul>
+     * 
+     * Los datos se gestionan a través del modelo {@code SkyManager} que mantiene
+     * una lista de aeropuertos externos.
+     * 
+     * @author Christian Grosso - christian.grosso@estudiante.uam.es
+     */
     private void inicializarPanelAeropuertosExternos() {
         JPanel panelLista = new JPanel(new BorderLayout());
         JPanel panelFormulario = new JPanel(new GridBagLayout());
@@ -1108,14 +1268,17 @@ public class ControlGestorGestionAeropuerto {
         JButton botonAñadir = new JButton("Añadir");
         JButton botonModificar = new JButton("Modificar");
         JButton botonEliminar = new JButton("Eliminar");
+        JButton botonImport = new JButton("Importar...");
 
         personalizarBoton(botonAñadir);
         personalizarBoton(botonModificar);
         personalizarBoton(botonEliminar);
+        personalizarBoton(botonImport);
 
         barraBotones.add(botonAñadir);
         barraBotones.add(botonModificar);
         barraBotones.add(botonEliminar);
+        barraBotones.add(botonImport);
 
         panelLista.add(scrollPane, BorderLayout.CENTER);
         panelLista.add(barraBotones, BorderLayout.SOUTH);
@@ -1208,7 +1371,32 @@ public class ControlGestorGestionAeropuerto {
         final Aeropuerto[] aeropuertoSeleccionado = {null};
 
         // EVENTI
-        botonAñadir.addActionListener(e -> {
+        botonImport.addActionListener(_ -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Seleccionar archivo .dat para importar");
+            fileChooser.setAcceptAllFileFilterUsed(false); // Disattiva "Todos los archivos"
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos DAT (*.dat)", "dat"));
+
+            int seleccion = fileChooser.showOpenDialog(null);
+
+            if (seleccion == JFileChooser.APPROVE_OPTION) {
+                java.io.File archivoSeleccionado = fileChooser.getSelectedFile();
+                String rutaArchivo = archivoSeleccionado.getAbsolutePath();
+
+                if (!rutaArchivo.toLowerCase().endsWith(".dat")) {
+                    JOptionPane.showMessageDialog(null, "El archivo debe tener extensión .dat", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Logica di importazione qui
+                System.out.println("Archivo .dat seleccionado: " + rutaArchivo);
+                JOptionPane.showMessageDialog(null, "Archivo seleccionado:\n" + rutaArchivo);
+
+                SkyManager.getInstance().cargarDatosAeropuertos(rutaArchivo);
+            }
+        });
+        
+        botonAñadir.addActionListener(_ -> {
             campoCodigo.setText("");
             campoNombre.setText("");
             campoPais.setText("");
@@ -1221,7 +1409,7 @@ public class ControlGestorGestionAeropuerto {
             cardLayout.show(panelAeropuertos, "formularioAeropuertos");
         });
 
-        botonModificar.addActionListener(e -> {
+        botonModificar.addActionListener(_ -> {
             int fila = tablaAeropuertos.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione un aeropuerto para modificar.");
@@ -1246,7 +1434,7 @@ public class ControlGestorGestionAeropuerto {
             }
         });
 
-        botonEliminar.addActionListener(e -> {
+        botonEliminar.addActionListener(_ -> {
             int fila = tablaAeropuertos.getSelectedRow();
             if (fila == -1) {
                 JOptionPane.showMessageDialog(null, "Seleccione un aeropuerto para eliminar.");
@@ -1268,11 +1456,11 @@ public class ControlGestorGestionAeropuerto {
             JOptionPane.showMessageDialog(null, "Aeropuerto eliminado correctamente.");
         });
 
-        botonCancelar.addActionListener(e -> {
+        botonCancelar.addActionListener(_ -> {
             cardLayout.show(panelAeropuertos, "listaAeropuertos");
         });
 
-        botonGuardar.addActionListener(e -> {
+        botonGuardar.addActionListener(_ -> {
             String codigo = campoCodigo.getText().trim().toUpperCase();
             String nombre = campoNombre.getText().trim();
             String pais = campoPais.getText().trim();
@@ -1342,6 +1530,27 @@ public class ControlGestorGestionAeropuerto {
         });
     }
     
+    /**
+     * Inicializa el panel de configuración del Aeropuerto Propio, permitiendo
+     * visualizar y modificar tanto sus datos generales como los costos asociados.
+     * 
+     * Este panel incluye tres secciones principales:
+     * <ul>
+     *   <li><b>Datos Generales:</b> código del aeropuerto (3 letras), nombre, país, ciudad cercana,
+     *       distancia a la ciudad, diferencia horaria (GMT) y dirección cardinal.</li>
+     *   <li><b>Costos Base:</b> costo base por factura.</li>
+     *   <li><b>Costos por Hora:</b> tarifas horarias para pista, terminal, finger, hangar y autobús.</li>
+     * </ul>
+     * 
+     * Los campos se rellenan automáticamente a partir de los datos cargados en el modelo
+     * {@code SkyManager}. Al pulsar el botón "Guardar Cambios", los datos se validan y
+     * se actualizan en el modelo correspondiente.
+     * 
+     * Este panel no permite crear ni eliminar aeropuertos, ya que representa al aeropuerto principal
+     * del sistema.
+     * 
+     * @author Christian Grosso - christian.grosso@estudiante.uam.es
+     */
     private void inicializarPanelAeropuertoPropio() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -1356,7 +1565,7 @@ public class ControlGestorGestionAeropuerto {
 
         gbc.gridwidth = 1;
         gbc.gridx = 0; gbc.gridy = 1; panel.add(new JLabel("Código (3 letras):"), gbc);
-        JLabel campoCodigo = new JLabel();
+        JTextField campoCodigo = new JTextField(10);
         gbc.gridx = 1; panel.add(campoCodigo, gbc);
 
         gbc.gridx = 0; gbc.gridy = 2; panel.add(new JLabel("Nombre Aeropuerto:"), gbc);
@@ -1438,8 +1647,8 @@ public class ControlGestorGestionAeropuerto {
                               campoCostoFinger, campoCostoHangar, campoCostoAutobus);
 
         // ACCIONES
-        botonGuardar.addActionListener(e -> {
-            guardarDatosAeroPropio(modelo, campoNombre, campoPais, campoCiudad,
+        botonGuardar.addActionListener(_ -> {
+            guardarDatosAeroPropio(modelo, campoCodigo,campoNombre, campoPais, campoCiudad,
                                    campoDistancia, campoGMT, comboDireccion,
                                    campoCostoBase, campoCostoPista, campoCostoTerminal,
                                    campoCostoFinger, campoCostoHangar, campoCostoAutobus);
@@ -1450,8 +1659,36 @@ public class ControlGestorGestionAeropuerto {
         ((CardLayout) vista.getPanelAeropuertoPropio().getLayout()).show(vista.getPanelAeropuertoPropio(), "panelDatosAeropuertoPropio");
     }
     
+    /**
+     * Carga los datos del aeropuerto propio y de los costos base y horarios
+     * desde el modelo {@code SkyManager} en los campos del formulario correspondiente.
+     * 
+     * Esta función se utiliza para inicializar los valores mostrados en el panel
+     * del aeropuerto propio, incluyendo tanto la información general del aeropuerto
+     * como las tarifas de uso de recursos.
+     * 
+     * Si el aeropuerto propio está definido en el modelo, se cargan sus atributos:
+     * código, nombre, país, ciudad más cercana, distancia a la ciudad, GMT y dirección.
+     * Además, se cargan los costos base y por hora definidos en el modelo para pista,
+     * terminal, finger, hangar y autobús.
+     * 
+     * @param modelo             Instancia del modelo {@code SkyManager}.
+     * @param campoCodigo        Campo de texto para el código del aeropuerto.
+     * @param campoNombre        Campo de texto para el nombre del aeropuerto.
+     * @param campoPais          Campo de texto para el país.
+     * @param campoCiudad        Campo de texto para la ciudad más cercana.
+     * @param campoDistancia     Campo de texto para la distancia a la ciudad (en km).
+     * @param campoGMT           Campo de texto para la diferencia horaria (GMT).
+     * @param comboDireccion     ComboBox para seleccionar la dirección cardinal.
+     * @param campoCostoBase     Campo de texto para el costo base de la factura.
+     * @param campoCostoPista    Campo de texto para el costo por hora de pista.
+     * @param campoCostoTerminal Campo de texto para el costo por hora de terminal.
+     * @param campoCostoFinger   Campo de texto para el costo por hora de finger.
+     * @param campoCostoHangar   Campo de texto para el costo por hora de hangar.
+     * @param campoCostoAutobus  Campo de texto para el costo por hora de autobús.
+     */
     private void cargarDatosAeroPropio(SkyManager modelo,
-            JLabel campoCodigo, JTextField campoNombre, JTextField campoPais, JTextField campoCiudad,
+    		JTextField campoCodigo, JTextField campoNombre, JTextField campoPais, JTextField campoCiudad,
             JTextField campoDistancia, JTextField campoGMT, JComboBox<Direccion> comboDireccion,
             JTextField campoCostoBase, JTextField campoCostoPista, JTextField campoCostoTerminal,
             JTextField campoCostoFinger, JTextField campoCostoHangar, JTextField campoCostoAutobus) {
@@ -1478,9 +1715,34 @@ public class ControlGestorGestionAeropuerto {
 			campoCostoHangar.setText(String.valueOf(modelo.getCostoHoraHangar()));
 			campoCostoAutobus.setText(String.valueOf(modelo.getCostoHoraAutobus()));
 			
-			}
-		    
-    private void guardarDatosAeroPropio(SkyManager modelo, JTextField campoNombre, JTextField campoPais, JTextField campoCiudad,
+	}
+	
+    /**
+     * Guarda los datos modificados del aeropuerto propio y los costos definidos por el usuario
+     * en el modelo {@code SkyManager}.
+     * 
+     * Esta función actualiza tanto los atributos del aeropuerto propio (si existe) como
+     * los costos base y por hora definidos en el sistema, los cuales son aplicados a todos
+     * los recursos relevantes (pistas, terminales, fingers, hangares).
+     * 
+     * Al finalizar, muestra un mensaje de confirmación y guarda los datos en persistencia.
+     *
+     * @param modelo             Instancia del modelo {@code SkyManager}.
+     * @param campoCodigo        Campo de texto con el código del aeropuerto.
+     * @param campoNombre        Campo de texto con el nombre del aeropuerto.
+     * @param campoPais          Campo de texto con el país del aeropuerto.
+     * @param campoCiudad        Campo de texto con la ciudad más cercana.
+     * @param campoDistancia     Campo de texto con la distancia a la ciudad (en km).
+     * @param campoGMT           Campo de texto con la diferencia horaria (GMT).
+     * @param comboDireccion     ComboBox para seleccionar la dirección cardinal.
+     * @param campoCostoBase     Campo de texto con el costo base de la factura.
+     * @param campoCostoPista    Campo de texto con el costo por hora de uso de pista.
+     * @param campoCostoTerminal Campo de texto con el costo por hora de uso de terminal.
+     * @param campoCostoFinger   Campo de texto con el costo por hora de uso de finger.
+     * @param campoCostoHangar   Campo de texto con el costo por hora de uso de hangar.
+     * @param campoCostoAutobus  Campo de texto con el costo por hora de uso de autobús.
+     */
+    private void guardarDatosAeroPropio(SkyManager modelo, JTextField campoCodigo, JTextField campoNombre, JTextField campoPais, JTextField campoCiudad,
 	    JTextField campoDistancia, JTextField campoGMT, JComboBox<Direccion> comboDireccion,
 	    JTextField campoCostoBase, JTextField campoCostoPista, JTextField campoCostoTerminal,
 	    JTextField campoCostoFinger, JTextField campoCostoHangar, JTextField campoCostoAutobus) {
@@ -1489,6 +1751,7 @@ public class ControlGestorGestionAeropuerto {
 		Aeropuerto aeropuerto = SkyManager.getInstance().getAeropuertoPropio();
 	
 		if (aeropuerto != null) {
+			aeropuerto.setNombre(campoCodigo.getText().trim());
 		aeropuerto.setNombre(campoNombre.getText().trim());
 		aeropuerto.setPais(campoPais.getText().trim());
 		aeropuerto.setCiudadMasCercana(campoCiudad.getText().trim());
@@ -1515,6 +1778,15 @@ public class ControlGestorGestionAeropuerto {
 		modelo.guardarDatos();
     }
     
+    /**
+     * Muestra la pestaña de edición del aeropuerto propio en la interfaz gráfica y
+     * carga en ella los datos actuales almacenados en el modelo {@code SkyManager}.
+     *
+     * Este método obtiene los datos del aeropuerto propio y los costos asociados
+     * desde el modelo, rellenando los campos del formulario correspondiente.
+     * Luego, cambia la vista al panel de datos del aeropuerto propio utilizando un {@code CardLayout}.
+     */
+
     public void mostrarTabAeropuertoPropio() {
         SkyManager modelo = SkyManager.getInstance();
 
@@ -1537,11 +1809,15 @@ public class ControlGestorGestionAeropuerto {
 
     }
 
-
-
-
-
-    
+    /**
+     * Aplica un estilo visual uniforme a un botón de la interfaz gráfica.
+     *
+     * Este método define el color de fondo, el color del texto, la fuente y las dimensiones
+     * del botón, asegurando una apariencia coherente con el diseño general del sistema,
+     * especialmente alineada con el estilo de la sección de "Gestión de Usuarios".
+     *
+     * @param boton el botón al que se aplicará la personalización de estilo
+     */
     private void personalizarBoton(JButton boton) {
         boton.setBackground(new java.awt.Color(135, 206, 250)); // Azzurrino chiaro (stile GestionUsuarios)
         boton.setForeground(java.awt.Color.BLACK);               // Testo nero
@@ -1550,6 +1826,15 @@ public class ControlGestorGestionAeropuerto {
         boton.setPreferredSize(new java.awt.Dimension(120, 40));           // Dimensioni uniformi
     }
     
+    /**
+     * Aplica un estilo visual personalizado a una tabla para mejorar su apariencia y legibilidad.
+     *
+     * Este método configura el fondo, el color del texto, la fuente, la altura de las filas,
+     * el color de las líneas de la cuadrícula y el estilo del encabezado de la tabla.
+     * Se utiliza para mantener una presentación coherente en toda la interfaz de usuario.
+     *
+     * @param tabla la JTable a la que se aplicará la personalización de estilo
+     */
     private void personalizarTabla(JTable tabla) {
         tabla.setBackground(Color.WHITE);
         tabla.setForeground(Color.BLACK);
@@ -1560,10 +1845,4 @@ public class ControlGestorGestionAeropuerto {
         tabla.getTableHeader().setForeground(Color.WHITE);
         tabla.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
     }
-
-
-
-
-
-
 }

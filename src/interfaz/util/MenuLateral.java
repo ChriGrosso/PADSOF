@@ -1,4 +1,4 @@
-package interfaz.elementosComunes;
+package interfaz.util;
 
 import interfaz.Aplicacion;
 import sistema.SkyManager;
@@ -8,13 +8,30 @@ import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Clase MenuLateral - Representa un panel lateral con un logo superior y botones fijos
+ * como "Notificaciones" y "Logout". Este menú se utiliza como componente común
+ * en las diferentes pantallas de la aplicación.
+ * 
+ * Los botones están estilizados y gestionados mediante un mapa para facilitar el acceso.
+ * 
+ * @author Christian Grosso - christian.grosso@estudiante.uam.es
+ */
 public class MenuLateral extends JPanel {
     private static final long serialVersionUID = 1L;
+    
+    /** Mapa que asocia nombres de botones con sus respectivas instancias. */
     private Map<String, JButton> bottoni = new LinkedHashMap<>();
 
+    /**
+     * Constructor del menú lateral.
+     * Crea el panel con el logo en la parte superior y los botones de notificaciones y cierre de sesión en la parte inferior.
+     *
+     * @param logoPath Ruta del archivo de imagen para el logo mostrado en el menú lateral.
+     */
     public MenuLateral(String logoPath) {
         setLayout(new BorderLayout());
-        setBackground(new Color(70, 130, 180));
+        setBackground(new Color(70, 130, 180)); // Color de fondo azul
 
         // === LOGO ===
         ImageIcon icon = new ImageIcon(logoPath);
@@ -33,7 +50,7 @@ public class MenuLateral extends JPanel {
         topPanel.add(logoButton);
         topPanel.add(Box.createVerticalStrut(30));
 
-        // === BOTTONI FISSI: Notifiche e Logout ===
+        // === BOTONES FIJOS: Notificaciones y Logout ===
         JButton notifiche = FabricaBotones.crearBotonMenu("Notificaciones", "resources/notification_icon.png");
         notifiche.setBackground(new Color(112, 128, 150));
         notifiche.setForeground(Color.WHITE);
@@ -44,7 +61,7 @@ public class MenuLateral extends JPanel {
         logout.setForeground(Color.WHITE);
         logout.setActionCommand("LOGOUT");
 
-        // Aggiunta listener interno
+        // Listeners internos
         notifiche.addActionListener(_ -> verNotifiche());
         logout.addActionListener(_ -> cerrarSesion());
 
@@ -64,16 +81,30 @@ public class MenuLateral extends JPanel {
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Lógica para cerrar la sesión del usuario actual.
+     * Guarda los datos y redirige al panel de inicio de sesión.
+     */
     private void cerrarSesion() {
         SkyManager.getInstance().guardarDatos();
         Aplicacion.getInstance().showLogin();
     }
 
+    /**
+     * Muestra la pantalla de notificaciones.
+     * Actualiza previamente la información mostrada.
+     */
     private void verNotifiche() {
-    	Aplicacion.getInstance().getNotificaciones().actualizarPantalla();
-    	Aplicacion.getInstance().showNotificaciones();
+        Aplicacion.getInstance().getNotificaciones().actualizarPantalla();
+        Aplicacion.getInstance().showNotificaciones();
     }
 
+    /**
+     * Devuelve un botón del menú lateral a partir de su nombre.
+     *
+     * @param nome Nombre asociado al botón (ej. "Notifiche" o "Logout").
+     * @return Instancia del JButton correspondiente, o null si no existe.
+     */
     public JButton getBottone(String nome) {
         return bottoni.get(nome);
     }
