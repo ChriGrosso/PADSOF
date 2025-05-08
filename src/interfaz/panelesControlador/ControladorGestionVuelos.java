@@ -1,13 +1,22 @@
 package interfaz.panelesControlador;
 
-import interfaz.elementosComunes.BotonVolver;
-import interfaz.util.NonEditableTableModel;
-
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 
+import interfaz.util.BotonVolver;
+import interfaz.util.NonEditableTableModel;
+
 import java.awt.*;
 
+/**
+ * Clase ControladorGestionVuelos - Vista principal para la gestión de vuelos por parte del controlador.
+ * 
+ * Permite visualizar una tabla de vuelos y acceder a un formulario para modificar el estado
+ * y la pista asignada de un vuelo seleccionado. Usa un diseño con CardLayout para alternar
+ * entre la vista principal y el formulario de edición.
+ * 
+ * @author Christian Grosso - christian.grosso@estudiante.uam.es
+ */
 public class ControladorGestionVuelos extends JPanel {
     private static final long serialVersionUID = 1L;
 
@@ -25,10 +34,14 @@ public class ControladorGestionVuelos extends JPanel {
     private JButton botonGuardar;
     private JButton botonCancelar;
 
+    /**
+     * Constructor de la clase. Inicializa los componentes gráficos y configura el layout principal.
+     */
     public ControladorGestionVuelos() {
         cardLayout = new CardLayout();
         setLayout(cardLayout);
 
+        // === PANEL PRINCIPAL ===
         panelPrincipal = new JPanel(new BorderLayout());
         panelPrincipal.setBackground(new Color(173, 216, 230));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
@@ -39,6 +52,7 @@ public class ControladorGestionVuelos extends JPanel {
         String[] columnas = {"ID", "Origen", "Destino", "Fecha", "Tipo Avión", "Estado", "Pista Asignata"};
         modelo = new NonEditableTableModel(columnas, 0);
         tabla = new JTable(modelo);
+
         JTableHeader header = tabla.getTableHeader();
         header.setBackground(new Color(70, 130, 180));
         header.setForeground(Color.WHITE);
@@ -54,17 +68,19 @@ public class ControladorGestionVuelos extends JPanel {
 
         botonModificar = new JButton("Modificar");
         personalizarBottone(botonModificar);
+
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelBoton.setBackground(new Color(173, 216, 230));
         panelBoton.add(botonModificar);
         panelPrincipal.add(panelBoton, BorderLayout.SOUTH);
 
-        // Form modifica (senza botonVolver)
+        // === FORMULARIO DE MODIFICACIÓN ===
         panelFormulario = new JPanel(new GridBagLayout());
         panelFormulario.setBackground(new Color(173, 216, 230));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 0; gbc.gridy = 0;
+
         panelFormulario.add(new JLabel("Stato Volo:"), gbc);
         gbc.gridx = 1;
         comboEstado = new JComboBox<>();
@@ -90,6 +106,11 @@ public class ControladorGestionVuelos extends JPanel {
         add(panelFormulario, "formulario");
     }
 
+    /**
+     * Aplica un estilo visual uniforme a los botones.
+     *
+     * @param boton Botón al que se le aplicará el estilo.
+     */
     private void personalizarBottone(JButton boton) {
         boton.setBackground(new Color(135, 206, 250));
         boton.setForeground(Color.BLACK);
@@ -98,26 +119,76 @@ public class ControladorGestionVuelos extends JPanel {
         boton.setPreferredSize(new Dimension(120, 40));
     }
 
+    // === MÉTODOS GETTER PARA ACCESO EXTERNO A LOS COMPONENTES ===
+
+    /**
+     * Devuelve la tabla de vuelos.
+     * @return JTable de vuelos.
+     */
     public JTable getTabla() { return tabla; }
+
+    /**
+     * Devuelve el modelo de la tabla.
+     * @return Modelo no editable de la tabla.
+     */
     public NonEditableTableModel getModelo() { return modelo; }
+
+    /**
+     * Devuelve el botón de volver.
+     * @return Botón personalizado de volver.
+     */
     public BotonVolver getBotonVolver() { return botonVolver; }
+
+    /**
+     * Devuelve el botón "Modificar".
+     * @return Botón de modificación de vuelo.
+     */
     public JButton getBotonModificar() { return botonModificar; }
 
+    /**
+     * Devuelve el combo de estados de vuelo.
+     * @return JComboBox de estados.
+     */
     public JComboBox<String> getComboEstado() { return comboEstado; }
+
+    /**
+     * Devuelve el combo de pistas disponibles.
+     * @return JComboBox de pistas.
+     */
     public JComboBox<String> getComboPistas() { return comboPistas; }
+
+    /**
+     * Devuelve el botón "Guardar".
+     * @return Botón para confirmar los cambios.
+     */
     public JButton getBotonGuardar() { return botonGuardar; }
+
+    /**
+     * Devuelve el botón "Cancelar".
+     * @return Botón para cancelar la edición.
+     */
     public JButton getBotonCancelar() { return botonCancelar; }
 
+    /**
+     * Muestra el formulario de modificación de vuelo.
+     */
     public void mostraFormModifica() {
         cardLayout.show(this, "formulario");
     }
 
+    /**
+     * Muestra la vista principal con la tabla de vuelos.
+     */
     public void mostraVistaPrincipale() {
         cardLayout.show(this, "principal");
     }
 
-	public void setControlador(ControlControladorGestionVuelos controlControladorGestionVuelos) {
-		botonVolver.setControladorVolver(e -> controlControladorGestionVuelos.tornaIndietro());
-		
-	}
+    /**
+     * Asigna el controlador a los componentes interactivos de esta vista.
+     *
+     * @param controlControladorGestionVuelos Controlador correspondiente.
+     */
+    public void setControlador(ControlControladorGestionVuelos controlControladorGestionVuelos) {
+        botonVolver.setControladorVolver(e -> controlControladorGestionVuelos.tornaIndietro());
+    }
 }

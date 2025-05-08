@@ -2,7 +2,11 @@ package interfaz;
 
 import java.awt.CardLayout;
 import java.awt.Container;
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -184,7 +188,7 @@ public class Aplicacion extends JFrame{
 		cartas.add(panelGestorGestionAeropuerto, GESTOR_GESTION_AEROPUERTO);
 		cartas.add(panelConfiguracionNotificaciones, CONFIGURACION_NOTIFICACIONES);
 		cartas.add(panelGestorGestionFacturas, GESTOR_GESTION_FACTURAS);
-		
+				
 		// Mostramos una carta (por defecto LOGIN)
 		((CardLayout)cartas.getLayout()).show(cartas, LOGIN);
 		

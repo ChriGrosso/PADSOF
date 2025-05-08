@@ -28,8 +28,8 @@ import javax.swing.table.TableCellRenderer;
 
 import aerolineas.Aerolinea;
 import interfaz.Aplicacion;
-import interfaz.elementosComunes.BotonVolver;
-import interfaz.elementosComunes.MultiLineCellRenderer;
+import interfaz.util.BotonVolver;
+import interfaz.util.MultiLineCellRenderer;
 import sistema.SkyManager;
 import usuarios.Operador;
 import vuelos.EstadoVuelo;

@@ -23,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
 
 import aerolineas.Aerolinea;
 import elementos.Terminal;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 import vuelos.Vuelo;
 

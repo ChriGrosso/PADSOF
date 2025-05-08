@@ -13,7 +13,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import aerolineas.Aerolinea;
 import interfaz.Aplicacion;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Operador;
 

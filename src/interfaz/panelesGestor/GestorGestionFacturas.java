@@ -2,29 +2,41 @@ package interfaz.panelesGestor;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
 import interfaz.Aplicacion;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import interfaz.util.NonEditableTableModel;
 import sistema.SkyManager;
-import facturas.Factura;
 
 import java.awt.*;
-import java.util.ArrayList;
 
+/**
+ * Panel de gestión de facturas del sistema.
+ * Permite al gestor visualizar las facturas existentes y generar nuevas
+ * facturas mensuales para aerolíneas registradas.
+ * <p>
+ * Incluye una tabla de visualización y un botón para la generación de facturas.
+ * </p>
+ * 
+ * @author Christian Grosso
+ * @email christian.grosso@estudiante.uam.es
+ */
 public class GestorGestionFacturas extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel panelPrincipal;
+    private static final long serialVersionUID = 1L;
+
+    private JPanel panelPrincipal;
     private JTable tablaFacturas;
     private JScrollPane scrollTabla;
     private BotonVolver botonVolver;
     private JButton botonGenerarFactura;
     private JLabel labelTitulo;
-
     private NonEditableTableModel modeloTabla;
 
+    /**
+     * Constructor principal. Inicializa el panel con el layout, los componentes
+     * visuales y la tabla de facturas.
+     */
     public GestorGestionFacturas() {
         setLayout(new BorderLayout());
         setBackground(new Color(200, 230, 255));

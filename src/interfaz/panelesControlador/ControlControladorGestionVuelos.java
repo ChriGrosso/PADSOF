@@ -9,12 +9,26 @@ import interfaz.Aplicacion;
 import javax.swing.*;
 import java.awt.event.*;
 
+/**
+ * Clase ControlControladorGestionVuelos - Controlador que gestiona la lógica de interacción
+ * entre la vista de gestión de vuelos del controlador y el modelo de la aplicación (SkyManager).
+ * 
+ * Permite modificar el estado y la pista asignada de un vuelo, actualiza la tabla de vuelos
+ * y gestiona las acciones de los botones de la interfaz.
+ * 
+ * @author Christian Grosso - christian.grosso@estudiante.uam.es
+ */
 public class ControlControladorGestionVuelos implements ActionListener {
+    
     private ControladorGestionVuelos vista;
     private SkyManager modelo;
-
     private Vuelo voloSelezionato;
 
+    /**
+     * Constructor del controlador de la vista de gestión de vuelos.
+     *
+     * @param vista Instancia de la vista asociada a este controlador.
+     */
     public ControlControladorGestionVuelos(ControladorGestionVuelos vista) {
         this.vista = vista;
         this.modelo = SkyManager.getInstance();
@@ -22,6 +36,9 @@ public class ControlControladorGestionVuelos implements ActionListener {
         aggiornaTabella();
     }
 
+    /**
+     * Inicializa todos los listeners y acciones de los botones en la vista.
+     */
     private void inizializzaControlli() {
         vista.getBotonVolver().setControladorVolver(e -> vista.mostraVistaPrincipale());
 
@@ -35,7 +52,6 @@ public class ControlControladorGestionVuelos implements ActionListener {
             voloSelezionato = modelo.getVuelos().get(idVolo);
             if (voloSelezionato == null) return;
 
-            // Stato selezionabili dinamici
             aggiornaComboStati();
 
             vista.getComboPistas().removeAllItems();
@@ -64,18 +80,18 @@ public class ControlControladorGestionVuelos implements ActionListener {
             if (selezionePista != null) {
                 Pista nuovaPista = modelo.getPistas().get(selezionePista);
                 if (nuovaPista != null) {
-                    // Rimuovi dalla vecchia pista
+                    // Elimina de la pista actual
                     Pista attuale = voloSelezionato.getPista();
                     if (attuale != null) {
                         attuale.getVuelos().remove(voloSelezionato);
                         if (attuale.getUsando() == voloSelezionato) attuale.actualizarColaVuelos();
                     }
 
-                    // Assegna nuova pista
+                    // Asigna la nueva pista
                     voloSelezionato.asignarPista(nuovaPista);
                     nuovaPista.addVuelo(voloSelezionato);
 
-                    // Aggiorna stato automaticamente
+                    // Actualiza estado si corresponde
                     if (voloSelezionato.getEstVuelo() == EstadoVuelo.ESPERANDO_PISTA_D) {
                         voloSelezionato.setEstVuelo(EstadoVuelo.ESPERANDO_DESPEGUE);
                     } else if (voloSelezionato.getEstVuelo() == EstadoVuelo.ESPERANDO_PISTA_A) {
@@ -96,6 +112,10 @@ public class ControlControladorGestionVuelos implements ActionListener {
         });
     }
 
+    /**
+     * Actualiza dinámicamente los estados disponibles en el combo de estado
+     * según el origen del vuelo seleccionado.
+     */
     private void aggiornaComboStati() {
         vista.getComboEstado().removeAllItems();
         vista.getComboEstado().addItem(EstadoVuelo.EN_VUELO.name());
@@ -110,6 +130,10 @@ public class ControlControladorGestionVuelos implements ActionListener {
         vista.getComboEstado().setSelectedItem(voloSelezionato.getEstVuelo().name());
     }
 
+    /**
+     * Actualiza la tabla de vuelos mostrada en la vista con los datos actuales del modelo.
+     * Muestra columnas como ID, origen, destino, fecha, tipo de avión, estado y pista.
+     */
     public void aggiornaTabella() {
         String[] colonne = {"ID", "Origen", "Destino", "Fecha", "Tipo Avión", "Estado", "Pista Asignata"};
         vista.getModelo().setDataVector(new Object[0][0], colonne);
@@ -130,13 +154,20 @@ public class ControlControladorGestionVuelos implements ActionListener {
         }
     }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    /**
+     * Método requerido por la interfaz ActionListener (no se utiliza directamente).
+     *
+     * @param e Evento de acción generado.
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Método no implementado
+    }
 
-	public void tornaIndietro() {
-		Aplicacion.getInstance().showContInicio();
-	}
+    /**
+     * Muestra la pantalla de inicio del controlador.
+     */
+    public void tornaIndietro() {
+        Aplicacion.getInstance().showContInicio();
+    }
 }

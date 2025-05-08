@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import aerolineas.Aerolinea;
 import aviones.Avion;
 import interfaz.Aplicacion;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Operador;
 

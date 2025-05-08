@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 
 import aviones.EstadoAvion;
 import interfaz.Aplicacion;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 import vuelos.EstadoVuelo;
 

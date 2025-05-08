@@ -4,11 +4,23 @@ import javax.swing.*;
 
 import aeropuertos.Direccion;
 import interfaz.Aplicacion;
-import interfaz.elementosComunes.BotonVolver;
+import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 
 
 import java.awt.*;
+
+/**
+ * Panel principal de gestión del aeropuerto.
+ * Permite al gestor visualizar y modificar la información de:
+ * pistas, terminales, fingers, zonas de parking, hangares,
+ * aeropuertos externos, aeropuerto propio y puertas.
+ * <p>
+ * Cada sección está organizada en un tab dentro di un JTabbedPane.
+ * </p>
+ * 
+ * @author Christian Grosso - christian.grosso@estudiante.uam.es
+ */
 
 public class GestorGestionAeropuerto extends JPanel {
 
@@ -18,7 +30,7 @@ public class GestorGestionAeropuerto extends JPanel {
     private JPanel panelPistas, panelTerminales, panelFingers, panelZonasParking, panelHangares, panelAeropuertosExternos, panelAeropuertoPropio;
     private JPanel panelPuertas;
     
-    private JLabel labelCodigoAeropuerto;
+    private JTextField labelCodigoAeropuerto;
     private JTextField campoNombreAeropuerto;
     private JTextField campoPaisAeropuerto;
     private JTextField campoCiudadAeropuerto;
@@ -32,9 +44,6 @@ public class GestorGestionAeropuerto extends JPanel {
     private JTextField campoCostoHoraHangar;
     private JTextField campoCostoHoraAutobus;
     
-
-
-
     public GestorGestionAeropuerto() {
         setLayout(new BorderLayout());
         setBackground(new Color(173, 216, 230));
@@ -94,12 +103,12 @@ public class GestorGestionAeropuerto extends JPanel {
     }
 
     
- // Getter per i campi del formulario Aeropuerto Propio
-    public JLabel getCampoCodigoAeropuerto() {
+    // Getter per i campi del formulario Aeropuerto Propio
+    public JTextField getCampoCodigoAeropuerto() {
         return labelCodigoAeropuerto;
     }
     
-    public void setCampoCodigoAeropuerto(JLabel label) {
+    public void setCampoCodigoAeropuerto(JTextField label) {
         this.labelCodigoAeropuerto = label;
     }
 
@@ -193,9 +202,6 @@ public class GestorGestionAeropuerto extends JPanel {
         return panelPuertas;
     }
     
-
-
-	public void setControlador(ControlGestorGestionAeropuerto controlGestorGestAeropuerto) {
-				
-	}
+	public void setControlador(ControlGestorGestionAeropuerto controlGestorGestAeropuerto) {}
+	
 }

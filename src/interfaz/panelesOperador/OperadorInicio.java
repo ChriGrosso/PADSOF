@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import interfaz.elementosComunes.MenuLateral;
+import interfaz.util.MenuLateral;
 import sistema.SkyManager;
 import usuarios.Usuario;
 
