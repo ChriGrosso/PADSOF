@@ -16,6 +16,8 @@ import java.time.MonthDay;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+
 import aerolineas.Aerolinea;
 import aeropuertos.Aeropuerto;
 import aeropuertos.Direccion;
@@ -1115,14 +1117,48 @@ public class SkyManager implements Serializable {
 
 	public void setAeropuertoPropio(Aeropuerto aeropuertoPropio) {
 		    this.informacionPropia = aeropuertoPropio;
-		}
-
-
-	 
-
-	 
+	}
 	
+	public List<LocalDateTime> horasAlternativas(Vuelo v) {
+		ArrayList<LocalDateTime> horas = new ArrayList<>();
+		int rangoNuevasHorasVuelo = 48;
+		LocalDateTime salida = v.getHoraSalida();
+		LocalDateTime llegada = v.getHoraLlegada();
+		int i = 0;
+		
+		LocalDateTime alternativaSalida = salida.minusHours(rangoNuevasHorasVuelo);
+		LocalDateTime alternativaLlegada = llegada.minusHours(rangoNuevasHorasVuelo);
 
-
+		while (((rangoNuevasHorasVuelo-i) > 0) && (horas.size()<2)) {
+			v.setHoraLlegada(alternativaLlegada.plusHours(i));
+			v.setHoraSalida(alternativaSalida.plusHours(i));
+			if (this.getTerminalesDisponibles(v).isEmpty() == false) {
+				if (v.getLlegada()) {
+					horas.add(alternativaLlegada.plusHours(i));
+				} else horas.add(alternativaSalida.plusHours(i));
+			}
+			i += 1;
+		}
+		
+		alternativaSalida = salida.plusHours(rangoNuevasHorasVuelo);
+		alternativaLlegada = llegada.plusHours(rangoNuevasHorasVuelo);
+		i=0;
+		
+		while (((rangoNuevasHorasVuelo-i) > 0) && (horas.size()<4)) {
+			v.setHoraLlegada(alternativaLlegada.minusHours(i));
+			v.setHoraSalida(alternativaSalida.minusHours(i));
+			if (this.getTerminalesDisponibles(v).isEmpty() == false) {
+				if (v.getLlegada()) {
+					horas.add(alternativaLlegada.minusHours(i));
+				} else horas.add(alternativaSalida.minusHours(i));
+			}
+			i += 1;
+		}
+		
+		v.setHoraLlegada(llegada);
+		v.setHoraSalida(salida);
+		
+		return horas;
+	}
 	
 }

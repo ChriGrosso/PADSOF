@@ -524,6 +524,26 @@ public abstract class Vuelo extends Observable implements Serializable{
 	}
 	
 	/**
+	 * Establece la hora de llegada del vuelo.
+	 *
+	 * @param llegada Hora de llegada.
+	 */
+	public void setHoraLlegada(LocalDateTime llegada) {
+		this.horaLlegada = llegada;
+		return;
+	}
+	
+	/**
+	 * Establece la hora de salida del vuelo.
+	 *
+	 * @param salida Hora de salida.
+	 */
+	public void setHoraSalida(LocalDateTime salida) {
+		this.horaSalida = salida;
+		return;
+	}
+	
+	/**
      * Cambia el estado del vuelo según la transición indicada por el nuevo estado de vuelo.
      * 
      * Este método realiza verificaciones sobre el estado actual del vuelo y la situación del avión 

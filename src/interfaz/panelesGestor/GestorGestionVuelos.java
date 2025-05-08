@@ -112,7 +112,7 @@ public class GestorGestionVuelos extends JPanel{
 			if (a.size() == 2) aerolineas += ", " + a.get(1).getId();
 
 			Object terminal = v.getTerminal() == null ? "Asignar" : v.getTerminal().getId();
-			Object operador = (v.getControladorAsignado() == null && v.getTerminal() != null) ? "Asignar" : v.getControladorAsignado().getDni();
+			Object operador = (v.getControladorAsignado() == null) ? "Asignar" : v.getControladorAsignado().getDni();
 
 			Object[] fila = {
 				v.getId(), 

@@ -67,8 +67,6 @@ public class ControlBusquedaVuelos implements ActionListener {
         default:
         	JOptionPane.showMessageDialog(null, "Debe seleccionar el tipo de búsqueda a realizar");
         }
-    	System.out.println(modelo.getVuelos());
-    	System.out.println(vuelos);
     	bv.setFilasTabla(vuelos);
     	
     }
