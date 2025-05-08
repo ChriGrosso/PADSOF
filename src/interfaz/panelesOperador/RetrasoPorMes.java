@@ -16,12 +16,21 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Panel que permite calcular el retraso medio de vuelos por mes.
+ * Incluye selección de mes y visualización del resultado.
+ * 
+ * @author Sofía Castro - sofiai.castro@estudiante.uam.es
+ */
 public class RetrasoPorMes extends JPanel{
 	private static final long serialVersionUID = 1L;
 	JComboBox<String> meses = new JComboBox<>();
 	JLabel resultado = new JLabel();
 	JButton calcular = new JButton();
 	
+	/**
+	 * Constructor que configura el panel con los componentes necesarios.
+	 */
 	public RetrasoPorMes() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -78,11 +87,22 @@ public class RetrasoPorMes extends JPanel{
         add(panelInferior, BorderLayout.SOUTH);
 	}
 	
+	/**
+	 * Establece el controlador para el botón de cálculo.
+	 * 
+	 * @param c ActionListener a asociar al botón.
+	 */
 	public void setControlador(ActionListener c) {
 		calcular.addActionListener(c);
 	}
 	
 	
+	/**
+	 * Crea un botón con el formato de estilo estándar.
+	 * 
+	 * @param text Texto a mostrar en el botón.
+	 * @return JButton configurado.
+	 */
 	private JButton createContentButton(String text) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(120, 48));
@@ -91,6 +111,11 @@ public class RetrasoPorMes extends JPanel{
         return btn;
     }
 	
+	/**
+	 * Aplica formato estético estándar a un botón.
+	 * 
+	 * @param boton El botón a formatear.
+	 */
 	void formatoBotones(JButton boton) {
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
@@ -98,11 +123,20 @@ public class RetrasoPorMes extends JPanel{
 	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
 	}
 	
-	
+	/**
+	 * Obtiene el JComboBox con todos los meses del año.
+	 * 
+	 * @return JComboBox con todos los meses.
+	 */
 	public JComboBox<String> getMeses() {
 		return meses;
 	}
 	
+	/**
+	 * Obtiene el JLabel donde se muestra el resultado del cálculo.
+	 * 
+	 * @return JLabel con el resultado.
+	 */
 	public JLabel getResultado() {
 		return resultado;
 	}

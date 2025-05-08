@@ -8,13 +8,27 @@ import interfaz.Aplicacion;
 import sistema.SkyManager;
 import usuarios.Operador;
 
+/**
+ * Controlador para manejar el cálculo del retraso promedio por vuelo.
+ * Implementa ActionListener para responder a eventos de la interfaz gráfica.
+ * 
+ * @author Sofía Castro - sofiai.castro@estudiante.uam.es 
+ */
 public class ControlRetrasoPorVuelo implements ActionListener{
 	private SkyManager modelo;
 	
+	/**
+	 * Constructor que inicializa el modelo a la instancia única de SkyManager.
+	 */
 	public ControlRetrasoPorVuelo() {
 		this.modelo = SkyManager.getInstance();
 	}
 
+	/**
+	 * Maneja los eventos de acción relacionados con la selección de vuelo y cálculo del retraso.
+	 * 
+	 * @param e el evento de acción
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		var v = Aplicacion.getInstance().getOpEstadisticas().getRetPorVuelo();
@@ -35,6 +49,10 @@ public class ControlRetrasoPorVuelo implements ActionListener{
 		}
 	}
 
+	/**
+	 * Determina si el vuelo es de llegada o salida, extrae los aeropuertos implicados,
+	 * y muestra el retraso promedio entre ellos.
+	 */
 	private void mostrarRetraso() {
 		var v = Aplicacion.getInstance().getOpEstadisticas().getRetPorVuelo();
 		// Definir si el vuelo es de salida o llegada

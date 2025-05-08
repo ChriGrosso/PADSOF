@@ -20,6 +20,14 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 
+/**
+ * Panel de interfaz gráfica que permite al operador calcular el retraso medio
+ * de vuelos en una franja horaria determinada.
+ * 
+ * Proporciona selectores de hora para definir la franja, y un botón para realizar el cálculo.
+ * 
+ * @author Sofía Castro - sofiai.castro@estudiante.uam.es 
+ */
 public class RetrasoPorFranja extends JPanel{
 	private static final long serialVersionUID = 1L;
 	JLabel resultado = new JLabel();
@@ -29,6 +37,9 @@ public class RetrasoPorFranja extends JPanel{
 	JSpinner llegada = new JSpinner(model2);
 	JButton calcular = new JButton();
 	
+	/**
+     * Constructor del panel. Configura la disposición de componentes y diseño visual.
+     */
 	public RetrasoPorFranja() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -95,11 +106,22 @@ public class RetrasoPorFranja extends JPanel{
         add(panelInferior, BorderLayout.SOUTH);
 	}
 	
+	/**
+     * Asigna un controlador de eventos al botón de cálculo.
+     * 
+     * @param c ActionListener que define el comportamiento al hacer clic
+     */
 	public void setControlador(ActionListener c) {
 		calcular.addActionListener(c);
 	}
 	
 	
+	/**
+	 * Crea un botón con el formato de estilo estándar.
+	 * 
+	 * @param text Texto a mostrar en el botón.
+	 * @return JButton configurado.
+	 */
 	private JButton createContentButton(String text) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(120, 48));
@@ -108,7 +130,12 @@ public class RetrasoPorFranja extends JPanel{
         return btn;
     }
 	
-	void formatoBotones(JButton boton) {
+	/**
+	 * Aplica formato estético estándar a un botón.
+	 * 
+	 * @param boton El botón a formatear.
+	 */
+	private void formatoBotones(JButton boton) {
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
 	    boton.setFocusPainted(false);
@@ -116,17 +143,30 @@ public class RetrasoPorFranja extends JPanel{
 	}
 	
 	
+	/**
+     * Devuelve la etiqueta donde se muestra el resultado.
+     * 
+     * @return JLabel con el texto de resultado
+     */
 	public JLabel getResultado() {
 		return resultado;
 	}
 	
-	// Obtener la fecha y hora de salida
+	/**
+	 * Devuelve la hora de salida seleccionada por el usuario.
+	 * 
+	 * @return LocalTime correspondiente al valor del spinner de salida.
+	 */
 	public LocalTime getHoraSalida() {
 		Date date = (Date) salida.getValue();
 		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
 	}
 
-	// Obtener la fecha y hora de llegada
+	/**
+	 * Devuelve la hora de llegada seleccionada por el usuario.
+	 * 
+	 * @return LocalTime correspondiente al valor del spinner de llegada.
+	 */
 	public LocalTime getHoraLlegada() {
 		Date date = (Date) llegada.getValue();
 		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();

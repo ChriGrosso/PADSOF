@@ -10,13 +10,28 @@ import interfaz.Aplicacion;
 import sistema.SkyManager;
 import usuarios.Operador;
 
+/**
+ * Controlador para manejar el cálculo del retraso promedio por mes.
+ * Implementa ActionListener para responder a eventos de la interfaz gráfica.
+ * 
+ * @author Sofía Castro - sofiai.castro@estudiante.uam.es 
+ */
 public class ControlRetrasoPorMes implements ActionListener{
 	private SkyManager modelo;
 	
+	/**
+	 * Constructor que inicializa el modelo a la instancia única de SkyManager.
+	 */
 	public ControlRetrasoPorMes() {
 		this.modelo = SkyManager.getInstance();
 	}
 
+	/**
+	 * Maneja los eventos de acción provenientes de la interfaz gráfica.
+	 * Ejecuta el cálculo de retraso si se selecciona el comando correspondiente.
+	 * 
+	 * @param e el evento de acción
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Calcular retraso medio")) {   
@@ -24,6 +39,10 @@ public class ControlRetrasoPorMes implements ActionListener{
 		}
 	}
 
+	/**
+	 * Convierte el mes seleccionado en la interfaz a un valor del enum Month,
+	 * y muestra el retraso promedio en minutos correspondiente al mes.
+	 */
 	private void mostrarRetraso() {
 		var v = Aplicacion.getInstance().getOpEstadisticas().getRetPorMes();
 		String seleccion = (String) v.getMeses().getSelectedItem();

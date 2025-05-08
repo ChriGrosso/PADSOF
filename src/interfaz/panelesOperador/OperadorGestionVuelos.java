@@ -48,7 +48,7 @@ public class OperadorGestionVuelos extends JPanel{
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 		        
 		// Contenedor en la esquina superior derecha
-		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras.png");
+		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
 		panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
 
 		// Añadir el contenedor al panel principal
@@ -373,8 +373,12 @@ public class OperadorGestionVuelos extends JPanel{
 
             if (option == JOptionPane.OK_OPTION) {
                 EstadoVuelo nuevoEstado = (EstadoVuelo) combo.getSelectedItem();
-                v.setEstVuelo(nuevoEstado);
-                JOptionPane.showMessageDialog(null, "Estado cambiado a: " + nuevoEstado);
+                boolean res = v.setEstVuelo(nuevoEstado);
+                if (res) { JOptionPane.showMessageDialog(null, "Estado cambiado a: " + nuevoEstado); }
+                else { 
+                	JOptionPane.showMessageDialog(Aplicacion.getInstance().getOpVuelos(), "No se ha podido cambiar al estado: " + nuevoEstado, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 Aplicacion.getInstance().getOpVuelos().actualizarPantalla();
             }
         }

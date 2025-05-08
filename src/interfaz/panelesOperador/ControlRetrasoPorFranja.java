@@ -9,13 +9,28 @@ import interfaz.Aplicacion;
 import sistema.SkyManager;
 import usuarios.Operador;
 
+/**
+ * Controlador para manejar el cálculo del retraso promedio por franja horaria.
+ * Implementa ActionListener para responder a eventos de la interfaz gráfica.
+ * 
+ * @author Sofía Castro - sofiai.castro@estudiante.uam.es 
+ */
 public class ControlRetrasoPorFranja implements ActionListener{
 	private SkyManager modelo;
 	
+	/**
+	 * Constructor que inicializa el modelo a la instancia única de SkyManager.
+	 */
 	public ControlRetrasoPorFranja() {
 		this.modelo = SkyManager.getInstance();
 	}
 
+	/**
+	 * Maneja los eventos de acción provenientes de la interfaz gráfica.
+	 * Ejecuta el cálculo de retraso si se selecciona el comando correspondiente.
+	 * 
+	 * @param e el evento de acción
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Calcular retraso medio")) {   
@@ -23,6 +38,10 @@ public class ControlRetrasoPorFranja implements ActionListener{
 		}
 	}
 
+	/**
+	 * Obtiene las horas de inicio y fin desde la vista y calcula el retraso
+	 * promedio en minutos para esa franja horaria, mostrándolo en la interfaz.
+	 */
 	private void mostrarRetraso() {
 		var v = Aplicacion.getInstance().getOpEstadisticas().getRetPorFranja();
 		

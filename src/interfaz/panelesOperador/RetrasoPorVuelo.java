@@ -21,6 +21,12 @@ import javax.swing.JRadioButton;
 import aeropuertos.Aeropuerto;
 import sistema.SkyManager;
 
+/**
+ * Panel que permite calcular el retraso medio para un vuelo específico.
+ * Incluye un campo para ingresar el ID del vuelo y muestra el resultado.
+ * 
+ * @author Sofía Castro - sofiai.castro@estudiante.uam.es
+ */
 public class RetrasoPorVuelo extends JPanel{
 	private static final long serialVersionUID = 1L;
 	JComboBox<String> origen = new JComboBox<>();
@@ -32,6 +38,9 @@ public class RetrasoPorVuelo extends JPanel{
 	ButtonGroup esLlegada;
 	JButton calcular = new JButton();
 	
+	/**
+	 * Constructor que inicializa y configura todos los componentes del panel.
+	 */
 	public RetrasoPorVuelo() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -118,11 +127,22 @@ public class RetrasoPorVuelo extends JPanel{
         add(panelInferior, BorderLayout.SOUTH);
 	}
 	
+	/**
+	 * Establece el controlador para el botón de cálculo.
+	 * 
+	 * @param c ActionListener a asociar.
+	 */
 	public void setControlador(ActionListener c) {
 		calcular.addActionListener(c);
 	}
 	
 	
+	/**
+	 * Crea un botón con el formato de estilo estándar.
+	 * 
+	 * @param text Texto a mostrar en el botón.
+	 * @return JButton configurado.
+	 */
 	private JButton createContentButton(String text) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(120, 48));
@@ -131,6 +151,11 @@ public class RetrasoPorVuelo extends JPanel{
         return btn;
     }
 	
+	/**
+	 * Aplica formato estético estándar a un botón.
+	 * 
+	 * @param boton El botón a formatear.
+	 */
 	void formatoBotones(JButton boton) {
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
@@ -139,32 +164,67 @@ public class RetrasoPorVuelo extends JPanel{
 	}
 	
 	
+	/**
+	 * Obtiene el JLabel con el resultado del cálculo.
+	 * 
+	 * @return JLabel del resultado.
+	 */
 	public JLabel getResultado() {
 		return resultado;
 	}
 	
+	/**
+	 * Devuelve el componente JComboBox que contiene los aeropuertos de origen.
+	 * 
+	 * @return JComboBox con los aeropuertos de origen disponibles.
+	 */
 	public JComboBox<String> getOrigenJCombo() {
 		return origen;
 	}
 	
+	/**
+	 * Devuelve el componente JComboBox que contiene los aeropuertos de destino.
+	 * 
+	 * @return JComboBox con los aeropuertos de destino disponibles.
+	 */
 	public JComboBox<String> getDestinoJCombo() {
 		return destino;
 	}
 	
+
+	/**
+	 * Devuelve el JLabel correspondiente al aeropuerto de origen seleccionado.
+	 * 
+	 * @return JLabel que representa el aeropuerto de origen.
+	 */
 	public JLabel getAeO() {
 		return nuestroAeO;
 	}
 	
+	/**
+	 * Devuelve el JLabel correspondiente al aeropuerto de destino seleccionado.
+	 * 
+	 * @return JLabel que representa el aeropuerto de destino.
+	 */
 	public JLabel getAeD() {
 		return nuestroAeD;
 	}
 	
-	// Verificar si el vuelo es de llegada
+	
+	/**
+	 * Indica si el vuelo seleccionado es de llegada.
+	 * 
+	 * @return true si el vuelo es de llegada; false en caso contrario.
+	 */
 	public boolean esLlegada() {
 		return llega.isSelected();
 	}
 
-	// Verificar si el vuelo no es de salida
+	/**
+	 * Indica si el vuelo seleccionado es de salida.
+	 * 
+	 * @return true si el vuelo es de salida; false en caso contrario.
+	 */
 	public boolean esSalida() {
 		return sale.isSelected();
 	}
