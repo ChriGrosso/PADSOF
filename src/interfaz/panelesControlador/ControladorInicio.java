@@ -64,12 +64,12 @@ public class ControladorInicio extends JPanel {
 
         busquedaVuelos = new JButton("Buscar Vuelos");
         formatoBotones(busquedaVuelos);
-        setScaledIcon(busquedaVuelos, "resources/searchFlights_icon.png");
+        setScaledIcon(busquedaVuelos, "resources/iconoBusquedaVuelos.png");
         panelBotones.add(busquedaVuelos);
 
         gestionVuelos = new JButton("Gestión Vuelos");
         formatoBotones(gestionVuelos);
-        setScaledIcon(gestionVuelos, "resources/plane_icon.png");
+        setScaledIcon(gestionVuelos, "resources/iconoGestionVuelos.png");
         panelBotones.add(gestionVuelos);
 
         gbc.gridwidth = 2;

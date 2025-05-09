@@ -122,4 +122,11 @@ public class GestorGestionFacturas extends JPanel {
 	    tabla.getTableHeader().setForeground(Color.WHITE);
 	    tabla.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
 	}
+	
+	/**
+	 * Actualiza los datos mostrados en la tabla con las facturas del sistema.
+	 */
+	public void actualizarPantalla() {
+		ControlGestorGestionFacturas _ = new ControlGestorGestionFacturas(this);
+	}
 }

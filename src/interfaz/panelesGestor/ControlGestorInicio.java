@@ -34,6 +34,7 @@ public class ControlGestorInicio implements ActionListener {
             	Aplicacion.getInstance().showGestorGestionAeropuerto();
                 break;  
             case "GESTION_FACTURAS":
+            	Aplicacion.getInstance().getGestorGestionFacturas().actualizarPantalla();
                 Aplicacion.getInstance().showGestorGestionFacturas();
                 break;
             case "GESTION_USUARIOS":

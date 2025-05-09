@@ -3,8 +3,10 @@ package interfaz.panelesControlador;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 
+import interfaz.Aplicacion;
 import interfaz.util.BotonVolver;
 import interfaz.util.NonEditableTableModel;
+import sistema.SkyManager;
 
 import java.awt.*;
 
@@ -46,7 +48,8 @@ public class ControladorGestionVuelos extends JPanel {
         panelPrincipal.setBackground(new Color(173, 216, 230));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 
-        botonVolver = new BotonVolver("resources/atras.png");
+        botonVolver = new BotonVolver("resources/atras_icon.png");
+        botonVolver.setControladorVolver(_ -> paginaAnterior());
         panelPrincipal.add(botonVolver, BorderLayout.NORTH);
 
         String[] columnas = {"ID", "Origen", "Destino", "Fecha", "Tipo Avión", "Estado", "Pista Asignata"};
@@ -107,6 +110,14 @@ public class ControladorGestionVuelos extends JPanel {
     }
 
     /**
+     * Vuelve a la pantalla de inicio del controlador, guardando los datos actuales.
+     */
+	private void paginaAnterior() {
+		SkyManager.getInstance().guardarDatos();
+		Aplicacion.getInstance().showContInicio();
+	}
+
+	/**
      * Aplica un estilo visual uniforme a los botones.
      *
      * @param boton Botón al que se le aplicará el estilo.

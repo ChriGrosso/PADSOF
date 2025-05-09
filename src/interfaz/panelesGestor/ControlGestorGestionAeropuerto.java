@@ -1711,35 +1711,34 @@ public class ControlGestorGestionAeropuerto {
         // Sección: Costos por Hora
         JLabel labelCostosHora = new JLabel("Costos por Hora");
         labelCostosHora.setFont(labelCostosHora.getFont().deriveFont(Font.BOLD, 16));
-        gbc.gridx = 0; gbc.gridy = 10; gbc.gridwidth = 2;
+        gbc.gridx = 2; gbc.gridy = 0; gbc.gridwidth = 2;
         panel.add(labelCostosHora, gbc);
 
         gbc.gridwidth = 1;
-        gbc.gridx = 0; gbc.gridy = 11; panel.add(new JLabel("Costo Hora Pista:"), gbc);
+        gbc.gridx = 2; gbc.gridy = 1; panel.add(new JLabel("Costo Hora Pista:"), gbc);
         JTextField campoCostoPista = new JTextField(10);
-        gbc.gridx = 1; panel.add(campoCostoPista, gbc);
+        gbc.gridx = 3; panel.add(campoCostoPista, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 12; panel.add(new JLabel("Costo Hora Terminal:"), gbc);
+        gbc.gridx = 2; gbc.gridy = 2; panel.add(new JLabel("Costo Hora Terminal:"), gbc);
         JTextField campoCostoTerminal = new JTextField(10);
-        gbc.gridx = 1; panel.add(campoCostoTerminal, gbc);
+        gbc.gridx = 3; panel.add(campoCostoTerminal, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 13; panel.add(new JLabel("Costo Hora Finger:"), gbc);
+        gbc.gridx = 2; gbc.gridy = 3; panel.add(new JLabel("Costo Hora Finger:"), gbc);
         JTextField campoCostoFinger = new JTextField(10);
-        gbc.gridx = 1; panel.add(campoCostoFinger, gbc);
+        gbc.gridx = 3; panel.add(campoCostoFinger, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 14; panel.add(new JLabel("Costo Hora Hangar:"), gbc);
+        gbc.gridx = 2; gbc.gridy = 4; panel.add(new JLabel("Costo Hora Hangar:"), gbc);
         JTextField campoCostoHangar = new JTextField(10);
-        gbc.gridx = 1; panel.add(campoCostoHangar, gbc);
+        gbc.gridx = 3; panel.add(campoCostoHangar, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 15; panel.add(new JLabel("Costo Hora Autobús:"), gbc);
+        gbc.gridx = 2; gbc.gridy = 5; panel.add(new JLabel("Costo Hora Autobús:"), gbc);
         JTextField campoCostoAutobus = new JTextField(10);
-        gbc.gridx = 1; panel.add(campoCostoAutobus, gbc);
+        gbc.gridx = 3; panel.add(campoCostoAutobus, gbc);
 
         // Botón Guardar Cambios
         JButton botonGuardar = new JButton("Guardar Cambios");
         personalizarBoton(botonGuardar);
-        personalizarBoton(botonGuardar);
-        gbc.gridx = 0; gbc.gridy = 16; gbc.gridwidth = 2;
+        gbc.gridx = 2; gbc.gridy = 6; gbc.gridwidth = 2;
         panel.add(botonGuardar, gbc);
 
         // ACCESO AL MODELLO

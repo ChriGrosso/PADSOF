@@ -47,7 +47,7 @@ public class GestorGestionAeropuerto extends JPanel {
     public GestorGestionAeropuerto() {
         setLayout(new BorderLayout());
         setBackground(new Color(173, 216, 230));
-        setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
+        setBorder(BorderFactory.createEmptyBorder(60, 60, 30, 60));
 
         // Pannello superiore (bottone + titolo)
         JPanel panelSuperiore = new JPanel(new BorderLayout());
@@ -203,5 +203,12 @@ public class GestorGestionAeropuerto extends JPanel {
     }
     
 	public void setControlador(ControlGestorGestionAeropuerto controlGestorGestAeropuerto) {}
+	
+	/**
+	 * Actualiza los datos mostrados en las tablas con los elementos que maneja el aeropuerto.
+	 */
+	public void actualizarPantalla() {
+		ControlGestorGestionAeropuerto _ = new ControlGestorGestionAeropuerto(this);
+	}
 	
 }
