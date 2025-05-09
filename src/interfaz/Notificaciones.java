@@ -330,7 +330,7 @@ public class Notificaciones extends JPanel{
                                 vuelo.setHoraSalida(nuevaFecha);
                                 vuelo.setHoraLlegada(llegadaActual.plus(diferencia));
                             }
-
+                             vuelo.setTerminal(null);
                             JOptionPane.showMessageDialog(null, "La fecha y hora del vuelo se han actualizado con éxito.");
                         }
                     }

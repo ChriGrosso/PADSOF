@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ import javax.swing.table.TableCellRenderer;
 
 import aerolineas.Aerolinea;
 import elementos.Terminal;
+import elementos.TerminalMercancias;
+import elementos.TerminalPasajeros;
 import interfaz.Aplicacion;
 import interfaz.util.BotonVolver;
 import sistema.SkyManager;
@@ -309,6 +312,12 @@ public class GestorGestionVuelos extends JPanel{
 			                    // Mostrar mensaje de verificación en pantalla
 			                    JOptionPane.showMessageDialog(null, "La notificación se ha enviado correctamente.", 
 			                                                  "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+			                    Terminal terminal;
+			                    if (vuelo.isVueloMercancias()) terminal = new TerminalMercancias("Esperando cambio de hora", LocalDate.now(), 1, "MM", 0);
+			                    else terminal = new TerminalPasajeros("Esperando cambio de hora", LocalDate.now(), 1, "MM", 0);
+			                    vuelo.setTerminal(terminal);
+			                    Aplicacion.getInstance().getGestorGestionVuelos().actualizarPantalla();
+			                    
 			                }
 			                dialogo.dispose(); // Cerrar la ventana tras selección
 			            });
