@@ -55,6 +55,7 @@ import sistema.SkyManager;
 
 public class ControlGestorGestionAeropuerto {
     private GestorGestionAeropuerto vista;
+ // Nella classe
 
     /**
      * Constructor que recibe la vista principal y lanza la inicialización de todos los paneles.
@@ -156,16 +157,27 @@ public class ControlGestorGestionAeropuerto {
 	    personalizarBoton(botonCancelar);
 	
 	    GridBagConstraints gbc = new GridBagConstraints();
-	    gbc.insets = new Insets(5,5,5,5);
-	    gbc.gridx = 0; gbc.gridy = 0; panelFormulario.add(labelTipo, gbc);
-	    gbc.gridx = 1; gbc.gridy = 0; panelFormulario.add(radioDespegue, gbc);
-	    gbc.gridx = 2; gbc.gridy = 0; panelFormulario.add(radioAterrizaje, gbc);
-	
-	    gbc.gridx = 0; gbc.gridy = 1; panelFormulario.add(labelLongitud, gbc);
-	    gbc.gridx = 1; gbc.gridy = 1; gbc.gridwidth = 2; panelFormulario.add(campoLongitud, gbc);
-	
-	    gbc.gridx = 0; gbc.gridy = 2; panelFormulario.add(botonGuardar, gbc);
-	    gbc.gridx = 1; gbc.gridy = 2; panelFormulario.add(botonCancelar, gbc);
+	    gbc.insets = new Insets(5, 10, 5, 10);
+	    gbc.anchor = GridBagConstraints.WEST;
+
+	    gbc.gridx = 0; gbc.gridy = 0;
+	    panelFormulario.add(labelTipo, gbc);
+	    gbc.gridx = 1; gbc.gridy = 0;
+	    panelFormulario.add(radioDespegue, gbc);
+	    gbc.gridx = 2; gbc.gridy = 0;
+	    panelFormulario.add(radioAterrizaje, gbc);
+
+	    gbc.gridx = 0; gbc.gridy = 1;
+	    panelFormulario.add(labelLongitud, gbc);
+	    gbc.gridx = 1; gbc.gridy = 1; gbc.gridwidth = 2;
+	    panelFormulario.add(campoLongitud, gbc);
+	    gbc.gridwidth = 1; // reset per i bottoni
+
+	    gbc.gridx = 1; gbc.gridy = 2;
+	    panelFormulario.add(botonGuardar, gbc);
+	    gbc.gridx = 2; gbc.gridy = 2;
+	    panelFormulario.add(botonCancelar, gbc);
+
 	
 	    // CardLayout su panelPistas
 	    JPanel panelPistas = vista.getPanelPistas();
@@ -348,15 +360,29 @@ public class ControlGestorGestionAeropuerto {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5,5,5);
 
-        gbc.gridx = 0; gbc.gridy = 0; panelFormulario.add(labelTipoTerminal, gbc);
-        gbc.gridx = 1; gbc.gridy = 0; panelFormulario.add(rdbtnPasajeros, gbc);
-        gbc.gridx = 2; gbc.gridy = 0; panelFormulario.add(rdbtnMercancias, gbc);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 1;
 
-        gbc.gridx = 0; gbc.gridy = 1; panelFormulario.add(labelNumeroPuertas, gbc);
-        gbc.gridx = 1; gbc.gridy = 1; gbc.gridwidth = 2; panelFormulario.add(campoNumeroPuertas, gbc);
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelFormulario.add(labelTipoTerminal, gbc);
+        gbc.gridx = 1; gbc.gridy = 0;
+        panelFormulario.add(rdbtnPasajeros, gbc);
+        gbc.gridx = 2; gbc.gridy = 0;
+        panelFormulario.add(rdbtnMercancias, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 2; panelFormulario.add(labelPrefijosPuertas, gbc);
-        gbc.gridx = 1; gbc.gridy = 2; gbc.gridwidth = 2; panelFormulario.add(campoPrefijosPuertas, gbc);
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelFormulario.add(labelNumeroPuertas, gbc);
+        gbc.gridx = 1; gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        panelFormulario.add(campoNumeroPuertas, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        panelFormulario.add(labelPrefijosPuertas, gbc);
+        gbc.gridx = 1; gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        panelFormulario.add(campoPrefijosPuertas, gbc);
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.add(botonGuardar);
@@ -649,18 +675,24 @@ public class ControlGestorGestionAeropuerto {
         personalizarBoton(botonCancelar);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,5,5,5);
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 1;
 
-        gbc.gridx = 0; gbc.gridy = 0; panelFormulario.add(labelAlturaMaxima, gbc);
-        gbc.gridx = 1; gbc.gridy = 0; gbc.gridwidth = 2; panelFormulario.add(campoAlturaMaxima, gbc);
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelFormulario.add(labelAlturaMaxima, gbc);
+        gbc.gridx = 1; gbc.gridy = 0;
+        panelFormulario.add(campoAlturaMaxima, gbc);
 
+        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.add(botonGuardar);
         panelBotones.add(botonCancelar);
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
         panelFormulario.add(panelBotones, gbc);
+
 
         JPanel panelFingers = vista.getPanelFingers();
         panelFingers.add(panelLista, "listaFingers");
@@ -844,31 +876,53 @@ public class ControlGestorGestionAeropuerto {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5,5,5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        gbc.gridx = 0; gbc.gridy = 0; panelFormulario.add(labelTipo, gbc);
-        gbc.gridx = 1; panelFormulario.add(rdbtnPasajeros, gbc);
-        gbc.gridx = 2; panelFormulario.add(rdbtnMercancias, gbc);
+        // RIGA 0: Tipo + Radio Buttons
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelFormulario.add(labelTipo, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1; panelFormulario.add(labelNumPlazas, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoNumPlazas, gbc);
+        JPanel tipoPanel = new JPanel();
+        tipoPanel.add(rdbtnPasajeros);
+        tipoPanel.add(rdbtnMercancias);
 
-        gbc.gridx = 0; gbc.gridy = 2; panelFormulario.add(labelAltura, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoAltura, gbc);
+        gbc.gridx = 1; gbc.gridy = 0; gbc.gridwidth = 2;
+        panelFormulario.add(tipoPanel, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 3; panelFormulario.add(labelAnchura, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoAnchura, gbc);
+        // RIGA 1: Número de Plazas
+        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1;
+        panelFormulario.add(labelNumPlazas, gbc);
+        gbc.gridx = 1; gbc.gridy = 1; gbc.gridwidth = 2;
+        panelFormulario.add(campoNumPlazas, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 4; panelFormulario.add(labelLargo, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoLargo, gbc);
+        // RIGA 2: Altura
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 1;
+        panelFormulario.add(labelAltura, gbc);
+        gbc.gridx = 1; gbc.gridy = 2; gbc.gridwidth = 2;
+        panelFormulario.add(campoAltura, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 3; panelFormulario.add(chkMaterialesPeligrosos, gbc);
+        // RIGA 3: Anchura
+        gbc.gridx = 0; gbc.gridy = 3;
+        panelFormulario.add(labelAnchura, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoAnchura, gbc);
 
+        // RIGA 4: Largo
+        gbc.gridx = 0; gbc.gridy = 4;
+        panelFormulario.add(labelLargo, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoLargo, gbc);
+
+        // RIGA 5: Checkbox
+        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 3;
+        panelFormulario.add(chkMaterialesPeligrosos, gbc);
+
+        // RIGA 6: Botones centrati
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.add(botonGuardar);
         panelBotones.add(botonCancelar);
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 3;
         panelFormulario.add(panelBotones, gbc);
 
         JPanel panelHangar = vista.getPanelHangares();
@@ -1088,26 +1142,40 @@ public class ControlGestorGestionAeropuerto {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5,5,5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        gbc.gridx = 0; gbc.gridy = 0; panelFormulario.add(labelNumPlazas, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoNumPlazas, gbc);
+        // RIGA 0: Número de Plazas
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelFormulario.add(labelNumPlazas, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoNumPlazas, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1; panelFormulario.add(labelAltura, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoAltura, gbc);
+        // RIGA 1: Altura
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelFormulario.add(labelAltura, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoAltura, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 2; panelFormulario.add(labelAnchura, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoAnchura, gbc);
+        // RIGA 2: Anchura
+        gbc.gridx = 0; gbc.gridy = 2;
+        panelFormulario.add(labelAnchura, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoAnchura, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 3; panelFormulario.add(labelLargo, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoLargo, gbc);
+        // RIGA 3: Largo
+        gbc.gridx = 0; gbc.gridy = 3;
+        panelFormulario.add(labelLargo, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoLargo, gbc);
 
+        // RIGA 4: Botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.add(botonGuardar);
         panelBotones.add(botonCancelar);
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
         panelFormulario.add(panelBotones, gbc);
+
 
         JPanel panelZonaParking = vista.getPanelZonasParking();
         panelZonaParking.add(panelLista, "listaZonaParking");
@@ -1315,35 +1383,59 @@ public class ControlGestorGestionAeropuerto {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5,5,5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
 
-        gbc.gridx = 0; gbc.gridy = 0; panelFormulario.add(labelCodigo, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoCodigo, gbc);
+        // RIGA 0: Código
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 1;
+        panelFormulario.add(labelCodigo, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoCodigo, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1; panelFormulario.add(labelNombre, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoNombre, gbc);
+        // RIGA 1: Nombre
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelFormulario.add(labelNombre, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoNombre, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 2; panelFormulario.add(labelPais, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoPais, gbc);
+        // RIGA 2: País
+        gbc.gridx = 0; gbc.gridy = 2;
+        panelFormulario.add(labelPais, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoPais, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 3; panelFormulario.add(labelCiudad, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoCiudad, gbc);
+        // RIGA 3: Ciudad
+        gbc.gridx = 0; gbc.gridy = 3;
+        panelFormulario.add(labelCiudad, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoCiudad, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 4; panelFormulario.add(labelDistancia, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoDistancia, gbc);
+        // RIGA 4: Distancia
+        gbc.gridx = 0; gbc.gridy = 4;
+        panelFormulario.add(labelDistancia, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoDistancia, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 5; panelFormulario.add(labelGMT, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(campoGMT, gbc);
+        // RIGA 5: GMT
+        gbc.gridx = 0; gbc.gridy = 5;
+        panelFormulario.add(labelGMT, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(campoGMT, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 6; panelFormulario.add(labelDireccion, gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; panelFormulario.add(comboDireccion, gbc);
+        // RIGA 6: Dirección
+        gbc.gridx = 0; gbc.gridy = 6;
+        panelFormulario.add(labelDireccion, gbc);
+        gbc.gridx = 1;
+        panelFormulario.add(comboDireccion, gbc);
 
+        // RIGA 7: Botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.add(botonGuardar);
         panelBotones.add(botonCancelar);
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 2;
         panelFormulario.add(panelBotones, gbc);
+
 
         JPanel panelAeropuertos = vista.getPanelAeropuertosExternos();
         panelAeropuertos.add(panelLista, "listaAeropuertos");
@@ -1391,7 +1483,7 @@ public class ControlGestorGestionAeropuerto {
                 // Logica di importazione qui
                 System.out.println("Archivo .dat seleccionado: " + rutaArchivo);
                 JOptionPane.showMessageDialog(null, "Archivo seleccionado:\n" + rutaArchivo);
-
+                inicializarPanelAeropuertoPropio();
                 SkyManager.getInstance().cargarDatosAeropuertos(rutaArchivo);
                 NonEditableTableModel modeloT = new NonEditableTableModel(new Object[]{"Código", "Nombre", "País", "Ciudad", "Distancia (km)", "GMT", "Dirección"}, 0);
                 for (Aeropuerto a : modelo.getAeropuertosExternos().values()) {

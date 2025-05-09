@@ -23,7 +23,13 @@ import interfaz.util.MenuLateral;
 import sistema.SkyManager;
 import usuarios.Usuario;
 
-
+/**
+ * Panel principal de inicio para el operador del sistema SkyManager.
+ * Contiene un menú lateral y varios botones para acceder a funcionalidades
+ * como búsqueda de vuelos, estadísticas, facturación, gestión de vuelos y aviones.
+ * 
+ * @author Sofía Castro - sofiai.castro@estudiante.uam.es
+ */
 public class OperadorInicio extends JPanel {
     private static final long serialVersionUID = 1L;
 
@@ -34,6 +40,10 @@ public class OperadorInicio extends JPanel {
     private JButton gestionAviones;
     private JLabel bienvenida;
 
+    /**
+     * Constructor del panel OperadorInicio. Inicializa la interfaz gráfica
+     * con los componentes necesarios y su disposición.
+     */
     public OperadorInicio() {
         setLayout(new BorderLayout());
 
@@ -57,7 +67,7 @@ public class OperadorInicio extends JPanel {
         subPanelCentral.setBackground(new Color(173, 216, 230));
         subPanelCentral.setBorder(BorderFactory.createEmptyBorder(80, 60, 80, 60));
 
-        // Bienvenida a usuario
+        // Etiqueta de bienvenida al usuario
         bienvenida = new JLabel();
         bienvenida.setFont(new Font("Arial", Font.BOLD, 22));
         bienvenida.setForeground(new Color(112, 128, 144)); 
@@ -65,9 +75,7 @@ public class OperadorInicio extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         panelContenido.add(bienvenida, gbc);
 
-        //gbc.gridwidth = 1;
-
-        // Componentes
+        // Creación de botones con sus respectivos iconos
         busquedaVuelos = createContentButton("Buscar Vuelos");
         setScaledIcon(busquedaVuelos, "resources/iconoBusquedaVuelos.png");
         estadisticas = createContentButton("Estadísticas");
@@ -89,10 +97,16 @@ public class OperadorInicio extends JPanel {
         gbc.gridx = 0;
         panelContenido.add(subPanelCentral, gbc);
 
-        // === ASSEMBLA ===
+        // Añadir el panel central al layout principal
         add(panelContenido, BorderLayout.CENTER);
     }
 
+    /**
+     * Crea un botón estilizado con texto dado.
+     * 
+     * @param text Texto del botón.
+     * @return JButton personalizado.
+     */
     private JButton createContentButton(String text) {
         JButton btn = new JButton(text);
         btn.setBackground(new Color(112, 128, 144));
@@ -100,7 +114,13 @@ public class OperadorInicio extends JPanel {
         btn.setFont(new Font("Arial", Font.BOLD, 18));
         return btn;
     }
-    
+
+    /**
+     * Asigna y escala un icono a un botón, adaptando su tamaño dinámicamente.
+     * 
+     * @param button Botón al que se asignará el icono.
+     * @param imagePath Ruta del archivo de imagen.
+     */
     public void setScaledIcon(JButton button, String imagePath) {
         ImageIcon originalIcon = new ImageIcon(imagePath);
 
@@ -110,22 +130,21 @@ public class OperadorInicio extends JPanel {
                 int btnWidth = button.getWidth();
                 int btnHeight = button.getHeight();
 
-                // Limitar el tamaño del icono (por ejemplo, máximo 64x64)
+                // Limitar el tamaño del icono
                 int iconWidth = Math.min(192, btnWidth / 2);
                 int iconHeight = Math.min(192, btnHeight / 2);
                 if (imagePath.equals("resources/notification_icon.png")) {
-                	iconWidth = Math.min(btnWidth, btnWidth / 3);
+                    iconWidth = Math.min(btnWidth, btnWidth / 3);
                     iconHeight = Math.min(iconHeight, btnHeight / 3);
                 }
                 if ((iconWidth != iconHeight) && !imagePath.equals("resources/iconoSkyManagerInicio.png")) {
-                	iconHeight = Math.min(iconHeight, btnWidth);
-                	iconWidth = Math.min(iconHeight, btnWidth);
+                    iconHeight = Math.min(iconHeight, btnWidth);
+                    iconWidth = Math.min(iconHeight, btnWidth);
                 }
                 if (imagePath.equals("resources/iconoSkyManagerInicio.png")) {
-                	iconWidth = btnWidth;
+                    iconWidth = btnWidth;
                     iconHeight = btnHeight;
                 }
-                
 
                 // Escalar manteniendo proporciones
                 Image scaledImage = originalIcon.getImage().getScaledInstance(
@@ -138,22 +157,27 @@ public class OperadorInicio extends JPanel {
             }
         });
     }
-    
-    
+
+    /**
+     * Actualiza el mensaje de bienvenida con el nombre del usuario actual.
+     */
     public void actualizarPantalla() {
-    	Usuario usuarioActual = SkyManager.getInstance().getUsuarioActual();
-    	if(usuarioActual != null) {
-    		bienvenida.setText("Bienvenid@ " + usuarioActual.getNombre());
-    	}
+        Usuario usuarioActual = SkyManager.getInstance().getUsuarioActual();
+        if(usuarioActual != null) {
+            bienvenida.setText("Bienvenid@ " + usuarioActual.getNombre());
+        }
     }
-    
-    // método para asignar un controlador a los botones
- 	public void setControlador(ActionListener c) {  
- 		busquedaVuelos.addActionListener(c);
- 		estadisticas.addActionListener(c);
- 		facturas.addActionListener(c);
- 		gestionVuelos.addActionListener(c);
- 		gestionAviones.addActionListener(c);
- 	}
- 	
+
+    /**
+     * Asigna un ActionListener común a todos los botones del panel.
+     * 
+     * @param c Controlador de eventos de acción.
+     */
+    public void setControlador(ActionListener c) {  
+        busquedaVuelos.addActionListener(c);
+        estadisticas.addActionListener(c);
+        facturas.addActionListener(c);
+        gestionVuelos.addActionListener(c);
+        gestionAviones.addActionListener(c);
+    }
 }

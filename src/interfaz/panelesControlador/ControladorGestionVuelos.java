@@ -188,7 +188,5 @@ public class ControladorGestionVuelos extends JPanel {
      *
      * @param controlControladorGestionVuelos Controlador correspondiente.
      */
-    public void setControlador(ControlControladorGestionVuelos controlControladorGestionVuelos) {
-        botonVolver.setControladorVolver(_ -> controlControladorGestionVuelos.tornaIndietro());
-    }
+    
 }

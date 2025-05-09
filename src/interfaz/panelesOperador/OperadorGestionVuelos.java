@@ -36,11 +36,25 @@ import vuelos.EstadoVuelo;
 import vuelos.PeticionCompartir;
 import vuelos.Vuelo;
 
+/**
+ * Panel de interfaz gráfica que permite al operador gestionar los vuelos
+ * de su aerolínea. Muestra una tabla con los vuelos actuales, su estado,
+ * y permite compartir vuelos o modificar su estado a través de botones interactivos.
+ * 
+ * Incluye funcionalidad para actualizar automáticamente los datos y mostrar
+ * diálogos de confirmación e interacción con el usuario.
+ * 
+ * @author Sofía Castro - sofiai.castro@estudiante.uam.es
+ */
 public class OperadorGestionVuelos extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton nuevoVuelo;
 	private JTable tablaVuelos;
 	
+	/**
+	 * Constructor del panel de gestión de vuelos.
+	 * Inicializa y organiza los elementos gráficos y la tabla.
+	 */
 	public OperadorGestionVuelos() {
 		// Configurar el Layout
 		setLayout(new BorderLayout());
@@ -111,7 +125,11 @@ public class OperadorGestionVuelos extends JPanel{
         add(panelContenido, BorderLayout.CENTER);
 	}
 	
-
+	/**
+	 * Actualiza la tabla con los vuelos actuales de la aerolínea del operador.
+	 * Muestra información sobre origen, destino, avión, estado y si el vuelo es compartido.
+	 * También permite compartir vuelos o cambiar su estado si corresponde.
+	 */
 	public void actualizarPantalla() {
 		// Colocar los nombres de las columnas de los aviones
 		String [] columnas = {"ID", "Origen", "Destino", "Avión", "Estado", "Compartido", "Compartir", "Cambiar Estado"};
@@ -193,6 +211,10 @@ public class OperadorGestionVuelos extends JPanel{
         tablaVuelos.getColumn("Cambiar Estado").setCellRenderer(new ModificarEstRenderer());
 	}
 	
+	/**
+	 * Renderizador personalizado para mostrar un botón de compartir o un mensaje de estado
+	 * en la columna "Compartir" de la tabla de vuelos.
+	 */
 	private static class CompartidoRenderer extends JPanel implements TableCellRenderer {
 		private static final long serialVersionUID = 1L;
 		private final JButton botonCompartir = new JButton("Compartir");
@@ -219,7 +241,10 @@ public class OperadorGestionVuelos extends JPanel{
 	    }
 	}
     
-    // Editor personalizado para la columna "Compartido"
+	/**
+	 * Editor personalizado que permite al operador solicitar compartir un vuelo
+	 * con otra aerolínea a través de una entrada de texto.
+	 */
     private static class CompartidoEditor extends AbstractCellEditor implements TableCellEditor {
 		private static final long serialVersionUID = 1L;
 		private final JPanel panel;
@@ -300,7 +325,9 @@ public class OperadorGestionVuelos extends JPanel{
 			}
     }
     
-    
+    /**
+     * Renderizador para la columna "Cambiar Estado", mostrando un botón o mensaje según el estado del vuelo.
+     */
     private static class ModificarEstRenderer extends JPanel implements TableCellRenderer {
 		private static final long serialVersionUID = 1L;
 		private final JButton botonModificar = new JButton("<html>Modificar<br>Estado</html>");
@@ -327,7 +354,10 @@ public class OperadorGestionVuelos extends JPanel{
 	    }
 	}
     
-    // Editor personalizado para la columna "Compartido"
+    /**
+     * Editor personalizado que permite al operador cambiar el estado de un vuelo
+     * seleccionando una nueva opción desde un JComboBox.
+     */
     private static class ModificarEstEditor extends AbstractCellEditor implements TableCellEditor {
 		private static final long serialVersionUID = 1L;
 		private final JPanel panel;
@@ -399,13 +429,22 @@ public class OperadorGestionVuelos extends JPanel{
 			}
     }
 	
-	
+    /**
+     * Vuelve a la pantalla de inicio del operador, guardando los datos actuales.
+     */
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getOpVuelos().setVisible(false);
 		Aplicacion.getInstance().showOpInicio();
 	}
 	
+	/**
+	 * Aplica formato estético a los botones del panel.
+	 * 
+	 * @param boton Botón al que se aplicará el formato.
+	 * @param ancho Ancho deseado del botón.
+	 * @param alto Alto deseado del botón.
+	 */
 	private void formatoBotones(JButton boton,  int ancho, int alto) {
 		boton.setPreferredSize(new Dimension(ancho, alto));
 		boton.setForeground(Color.WHITE);
@@ -415,6 +454,11 @@ public class OperadorGestionVuelos extends JPanel{
 	    boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 	}
 	
+	/**
+	 * Asigna un ActionListener al botón de creación de nuevo vuelo.
+	 * 
+	 * @param c Controlador a asignar.
+	 */
 	public void setControlador(ActionListener c) {
 		nuevoVuelo.addActionListener(c);
 	}

@@ -1,0 +1,1 @@
+javadoc -d doc -sourcepath src -classpath "lib/invoiceSystem.jar;lib/TeleChargeAndPaySystem8.jar;lib/jfreechart-1.5.4.jar;lib/jcommon1.0.24.jar" -subpackages aerolineas aeropuertos app aviones elementos facturas interfaz interfaz.util interfaz.panelesControlador interfaz.panelesGestor interfaz.panelesOperador notificaciones sistema usuarios vuelos

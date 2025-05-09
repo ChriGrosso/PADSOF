@@ -3,19 +3,17 @@ package interfaz;
 import java.awt.CardLayout;
 import java.awt.Container;
 
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import interfaz.panelesControlador.ControlControladorGestionVuelos;
 import interfaz.panelesControlador.ControlControladorInicio;
 import interfaz.panelesControlador.ControladorGestionVuelos;
 import interfaz.panelesControlador.ControladorInicio;
 import interfaz.panelesGestor.ConfiguracionNotificaciones;
 import interfaz.panelesGestor.ControlConfiguracionNotificaciones;
 import interfaz.panelesGestor.ControlGestorGestionAeropuerto;
-import interfaz.panelesGestor.ControlGestorGestionUsuarios;
 import interfaz.panelesGestor.ControlGestorGestionFacturas;
+import interfaz.panelesGestor.ControlGestorGestionUsuarios;
 import interfaz.panelesGestor.ControlGestorInicio;
 import interfaz.panelesGestor.ControlNuevoUsuario;
 import interfaz.panelesGestor.GestorEstadisticas;
@@ -138,7 +136,6 @@ public class Aplicacion extends JFrame{
 		ControlNuevoVuelo controlNuevoVuelo = new ControlNuevoVuelo();
 		ControlOperadorEstadisticas controlOpEst = new ControlOperadorEstadisticas();
 		ControlBusquedaVuelos controlBusquedaVuelos = new ControlBusquedaVuelos();
-		ControlControladorGestionVuelos controlControladorGestionVuelos = new ControlControladorGestionVuelos(panelControladorGestionVuelos);
 		ControlGestorGestionAeropuerto controlGestorGestAeropuerto = new ControlGestorGestionAeropuerto(panelGestorGestionAeropuerto);
 		ControlConfiguracionNotificaciones controlConfiguracionNotificaciones = new ControlConfiguracionNotificaciones();
 		ControlGestorGestionFacturas controlGestorGestionFacturas = new ControlGestorGestionFacturas(panelGestorGestionFacturas);	
@@ -157,7 +154,6 @@ public class Aplicacion extends JFrame{
 		panelNuevoVuelo.setControlador(controlNuevoVuelo);
 		panelOpEstadisticas.setControlador(controlOpEst);
 		panelBusquedaVuelos.setControlador(controlBusquedaVuelos);
-		panelControladorGestionVuelos.setControlador(controlControladorGestionVuelos);
 		panelGestorGestionAeropuerto.setControlador(controlGestorGestAeropuerto);
 		panelConfiguracionNotificaciones.setControlador(controlConfiguracionNotificaciones);
 		panelGestorGestionFacturas.setControlador(controlGestorGestionFacturas);

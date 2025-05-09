@@ -4,8 +4,12 @@ app
 aviones
 elementos
 facturas
+interfaz
+interfaz.panelesControlador
+interfaz.panelesGestor
+interfaz.panelesOperador
+interfaz.util
 notificaciones
 sistema
-tests
 usuarios
 vuelos

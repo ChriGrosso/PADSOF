@@ -34,10 +34,21 @@ import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Operador;
 
-public class OperadorFacturas extends JPanel{
+/**
+ * Panel que permite a un operador visualizar y gestionar las facturas
+ * asociadas a su aerolínea. Muestra una tabla con facturas, su estado,
+ * y permite realizar pagos directamente desde la interfaz.
+ * 
+ * @author Sofía Castro - sofiai.castro@estudiante.uam.es
+ */
+public class OperadorFacturas extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTable tablaFacturas;
-	
+
+	/**
+	 * Constructor del panel. Inicializa la interfaz, el diseño
+	 * y la tabla de facturas.
+	 */
 	public OperadorFacturas() {
 		// Configurar el Layout
 		setLayout(new BorderLayout());
@@ -97,7 +108,10 @@ public class OperadorFacturas extends JPanel{
 		add(panelContenido, BorderLayout.CENTER);
 	}
 	
-	
+	/**
+	 * Actualiza los datos mostrados en la tabla con las facturas
+	 * asociadas a la aerolínea del operador actualmente logueado.
+	 */
 	public void actualizarPantalla() {
 		// Colocar los nombres de las columnas de los aviones
 		String [] columnas = {"ID", "Fecha Emisión", "Total", "Estado", "Fecha Emisión", "Pagar"};
@@ -154,6 +168,9 @@ public class OperadorFacturas extends JPanel{
         tablaFacturas.getColumn("Pagar").setCellRenderer(new PagadoRenderer());
 	}
 	
+	/**
+	 * Renderizador para la columna "Pagar", que muestra un botón o una etiqueta.
+	 */
 	private static class PagadoRenderer extends JPanel implements TableCellRenderer {
 		private static final long serialVersionUID = 1L;
 		private final JButton botonPagar = new JButton("Pagar");
@@ -178,7 +195,9 @@ public class OperadorFacturas extends JPanel{
 	    }
 	}
     
-    // Editor personalizado para la columna "Compartido"
+	/**
+	 * Editor personalizado para la columna "Pagar" que gestiona la acción de pago.
+	 */
     private static class PagadoEditor extends AbstractCellEditor implements TableCellEditor {
 		private static final long serialVersionUID = 1L;
 		private final JPanel panel;
@@ -243,6 +262,9 @@ public class OperadorFacturas extends JPanel{
 			}
     }
 
+    /**
+	 * Método para regresar a la pantalla anterior guardando los datos.
+	 */
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getOpFacturas().setVisible(false);
