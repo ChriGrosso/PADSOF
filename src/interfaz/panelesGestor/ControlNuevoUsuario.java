@@ -11,13 +11,28 @@ import usuarios.Controlador;
 import usuarios.Operador;
 import usuarios.Usuario;
 
+/**
+ * Clase que gestiona la creación de nuevos usuarios en el sistema.
+ * Implementa ActionListener para manejar los eventos de la interfaz de registro de usuarios.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class ControlNuevoUsuario implements ActionListener {
 	private SkyManager modelo;
-
+	
+	/**
+     * Constructor de la clase ControlNuevoUsuario.
+     * Inicializa el modelo del sistema (SkyManager) para gestionar el registro de usuarios.
+     */
     public ControlNuevoUsuario() {
         this.modelo = SkyManager.getInstance();
     }
-
+    
+    /**
+     * Maneja los eventos de acción generados en la interfaz de registro de usuarios.
+     * 
+     * @param e Evento de acción recibido.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
@@ -44,7 +59,11 @@ public class ControlNuevoUsuario implements ActionListener {
                 System.out.println("Comando desconocido:  " + comando);
         }
     }
-
+    
+    /**
+     * Registra un nuevo usuario en el sistema.
+     * Valida los datos ingresados antes de proceder con el registro.
+     */
     private void aceptar() {
     	NuevoUsuario nu = Aplicacion.getInstance().getNuevoUsuario();
     	GestorGestionUsuarios gest = Aplicacion.getInstance().getGestorGestionUsuarios();
@@ -83,6 +102,12 @@ public class ControlNuevoUsuario implements ActionListener {
         nu.limpiarCampos();
     }
     
+    /**
+     * Verifica si el formato del DNI ingresado es válido.
+     * 
+     * @param dni DNI a validar.
+     * @return `true` si el DNI tiene un formato correcto, `false` en caso contrario.
+     */
     private boolean esDniValido(String dni) {
         return dni.matches("^\\d{8}[A-Z]$");
     }

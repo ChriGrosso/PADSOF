@@ -22,7 +22,12 @@ import aerolineas.Aerolinea;
 import elementos.Terminal;
 import sistema.SkyManager;
 
-
+/**
+ * Clase que representa la pantalla de creación de un nuevo usuario en el sistema.
+ * Permite ingresar los datos necesarios para registrar un operador o un controlador.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class NuevoUsuario extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
@@ -38,6 +43,10 @@ public class NuevoUsuario extends JPanel{
 	private JComboBox<String> aerolineas;
 	private JComboBox<String> terminales;
 	
+	/**
+     * Constructor de la clase `NuevoUsuario`.
+     * Configura la interfaz gráfica con los campos de entrada necesarios para el registro de usuarios.
+     */
 	public NuevoUsuario() {
 		// Usar GridBagLayout para centrar componentes
         this.setLayout(new BorderLayout());
@@ -154,6 +163,11 @@ public class NuevoUsuario extends JPanel{
 	    add(panelInferior, BorderLayout.SOUTH);
 	}
 	
+	/**
+     * Aplica formato de estilo a los botones de la interfaz.
+     * 
+     * @param boton Botón a formatear.
+     */
 	void formatoBotones(JButton boton) {
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
@@ -161,7 +175,11 @@ public class NuevoUsuario extends JPanel{
 	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
 	}
 	
-	// método para asignar un controlador a los botones
+	/**
+     * Asigna un controlador de eventos a los botones de la interfaz.
+     * 
+     * @param c Controlador de eventos que manejará la acción de los botones.
+     */
 	public void setControlador(ActionListener c) {
 		aceptar.setActionCommand("ACEPTAR");
 		cancelar.setActionCommand("CANCELAR");
@@ -174,28 +192,46 @@ public class NuevoUsuario extends JPanel{
 		controlador.addActionListener(c);
 	}
 	
-	// método que devuelve el dni del usuario (contenido del campo JTextField)
+	/**
+     * Obtiene el DNI ingresado en el campo de texto.
+     * 
+     * @return DNI como cadena de texto.
+     */
 	public String getDniUsuario() {
 	    return campoDni.getText().trim();
 	}
 
-	// método que devuelve la contraseña del usuario (contenido del campo JTextField)
+	/**
+     * Obtiene la contraseña ingresada en el campo de texto.
+     * 
+     * @return Contraseña como cadena de texto.
+     */
 	public String getPasswordUsuario() {
 	    return campoPassword.getText().trim();
 	}
 	
-	// método que devuelve el nombre del usuario
+	/**
+     * Obtiene el nombre ingresado en el campo de texto.
+     * 
+     * @return Nombre del usuario.
+     */
 	public String getNombreUsuario() {
 	    return campoNombre.getText().trim();
 	}
 	
+	/**
+     * Muestra el selector de aerolíneas y oculta el selector de terminales.
+     */
 	public void mostrarAerolineas() {
 		aerolineas.setVisible(true);
         labelAerolinea.setVisible(true);
         terminales.setVisible(false);
         labelTerminal.setVisible(false);
 	}
-
+	
+	/**
+     * Muestra el selector de terminales y oculta el selector de aerolíneas.
+     */
 	public void mostrarTerminales() {
 		aerolineas.setVisible(false);
         labelAerolinea.setVisible(false);
@@ -203,25 +239,46 @@ public class NuevoUsuario extends JPanel{
         labelTerminal.setVisible(true);
 	}
 	
+	/**
+	 * Verifica si esta seleccionado operador.
+	 * 
+	 * @return true si la casilla marcada es operador, false en caso contrario.
+	 */
 	public boolean esOperadorSeleccionado() {
 	    return operador.isSelected();
 	}
-
+	
+	/**
+	 * Verifica si esta seleccionado controlador.
+	 * 
+	 * @return true si la casilla marcada es controlador, false en caso contrario.
+	 */
 	public boolean esControladorSeleccionado() {
 	    return controlador.isSelected();
 	}
 	
-	// Obtener la aerolínea seleccionada del combo
+	/**
+	 * Obtiene la aerolínea seleccionada en el combo box.
+	 * 
+	 * @return Aerolínea seleccionada como una cadena de texto.
+	 */
 	public String getAerolineaSeleccionada() {
 	    return (String) aerolineas.getSelectedItem();
 	}
 
-	// Obtener la terminal seleccionada del combo
+	/**
+	 * Obtiene la terminal seleccionada en el combo box.
+	 * 
+	 * @return Terminal seleccionada como una cadena de texto.
+	 */
 	public String getTerminalSeleccionada() {
 	    return (String) terminales.getSelectedItem();
 	}
 	
-	// método que actualiza el valor de los campos
+	/**
+	 * Restablece los valores de los campos de entrada y los elementos de la interfaz.
+	 * Se reinician los textos y las opciones seleccionadas a su estado inicial.
+	 */
 	public void limpiarCampos() {
 	    campoNombre.setText("");
 	    campoDni.setText("");
@@ -232,6 +289,4 @@ public class NuevoUsuario extends JPanel{
 	    
 	    campoNombre.grabFocus();
 	}
-
-	
 }

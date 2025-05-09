@@ -5,7 +5,19 @@ import java.awt.event.ActionListener;
 
 import interfaz.Aplicacion;
 
+/**
+ * Clase que controla la pantalla de inicio del gestor.
+ * Maneja los eventos relacionados con la navegación entre diferentes módulos de gestión dentro de la aplicación.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class ControlGestorInicio implements ActionListener {
+	/**
+     * Maneja los eventos de acción generados en la pantalla de inicio del gestor.
+     * Dependiendo del comando recibido, redirige a las distintas secciones de la aplicación.
+     * 
+     * @param e Evento de acción recibido.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();

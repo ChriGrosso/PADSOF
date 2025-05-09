@@ -23,6 +23,12 @@ import interfaz.util.MenuLateral;
 import sistema.SkyManager;
 import usuarios.Usuario;
 
+/**
+ * Clase que representa la pantalla de inicio del gestor dentro del sistema.
+ * Permite al gestor acceder a diferentes módulos de administración, como gestión de vuelos, usuarios y estadísticas.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class GestorInicio extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton busquedaVuelos;
@@ -33,6 +39,10 @@ public class GestorInicio extends JPanel{
 	private JButton estadisticas;
 	private JLabel bienvenida;
 	
+	/**
+     * Constructor de la clase `GestorInicio`.
+     * Configura la interfaz gráfica con los botones de acceso a los diferentes módulos de administración.
+     */
 	public GestorInicio() {
 		setLayout(new BorderLayout());
 		
@@ -107,14 +117,22 @@ public class GestorInicio extends JPanel{
         add(panelGeneral, BorderLayout.CENTER);
    }
 		
-		
+	/**
+     * Aplica formato de estilo a los botones de la interfaz.
+     * 
+     * @param boton Botón a formatear.
+     */
 	private void formatoBotones(JButton boton) {
 		boton.setFont(new Font("Arial", Font.BOLD, 18));
 		boton.setBackground(new Color(112, 128, 144));
 		boton.setForeground(Color.WHITE);
 	}
 
-	// método para asignar un controlador a los botones
+	/**
+     * Asigna un controlador de eventos a los botones de la interfaz.
+     * 
+     * @param c Controlador de eventos que manejará la acción de cada botón.
+     */
 	public void setControlador(ActionListener c) {
 		busquedaVuelos.setActionCommand("BUSQUEDA_VUELOS");
 		gestionVuelos.setActionCommand("GESTION_VUELOS");
@@ -131,6 +149,12 @@ public class GestorInicio extends JPanel{
 		estadisticas.addActionListener(c);
 	}
 	
+	/**
+     * Configura y ajusta el tamaño de los iconos en los botones de la interfaz.
+     * 
+     * @param button Botón al que se le asignará un icono.
+     * @param imagePath Ruta de la imagen utilizada como icono.
+     */
 	public void setScaledIcon(JButton button, String imagePath) {
         ImageIcon originalIcon = new ImageIcon(imagePath);
 
@@ -160,6 +184,9 @@ public class GestorInicio extends JPanel{
         });
     }
 	
+	/**
+     * Actualiza la pantalla con el nombre del usuario actual en el mensaje de bienvenida.
+     */
 	public void actualizarPantalla() {
     	Usuario usuarioActual = SkyManager.getInstance().getUsuarioActual();
     	if(usuarioActual != null) {

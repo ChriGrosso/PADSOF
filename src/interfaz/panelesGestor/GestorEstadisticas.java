@@ -13,9 +13,19 @@ import interfaz.Aplicacion;
 import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 
+/**
+ * Clase que representa la pantalla de estadísticas para el gestor.
+ * Permite visualizar diferentes tipos de datos analíticos sobre la infraestructura del aeropuerto.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class GestorEstadisticas extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
+	/**
+     * Constructor de la clase GestorEstadisticas.
+     * Configura la interfaz gráfica con pestañas que muestran distintas estadísticas.
+     */
 	public GestorEstadisticas() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -50,7 +60,9 @@ public class GestorEstadisticas extends JPanel {
 
 	}
 	
-	
+	/**
+     * Regresa a la pantalla de inicio del gestor y guarda los datos del sistema.
+     */
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().showGestorInicio();

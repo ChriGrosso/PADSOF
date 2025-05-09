@@ -38,10 +38,20 @@ import usuarios.Controlador;
 import usuarios.Usuario;
 import vuelos.Vuelo;
 
+/**
+ * Clase que representa la pantalla de gestión de vuelos dentro del sistema.
+ * Permite visualizar los vuelos registrados y asignar terminales y operadores a ellos.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class GestorGestionVuelos extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JTable tablaVuelos;
 	
+	/**
+     * Constructor de la clase `GestorGestionVuelos`.
+     * Configura la interfaz gráfica con la lista de vuelos y opciones para asignaciones.
+     */
 	public GestorGestionVuelos() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -100,6 +110,9 @@ public class GestorGestionVuelos extends JPanel{
 	    add(panelContenido, BorderLayout.CENTER);
 	}
 	
+	/**
+     * Actualiza la pantalla con la lista de vuelos y sus asignaciones.
+     */
 	public void actualizarPantalla() {
 		String[] titulos = {"ID Vuelo", "Origen", "Destino", "Aerolinea", "Estado", "Terminal", "Operador"};
 
@@ -138,16 +151,34 @@ public class GestorGestionVuelos extends JPanel{
 		tablaVuelos.getColumn("Operador").setCellEditor(new AsignarEditor("operador"));
 	}
 	
+	/**
+     * Clase interna que permite visualizar botones para asignar terminales u operadores a vuelos.
+     */
 	private static class AsignarRenderer extends JPanel implements TableCellRenderer {
 		private static final long serialVersionUID = 1L;
 		private final JButton boton = new JButton("Asignar");
 		private final JLabel label = new JLabel();
-
+		
+		/**
+         * Constructor de la clase AsignarRenderer.
+         * Configura el diseño del botón y etiqueta de asignación.
+         */
 		public AsignarRenderer() {
 			setLayout(new BorderLayout());
 			boton.setBackground(Color.LIGHT_GRAY);
 		}
-
+		
+		/**
+         * Método que renderiza la celda de la tabla con un botón o etiqueta según su estado.
+         * 
+         * @param table Tabla en la que se encuentra la celda.
+         * @param value Valor de la celda.
+         * @param isSelected Indica si la celda está seleccionada.
+         * @param hasFocus Indica si la celda tiene el foco.
+         * @param row Fila de la celda.
+         * @param column Columna de la celda.
+         * @return Componente que se mostrará en la celda de la tabla.
+         */
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 		                                               boolean hasFocus, int row, int column) {
@@ -161,14 +192,26 @@ public class GestorGestionVuelos extends JPanel{
 			return this;
 		}
 	}
-
+	
+	/**
+	 * Clase que permite la asignación de terminales y operadores a los vuelos dentro del sistema.
+	 * Implementa TableCellEditor para manejar la edición de celdas en la tabla de gestión de vuelos.
+	 * 
+	 * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+	 */
 	private static class AsignarEditor extends AbstractCellEditor implements TableCellEditor {
 		private static final long serialVersionUID = 1L;
 		private final JPanel panel = new JPanel(new BorderLayout());
 		private final JButton boton = new JButton("Asignar");
 		private final JLabel label = new JLabel();
 		private final String tipo; // "terminal" o "operador"
-
+		
+		/**
+	     * Constructor de la clase `AsignarEditor`.
+	     * Configura el botón y determina el tipo de asignación ("terminal" o "operador").
+	     * 
+	     * @param t Tipo de asignación, ya sea `"terminal"` o `"operador"`.
+	     */
 		public AsignarEditor(String t) {
 			tipo = t;
 			boton.setBackground(Color.LIGHT_GRAY);
@@ -189,6 +232,21 @@ public class GestorGestionVuelos extends JPanel{
 
 			        if (terminales.isEmpty()) {
 			            List<LocalDateTime> horasAlternativas = SkyManager.getInstance().horasAlternativas(vuelo);
+			            
+			            if (horasAlternativas.isEmpty()) {
+			            	String mensajeTexto = "Solicitud de Vuelo Denegada. No hay ninguna terminal disponible para el vuelo " + vuelo.getId() +
+				                    " y no hay horas alternativas disponibles en un rango de +/- 48 horas.";
+			            	JOptionPane.showMessageDialog(null, mensajeTexto, 
+                                    "Denegación Solicitud Vuelo", JOptionPane.INFORMATION_MESSAGE);
+			            	SkyManager.getInstance().denegarSolicitudVuelo(vuelo);
+			            	// Enviar notificación a los operadores
+		                    for (Usuario u : vuelo.getAerolinea().getOperadores()) {
+		                        SkyManager.getInstance().getUsuarioActual().enviarNotificacion(mensajeTexto, u);
+		                    }
+		                    Aplicacion.getInstance().getGestorGestionVuelos().actualizarPantalla();
+		                    fireEditingCanceled();
+			            	return;
+			            }
 
 			            // Crear ventana personalizada
 			            JDialog dialogo = new JDialog();
@@ -240,7 +298,7 @@ public class GestorGestionVuelos extends JPanel{
 			                }
 
 			                if (!horasSeleccionadas.isEmpty()) {
-			                    String mensajeNotificacion = "No hay terminales disponibles en el horario solicitudo. Estas son algunas horas alternativas de " +
+			                    String mensajeNotificacion = "No hay terminales disponibles en el horario solicitado. Estas son algunas horas alternativas de " +
 			                            (vuelo.getLlegada() ? "llegada" : "salida") +" para el vuelo "+vuelo.getId()+": "+ horasSeleccionadas.toString();
 
 			                    // Enviar notificación a los operadores
@@ -321,7 +379,12 @@ public class GestorGestionVuelos extends JPanel{
 			});
 
 		}
-
+		
+		/**
+	     * Permite la asignación de una terminal a un vuelo.
+	     * 
+	     * @param vuelo Vuelo al que se asignará la terminal.
+	     */
 		@Override
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 			panel.removeAll();
@@ -333,13 +396,23 @@ public class GestorGestionVuelos extends JPanel{
 			}
 			return panel;
 		}
-
+		
+		/**
+	     * Permite la asignación de un operador a un vuelo.
+	     * 
+	     * @param vuelo Vuelo al que se asignará el operador.
+	     */
 		@Override
 		public Object getCellEditorValue() {
 			return null;
 		}
 	}
-
+	
+	/**
+     * Muestra una ventana para seleccionar horas alternativas cuando no hay terminales disponibles.
+     * 
+     * @param vuelo Vuelo que requiere horas alternativas.
+     */
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().showGestorInicio();

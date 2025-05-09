@@ -22,12 +22,22 @@ import usuarios.Usuario;
 import usuarios.Controlador;
 import usuarios.Operador;
 
+/**
+ * Clase que representa la pantalla de gestión de usuarios dentro del sistema.
+ * Permite visualizar los usuarios registrados y añadir nuevos usuarios.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class GestorGestionUsuarios extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton nuevoUsuario;
 	private DefaultTableModel modeloDatos;
 	private JTable tabla;
 	
+	/**
+     * Constructor de la clase `GestorGestionUsuarios`.
+     * Configura la interfaz gráfica con la lista de usuarios y el botón para añadir nuevos usuarios.
+     */
 	public GestorGestionUsuarios() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -95,7 +105,14 @@ public class GestorGestionUsuarios extends JPanel{
 	    add(panelInferior, BorderLayout.SOUTH);
 	}
 	
-	void formatoBotones(JButton boton,  int ancho, int alto) {
+	/**
+     * Aplica formato de estilo a los botones de la interfaz.
+     * 
+     * @param boton Botón a formatear.
+     * @param ancho Ancho deseado para el botón.
+     * @param alto Alto deseado para el botón.
+     */
+	private void formatoBotones(JButton boton,  int ancho, int alto) {
 		boton.setPreferredSize(new Dimension(ancho, alto));
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
@@ -104,18 +121,30 @@ public class GestorGestionUsuarios extends JPanel{
 	    boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 	}
 	
-	// método para asignar un controlador a los botones
+	/**
+     * Asigna un controlador de eventos al botón de nuevo usuario.
+     * 
+     * @param c Controlador de eventos que manejará la acción de añadir un nuevo usuario.
+     */
 	public void setControlador(ActionListener c) {  
 		nuevoUsuario.setActionCommand("NUEVO_USUARIO");
 		
 		nuevoUsuario.addActionListener(c);
 	}
 	
+	/**
+     * Regresa a la pantalla de inicio del gestor y guarda los datos del sistema.
+     */
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().showGestorInicio();
 	}
 	
+	/**
+     * Añade una nueva fila a la tabla con la información de un usuario.
+     * 
+     * @param u Usuario que será añadido a la tabla.
+     */
 	public void addFila(Usuario u) {
 		String s;
 		if (u.esOperador() == true) { 

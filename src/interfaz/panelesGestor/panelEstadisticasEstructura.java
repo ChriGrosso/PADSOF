@@ -20,9 +20,21 @@ import elementos.Terminal;
 import elementos.ZonaParking;
 import sistema.SkyManager;
 
+/**
+ * Clase que representa el panel de estadísticas de uso de estructuras del aeropuerto.
+ * Muestra información sobre la utilización de fingers, puertas, aparcamientos y hangares.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class panelEstadisticasEstructura extends JPanel {
 	private static final long serialVersionUID = 1L;
-
+	
+	/**
+     * Constructor de la clase `panelEstadisticasEstructura`.
+     * Configura la interfaz gráfica y muestra estadísticas en función del tipo de estructura seleccionado.
+     * 
+     * @param tipo Tipo de estructura a analizar (Finger, Puerta, Aparcamiento o Hangar).
+     */
 	public panelEstadisticasEstructura(String tipo) {
         setLayout(new BorderLayout());
         setBackground(new Color(192, 214, 236));
@@ -52,7 +64,13 @@ public class panelEstadisticasEstructura extends JPanel {
         // Gráfico
         add(crearGraficoDeBarras(tipo), BorderLayout.CENTER);
     }
-
+	
+	/**
+     * Crea un gráfico de barras con las horas de uso promedio de las estructuras seleccionadas.
+     * 
+     * @param tipo Tipo de estructura para el gráfico.
+     * @return Panel con el gráfico de barras.
+     */
     private JPanel crearGraficoDeBarras(String tipo) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -87,7 +105,13 @@ public class panelEstadisticasEstructura extends JPanel {
 
         return chartPanel;
     }
-
+    
+    /**
+     * Obtiene los datos de uso promedio de estructuras específicas.
+     * 
+     * @param tipo Tipo de estructura a analizar.
+     * @return Mapa con los identificadores de las estructuras y sus horas de uso promedio.
+     */
     private HashMap<String, Double> obtenerDatos(String tipo) {
         HashMap<String, Double> datos = new HashMap<>();
         SkyManager modelo = SkyManager.getInstance();
@@ -121,7 +145,13 @@ public class panelEstadisticasEstructura extends JPanel {
 
         return datos;
     }
-
+    
+    /**
+     * Determina qué estructura es la más utilizada en función de las horas de uso promedio.
+     * 
+     * @param tipo Tipo de estructura a analizar.
+     * @return Identificador de la estructura más utilizada.
+     */
     private String obtenerElementoMasUsado(String tipo) {
         String masUsado = "N/A";
         double maxHoras = -1;
@@ -136,7 +166,13 @@ public class panelEstadisticasEstructura extends JPanel {
         }
         return masUsado;
     }
-
+    
+    /**
+     * Calcula la suma total de horas de uso entre todas las estructuras del tipo seleccionado.
+     * 
+     * @param tipo Tipo de estructura a analizar.
+     * @return Total de horas de uso.
+     */
     private int obtenerHorasTotales(String tipo) {
         int total = 0;
 

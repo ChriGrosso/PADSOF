@@ -15,7 +15,18 @@ import usuarios.Usuario;
 import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
 
+/**
+ * Clase que controla la configuración de notificaciones de vuelos y aviones.
+ * Permite a los usuarios seguir cambios de estado en vuelos y aviones, así como registrarse para recibir notificaciones.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class ControlConfiguracionNotificaciones implements ActionListener {
+	/**
+     * Maneja eventos de acción generados en la interfaz.
+     * 
+     * @param e Evento de acción recibido.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
@@ -43,6 +54,9 @@ public class ControlConfiguracionNotificaciones implements ActionListener {
         c.actualizarTablas();
     }
     
+    /**
+     * Confirma que el usuario desea seguir una transición específica de estados en aviones.
+     */
     private void confirmarA() {
     	ConfiguracionNotificaciones vista = Aplicacion.getInstance().getConfiguracionNotificaciones();
         Usuario u = SkyManager.getInstance().getUsuarioActual();
@@ -60,6 +74,9 @@ public class ControlConfiguracionNotificaciones implements ActionListener {
         }
     }
     
+    /**
+     * Confirma que el usuario desea seguir una transición específica de estados en vuelos.
+     */
     private void confirmarV() {
     	ConfiguracionNotificaciones vista = Aplicacion.getInstance().getConfiguracionNotificaciones();
         Usuario u = SkyManager.getInstance().getUsuarioActual();
@@ -78,6 +95,9 @@ public class ControlConfiguracionNotificaciones implements ActionListener {
 
     }
     
+    /**
+     * Permite al usuario seguir un avión específico.
+     */
     private void seguirA() {
     	ConfiguracionNotificaciones c = Aplicacion.getInstance().getConfiguracionNotificaciones();
         Usuario u = SkyManager.getInstance().getUsuarioActual();
@@ -107,6 +127,9 @@ public class ControlConfiguracionNotificaciones implements ActionListener {
     	
     }
     
+    /**
+     * Permite al usuario seguir un vuelo específico.
+     */
     private void seguirV() {
     	ConfiguracionNotificaciones c = Aplicacion.getInstance().getConfiguracionNotificaciones();
         Usuario u = SkyManager.getInstance().getUsuarioActual();

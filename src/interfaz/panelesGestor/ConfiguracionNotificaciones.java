@@ -29,6 +29,12 @@ import usuarios.Gestor;
 import vuelos.EstadoVuelo;
 import vuelos.Vuelo;
 
+/**
+ * Clase que representa el panel de configuración de notificaciones en el sistema.
+ * Permite a los usuarios gestionar transiciones de estado de vuelos y aviones, así como seguir vuelos y aviones específicos.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class ConfiguracionNotificaciones extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton confirmarA;
@@ -46,6 +52,10 @@ public class ConfiguracionNotificaciones extends JPanel{
 	private JComboBox<EstadoVuelo> comboVueloInicio;
 	private JComboBox<EstadoVuelo> comboVueloFin;
 	
+	/**
+     * Constructor de la clase ConfiguracionNotificaciones.
+     * Configura la interfaz gráfica con los elementos necesarios para gestionar las notificaciones.
+     */
 	public ConfiguracionNotificaciones() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -227,17 +237,30 @@ public class ConfiguracionNotificaciones extends JPanel{
         add(panelContenido, BorderLayout.CENTER);  
 	}
 	
+	/**
+     * Regresa a la pantalla anterior y guarda los datos del sistema.
+     */
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().showNotificaciones();
 	}
 	
+	 /**
+     * Aplica formato de estilo a los botones.
+     * 
+     * @param boton Botón a formatear.
+     */
 	private void formatoBotones(JButton boton) {
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
 	    boton.setFocusPainted(false);
 	}
 	
+	/**
+     * Aplica formato de estilo a las tablas de la interfaz.
+     * 
+     * @param tabla Tabla a formatear.
+     */
 	private void formatoTabla(JTable tabla) {
 		tabla.setBackground(Color.WHITE);
 	    tabla.setForeground(Color.BLACK);
@@ -249,8 +272,11 @@ public class ConfiguracionNotificaciones extends JPanel{
 	    tabla.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
 	}
 	
-	
-	// método para asignar un controlador a los botones
+	/**
+     * Asigna un controlador de eventos a los botones de la interfaz.
+     * 
+     * @param c Controlador de eventos para manejar las acciones del usuario.
+     */
 	public void setControlador(ActionListener c) {  
 		confirmarA.setActionCommand("CONFIRMAR_A");
 		confirmarV.setActionCommand("CONFIRMAR_V");
@@ -263,38 +289,71 @@ public class ConfiguracionNotificaciones extends JPanel{
 		botonSeguirV.addActionListener(c);
 	}
 	
-	// método que devuelve el contenido del campoV que dice que vuelo se quiere seguir.
+	/**
+     * Obtiene el contenido ingresado en el campo de seguimiento de vuelos.
+     * 
+     * @return Identificador del vuelo que el usuario desea seguir.
+     */
 	public String getContenidoCampoVuelos() {
 	    return campoV.getText().trim();
 	}
 	
-	// método que devuelve el contenido del campoA que dice que avión se quiere seguir.
+	/**
+     * Obtiene el contenido ingresado en el campo de seguimiento de aviones.
+     * 
+     * @return Matrícula del avión que el usuario desea seguir.
+     */
 	public String getContenidoCampoAviones() {
 	    return campoA.getText().trim();
 	}
 	
-	// método que actualiza el valor de los campos
+	/**
+     * Limpia los campos de búsqueda de vuelos y aviones seguidos.
+     */
 	public void limpiarCampos() {
 	    campoA.setText("");
 	    campoV.setText("");
 	}
 	
+	/**
+     * Obtiene el estado inicial de la transición de aviones seleccionado en el combo box.
+     * 
+     * @return Estado de inicio del avión.
+     */
 	public EstadoAvion getEstadoAvionInicio() {
 	    return (EstadoAvion) comboAvionInicio.getSelectedItem();
 	}
-
+	
+	/**
+     * Obtiene el estado final de la transición de aviones seleccionado en el combo box.
+     * 
+     * @return Estado final del avión.
+     */
 	public EstadoAvion getEstadoAvionFin() {
 	    return (EstadoAvion) comboAvionFin.getSelectedItem();
 	}
-
+	
+	/**
+     * Obtiene el estado inicial de la transición de vuelos seleccionado en el combo box.
+     * 
+     * @return Estado de inicio del vuelo.
+     */
 	public EstadoVuelo getEstadoVueloInicio() {
 	    return (EstadoVuelo) comboVueloInicio.getSelectedItem();
 	}
-
+	
+	/**
+     * Obtiene el estado final de la transición de vuelos seleccionado en el combo box.
+     * 
+     * @return Estado final del vuelo.
+     */
 	public EstadoVuelo getEstadoVueloFin() {
 	    return (EstadoVuelo) comboVueloFin.getSelectedItem();
 	}
 	
+	/**
+     * Actualiza las filas de las tablas con el contenido almacenado en el sistema.
+     */
 	public void actualizarTablas() {
 		SkyManager sk = SkyManager.getInstance();
 		DefaultTableModel modeloTablaEstadosA = new DefaultTableModel(new Object[]{"Desde", "Hasta"}, 0);

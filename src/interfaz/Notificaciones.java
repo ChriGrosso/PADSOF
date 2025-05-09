@@ -7,10 +7,11 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -31,6 +32,7 @@ import notificaciones.Notificacion;
 import sistema.SkyManager;
 import usuarios.Operador;
 import usuarios.Usuario;
+import vuelos.Vuelo;
 
 /**
  * Clase que gestiona la pantalla de notificaciones de la aplicación.
@@ -261,6 +263,8 @@ public class Notificaciones extends JPanel{
                 JTable table = (JTable) SwingUtilities.getAncestorOfClass(JTable.class, botonMarcarLeido);
                 int row = table.getEditingRow();
                 Notificacion notif = notificaciones.get(row);
+                
+                String mensaje = notif.getMensaje();
 
                 if (notif.getMensaje().contains("ha solicitado compartir su vuelo")) {
                     int opcion = JOptionPane.showOptionDialog(null,
@@ -283,6 +287,52 @@ public class Notificaciones extends JPanel{
                     	vueloId = UtilidadesNotificaciones.extraerIdVuelo(notif.getMensaje());
                     	SkyManager.getInstance().getVuelos().get(vueloId).rechazarCompartirVuelo();
                         JOptionPane.showMessageDialog(null, "Has rechazado la solicitud.");
+                    }
+                } else if (mensaje.contains("No hay terminales disponibles en el horario solicitado.")) {
+                    String vueloId = UtilidadesNotificaciones.extraerIdVueloEnHorasAlternativas(mensaje);
+                    List<LocalDateTime> fechasAlternativas = UtilidadesNotificaciones.extraerFechas(mensaje);
+
+                    if (fechasAlternativas == null || fechasAlternativas.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "No se encontraron fechas alternativas.");
+                    } else {
+                        LocalDateTime seleccion = (LocalDateTime) JOptionPane.showInputDialog(
+                            null,
+                            "Selecciona una nueva fecha y hora para el vuelo:",
+                            "Fechas alternativas",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            fechasAlternativas.toArray(),
+                            fechasAlternativas.get(0)
+                        );
+
+                        if (seleccion != null) {
+                            Vuelo vuelo = SkyManager.getInstance().getVuelos().get(vueloId);
+                            boolean esLlegada = mensaje.contains("llegada");
+
+                            LocalDateTime nuevaFecha = seleccion;
+
+                            if (esLlegada) {
+                                // Calcular diferencia entre nueva y actual llegada
+                                LocalDateTime llegadaActual = vuelo.getHoraLlegada();
+                                LocalDateTime salidaActual = vuelo.getHoraSalida();
+                                Duration diferencia = Duration.between(llegadaActual, nuevaFecha);
+
+                                // Aplicar nueva llegada y ajustar salida
+                                vuelo.setHoraLlegada(nuevaFecha);
+                                vuelo.setHoraSalida(salidaActual.plus(diferencia));
+                            } else {
+                                // Calcular diferencia entre nueva y actual salida
+                                LocalDateTime salidaActual = vuelo.getHoraSalida();
+                                LocalDateTime llegadaActual = vuelo.getHoraLlegada();
+                                Duration diferencia = Duration.between(salidaActual, nuevaFecha);
+
+                                // Aplicar nueva salida y ajustar llegada
+                                vuelo.setHoraSalida(nuevaFecha);
+                                vuelo.setHoraLlegada(llegadaActual.plus(diferencia));
+                            }
+
+                            JOptionPane.showMessageDialog(null, "La fecha y hora del vuelo se han actualizado con éxito.");
+                        }
                     }
                 }
 

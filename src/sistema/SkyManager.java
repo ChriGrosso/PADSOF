@@ -1320,4 +1320,15 @@ public class SkyManager implements Serializable {
 		return aviones;
 	}
 	
+	/**
+	 * Cancela un vuelo, eliminandolo del sistema.
+	 * 
+	 * @param v Vuelo que se quiere cancelar.
+	 */
+	public void denegarSolicitudVuelo(Vuelo v) {
+		if (vuelos.containsKey(v.getId())) {
+			vuelos.remove(v.getId(), v);
+		}
+	}
+	
 }
