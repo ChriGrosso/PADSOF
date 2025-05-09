@@ -558,8 +558,8 @@ public abstract class Vuelo extends Observable implements Serializable{
      * @return true si la transición de estado fue exitosa, false en caso contrario.
      */
 	public boolean setEstVuelo(EstadoVuelo estV) {
-		this.notifyObservers(this.estVuelo, estV);
 		if (estV == EstadoVuelo.RETRASADO && this.estVuelo.equals(EstadoVuelo.EN_TIEMPO)) {
+			this.notifyObservers(this.estVuelo, estV);
 			this.estVuelo = estV;
 			return true;
 		}
@@ -567,17 +567,20 @@ public abstract class Vuelo extends Observable implements Serializable{
 		if(this.llegada) {
 			// ESPERANDO_PISTA: no hay todavía pista o localización de aterrizaje
 			if(estV == EstadoVuelo.ESPERANDO_PISTA_A && this.pista == null && this.locAterrizaje == null) {
+				this.notifyObservers(this.estVuelo, estV);
 				this.estVuelo = estV;
 				return true;
 			}
 			// ESPERANDO_AT: espera en su pista, no la usa
 			if(estV == EstadoVuelo.ESPERANDO_ATERRIZAJE && this.pista != null && this.pista.getUsando().equals(this) == false) {
+				this.notifyObservers(this.estVuelo, estV);
 				this.estVuelo = estV;
 				this.puerta.liberarPuerta();
 				this.avion.setEstadoAvion(EstadoAvion.ESPERANDO_PISTA);
 				return true;
 			}
 			if(estV == EstadoVuelo.ATERRIZADO) {
+				this.notifyObservers(this.estVuelo, estV);
 				this.estVuelo = estV;
 				this.avion.setEstadoAvion(EstadoAvion.EN_PISTA);
 				this.pista.actualizarColaVuelos();
@@ -598,6 +601,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 						a.addUso(LocalDateTime.now(), this, this.puerta);
 					}
 				}
+				this.notifyObservers(this.estVuelo, estV);
 				this.estVuelo = estV;
 				return true;
 			}
@@ -629,6 +633,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 						a.addVueloPeriodico(this);
 					}
 				}
+				this.notifyObservers(this.estVuelo, estV);
 				this.estVuelo = estV;
 				return true;
 			}
@@ -638,11 +643,13 @@ public abstract class Vuelo extends Observable implements Serializable{
 		else {
 			// ESPERANDO_PISTA: no hay todavía pista, ya ha cargado
 			if(estV == EstadoVuelo.ESPERANDO_PISTA_D && this.pista == null) {
+				this.notifyObservers(this.estVuelo, estV);
 				this.estVuelo = estV;
 				return true;
 			}
 			// ESPERANDO_DESP: espera en su pista, no la usa
 			if(estV == EstadoVuelo.ESPERANDO_DESPEGUE && this.pista != null && this.pista.getUsando().equals(this) == false) {
+				this.notifyObservers(this.estVuelo, estV);
 				this.estVuelo = estV;
 				this.avion.setEstadoAvion(EstadoAvion.ESPERANDO_PISTA);
 				for(Aerolinea a: this.aerolinea) {
@@ -658,6 +665,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 				return true;
 			}
 			if(estV == EstadoVuelo.EN_VUELO) {
+				this.notifyObservers(this.estVuelo, estV);
 				this.estVuelo = estV;
 				this.avion.setEstadoAvion(EstadoAvion.FUERA_AEROPUERTO);
 				this.pista.actualizarColaVuelos();
@@ -703,6 +711,7 @@ public abstract class Vuelo extends Observable implements Serializable{
 					a.addUso(LocalDateTime.now(), this, this.locAterrizaje);
 					a.addUso(LocalDateTime.now(), this, this.puerta);
 				}
+				this.notifyObservers(this.estVuelo, estV);
 				this.estVuelo = estV;
 				return true;
 			}

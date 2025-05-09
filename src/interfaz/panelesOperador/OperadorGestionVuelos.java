@@ -171,12 +171,12 @@ public class OperadorGestionVuelos extends JPanel{
             	else { 
             		compartido = "No compartido"; 
             		compartirAccion = "Compartir";
+            	}
+	            if(vuelo.getHoraLlegadaEfectiva() == null) { cambiarEst = "Cambiar Estado"; }
+	            else { cambiarEst = "Vuelo Finalizado"; }
             }
-            if(vuelo.getHoraLlegadaEfectiva() == null) { cambiarEst = "Cambiar Estado"; }
-            else { cambiarEst = "Vuelo Finalizado"; }
-         }
-        
-	        model.addRow(new Object[]{
+       
+            model.addRow(new Object[]{
 	        		vuelo.getId(),
 	                vuelo.getOrigen().getCiudadMasCercana() + " (" + vuelo.getOrigen().getDiferenciaHoraria() + ") " + vuelo.getHoraSalida() + "\n" + vuelo.getOrigen().getNombre(),
 	                vuelo.getDestino().getCiudadMasCercana() + " (" + vuelo.getDestino().getDiferenciaHoraria() + ") " + vuelo.getHoraLlegada() + "\n" + vuelo.getDestino().getNombre(),
@@ -405,10 +405,7 @@ public class OperadorGestionVuelos extends JPanel{
                 EstadoVuelo nuevoEstado = (EstadoVuelo) combo.getSelectedItem();
                 boolean res = v.setEstVuelo(nuevoEstado);
                 if (res) { JOptionPane.showMessageDialog(null, "Estado cambiado a: " + nuevoEstado); }
-                else { 
-                	JOptionPane.showMessageDialog(Aplicacion.getInstance().getOpVuelos(), "No se puede hacer el cambio de estados de vuelo: " + v.getEstVuelo() + " -> " + nuevoEstado, "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+                else { JOptionPane.showMessageDialog(Aplicacion.getInstance().getOpVuelos(), "No se puede hacer el cambio de estados de vuelo: " + v.getEstVuelo() + " -> " + nuevoEstado, "Error", JOptionPane.ERROR_MESSAGE); }
                 Aplicacion.getInstance().getOpVuelos().actualizarPantalla();
             }
         }

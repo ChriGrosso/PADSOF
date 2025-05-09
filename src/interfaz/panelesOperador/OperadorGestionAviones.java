@@ -114,25 +114,41 @@ public class OperadorGestionAviones extends JPanel {
 	 * de los aviones pertenecientes a la aerolínea del operador actual.
 	 */
 	public void actualizarPantalla() {
-		String[] columnas = {"Matrícula", "Fecha de Compra", "Última Revisión", "Modelo", "Estado"};
+		String[] columnas = {"Matrícula", "Fecha de Compra", "Última Revisión", "Modelo", "Tipo", "Estado"};
 		Operador op = (Operador) SkyManager.getInstance().getUsuarioActual();
 		Aerolinea a = op.getAerolinea();
 		Collection<Avion> aviones = a.getAviones().values();
-		String[][] datos = new String[aviones.size()][5];
-		int i = 0;
 
-		for (Avion avion : aviones) {
-			datos[i][0] = avion.getMatricula();
-			datos[i][1] = String.valueOf(avion.getFechaCompra());
-			datos[i][2] = (avion.getFechaUltimaRevision() == null) ? "No registrado" : String.valueOf(avion.getFechaUltimaRevision());
-			datos[i][3] = avion.getTipoAvion().getMarca() + " " + avion.getTipoAvion().getModelo();
-			datos[i][4] = String.valueOf(avion.getEstadoAvion());
-			i++;
-		}
+		// Crear el modelo de tabla personalizado
+        DefaultTableModel model = new DefaultTableModel(columnas, 0) {
+			private static final long serialVersionUID = 1L;
 
-		DefaultTableModel model = new DefaultTableModel(datos, columnas);
+			@Override
+            public boolean isCellEditable(int row, int column) {
+                // Ninguna celda es editable
+                return false;
+            }
+        };
+        
+        // Rellenar el modelo con los datos de los aviones
+        for (Avion avion: aviones) {
+            String tipo = null;
+            if (avion.getTipoAvion().isMercancias()) {
+            	tipo = "Mercancías";
+            } 
+            else { tipo = "Pasajeros"; }
+        
+	        model.addRow(new Object[]{
+	        		avion.getMatricula(),
+	                avion.getFechaCompra(),
+	                avion.getFechaUltimaRevision(),
+	                avion.getTipoAvion().getModelo(),
+	                tipo,
+	                avion.getEstadoAvion()
+	        });
+        }
+
 		tablaAviones.setModel(model);
-		model.fireTableDataChanged();
 	}
 
 	/**
