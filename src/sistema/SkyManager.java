@@ -203,37 +203,40 @@ public class SkyManager implements Serializable {
 	            ArrayList<Temporada> temporadas = new ArrayList<Temporada>();
 	            while ((linea = br.readLine()) != null) {
 	                String[] datos = linea.split(";");
-	                String nombre = datos[0];
-	                String codigo = datos[1];
-	                String ciudadMasCercana = datos[2];
-	                String pais = datos[3];
-	                double distanciaCiudad = Double.parseDouble(datos[4]);
-	                String direccionCiudad = datos[5];
-	                Direccion dir = Direccion.getDireccion(direccionCiudad);
-	                int diferenciaHoraria = Integer.parseInt(datos[6]);
-	                int numeroTemporadas = Integer.parseInt(datos[7]);
-
-	                for (int i = 0; i < numeroTemporadas; i++) {
-	                    String aux = datos[8 + i * 3];
-	                    String[] auxs = aux.split("/");
-	                    MonthDay fechaInicio = MonthDay.of(Integer.parseInt(auxs[1]), Integer.parseInt(auxs[0]));
-	                    
-	                    aux = datos[9 + i * 3];
-	                    auxs = aux.split(":");
-	                    String[] aux2 = auxs[1].split("-");
-	                    LocalTime apertura = LocalTime.of(Integer.parseInt(auxs[0]), Integer.parseInt(aux2[0]));
-	                    LocalTime cierre = LocalTime.of(Integer.parseInt(aux2[1]), Integer.parseInt(auxs[2]));
-	                    
-	                    aux = datos[10 + i * 3];
-	                    auxs = aux.split("/");
-	                    MonthDay fechaFin = MonthDay.of(Integer.parseInt(auxs[1]), Integer.parseInt(auxs[0]));
-
-	                    Temporada temporada = new Temporada(fechaInicio, apertura, cierre, fechaFin);
-	                    temporadas.add(temporada);
+	                if (datos.length > 7) { // Asegura que hay al menos 8 elementos
+		                String nombre = datos[0];
+		                String codigo = datos[1];
+		                String ciudadMasCercana = datos[2];
+		                String pais = datos[3];
+		                double distanciaCiudad = Double.parseDouble(datos[4]);
+		                String direccionCiudad = datos[5];
+		                Direccion dir = Direccion.getDireccion(direccionCiudad);
+		                int diferenciaHoraria = Integer.parseInt(datos[6]);
+		                int numeroTemporadas = Integer.parseInt(datos[7]);
+		                
+		                if (datos.length >= 8 + numeroTemporadas * 3) {
+			                for (int i = 0; i < numeroTemporadas; i++) {
+			                    String aux = datos[8 + i * 3];
+			                    String[] auxs = aux.split("/");
+			                    MonthDay fechaInicio = MonthDay.of(Integer.parseInt(auxs[1]), Integer.parseInt(auxs[0]));
+			                    
+			                    aux = datos[9 + i * 3];
+			                    auxs = aux.split(":");
+			                    String[] aux2 = auxs[1].split("-");
+			                    LocalTime apertura = LocalTime.of(Integer.parseInt(auxs[0]), Integer.parseInt(aux2[0]));
+			                    LocalTime cierre = LocalTime.of(Integer.parseInt(aux2[1]), Integer.parseInt(auxs[2]));
+			                    
+			                    aux = datos[10 + i * 3];
+			                    auxs = aux.split("/");
+			                    MonthDay fechaFin = MonthDay.of(Integer.parseInt(auxs[1]), Integer.parseInt(auxs[0]));
+			
+			                    Temporada temporada = new Temporada(fechaInicio, apertura, cierre, fechaFin);
+			                    temporadas.add(temporada);
+			                }
+		                }
+		                Aeropuerto aeropuerto = new Aeropuerto(nombre, codigo, ciudadMasCercana, pais, distanciaCiudad, diferenciaHoraria, temporadas, dir);
+		                this.registrarAeropuertoExterno(aeropuerto);
 	                }
-	                
-	                Aeropuerto aeropuerto = new Aeropuerto(nombre, codigo, ciudadMasCercana, pais, distanciaCiudad, diferenciaHoraria, temporadas, dir);
-	                this.registrarAeropuertoExterno(aeropuerto);
 	            }
 	            
 	    } catch (IOException e) { e.printStackTrace(); }

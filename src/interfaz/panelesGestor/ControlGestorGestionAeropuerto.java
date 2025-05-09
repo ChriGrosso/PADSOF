@@ -1393,6 +1393,19 @@ public class ControlGestorGestionAeropuerto {
                 JOptionPane.showMessageDialog(null, "Archivo seleccionado:\n" + rutaArchivo);
 
                 SkyManager.getInstance().cargarDatosAeropuertos(rutaArchivo);
+                NonEditableTableModel modeloT = new NonEditableTableModel(new Object[]{"Código", "Nombre", "País", "Ciudad", "Distancia (km)", "GMT", "Dirección"}, 0);
+                for (Aeropuerto a : modelo.getAeropuertosExternos().values()) {
+                    modeloT.addRow(new Object[]{
+                        a.getCodigo(),
+                        a.getNombre(),
+                        a.getPais(),
+                        a.getCiudadMasCercana(),
+                        a.getDistanciaCiudadMasCercana(),
+                        a.getDiferenciaHoraria(),
+                        (a.getDireccion() != null) ? a.getDireccion().toString() : ""
+                    });
+                }
+                tablaAeropuertos.setModel(modeloT);
             }
         });
         
