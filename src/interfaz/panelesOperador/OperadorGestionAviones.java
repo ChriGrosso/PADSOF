@@ -46,10 +46,10 @@ public class OperadorGestionAviones extends JPanel {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
-
-		// Botón para volver
-		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras.png");
-		panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
+        
+        // Contenedor en la esquina superior derecha
+        BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
+        panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
 		add(panelSuperiorIzquierdo, BorderLayout.NORTH);
 
 		JPanel panelContenido = new JPanel();

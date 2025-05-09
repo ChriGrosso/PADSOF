@@ -406,7 +406,7 @@ public class OperadorGestionVuelos extends JPanel{
                 boolean res = v.setEstVuelo(nuevoEstado);
                 if (res) { JOptionPane.showMessageDialog(null, "Estado cambiado a: " + nuevoEstado); }
                 else { 
-                	JOptionPane.showMessageDialog(Aplicacion.getInstance().getOpVuelos(), "No se ha podido cambiar al estado: " + nuevoEstado, "Error", JOptionPane.ERROR_MESSAGE);
+                	JOptionPane.showMessageDialog(Aplicacion.getInstance().getOpVuelos(), "No se puede hacer el cambio de estados de vuelo: " + v.getEstVuelo() + " -> " + nuevoEstado, "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 Aplicacion.getInstance().getOpVuelos().actualizarPantalla();
