@@ -15,12 +15,22 @@ import javax.swing.JTextField;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
+/**
+ * Clase que representa la pantalla de inicio de sesión de la aplicación.
+ * Permite a los usuarios ingresar sus credenciales para autenticarse en el sistema.
+ * 
+ * @author Sofia Castro - sofiai.castro@estudiante.uam.es
+ */
 public class Login extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JTextField campoUsuario;
 	private JPasswordField campoPassword;
 	private JButton login;
 	
+	/**
+     * Constructor de la clase Login.
+     * Configura la interfaz gráfica con los campos de usuario, contraseña y el botón de login.
+     */
 	public Login() {
 		// Usar GridBagLayout para centrar componentes
         this.setLayout(new GridBagLayout());
@@ -67,6 +77,13 @@ public class Login extends JPanel{
         });
 	}
 	
+	/**
+     * Aplica formato visual a los botones de la interfaz.
+     * 
+     * @param boton Botón a formatear.
+     * @param ancho Ancho deseado.
+     * @param alto Alto deseado.
+     */
 	private void formatoBotones(JButton boton,  int ancho, int alto) {
 		boton.setPreferredSize(new Dimension(ancho, alto));
 		boton.setForeground(Color.WHITE);
@@ -76,22 +93,37 @@ public class Login extends JPanel{
 	    boton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 	}
 	
-	// método para asignar un controlador al botón
+	/**
+     * Asigna un controlador de eventos al botón de login.
+     * 
+     * @param c Controlador de eventos a asignar.
+     */
 	public void setControlador(ActionListener c) {  
 		login.addActionListener(c);
 	}
 	
-	// método que devuelve el nif del usuario (contenido del campo JTextField)
+	/**
+     * Obtiene el NIF ingresado por el usuario.
+     * 
+     * @return El NIF como una cadena de texto.
+     */
 	public String getNifUsuario () {
 		return campoUsuario.getText();
 	}
 	
-	// método que devuelve el nif del usuario (contenido del campo JTextField)
+	 /**
+     * Obtiene la contraseña ingresada por el usuario.
+     * 
+     * @return Arreglo de caracteres con la contraseña ingresada.
+     */
 	public char[] getPswUsuario () {
 		return campoPassword.getPassword();
 	}
 	
-	// método que actualiza el valor de los campos
+	 /**
+     * Restablece los campos de usuario y contraseña, dejándolos vacíos.
+     * Además, coloca el foco en el campo de usuario.
+     */
 	public void update () {
 		campoUsuario.setText("");
 		campoUsuario.grabFocus();

@@ -9,13 +9,29 @@ import javax.swing.JOptionPane;
 import sistema.SkyManager;
 import usuarios.Usuario;
 
+/**
+ * Clase que gestiona el proceso de inicio de sesión en la aplicación.
+ * Implementa ActionListener para responder a eventos de login y validar credenciales de usuario.
+ * 
+ * @author Sofia Castro - sofiai.castro@estudiante.uam.es
+ */
 public class ControlLogin implements ActionListener{
 	private SkyManager modelo;
 	
+	/**
+     * Constructor de la clase ControlLogin.
+     * Obtiene la instancia única del modelo SkyManager para manejar la autenticación de usuarios.
+     */
 	public ControlLogin() {
 		this.modelo = SkyManager.getInstance();
 	}
-
+	
+	/**
+     * Maneja eventos de acción generados en la interfaz.
+     * Responde al evento de "Login" ejecutando el proceso de inicio de sesión.
+     * 
+     * @param e Evento de acción recibido.
+     */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Login")) {     // si se ha pulsado "Login"
@@ -23,7 +39,10 @@ public class ControlLogin implements ActionListener{
 		}			 
 	}
 
-	
+	/**
+     * Realiza el proceso de autenticación del usuario.
+     * Valida los datos de entrada, verifica las credenciales y muestra la vista correspondiente según el tipo de usuario.
+     */
 	private void iniciarSesion() {
 		// validar valores en la vista
 		String nifUser = Aplicacion.getInstance().getLogin().getNifUsuario();

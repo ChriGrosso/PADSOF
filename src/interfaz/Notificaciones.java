@@ -32,12 +32,22 @@ import sistema.SkyManager;
 import usuarios.Operador;
 import usuarios.Usuario;
 
+/**
+ * Clase que gestiona la pantalla de notificaciones de la aplicación.
+ * Permite a los usuarios visualizar y gestionar las notificaciones recibidas.
+ * 
+ * @author Sofia Castro - sofiai.castro@estudiante.uam.es
+ */
 public class Notificaciones extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JTable tablaNotificaciones;
 	private JPanel panelInferior; 
 	private JButton botonConfiguracion;
 	
+	/**
+     * Constructor de la clase Notificaciones.
+     * Configura la interfaz gráfica y los componentes necesarios para mostrar notificaciones.
+     */
 	public Notificaciones() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -97,6 +107,10 @@ public class Notificaciones extends JPanel{
 		panelInferior.setVisible(false);
     }
 	
+	/**
+     * Actualiza la pantalla mostrando las notificaciones recibidas por el usuario actual.
+     * Aplica estilos y configuración de renderizado para la tabla de notificaciones.
+     */
 	public void actualizarPantalla() {
         String[] columnas = {"Notificación", "Estado"};
 
@@ -144,9 +158,15 @@ public class Notificaciones extends JPanel{
 		}
     }
 	
+	/**
+     * Renderiza celdas de la tabla con múltiples líneas de texto.
+     */
 	private static class MultiLineRenderer extends JLabel implements TableCellRenderer {
         private static final long serialVersionUID = 1L;
         
+        /**
+         * Constructor del renderizador de las celdas de la tabla.
+         */
         public MultiLineRenderer() {
             setOpaque(true);
             setVerticalAlignment(SwingConstants.TOP);
@@ -168,16 +188,36 @@ public class Notificaciones extends JPanel{
         }
     }
 	
+	/**
+	 * Clase que representa el renderizador de celdas para la columna de estado de las notificaciones.
+	 * Muestra un botón "Leer" si la notificación no ha sido leída, y la etiqueta "Leído" en caso contrario.
+	 * 
+	 */
 	private static class NotificacionRenderer extends JPanel implements TableCellRenderer {
         private static final long serialVersionUID = 1L;
         private final JButton botonMarcarLeido = new JButton("Leer");
         private final JLabel etiquetaLeido = new JLabel("Leído");
-
+        
+        /**
+         * Constructor de la clase NotificacionRenderer.
+         * Configura el diseño y los estilos de los elementos dentro de la celda.
+         */
         public NotificacionRenderer() {
             setLayout(new BorderLayout());
             botonMarcarLeido.setBackground(Color.cyan);
         }
-
+        
+        /**
+         * Método para renderizar la celda correspondiente a la notificación.
+         * 
+         * @param table Tabla en la que se muestra la celda.
+         * @param value Valor que se mostrará en la celda.
+         * @param isSelected Indica si la celda está seleccionada.
+         * @param hasFocus Indica si la celda tiene el foco.
+         * @param row Fila de la celda.
+         * @param column Columna de la celda.
+         * @return Componente renderizado que se mostrará en la celda.
+         */
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus,
@@ -191,14 +231,24 @@ public class Notificaciones extends JPanel{
             return this;
         }
     }
-
+	
+	/**
+	 * Clase que representa el editor de celdas para la columna de estado de las notificaciones.
+	 * Permite cambiar el estado de una notificación a "Leído" cuando el usuario interactúa con el botón.
+	 * 
+	 */
     private static class NotificacionEditor extends AbstractCellEditor implements TableCellEditor {
         private static final long serialVersionUID = 1L;
         private final JPanel panel;
         private final JButton botonMarcarLeido;
         private final JLabel etiquetaLeido;
         private final List<Notificacion> notificaciones;
-
+        
+        /**
+         * Constructor de la clase NotificacionEditor.
+         * 
+         * @param notifs Lista de notificaciones que se pueden marcar como leídas.
+         */
         public NotificacionEditor(Collection<Notificacion> notifs) {
             this.panel = new JPanel(new BorderLayout());
             this.botonMarcarLeido = new JButton("Leer");
@@ -241,7 +291,17 @@ public class Notificaciones extends JPanel{
                 fireEditingStopped();
             });
         }
-
+        
+        /**
+         * Método que devuelve el componente editor de la celda de la tabla.
+         * 
+         * @param table Tabla en la que se muestra la celda.
+         * @param value Valor de la celda.
+         * @param isSelected Indica si la celda está seleccionada.
+         * @param row Fila de la celda.
+         * @param column Columna de la celda.
+         * @return Componente que se usará como editor de la celda.
+         */
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
                                                       boolean isSelected, int row, int column) {
@@ -253,13 +313,21 @@ public class Notificaciones extends JPanel{
             }
             return panel;
         }
-
+        
+        /**
+         * Método que devuelve el valor de la celda después de la edición.
+         * 
+         * @return Valor de la celda (en este caso, null porque el estado se gestiona directamente en la tabla).
+         */
         @Override
         public Object getCellEditorValue() {
             return null;
         }
     }
-
+    
+    /**
+     * Retroce a la pagina establecida como la anterior para este panel.
+     */
 	public void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getNotificaciones().setVisible(false);
@@ -272,7 +340,10 @@ public class Notificaciones extends JPanel{
 		}
 	}
 	
-	void formatoBotones(JButton boton) {
+	/**
+     * Aplica formato visual a los botones de la interfaz.
+     */
+	private void formatoBotones(JButton boton) {
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
 	    boton.setFocusPainted(false);

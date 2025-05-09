@@ -21,13 +21,28 @@ import vuelos.Periodicidad;
 import vuelos.VueloMercancias;
 import vuelos.VueloPasajeros;
 
+/**
+ * Clase que controla el registro de nuevos vuelos en la aerolínea.
+ * Implementa ActionListener para gestionar eventos de la interfaz.
+ * 
+ * @author Sofia Castro - sofiai.castro@estudiante.uam.es
+ */
 public class ControlNuevoVuelo implements ActionListener{
 	private SkyManager modelo;
 	
+	/**
+     * Constructor de la clase ControlNuevoVuelo.
+     * Inicializa el modelo del sistema para gestionar vuelos.
+     */
 	public ControlNuevoVuelo() {
 		this.modelo = SkyManager.getInstance();
 	}
-
+	
+	/**
+     * Maneja los eventos de acción generados en la interfaz.
+     * 
+     * @param e Evento de acción recibido.
+     */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object fuente = e.getSource(); // quién disparó el evento
@@ -82,7 +97,9 @@ public class ControlNuevoVuelo implements ActionListener{
 		}
 	}
 
-	
+	/**
+     * Registra un nuevo vuelo en el sistema validando los datos ingresados.
+     */
 	private void registrarVuelo() {
 		// obtener valores de la vista
 		String mat = Aplicacion.getInstance().getNuevoVuelo().getMat();

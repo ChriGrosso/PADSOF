@@ -13,13 +13,28 @@ import sistema.SkyManager;
 import usuarios.Operador;
 import interfaz.Aplicacion;
 
+/**
+ * Clase que controla el registro de nuevos aviones en la aerolínea.
+ * Implementa ActionListener para manejar eventos de la interfaz de usuario.
+ *
+ * @author Sofia Castro - sofiai.castro@estudiante.uam.es
+ */
 public class ControlNuevoAvion implements ActionListener{
 	private SkyManager modelo;
 	
+	/**
+     * Constructor de la clase ControlNuevoAvion.
+     * Inicializa el modelo de la aplicación.
+     */
 	public ControlNuevoAvion() {
 		this.modelo = SkyManager.getInstance();
 	}
-
+	
+	/**
+     * Maneja los eventos de acción generados en la interfaz.
+     * 
+     * @param e Evento de acción recibido.
+     */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Registrar Avión")) {     // si se ha pulsado "Registrar Avión"
@@ -35,7 +50,10 @@ public class ControlNuevoAvion implements ActionListener{
 		}
 	}
 
-	
+	/**
+     * Registra un nuevo avión en la aerolínea del operador actual.
+     * Valida los datos ingresados y verifica que el modelo del avión es compatible con la aerolínea.
+     */
 	private void registrarAvion() {
 		// obtener valores de la vista
 		String matricula = Aplicacion.getInstance().getNuevoAvion().getMatricula();

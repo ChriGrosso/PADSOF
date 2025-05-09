@@ -27,6 +27,12 @@ import interfaz.Aplicacion;
 import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 
+/**
+ * Clase que representa el panel de registro de un nuevo avión en la aerolínea.
+ * Permite ingresar la información del avión y registrarlo en el sistema.
+ *
+ * @author Sofia Castro - sofiai.castro@estudiante.uam.es
+ */
 public class NuevoAvion extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton registrarAvion;
@@ -38,6 +44,10 @@ public class NuevoAvion extends JPanel{
 	private JRadioButton mercancias, pasajeros, mercPeligrosas, mercNoPeligrosas;
 	ButtonGroup tipoAvion, tipoMerc;
 	
+	/**
+     * Constructor de la clase NuevoAvion.
+     * Configura la interfaz gráfica con los elementos necesarios para el registro del avión.
+     */
 	public NuevoAvion() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -162,14 +172,21 @@ public class NuevoAvion extends JPanel{
         add(panelInferior, BorderLayout.SOUTH);
 	}
 	
-	
+	/**
+     * Regresa a la pantalla anterior y guarda los datos del sistema.
+     */
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getNuevoAvion().setVisible(false);
 		Aplicacion.getInstance().showOpAviones();
 	}
 
-
+	/**
+     * Crea y configura un botón de contenido.
+     * 
+     * @param text Texto del botón.
+     * @return Botón configurado.
+     */
 	private JButton createContentButton(String text) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(120, 48));
@@ -178,6 +195,11 @@ public class NuevoAvion extends JPanel{
         return btn;
     }
 	
+	/**
+     * Aplica el formato de estilo a los botones.
+     * 
+     * @param boton Botón a formatear.
+     */
 	void formatoBotones(JButton boton) {
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
@@ -185,70 +207,122 @@ public class NuevoAvion extends JPanel{
 	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
 	}
 	
-	
-	// método para asignar un controlador a los botones
+	/**
+	 * Asigna un controlador de eventos a los botones de la interfaz.
+	 *
+	 * @param c Controlador de eventos que manejará las acciones del usuario.
+	 */
 	public void setControlador(ActionListener c) {  
 	 	registrarAvion.addActionListener(c);
 	 	mercancias.addActionListener(c);
 	 	pasajeros.addActionListener(c);
 	 }
 	 	
-	// Obtener el texto del campo matrícula
+	/**
+	 * Obtiene el texto ingresado en el campo de matrícula.
+	 *
+	 * @return Matrícula ingresada como una cadena de texto.
+	 */
     public String getMatricula() {
         return cmpMatricula.getText().trim();
     }
 
-    // Obtener el texto del campo marca
+    /**
+     * Obtiene el texto ingresado en el campo de marca del avión.
+     *
+     * @return Marca ingresada como una cadena de texto.
+     */
     public String getMarca() {
         return cmpMarca.getText().trim();
     }
 
-    // Obtener el texto del campo modelo
+    /**
+     * Obtiene el texto ingresado en el campo de modelo del avión.
+     *
+     * @return Modelo ingresado como una cadena de texto.
+     */
     public String getModelo() {
         return cmpModelo.getText().trim();
     }
 
-    // Obtener la fecha seleccionada en el spinner "compra"
+    /**
+     * Obtiene la fecha de compra del avión seleccionada en el spinner correspondiente.
+     *
+     * @return Fecha de compra como un objeto LocalDate.
+     */
     public LocalDate getFechaCompra() {
     	Date date = (Date) compra.getValue(); // Obtener el valor como Date
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Convertir a LocalDate
     }
 
-    // Obtener la fecha seleccionada en el spinner "última revisión"
+    /**
+     * Obtiene la fecha de última revisión del avión seleccionada en el spinner correspondiente.
+     *
+     * @return Fecha de última revisión como un objeto LocalDate.
+     */
     public LocalDate getFechaUltimaRevision() {
     	Date date = (Date) ultimaRev.getValue(); // Obtener el valor como Date
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Convertir a LocalDate
     }
 
-    // Verificar si el avión es de tipo "Mercancías"
+    /**
+     * Verifica si el avión es de tipo mercancías.
+     *
+     * @return true si el avión es de mercancías, false en caso contrario.
+     */
     public boolean esMercancias() {
         return mercancias.isSelected();
     }
 
-    // Verificar si el avión es de tipo "Pasajeros"
+    /**
+     * Verifica si el avión es de tipo pasajeros.
+     *
+     * @return true si el avión es de pasajeros, false en caso contrario.
+     */
     public boolean esPasajeros() {
         return pasajeros.isSelected();
     }
 
-    // Verificar si el avión puede transportar mercancías peligrosas
+    /**
+     * Verifica si el avión está configurado para transportar mercancías peligrosas.
+     *
+     * @return true si el avión transporta mercancías peligrosas, false en caso contrario.
+     */
     public boolean esMercPeligrosas() {
         return mercPeligrosas.isSelected();
     }
     
+    /**
+     * Obtiene el botón de selección de mercancías peligrosas.
+     *
+     * @return JRadioButton que permite la selección de mercancías peligrosas.
+     */
     public JRadioButton getMercPeligrosas() {
     	return mercPeligrosas;
     }
 
-    // Verificar si el avión no puede transportar mercancías peligrosas
+    /**
+     * Verifica si el avión no transporta mercancías peligrosas.
+     *
+     * @return true si el avión no transporta mercancías peligrosas, false en caso contrario.
+     */
     public boolean esMercNoPeligrosas() {
         return mercNoPeligrosas.isSelected();
     }
     
+    /**
+     * Obtiene el botón de selección de mercancías no peligrosas.
+     *
+     * @return `JRadioButton` que permite la selección de mercancías no peligrosas.
+     */
     public JRadioButton getMercNoPeligrosas() {
     	return mercNoPeligrosas;
     }
 
-
+    /**
+     * Restablece los valores de los campos de entrada y los elementos de la interfaz.
+     * Se reinician los textos, fechas y opciones de selección.
+     */
 	public void update() {
 		// Reiniciar campos de texto
 	    cmpMatricula.setText("");

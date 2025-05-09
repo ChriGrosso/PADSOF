@@ -27,6 +27,12 @@ import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 import vuelos.Vuelo;
 
+/**
+ * Clase BusquedaVuelos representa un panel de búsqueda de vuelos en la interfaz de usuario.
+ * Permite al usuario realizar búsquedas por distintos criterios y visualizar los resultados en una tabla.
+ * 
+ * @author Sara Lorenzo - sara.lorenzot@estudiante.uam.es
+ */
 public class BusquedaVuelos extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JTable tabla;
@@ -34,6 +40,10 @@ public class BusquedaVuelos extends JPanel{
 	private JTextField campoBusqueda;
 	private JButton botonBuscar;
 	
+	/**
+     * Constructor de la clase BusquedaVuelos.
+     * Configura la interfaz gráfica incluyendo opciones de búsqueda y una tabla de resultados.
+     */
 	public BusquedaVuelos() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -115,6 +125,11 @@ public class BusquedaVuelos extends JPanel{
 		add(panelContenido, BorderLayout.CENTER);
 	}
 	
+	/**
+     * Método para actualizar la tabla de resultados con los vuelos proporcionados.
+     *
+     * @param vuelos Lista de vuelos a mostrar en la tabla.
+     */
 	public void setFilasTabla(ArrayList<Vuelo> vuelos) {
 		String[] titulos = {"ID Vuelo", "Origen", "Destino", "Estado", "Terminal", "Fecha", "Aerolinea", "ID Avión"};
 		DefaultTableModel modeloDatos = new DefaultTableModel(titulos, 0);
@@ -146,6 +161,13 @@ public class BusquedaVuelos extends JPanel{
 		tabla.setModel(modeloDatos);
 	}
 	
+	/**
+     * Método para dar formato a los botones de la interfaz.
+     *
+     * @param boton Botón a formatear.
+     * @param ancho Ancho deseado.
+     * @param alto Alto deseado.
+     */
 	private void formatoBotones(JButton boton,  int ancho, int alto) {
 		boton.setPreferredSize(new Dimension(ancho, alto));
 		boton.setForeground(Color.WHITE);
@@ -154,6 +176,10 @@ public class BusquedaVuelos extends JPanel{
 	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
 	}
 	
+	/**
+     * Método para regresar a la pantalla anterior.
+     * Guarda los datos y muestra la interfaz correspondiente según el tipo de usuario.
+     */
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		limpiarCampos();
@@ -166,17 +192,27 @@ public class BusquedaVuelos extends JPanel{
 		}
 	}
 	
-	// método que devuelve el continido que buscar (contenido del campoBusqueda JTextField)
+	/**
+     * Devuelve el contenido del campo de búsqueda.
+     *
+     * @return Texto ingresado en el campo de búsqueda.
+     */
 	public String getContenidoCampoBusqueda() {
 	    return campoBusqueda.getText().trim();
 	}
 	
-	// Obtener el metodo de busqueda seleccionado del combo
+	/**
+     * Devuelve el tipo de búsqueda seleccionado.
+     *
+     * @return Tipo de búsqueda seleccionado en el combo box.
+     */
 	public String getTipoBusquedaSeleccionado() {
 	    return (String) tiposBusqueda.getSelectedItem();
 	}
 	
-	// método que actualiza el valor de los campos
+	/**
+     * Limpia los campos de búsqueda y la tabla de resultados.
+     */
 	public void limpiarCampos() {
 	    campoBusqueda.setText("");
 	    
@@ -185,7 +221,11 @@ public class BusquedaVuelos extends JPanel{
 	    campoBusqueda.grabFocus();
 	}
 	
-	// método para asignar un controlador a los botones
+	/**
+     * Asigna un controlador de eventos a los botones de la interfaz.
+     *
+     * @param c Controlador de eventos para manejar las acciones de búsqueda.
+     */
 	public void setControlador(ActionListener c) {  
 		botonBuscar.setActionCommand("BUSCAR");
 		

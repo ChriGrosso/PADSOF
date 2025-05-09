@@ -34,6 +34,12 @@ import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Operador;
 
+/**
+ * Clase que representa el panel de registro de un nuevo vuelo en la aerolínea.
+ * Permite ingresar información relevante sobre el vuelo y registrarlo en el sistema.
+ * 
+ * @author Sofia Castro - sofiai.castro@estudiante.uam.es
+ */
 public class NuevoVuelo extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton registrarVuelo;
@@ -59,6 +65,10 @@ public class NuevoVuelo extends JPanel{
     JLabel etiquetaCarga = new JLabel("Carga [Tn]:");
     JLabel etiquetaPasajeros = new JLabel("Número de pasajeros:");
 	
+    /**
+     * Constructor de la clase NuevoVuelo.
+     * Configura la interfaz gráfica con los elementos necesarios para el registro del vuelo.
+     */
 	public NuevoVuelo() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -272,14 +282,21 @@ public class NuevoVuelo extends JPanel{
         add(panelInferior, BorderLayout.SOUTH);
 	}
 
-	
+	/**
+     * Regresa a la pantalla anterior y guarda los datos del sistema.
+     */
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getNuevoVuelo().setVisible(false);
 		Aplicacion.getInstance().showOpVuelos();
 	}
 
-	
+	/**
+	 * Crea y configura un botón de la interfaz con formato estándar.
+	 * 
+	 * @param text Texto que aparecerá en el botón.
+	 * @return Botón configurado.
+	 */
 	private JButton createContentButton(String text) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(120, 48));
@@ -288,6 +305,11 @@ public class NuevoVuelo extends JPanel{
         return btn;
     }
 	
+	/**
+     * Aplica formato de estilo a los botones.
+     * 
+     * @param boton Botón a formatear.
+     */
 	void formatoBotones(JButton boton) {
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
@@ -295,7 +317,11 @@ public class NuevoVuelo extends JPanel{
 	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
 	}
 	
-	
+	/**
+	 * Asigna un controlador de eventos a los botones de la interfaz.
+	 * 
+	 * @param c Controlador de eventos que manejará las acciones del usuario.
+	 */
 	public void setControlador(ActionListener c) {
 		registrarVuelo.addActionListener(c);
 	 	mercancias.addActionListener(c);
@@ -306,107 +332,203 @@ public class NuevoVuelo extends JPanel{
 	 	llega.addActionListener(c);
 	 	sale.addActionListener(c);
 	}
-
 	
-	// Obtener la matrícula del avión
+	/**
+	 * Obtiene la matrícula del avión seleccionado en el combo box.
+	 * 
+	 * @return Matrícula del avión como una cadena de texto.
+	 */
 	public String getMat() {
 		return (String) mat.getSelectedItem();
 	}
 	
-	// Verificar si el vuelo es de llegada
+	/**
+	 * Verifica si el vuelo es de llegada.
+	 * 
+	 * @return true si el vuelo es de llegada, false en caso contrario.
+	 */
 	public boolean esLlegada() {
 		return llega.isSelected();
 	}
 
-	// Verificar si el vuelo no es de salida
+	/**
+	 * Verifica si el vuelo es de salida.
+	 * 
+	 * @return true si el vuelo es de salida, false en caso contrario.
+	 */
 	public boolean esSalida() {
 		return sale.isSelected();
 	}
 
-	// Obtener el nombre del aeropuerto de origen
+	/**
+	 * Obtiene el nombre del aeropuerto de origen.
+	 * 
+	 * @return Código del aeropuerto de origen como una cadena de texto.
+	 */
 	public String getOrigen() {
 	    return origen.getText().trim();
 	}
+	
+	/**
+	 * Obtiene el campo de texto del aeropuerto de origen.
+	 * 
+	 * @return JTextField que contiene el aeropuerto de origen.
+	 */
 	public JTextField getOrigenTextField() {
     	return origen;
     }
 
-	// Obtener el nombre del aeropuerto de destino
+	/**
+	 * Obtiene el nombre del aeropuerto de destino.
+	 * 
+	 * @return Código del aeropuerto de destino como una cadena de texto.
+	 */
 	public String getDestino() {
 	    return destino.getText().trim();
 	}
+	
+	/**
+	 * Obtiene el campo de texto del aeropuerto de destino.
+	 * 
+	 * @return JTextField que contiene el aeropuerto de destino.
+	 */
 	public JTextField getDestinoTextField() {
     	return destino;
     }
 
-	// Obtener el nombre de la aerolínea secundaria
+	/**
+	 * Obtiene el nombre de la aerolínea secundaria en vuelos compartidos.
+	 * 
+	 * @return Nombre de la aerolínea secundaria como una cadena de texto.
+	 */
 	public String txtAerolineaSecundaria() {
 	    return aeS.getText().trim();
 	}
 	
+	/**
+	 * Obtiene el campo de texto para la aerolínea secundaria.
+	 * 
+	 * @return JTextField que contiene el nombre de la aerolínea secundaria.
+	 */
 	public JTextField getAerolineaSecundaria() {
 	    return aeS;
 	}
 	
+	/**
+	 * Obtiene la etiqueta del campo de aerolínea secundaria.
+	 * 
+	 * @return `JLabel` que indica la aerolínea secundaria.
+	 */
 	public JLabel getEtiqAeS() {
 		return etiquetaAeS;
 	}
 	
-	// Obtener la fecha y hora de salida
+	/**
+	 * Obtiene la fecha y hora de salida del vuelo.
+	 * 
+	 * @return Fecha y hora de salida como LocalDateTime.
+	 */
 	public LocalDateTime getFechaHoraSalida() {
 	    Date date = (Date) salida.getValue();
 	    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 	}
 
-	// Obtener la fecha y hora de llegada
+	/**
+	 * Obtiene la fecha y hora de llegada del vuelo.
+	 * 
+	 * @return Fecha y hora de llegada como LocalDateTime.
+	 */
 	public LocalDateTime getFechaHoraLlegada() {
 	    Date date = (Date) llegada.getValue();
 	    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 	}
 	
-	// Verificar si el vuelo es de tipo mercancías
+	/**
+	 * Verifica si el vuelo es de tipo mercancías.
+	 * 
+	 * @return true si el vuelo es de mercancías, false en caso contrario.
+	 */
 	public boolean esMercancias() {
 	    return mercancias.isSelected();
 	}
 
-	// Verificar si el vuelo es de tipo pasajeros
+	/**
+	 * Verifica si el vuelo es de tipo pasajeros.
+	 * 
+	 * @return true si el vuelo es de pasajeros, false en caso contrario.
+	 */
 	public boolean esPasajeros() {
 	    return pasajeros.isSelected();
 	}
-	
-	// Verificar si el vuelo lleva mercancías peligrosas
+
+	/**
+	 * Verifica si el vuelo transporta mercancías peligrosas.
+	 * 
+	 * @return true si el vuelo transporta mercancías peligrosas, false en caso contrario.
+	 */
 	public boolean esMercPeligrosas() {
 	    return mercPeligrosas.isSelected();
 	}
-	
-	public JRadioButton getMercPeligrosas() {
-    	return mercPeligrosas;
-    }
 
-	// Verificar si el vuelo no lleva mercancías peligrosas
+	/**
+	 * Obtiene el botón de selección de mercancías peligrosas.
+	 * 
+	 * @return JRadioButton que permite seleccionar mercancías peligrosas.
+	 */
+	public JRadioButton getMercPeligrosas() {
+	    return mercPeligrosas;
+	}
+	
+	/**
+	 * Verifica si el vuelo no transporta mercancías peligrosas.
+	 * 
+	 * @return true si el vuelo no transporta mercancías peligrosas, false en caso contrario.
+	 */
 	public boolean esMercNoPeligrosas() {
 	    return mercNoPeligrosas.isSelected();
 	}
 	
+	/**
+	 * Obtiene el botón de selección de mercancías no peligrosas.
+	 * 
+	 * @return JRadioButton que permite seleccionar mercancías no peligrosas.
+	 */
 	public JRadioButton getMercNoPeligrosas() {
-    	return mercNoPeligrosas;
-    }
-	
-	// Verificar si el vuelo es compartido
+	    return mercNoPeligrosas;
+	}
+
+	/**
+	 * Verifica si el vuelo es compartido con otra aerolínea.
+	 * 
+	 * @return true si el vuelo es compartido, false en caso contrario.
+	 */
 	public boolean esCompartido() {
 	    return comp.isSelected();
 	}
 
-	// Verificar si el vuelo no es compartido
+	/**
+	 * Verifica si el vuelo no es compartido con otra aerolínea.
+	 * 
+	 * @return `true` si el vuelo no es compartido, `false` en caso contrario.
+	 */
 	public boolean esNoCompartido() {
 	    return noComp.isSelected();
 	}
 	
-	// Obtener la periodicidad seleccionada
+	/**
+	 * Obtiene la periodicidad seleccionada para el vuelo.
+	 * 
+	 * @return Tipo de periodicidad como cadena de texto.
+	 */
 	public String getPeriodicidad() {
 	    return (String) periodicidad.getSelectedItem();
 	}
 	
+	/**
+	 * Obtiene los días seleccionados en caso de vuelos alternos.
+	 * 
+	 * @return Lista de `DayOfWeek` representando los días seleccionados.
+	 */
 	public ArrayList<DayOfWeek> getDiasSeleccionados() {
 	    ArrayList<DayOfWeek> dias = new ArrayList<>();
 
@@ -421,11 +543,20 @@ public class NuevoVuelo extends JPanel{
 	    return dias;
 	}
 	
+	/**
+	 * Obtiene el panel con los checkboxes de selección de días de operación del vuelo.
+	 * 
+	 * @return Panel con los checkboxes de los días.
+	 */
 	public JPanel getPanelCheckbox() {
 		return panelCheckbox;
 	}
 	
-	// Obtener el dato (int o double) del campo "carga"
+	/**
+	 * Obtiene la cantidad de carga en toneladas del vuelo.
+	 * 
+	 * @return Cantidad de carga en toneladas. Retorna -1 si el valor no es válido.
+	 */
     public Double getCarga() {
     	try {
             return Double.parseDouble(carga.getText().trim());
@@ -433,12 +564,30 @@ public class NuevoVuelo extends JPanel{
             return -1.0; // Retorna -1 si el texto no es un número válido
         }
     }
+    
+    /**
+     * Obtiene el campo de entrada de carga del vuelo.
+     * 
+     * @return Campo de texto donde se ingresa la carga.
+     */
     public JTextField getCargaTextField() {
     	return carga;
     }
+    
+    /**
+     * Obtiene la etiqueta del campo de carga.
+     * 
+     * @return `JLabel` que indica la carga del vuelo.
+     */
     public JLabel getCargaLabel() {
     	return etiquetaCarga;
     }
+    
+    /**
+     * Obtiene la cantidad de pasajeros del vuelo.
+     * 
+     * @return Número de pasajeros. Retorna -1 si el valor no es válido.
+     */
     public Integer getNumP() {
     	try {
             return Integer.parseInt(numP.getText().trim());
@@ -446,14 +595,28 @@ public class NuevoVuelo extends JPanel{
             return -1; // Retorna -1 si el texto no es un número válido
         }
     }
+    
+    /**
+     * Obtiene el campo de entrada de número de pasajeros.
+     * 
+     * @return Campo de texto donde se ingresa la cantidad de pasajeros.
+     */
     public JTextField getnumPTextField() {
     	return numP;
     }
+    
+    /**
+     * Obtiene la etiqueta del campo de número de pasajeros.
+     * 
+     * @return `JLabel` que indica la cantidad de pasajeros del vuelo.
+     */
     public JLabel getNumPLabel() {
     	return etiquetaPasajeros;
     }
     
-    
+    /**
+     * Actualiza el combo box de matrícula del avión con los aviones disponibles de la aerolínea actual.
+     */
     public void actualizarPantalla() {
     	Operador op = (Operador) SkyManager.getInstance().getUsuarioActual();
     	if(op != null) {
@@ -466,7 +629,10 @@ public class NuevoVuelo extends JPanel{
     	}
     }
 	
-	
+    /**
+     * Reinicia los valores de todos los campos y elementos de la interfaz gráfica.
+     * Se restauran los textos, fechas y opciones seleccionadas a su estado inicial.
+     */
 	public void update() {
 		// Reiniciar campos de texto
 	    origen.setText("");

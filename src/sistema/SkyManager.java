@@ -960,6 +960,10 @@ public class SkyManager implements Serializable {
 		 return s;
 	 }
 	 
+	 /**
+	  * Actualiza el contador de pistas para asegurar que los identificadores sean únicos y consecutivos.
+	  * Busca el identificador más alto en la colección y establece el siguiente número disponible.
+	  */
 	 private void actualizarContadorPistas() {
 		    int max = 0;
 		    for (String id : pistas.keySet()) {
@@ -975,6 +979,9 @@ public class SkyManager implements Serializable {
 		    Pista.setContador(max);
 		}
 	 
+	 /**
+	  * Actualiza el contador de terminales asegurando que los identificadores sean únicos y consecutivos.
+	  */
 	 public void actualizarContadorTerminales() {
 		    int max = 0;
 		    for (Terminal t : terminales.values()) {
@@ -991,6 +998,9 @@ public class SkyManager implements Serializable {
 		    Terminal.setContador(max + 1);
 		}
 	 
+	 /**
+	  * Actualiza el contador de fingers garantizando identificadores únicos y consecutivos.
+	  */
 	 public void actualizarContadorFingers() {
 		    int max = 0;
 		    for (Finger f : fingers.values()) {
@@ -1007,6 +1017,9 @@ public class SkyManager implements Serializable {
 		    Finger.setContador(max + 1);
 		}
 	 
+	 /**
+	  * Actualiza el contador de hangares asegurando que los identificadores sean únicos y consecutivos.
+	  */
 	 public void actualizarContadorHangars() {
 		    int max = 0;
 		    for (Hangar h : hangares.values()) {
@@ -1023,6 +1036,9 @@ public class SkyManager implements Serializable {
 		    Hangar.setContador(max + 1);
 		}
 	 
+	 /**
+	  * Actualiza el contador de zonas de estacionamiento asegurando que los identificadores sean únicos y consecutivos.
+	  */
 	 public void actualizarContadorZonaParking() {
 		    int max = 0;
 		    for (ZonaParking zp : zonasParking.values()) {
@@ -1040,88 +1056,186 @@ public class SkyManager implements Serializable {
 		}
 	 
 	// --- Costos Base y Costos por Hora ---
+	 /**
+	  * Obtiene el costo base de una factura.
+	  * 
+	  * @return Costo base de la factura.
+	  */
 	 public double getCostoBaseFactura() {
 	     return costoBaseFactura;
 	 }
-
+	 
+	 /**
+	  * Establece el costo base de una factura.
+	  * 
+	  * @param costoBaseFactura Nuevo costo base de la factura.
+	  */
 	 public void setCostoBaseFactura(double costoBaseFactura) {
 	     this.costoBaseFactura = costoBaseFactura;
 	 }
 
+	 /**
+	  * Obtiene el costo por hora de una pista.
+	  * 
+	  * @return Costo por hora de una pista.
+	  */
 	 public double getCostoHoraPista() {
 	     return costoHoraPista;
 	 }
 
+	 /**
+	  * Establece el costo por hora de una pista.
+	  * 
+	  * @param costoHoraPista Nuevo costo por hora de la pista.
+	  */
 	 public void setCostoHoraPista(double costoHoraPista) {
 	     this.costoHoraPista = costoHoraPista;
 	 }
 
+	 /**
+	  * Obtiene el costo por hora de una terminal.
+	  * 
+	  * @return Costo por hora de una terminal.
+	  */
 	 public double getCostoHoraTerminal() {
 	     return costoHoraTerminal;
 	 }
 
+	 /**
+	  * Establece el costo por hora de una terminal.
+	  * 
+	  * @param costoHoraTerminal Nuevo costo por hora de la terminal.
+	  */
 	 public void setCostoHoraTerminal(double costoHoraTerminal) {
 	     this.costoHoraTerminal = costoHoraTerminal;
 	 }
 
+	 /**
+	  * Obtiene el costo por hora de un finger.
+	  * 
+	  * @return Costo por hora de un finger.
+	  */
 	 public double getCostoHoraFinger() {
 	     return costoHoraFinger;
 	 }
 
+	 /**
+	  * Establece el costo por hora de un finger.
+	  * 
+	  * @param costoHoraFinger Nuevo costo por hora del finger.
+	  */
 	 public void setCostoHoraFinger(double costoHoraFinger) {
 	     this.costoHoraFinger = costoHoraFinger;
 	 }
 
+	 /**
+	  * Obtiene el costo por hora de un hangar.
+	  * 
+	  * @return Costo por hora de un hangar.
+	  */
 	 public double getCostoHoraHangar() {
 	     return costoHoraHangar;
 	 }
 
+	 /**
+	  * Establece el costo por hora de un hangar.
+	  * 
+	  * @param costoHoraHangar Nuevo costo por hora del hangar.
+	  */
 	 public void setCostoHoraHangar(double costoHoraHangar) {
 	     this.costoHoraHangar = costoHoraHangar;
 	 }
 
+	 /**
+	  * Obtiene el costo por hora de un autobús.
+	  * 
+	  * @return Costo por hora de un autobús.
+	  */
 	 public double getCostoHoraAutobus() {
 	     return costoHoraAutobus;
 	 }
 
+	 /**
+	  * Establece el costo por hora de un autobús.
+	  * 
+	  * @param costoHoraAutobus Nuevo costo por hora del autobús.
+	  */
 	 public void setCostoHoraAutobus(double costoHoraAutobus) {
 	     this.costoHoraAutobus = costoHoraAutobus;
 	 }
 
-	// --- Métodos para actualizar el coste por hora de los elementos ---
+	 // --- Métodos para actualizar el coste por hora de los elementos ---
 
+	 /**
+	  * Actualiza el costo por hora de todas las pistas en el sistema.
+	  * 
+	  * @param nuevoCoste Nuevo costo por hora de las pistas.
+	  */
 	 public void actualizarCosteHoraPistas(double nuevoCoste) {
 	     for (Pista pista : pistas.values()) {
 	         pista.setCostePorHora(nuevoCoste);
 	     }
 	 }
 
+	 /**
+	  * Actualiza el costo por hora de todas las terminales en el sistema.
+	  * 
+	  * @param nuevoCoste Nuevo costo por hora de las terminales.
+	  */
 	 public void actualizarCosteHoraTerminales(double nuevoCoste) {
 	     for (Terminal terminal : terminales.values()) {
 	         terminal.setCostePorHora(nuevoCoste);
 	     }
 	 }
 
+	 /**
+	  * Actualiza el costo por hora de todos los fingers en el sistema.
+	  * 
+	  * @param nuevoCoste Nuevo costo por hora de los fingers.
+	  */
 	 public void actualizarCosteHoraFingers(double nuevoCoste) {
 	     for (Finger finger : fingers.values()) {
 	         finger.setCostePorHora(nuevoCoste);
 	     }
 	 }
 
+	 /**
+	  * Actualiza el costo por hora de todos los hangares en el sistema.
+	  * 
+	  * @param nuevoCoste Nuevo costo por hora de los hangares.
+	  */
 	 public void actualizarCosteHoraHangares(double nuevoCoste) {
 	     for (Hangar hangar : hangares.values()) {
 	         hangar.setCostePorHora(nuevoCoste);
 	     }
 	 }
-	 
-	 public Aeropuerto getAeropuertoPropio() {
-		    return informacionPropia;
-		}
 
-	public void setAeropuertoPropio(Aeropuerto aeropuertoPropio) {
-		    this.informacionPropia = aeropuertoPropio;
-	}
+	 /**
+	  * Obtiene el aeropuerto propio del sistema.
+	  * 
+	  * @return Aeropuerto propio del sistema.
+	  */
+	 public Aeropuerto getAeropuertoPropio() {
+	     return informacionPropia;
+	 }
+
+	 /**
+	  * Establece el aeropuerto propio del sistema.
+	  * 
+	  * @param aeropuertoPropio Nuevo aeropuerto propio.
+	  */
+	 public void setAeropuertoPropio(Aeropuerto aeropuertoPropio) {
+	     this.informacionPropia = aeropuertoPropio;
+	 }
+
 	
+	/**
+	 * Devuelve una lista de posibles horas alternativas para la salida o llegada de un vuelo.
+	 * La función ajusta la hora del vuelo y verifica disponibilidad de terminales para ofrecer opciones al usuario.
+	 *
+	 * @param v Vuelo al que se le buscan horas alternativas.
+	 * @return Lista de posibles horarios disponibles para la operación del vuelo.
+	 */
 	public List<LocalDateTime> horasAlternativas(Vuelo v) {
 		ArrayList<LocalDateTime> horas = new ArrayList<>();
 		int rangoNuevasHorasVuelo = 48;
@@ -1164,6 +1278,12 @@ public class SkyManager implements Serializable {
 		return horas;
 	}
 	
+	/**
+	 * Devuelve una lista de vuelos seguidos por un usuario.
+	 * 
+	 * @param u Usuario que sigue los vuelos.
+	 * @return Lista de vuelos seguidos por el usuario.
+	 */
 	public ArrayList<Vuelo> vuelosSeguidos(Usuario u) {
 		ArrayList<Vuelo> vuelos = new ArrayList<>();
 		
@@ -1178,6 +1298,12 @@ public class SkyManager implements Serializable {
 		return vuelos;
 	}
 	
+	/**
+	 * Devuelve una lista de aviones seguidos por un usuario.
+	 * 
+	 * @param u Usuario que sigue los aviones.
+	 * @return Lista de aviones seguidos por el usuario.
+	 */
 	public ArrayList<Avion> avionesSeguidos(Usuario u) {
 		ArrayList<Avion> aviones = new ArrayList<>();
 		

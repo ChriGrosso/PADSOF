@@ -21,6 +21,12 @@ import interfaz.Aplicacion;
 import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 
+/**
+ * Clase que representa el panel de registro de un nuevo tipo de avión.
+ * Permite ingresar la información del modelo y registrarlo en el sistema.
+ * 
+ * @author Sofia Castro - sofiai.castro@estudiante.uam.es
+ */
 public class NuevoTipoAvion extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JButton registrarTipoAvion;
@@ -28,6 +34,10 @@ public class NuevoTipoAvion extends JPanel{
 	private JRadioButton mercancias, pasajeros, mercPeligrosas, mercNoPeligrosas;
 	ButtonGroup tipoAvion, tipoMerc;
 	
+	/**
+     * Constructor de la clase NuevoTipoAvion.
+     * Configura la interfaz gráfica con los elementos necesarios para el registro del modelo de avión.
+     */
 	public NuevoTipoAvion() {
 		setLayout(new BorderLayout());
 		setBackground(new Color(173, 216, 230));
@@ -174,14 +184,21 @@ public class NuevoTipoAvion extends JPanel{
         add(panelInferior, BorderLayout.SOUTH);
 	}
 	
-	
+	/**
+     * Regresa a la pantalla anterior y guarda los datos del sistema.
+     */
 	private void paginaAnterior() {
 		SkyManager.getInstance().guardarDatos();
 		Aplicacion.getInstance().getNuevoAvion().setVisible(false);
 		Aplicacion.getInstance().showOpAviones();
 	}
 	
-
+	/**
+	 * Crea y configura un botón de la interfaz con formato estándar.
+	 * 
+	 * @param text Texto que aparecerá en el botón.
+	 * @return Botón configurado.
+	 */
 	private JButton createContentButton(String text) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(120, 48));
@@ -190,6 +207,11 @@ public class NuevoTipoAvion extends JPanel{
         return btn;
     }
 	
+	/**
+     * Aplica formato de estilo a los botones.
+     * 
+     * @param boton Botón a formatear.
+     */
 	void formatoBotones(JButton boton) {
 		boton.setForeground(Color.WHITE);
 	    boton.setBackground(new Color(70, 130, 180)); 
@@ -197,14 +219,22 @@ public class NuevoTipoAvion extends JPanel{
 	    boton.setFont(new Font("SansSerif", Font.BOLD, 11));
 	}
 	
-	
+	/**
+	 * Asigna un controlador de eventos a los botones de la interfaz.
+	 * 
+	 * @param c Controlador de eventos que manejará las acciones del usuario.
+	 */
 	public void setControlador(ActionListener c) {
 		registrarTipoAvion.addActionListener(c);
 	 	mercancias.addActionListener(c);
 	 	pasajeros.addActionListener(c);
 	}
 
-	// Obtener el dato (int o double) del campo capcidad
+	/**
+	 * Obtiene la capacidad de carga en toneladas del avión de mercancías.
+	 * 
+	 * @return Capacidad de carga en toneladas. Retorna -1 si el valor no es válido.
+	 */
     public Double getCapacidadM() {
     	try {
             return Double.parseDouble(capacidadM.getText().trim());
@@ -212,9 +242,21 @@ public class NuevoTipoAvion extends JPanel{
             return -1.0; // Retorna -1 si el texto no es un número válido
         }
     }
+    
+    /**
+     * Obtiene el campo de entrada de capacidad de carga de mercancías.
+     * 
+     * @return Campo de texto para ingresar la capacidad de carga de mercancías.
+     */
     public JTextField getCapacidadMTextField() {
     	return capacidadM;
     }
+    
+    /**
+     * Obtiene la capacidad de pasajeros del avión.
+     * 
+     * @return Número de pasajeros. Retorna -1 si el valor no es válido.
+     */
     public Integer getCapacidadP() {
     	try {
             return Integer.parseInt(capacidadP.getText().trim());
@@ -222,21 +264,39 @@ public class NuevoTipoAvion extends JPanel{
             return -1; // Retorna -1 si el texto no es un número válido
         }
     }
+    
+    /**
+     * Obtiene el campo de entrada de capacidad de pasajeros.
+     * 
+     * @return Campo de texto para ingresar la capacidad de pasajeros.
+     */
     public JTextField getCapacidadPTextField() {
     	return capacidadP;
     }
 
-    // Obtener el texto del campo marca
+    /**
+     * Obtiene la marca del modelo de avión.
+     * 
+     * @return Marca del avión como una cadena de texto.
+     */
     public String getMarca() {
         return cmpMarca.getText().trim();
     }
 
-    // Obtener el texto del campo modelo
+    /**
+     * Obtiene el modelo del avión.
+     * 
+     * @return Modelo del avión como una cadena de texto.
+     */
     public String getModelo() {
         return cmpModelo.getText().trim();
     }
     
-    // Obtener el dato del campo autonomia
+    /**
+     * Obtiene la autonomía máxima del avión en kilómetros.
+     * 
+     * @return Autonomía del avión. Retorna -1 si el valor no es válido.
+     */
     public Double getAutonomia() {
     	try {
             return Double.parseDouble(cmpAutonomia.getText().trim());
@@ -245,7 +305,11 @@ public class NuevoTipoAvion extends JPanel{
         }
     }
     
-    // Obtener el dato del campo anchura
+    /**
+     * Obtiene la anchura del avión en metros.
+     * 
+     * @return Anchura del avión. Retorna -1 si el valor no es válido.
+     */
     public Double getAnchura() {
     	try {
             return Double.parseDouble(cmpAnchura.getText().trim());
@@ -254,7 +318,11 @@ public class NuevoTipoAvion extends JPanel{
         }
     }
     
-    // Obtener el dato del campo altura
+    /**
+     * Obtiene la altura del avión en metros.
+     * 
+     * @return Altura del avión. Retorna -1 si el valor no es válido.
+     */
     public Double getAltura() {
     	try {
             return Double.parseDouble(cmpAltura.getText().trim());
@@ -263,7 +331,11 @@ public class NuevoTipoAvion extends JPanel{
         }
     }
     
-    // Obtener el dato del campo largo
+    /**
+     * Obtiene el largo del avión en metros.
+     * 
+     * @return Largo del avión. Retorna -1 si el valor no es válido.
+     */
     public Double getLargo() {
     	try {
             return Double.parseDouble(cmpLargo.getText().trim());
@@ -272,35 +344,64 @@ public class NuevoTipoAvion extends JPanel{
         }
     }
     
- // Verificar si el avión es de tipo "Mercancías"
+    /**
+     * Verifica si el avión es de tipo mercancías.
+     * 
+     * @return true si el avión es de mercancías, false en caso contrario.
+     */
     public boolean esMercancias() {
         return mercancias.isSelected();
     }
 
-    // Verificar si el avión es de tipo "Pasajeros"
+    /**
+     * Verifica si el avión es de tipo pasajeros.
+     * 
+     * @return true si el avión es de pasajeros, false en caso contrario.
+     */
     public boolean esPasajeros() {
         return pasajeros.isSelected();
     }
 
-    // Verificar si el avión puede transportar mercancías peligrosas
+    /**
+     * Verifica si el avión puede transportar mercancías peligrosas.
+     * 
+     * @return true si el avión transporta mercancías peligrosas, false en caso contrario.
+     */
     public boolean esMercPeligrosas() {
         return mercPeligrosas.isSelected();
     }
-    
+
+    /**
+     * Obtiene el botón de selección de mercancías peligrosas.
+     * 
+     * @return JRadioButton que permite la selección de mercancías peligrosas.
+     */
     public JRadioButton getMercPeligrosas() {
-    	return mercPeligrosas;
+        return mercPeligrosas;
     }
 
-    // Verificar si el avión no puede transportar mercancías peligrosas
+    /**
+     * Verifica si el avión no transporta mercancías peligrosas.
+     * 
+     * @return true si el avión no transporta mercancías peligrosas, false en caso contrario.
+     */
     public boolean esMercNoPeligrosas() {
         return mercNoPeligrosas.isSelected();
     }
-    
+
+    /**
+     * Obtiene el botón de selección de mercancías no peligrosas.
+     * 
+     * @return JRadioButton que permite la selección de mercancías no peligrosas.
+     */
     public JRadioButton getMercNoPeligrosas() {
-    	return mercNoPeligrosas;
+        return mercNoPeligrosas;
     }
 
-
+    /**
+     * Restablece los valores de los campos de entrada y los elementos de la interfaz.
+     * Se reinician los textos, capacidades y opciones de selección.
+     */
 	public void update() {
 		// Reiniciar campos de texto
 	    capacidadM.setText("");
