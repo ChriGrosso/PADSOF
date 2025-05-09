@@ -253,9 +253,9 @@ public class DemoApp {
     	String s = "Vuelo "+v1.getId()+" a espera de asignación de Terminal y controlador";
     	app.getUsuarioActual().enviarNotificacion(s, app.getUsuarios().get("01020304A"));
     	
-    	//Vuelo de Mercancias de llegada
+    	//Vuelo de Mercancias de salida
     	avion = aerolineas.get(2).getAviones().get("AV-1209QW");
-    	Vuelo v2 = new VueloMercancias(aeropuertos.get(4), aeropuertos.get(3), LocalDateTime.of(2025, 5, 30, 12, 30), LocalDateTime.of(2025, 5, 30, 15, 45), 
+    	Vuelo v2 = new VueloMercancias(app.getAeropuertoPropio(), aeropuertos.get(3), LocalDateTime.of(2025, 5, 30, 12, 30), LocalDateTime.of(2025, 5, 30, 15, 45), 
     			new ArrayList<Aerolinea>(Arrays.asList(aerolineas.get(2))), false, 10, false, Periodicidad.NO_PERIODICO, avion);
     	aerolineas.get(2).addVuelo(v2);
     	app.registrarVuelo(v2);

@@ -43,7 +43,7 @@ public class OperadorEstadisticas extends JPanel {
 		setBackground(new Color(173, 216, 230));
 		setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
 
-		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras.png");
+		BotonVolver panelSuperiorIzquierdo = new BotonVolver("resources/atras_icon.png");
 		panelSuperiorIzquierdo.setControladorVolver(_ -> paginaAnterior());
 		add(panelSuperiorIzquierdo, BorderLayout.NORTH);
 
