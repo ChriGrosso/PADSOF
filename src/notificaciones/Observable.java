@@ -60,6 +60,21 @@ public abstract class Observable implements Serializable{
 	}
 	
 	/**
+     * Comprueba si un usuario ya pertenece a la lista de observadores.
+     * 
+     * @param user Usuario a comprobar.
+     * @return true si lo contiene, false en caso contrario.
+     */
+	public boolean comprobarObserver(Usuario user) {
+		if (user != null) {
+            return observers.containsKey(user.getDni());
+        }
+		return false;
+	}
+	
+	
+	
+	/**
      * Elimina un usuario de la lista de observadores.
      * 
      * @param user Usuario a eliminar.

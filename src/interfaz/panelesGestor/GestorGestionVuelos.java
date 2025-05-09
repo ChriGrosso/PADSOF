@@ -8,17 +8,21 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -31,6 +35,7 @@ import interfaz.Aplicacion;
 import interfaz.util.BotonVolver;
 import sistema.SkyManager;
 import usuarios.Controlador;
+import usuarios.Usuario;
 import vuelos.Vuelo;
 
 public class GestorGestionVuelos extends JPanel{
@@ -183,10 +188,88 @@ public class GestorGestionVuelos extends JPanel{
 			        }
 
 			        if (terminales.isEmpty()) {
-			            JOptionPane.showMessageDialog(null, "No hay terminales disponibles.");
+			            List<LocalDateTime> horasAlternativas = SkyManager.getInstance().horasAlternativas(vuelo);
+
+			            // Crear ventana personalizada
+			            JDialog dialogo = new JDialog();
+			            dialogo.setTitle("Horas Alternativas");
+			            dialogo.setModal(true);
+			            dialogo.setLayout(new BorderLayout());
+			            dialogo.setSize(500, 400); 
+
+			            // Usar JTextArea para mostrar todo el mensaje sin corte
+			            String mensajeTexto = "No hay terminales disponibles para el vuelo " + vuelo.getId() +
+			                    ". Seleccione las horas alternativas que desea notificar al operador:";
+			            JTextArea mensaje = new JTextArea(mensajeTexto);
+			            mensaje.setWrapStyleWord(true);
+			            mensaje.setLineWrap(true);
+			            mensaje.setEditable(false);
+			            mensaje.setBackground(dialogo.getBackground());
+			            
+			            JPanel panelMensaje = new JPanel(new BorderLayout());
+			            panelMensaje.add(mensaje, BorderLayout.CENTER);
+			            dialogo.add(panelMensaje, BorderLayout.NORTH);
+
+			            // Panel para las casillas de selección
+			            JPanel panelCasillas = new JPanel(new GridBagLayout());
+			            GridBagConstraints gbc = new GridBagConstraints();
+			            gbc.insets = new Insets(5, 5, 5, 5);
+			            gbc.gridx = 0;
+			            gbc.gridy = 0;
+			            gbc.anchor = GridBagConstraints.WEST;
+
+			            List<JCheckBox> listaCasillas = new ArrayList<>();
+			            for (LocalDateTime hora : horasAlternativas) {
+			                JCheckBox casilla = new JCheckBox(hora.toString());
+			                listaCasillas.add(casilla);
+			                panelCasillas.add(casilla, gbc);
+			                gbc.gridy++;
+			            }
+
+			            JScrollPane scrollPane = new JScrollPane(panelCasillas);
+			            dialogo.add(scrollPane, BorderLayout.CENTER);
+
+			            // Botón de confirmación
+			            JButton botonConfirmar = new JButton("Confirmar");
+			            botonConfirmar.addActionListener(_ -> {
+			                List<LocalDateTime> horasSeleccionadas = new ArrayList<>();
+			                for (JCheckBox casilla : listaCasillas) {
+			                    if (casilla.isSelected()) {
+			                        horasSeleccionadas.add(LocalDateTime.parse(casilla.getText()));
+			                    }
+			                }
+
+			                if (!horasSeleccionadas.isEmpty()) {
+			                    String mensajeNotificacion = "No hay terminales disponibles en el horario solicitudo. Estas son algunas horas alternativas de " +
+			                            (vuelo.getLlegada() ? "llegada" : "salida") +" para el vuelo "+vuelo.getId()+": "+ horasSeleccionadas.toString();
+
+			                    // Enviar notificación a los operadores
+			                    for (Usuario u : vuelo.getAerolinea().getOperadores()) {
+			                        SkyManager.getInstance().getUsuarioActual().enviarNotificacion(mensajeNotificacion, u);
+			                    }
+
+			                    // Mostrar mensaje de verificación en pantalla
+			                    JOptionPane.showMessageDialog(null, "La notificación se ha enviado correctamente.", 
+			                                                  "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+			                }
+			                dialogo.dispose(); // Cerrar la ventana tras selección
+			            });
+
+			            // Botón de cancelar
+			            JButton botonCancelar = new JButton("Cancelar");
+			            botonCancelar.addActionListener(_ -> dialogo.dispose());
+
+			            JPanel panelBotones = new JPanel();
+			            panelBotones.add(botonConfirmar);
+			            panelBotones.add(botonCancelar);
+			            dialogo.add(panelBotones, BorderLayout.SOUTH);
+
+			            dialogo.setVisible(true);
+
 			            fireEditingCanceled();
 			            return;
 			        }
+
 
 			        String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione una terminal:", "Asignar Terminal", 
 			                JOptionPane.QUESTION_MESSAGE, null, terminales.toArray(), terminales.get(0));
@@ -196,8 +279,7 @@ public class GestorGestionVuelos extends JPanel{
 			            JOptionPane.showMessageDialog(null, "Terminal asignada: " + seleccion);
 
 			            // ACTUALIZAR CELDA
-			            table.setValueAt(seleccion, row, table.getColumn("Terminal").getModelIndex());
-			            table.repaint();
+			            Aplicacion.getInstance().getGestorGestionVuelos().actualizarPantalla();
 			            fireEditingStopped();
 			        } else {
 			            fireEditingCanceled(); // Usuario canceló
@@ -230,8 +312,7 @@ public class GestorGestionVuelos extends JPanel{
 			            JOptionPane.showMessageDialog(null, "Controlador asignado: " + seleccion);
 
 			            // ACTUALIZAR CELDA
-			            table.setValueAt(seleccion, row, table.getColumn("Operador").getModelIndex());
-			            table.repaint();
+			            Aplicacion.getInstance().getGestorGestionVuelos().actualizarPantalla();
 			            fireEditingStopped();
 			        } else {
 			            fireEditingCanceled();

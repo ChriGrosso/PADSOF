@@ -4,6 +4,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import aviones.EstadoAvion;
 import vuelos.EstadoVuelo;
@@ -122,5 +123,24 @@ public class Gestor extends Usuario {
 	public Boolean sigueCambioEstadoAvion(EstadoAvion anterior, EstadoAvion nuevo) {
 		return cambiosEstadoAvion.stream()
                 .anyMatch(c -> c.getKey().equals(anterior) && c.getValue().equals(nuevo));
-    }	
+    }
+	
+	/**
+     * Obtiene los cambios de estado de aviones que sigue el gestor.
+     *
+     * @return Lista con los pares de cambios de estado.
+     */
+	public List<Entry<EstadoAvion, EstadoAvion>> getEstadosSeguidosAvion() {
+		return this.cambiosEstadoAvion;
+	}
+	
+	/**
+     * Obtiene los cambios de estado de vuelos que sigue el gestor.
+     *
+     * @return Lista con los pares de cambios de estado.
+     */
+	public List<Map.Entry<EstadoVuelo, EstadoVuelo>> getEstadosSeguidosVuelo() {
+		return this.cambiosEstadoVuelo;
+	}
+	
 }

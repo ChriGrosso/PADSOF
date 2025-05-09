@@ -1708,12 +1708,12 @@ public class ControlGestorGestionAeropuerto {
 			}
 			}
 			
-			campoCostoBase.setText(String.valueOf(modelo.getCostoBaseFactura()));
-			campoCostoPista.setText(String.valueOf(modelo.getCostoHoraPista()));
-			campoCostoTerminal.setText(String.valueOf(modelo.getCostoHoraTerminal()));
-			campoCostoFinger.setText(String.valueOf(modelo.getCostoHoraFinger()));
-			campoCostoHangar.setText(String.valueOf(modelo.getCostoHoraHangar()));
-			campoCostoAutobus.setText(String.valueOf(modelo.getCostoHoraAutobus()));
+			campoCostoBase.setText(""+modelo.getCostoBaseFactura());
+			campoCostoPista.setText(""+modelo.getCostoHoraPista());
+			campoCostoTerminal.setText(""+modelo.getCostoHoraTerminal());
+			campoCostoFinger.setText(""+modelo.getCostoHoraFinger());
+			campoCostoHangar.setText(""+modelo.getCostoHoraHangar());
+			campoCostoAutobus.setText(""+modelo.getCostoHoraAutobus());
 			
 	}
 	

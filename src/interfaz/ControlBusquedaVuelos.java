@@ -29,7 +29,7 @@ public class ControlBusquedaVuelos implements ActionListener {
                 break;
                 
             default:
-                System.out.println("Comando desconocido:  " + comando);
+	            break;
         }
     }
     
@@ -37,6 +37,7 @@ public class ControlBusquedaVuelos implements ActionListener {
     	ArrayList<Vuelo> vuelos = new ArrayList<>();
     	BusquedaVuelos bv = Aplicacion.getInstance().getBusquedaVuelos();
     	String contenido = bv.getContenidoCampoBusqueda();
+    	
     	LocalTime hora;
     	
     	String tipo = bv.getTipoBusquedaSeleccionado();
@@ -58,16 +59,19 @@ public class ControlBusquedaVuelos implements ActionListener {
             break;
         case "Hora de Llegada":
         	hora = parsearHoraUsuario(contenido);
-        	vuelos = modelo.buscarVuelosPorHoraLlegada(hora);
+        	if (hora != null) vuelos = modelo.buscarVuelosPorHoraLlegada(hora);
             break;
         case "Hora de Salida":
         	hora = parsearHoraUsuario(contenido);
-        	vuelos = modelo.buscarVuelosPorHoraSalida(hora);
+        	if (hora != null) vuelos = modelo.buscarVuelosPorHoraSalida(hora);
             break;
         default:
         	JOptionPane.showMessageDialog(null, "Debe seleccionar el tipo de búsqueda a realizar");
         }
     	bv.setFilasTabla(vuelos);
+    	if (vuelos == null || vuelos.isEmpty()) {
+        	JOptionPane.showMessageDialog(null, "No hay resultados");
+    	}
     	
     }
     

@@ -40,9 +40,9 @@ public class ControlControladorGestionVuelos implements ActionListener {
      * Inicializa todos los listeners y acciones de los botones en la vista.
      */
     private void inizializzaControlli() {
-        vista.getBotonVolver().setControladorVolver(e -> vista.mostraVistaPrincipale());
+        vista.getBotonVolver().setControladorVolver(_ -> vista.mostraVistaPrincipale());
 
-        vista.getBotonModificar().addActionListener(e -> {
+        vista.getBotonModificar().addActionListener(_ -> {
             int row = vista.getTabla().getSelectedRow();
             if (row == -1) {
                 JOptionPane.showMessageDialog(null, "Seleziona un volo da modificare.");
@@ -70,7 +70,7 @@ public class ControlControladorGestionVuelos implements ActionListener {
             vista.mostraFormModifica();
         });
 
-        vista.getBotonGuardar().addActionListener(e -> {
+        vista.getBotonGuardar().addActionListener(_ -> {
             if (voloSelezionato == null) return;
 
             String nuovoStato = (String) vista.getComboEstado().getSelectedItem();
@@ -106,7 +106,7 @@ public class ControlControladorGestionVuelos implements ActionListener {
             vista.mostraVistaPrincipale();
         });
 
-        vista.getBotonCancelar().addActionListener(e -> {
+        vista.getBotonCancelar().addActionListener(_ -> {
             voloSelezionato = null;
             vista.mostraVistaPrincipale();
         });

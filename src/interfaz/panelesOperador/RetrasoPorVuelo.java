@@ -31,8 +31,9 @@ public class RetrasoPorVuelo extends JPanel{
 	private static final long serialVersionUID = 1L;
 	JComboBox<String> origen = new JComboBox<>();
 	JComboBox<String> destino = new JComboBox<>();
-	JLabel nuestroAeO = new JLabel(SkyManager.getInstance().getInformacionPropia().getNombre() + "(" + SkyManager.getInstance().getInformacionPropia().getCodigo() +")");
-	JLabel nuestroAeD = new JLabel(SkyManager.getInstance().getInformacionPropia().getNombre() + "(" + SkyManager.getInstance().getInformacionPropia().getCodigo() +")");
+	SkyManager sk = SkyManager.getInstance();
+	JLabel nuestroAeO = new JLabel(((sk.getInformacionPropia() != null) ? sk.getInformacionPropia().getNombre() : ("Aeropuerto Propio")) + "(" + ((sk.getInformacionPropia() != null) ? sk.getInformacionPropia().getCodigo() : "AP") +")");
+	JLabel nuestroAeD = new JLabel(((sk.getInformacionPropia() != null) ? sk.getInformacionPropia().getNombre() : "Aeropuerto Propio") + "(" + ((sk.getInformacionPropia() != null) ? sk.getInformacionPropia().getCodigo() : "AP")+")");
 	JLabel resultado = new JLabel();
 	private JRadioButton llega, sale;
 	ButtonGroup esLlegada;

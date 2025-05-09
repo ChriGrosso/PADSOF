@@ -7,32 +7,44 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+
+import aviones.Avion;
 import aviones.EstadoAvion;
 import interfaz.Aplicacion;
 import interfaz.util.BotonVolver;
 import sistema.SkyManager;
+import usuarios.Gestor;
 import vuelos.EstadoVuelo;
+import vuelos.Vuelo;
 
 public class ConfiguracionNotificaciones extends JPanel{
 	private static final long serialVersionUID = 1L;
-	private ArrayList<JCheckBox> casillasAvion = new ArrayList<>();
-	private ArrayList<JCheckBox> casillasVuelos = new ArrayList<>();
 	private JButton confirmarA;
 	private JButton confirmarV;
 	private JButton botonSeguirA;
 	private JButton botonSeguirV;
 	private JTextField campoA;
 	private JTextField campoV;
+	private JTable tablaEstadosA;
+	private JTable tablaEstadosV;
+	private JTable tablaVuelos;
+	private JTable tablaAviones;
+	private JComboBox<EstadoAvion> comboAvionInicio;
+	private JComboBox<EstadoAvion> comboAvionFin;
+	private JComboBox<EstadoVuelo> comboVueloInicio;
+	private JComboBox<EstadoVuelo> comboVueloFin;
 	
 	public ConfiguracionNotificaciones() {
 		setLayout(new BorderLayout());
@@ -59,111 +71,159 @@ public class ConfiguracionNotificaciones extends JPanel{
 	    add(panelSuperiorIzquierdo, BorderLayout.NORTH);
 		
 		
-        JPanel panelContenido = new JPanel(new GridBagLayout());
-        panelContenido.setBackground(new Color(173, 216, 230));
-        panelContenido.setBorder(BorderFactory.createEmptyBorder(10, 10,10, 10));
+	    JPanel panelContenido = new JPanel(new GridBagLayout());
+	    panelContenido.setBackground(new Color(173, 216, 230));
+	    panelContenido.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	    GridBagConstraints gbc_cont = new GridBagConstraints();
+	    gbc_cont.insets = new Insets(5, 10, 5, 10);
+	    gbc_cont.weightx = 1.0;
+	    gbc_cont.fill = GridBagConstraints.BOTH;
 
-        JPanel avionesCheckbox = new JPanel(new GridBagLayout());
-        avionesCheckbox.setBorder(BorderFactory.createEmptyBorder(10, 20,20, 20));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 10, 5, 10);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2; // Ocupa 2 columnas
-		gbc.anchor = GridBagConstraints.WEST;
-        avionesCheckbox.add(new JLabel("Estados de Aviones que se desean seguir:"), gbc);
-		gbc.anchor = GridBagConstraints.CENTER;
-        // Crear las opciones
-        for (EstadoAvion v: Arrays.asList(EstadoAvion.EN_FINGER, EstadoAvion.EN_PARKING, EstadoAvion.ESPERANDO_PISTA, EstadoAvion.EN_PISTA, EstadoAvion.EN_HANGAR, EstadoAvion.FUERA_AEROPUERTO)) {
-        	JCheckBox casilla = new JCheckBox(v.toString());
-        	casillasAvion.add(casilla);
-        	gbc.gridy+=1;
-        	gbc.anchor = GridBagConstraints.WEST;
-        	gbc.gridwidth = 1;
-        	avionesCheckbox.add(casilla, gbc);
-        	if (gbc.gridy == 3) { gbc.gridx+=1; gbc.gridy = 0;}
-        }
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        gbc.gridwidth = 3;
-        confirmarA = new JButton("Confirmar");
-        this.formatoBotones(confirmarA);
-        avionesCheckbox.add(confirmarA, gbc);
+	    /** PANEL DE VUELOS (IZQUIERDA) **/
+	    JPanel panelVueloG = new JPanel(new BorderLayout());
+	    panelVueloG.setBackground(new Color(173, 216, 230));
+	    
+	    JPanel panelVuelo = new JPanel(new GridBagLayout());
+	    panelVuelo.setBorder(BorderFactory.createTitledBorder("Transiciones de Vuelo"));
+	    panelVuelo.setBackground(new Color(173, 216, 230));
+	    GridBagConstraints gbcVuelo = new GridBagConstraints();
+	    gbcVuelo.insets = new Insets(5, 10, 5, 10);
+	    gbcVuelo.gridx = 0; gbcVuelo.gridy = 0;
+
+	    // Sección de selección de estados
+	    panelVuelo.add(new JLabel("Desde:"), gbcVuelo);
+	    gbcVuelo.gridx++;
+	    comboVueloInicio = new JComboBox<>(EstadoVuelo.values());
+	    panelVuelo.add(comboVueloInicio, gbcVuelo);
+
+	    gbcVuelo.gridx++;
+	    panelVuelo.add(new JLabel("Hasta:"), gbcVuelo);
+	    gbcVuelo.gridx++;
+	    comboVueloFin = new JComboBox<>(EstadoVuelo.values());
+	    panelVuelo.add(comboVueloFin, gbcVuelo);
+
+	    gbcVuelo.gridx++;
+	    confirmarV = new JButton("Seguir transición");
+	    this.formatoBotones(confirmarV);
+	    panelVuelo.add(confirmarV, gbcVuelo);
+	    panelVueloG.add(panelVuelo, BorderLayout.NORTH);
+
+	    // Tabla de transiciones actuales de vuelos
+	    tablaEstadosV = new JTable(new DefaultTableModel(new Object[]{"Desde", "Hasta"}, 0));
+	    this.formatoTabla(tablaEstadosV);
+	    panelVueloG.add(new JScrollPane(tablaEstadosV), BorderLayout.CENTER);
+
+	    // Panel de seguimiento de vuelos
+	    JPanel panelSegVuelosG = new JPanel(new BorderLayout());
+	    panelSegVuelosG.setBackground(new Color(173, 216, 230));
+	    
+	    JPanel panelSeguimientoVuelos = new JPanel(new GridBagLayout());
+	    panelSeguimientoVuelos.setBorder(BorderFactory.createTitledBorder("Seguimiento de Vuelos"));
+	    panelSeguimientoVuelos.setBackground(new Color(173, 216, 230));
+
+	    GridBagConstraints gbcSeguimientoV = new GridBagConstraints();
+	    gbcSeguimientoV.insets = new Insets(5, 10, 5, 10);
+	    gbcSeguimientoV.gridx = 0; gbcSeguimientoV.gridy = 0;
+
+	    panelSeguimientoVuelos.add(new JLabel("Seguir vuelo:"), gbcSeguimientoV);
+	    gbcSeguimientoV.gridx++;
+	    campoV = new JTextField(15);
+	    panelSeguimientoVuelos.add(campoV, gbcSeguimientoV);
+
+	    gbcSeguimientoV.gridx++;
+	    botonSeguirV = new JButton("Seguir");
+	    this.formatoBotones(botonSeguirV);
+	    panelSeguimientoVuelos.add(botonSeguirV, gbcSeguimientoV);
+	    panelSegVuelosG.add(panelSeguimientoVuelos, BorderLayout.NORTH);
+
+	    // Tabla de vuelos seguidos
+	    tablaVuelos = new JTable(new DefaultTableModel(new Object[]{"ID Vuelo", "Aerolínea", "Estado"}, 0));
+	    this.formatoTabla(tablaVuelos);
+	    JScrollPane scrollVuelos = new JScrollPane(tablaVuelos);
+	    scrollVuelos.setPreferredSize(null);  // Permitir expansión
+	    panelSegVuelosG.add(scrollVuelos, BorderLayout.CENTER);
+
+	    // Agregar los paneles al contenedor principal (Vuelos a la izquierda)
+	    gbc_cont.gridx = 0;
+	    gbc_cont.gridy = 0;
+	    panelContenido.add(panelVueloG, gbc_cont);
+
+	    gbc_cont.gridy = 1;
+	    panelContenido.add(panelSegVuelosG, gbc_cont);
+
+	    /** PANEL DE AVIONES (DERECHA) **/
+	    JPanel panelAvionG = new JPanel(new BorderLayout());
+	    panelAvionG.setBackground(new Color(173, 216, 230));
+	    
+	    JPanel panelAvion = new JPanel(new GridBagLayout());
+	    panelAvion.setBorder(BorderFactory.createTitledBorder("Transiciones de Avión"));
+	    panelAvion.setBackground(new Color(173, 216, 230));
+	    GridBagConstraints gbcAvion = new GridBagConstraints();
+	    gbcAvion.insets = new Insets(5, 10, 5, 10);
+	    gbcAvion.gridx = 0; gbcAvion.gridy = 0;
+
+	    // Sección de selección de estados
+	    panelAvion.add(new JLabel("Desde:"), gbcAvion);
+	    gbcAvion.gridx++;
+	    comboAvionInicio = new JComboBox<>(EstadoAvion.values());
+	    panelAvion.add(comboAvionInicio, gbcAvion);
+
+	    gbcAvion.gridx++;
+	    panelAvion.add(new JLabel("Hasta:"), gbcAvion);
+	    gbcAvion.gridx++;
+	    comboAvionFin = new JComboBox<>(EstadoAvion.values());
+	    panelAvion.add(comboAvionFin, gbcAvion);
+
+	    gbcAvion.gridx++;
+	    confirmarA = new JButton("Seguir transición");
+	    this.formatoBotones(confirmarA);
+	    panelAvion.add(confirmarA, gbcAvion);
+	    panelAvionG.add(panelAvion, BorderLayout.NORTH);
+
+	    // Tabla de transiciones actuales de aviones
+	    tablaEstadosA = new JTable(new DefaultTableModel(new Object[]{"Desde", "Hasta"}, 0));
+	    this.formatoTabla(tablaEstadosA);
+	    panelAvionG.add(new JScrollPane(tablaEstadosA), BorderLayout.CENTER);
+
+	    // Panel de seguimiento de aviones
+	    JPanel panelSegAvionesG = new JPanel(new BorderLayout());
+	    panelSegAvionesG.setBackground(new Color(173, 216, 230));
+	    
+	    JPanel panelSeguimientoAviones = new JPanel(new GridBagLayout());
+	    panelSeguimientoAviones.setBorder(BorderFactory.createTitledBorder("Seguimiento de Aviones"));
+	    panelSeguimientoAviones.setBackground(new Color(173, 216, 230));
+
+	    GridBagConstraints gbcSeguimientoA = new GridBagConstraints();
+	    gbcSeguimientoA.insets = new Insets(5, 10, 5, 10);
+	    gbcSeguimientoA.gridx = 0; gbcSeguimientoA.gridy = 0;
+
+	    panelSeguimientoAviones.add(new JLabel("Seguir avión:"), gbcSeguimientoA);
+	    gbcSeguimientoA.gridx++;
+	    campoA = new JTextField(15);
+	    panelSeguimientoAviones.add(campoA, gbcSeguimientoA);
+
+	    gbcSeguimientoA.gridx++;
+	    botonSeguirA = new JButton("Seguir");
+	    this.formatoBotones(botonSeguirA);
+	    panelSeguimientoAviones.add(botonSeguirA, gbcSeguimientoA);
+	    panelSegAvionesG.add(panelSeguimientoAviones, BorderLayout.NORTH);
+	    
+	    // Tabla de aviones seguidos
+	    tablaAviones = new JTable(new DefaultTableModel(new Object[]{"Matrícula", "Tipo", "Estado"}, 0));
+	    this.formatoTabla(tablaAviones);
+	    JScrollPane scrollAviones = new JScrollPane(tablaAviones);
+	    scrollAviones.setPreferredSize(null);  // Permitir expansión
+	    gbc_cont.weighty = 0.25;
+	    panelSegAvionesG.add(scrollAviones, BorderLayout.CENTER);
+
+	    // Agregar los paneles al contenedor principal (Aviones a la derecha)
+	    gbc_cont.gridx = 1;
+	    gbc_cont.gridy = 0;
+	    panelContenido.add(panelAvionG, gbc_cont);
+
+	    gbc_cont.gridy = 1;
+	    panelContenido.add(panelSegAvionesG, gbc_cont);
         
-        JPanel vuelosCheckbox = new JPanel(new GridBagLayout());
-        vuelosCheckbox.setBorder(BorderFactory.createEmptyBorder(10, 10,10, 10));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 4; // Ocupa 4 columnas
-        gbc.anchor = GridBagConstraints.WEST;
-        vuelosCheckbox.add(new JLabel("Estados de Vuelos que se desean seguir:"), gbc);
-		gbc.anchor = GridBagConstraints.CENTER;
-        // Crear las opciones
-        for (EstadoVuelo v: Arrays.asList(EstadoVuelo.EN_VUELO, EstadoVuelo.ESPERANDO_PISTA_A, EstadoVuelo.ESPERANDO_PISTA_D, EstadoVuelo.ESPERANDO_ATERRIZAJE, EstadoVuelo.ESPERANDO_DESPEGUE, 
-        		EstadoVuelo.ATERRIZADO, EstadoVuelo.EMBARQUE, EstadoVuelo.DESEMBARQUE_INI, EstadoVuelo.DESEMBARQUE_FIN, EstadoVuelo.CARGA, EstadoVuelo.DESCARGA_INI, 
-        		EstadoVuelo.DESCARGA_FIN, EstadoVuelo.EN_TIEMPO, EstadoVuelo.RETRASADO, EstadoVuelo.OPERATIVO, EstadoVuelo.EN_HANGAR)) {
-        	JCheckBox casilla = new JCheckBox(v.toString());
-        	casillasVuelos.add(casilla);
-        	gbc.gridy+= 1;
-        	gbc.anchor = GridBagConstraints.WEST;
-        	gbc.gridwidth = 1;
-        	vuelosCheckbox.add(casilla, gbc);
-        	if (gbc.gridy%5 == 0) { gbc.gridx+=1; gbc.gridy = 0;}
-        }
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        gbc.gridwidth = 4;
-        confirmarV = new JButton("Confirmar");
-        this.formatoBotones(confirmarV);
-        vuelosCheckbox.add(confirmarV, gbc);
-        
-        JPanel panel_seguimiento = new JPanel(new GridBagLayout());
-        panel_seguimiento.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1; 
-		gbc.anchor = GridBagConstraints.CENTER;
-		JLabel labelVuelos = new JLabel("Seguir vuelo:");
-		panel_seguimiento.add(labelVuelos, gbc);
-		gbc.gridx +=1;
-		campoV = new JTextField(15);
-		panel_seguimiento.add(campoV, gbc);
-		gbc.gridx +=1;
-		botonSeguirV = new JButton("Seguir");
-		this.formatoBotones(botonSeguirV);
-		panel_seguimiento.add(botonSeguirV, gbc);
-		
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-		JLabel labelAviones = new JLabel("Seguir avión:");
-		panel_seguimiento.add(labelAviones, gbc);
-		gbc.gridx +=1;
-		campoA = new JTextField(15);
-		panel_seguimiento.add(campoA, gbc);
-		gbc.gridx +=1;
-		botonSeguirA = new JButton("Seguir");
-		this.formatoBotones(botonSeguirA);
-		panel_seguimiento.add(botonSeguirA, gbc);
-		
-		GridBagConstraints gbc_cont = new GridBagConstraints();
-		gbc_cont.insets = new Insets(5, 10, 5, 10);
-		gbc_cont.gridx = 0;
-		gbc_cont.gridy = 0;
-		gbc_cont.weightx = 1.0; // Permitir expansión en el eje X
-		gbc_cont.fill = GridBagConstraints.BOTH; // Expandirse en ambas direcciones
-
-		// Panel de aviones
-		panelContenido.add(avionesCheckbox, gbc_cont);
-
-		// Panel de vuelos
-		gbc_cont.gridx = 1; // Ubicarlo en la segunda columna
-		panelContenido.add(vuelosCheckbox, gbc_cont);
-
-		// Panel inferior (ocupando el ancho total)
-		gbc_cont.gridx = 0;
-		gbc_cont.gridy = 1;
-		gbc_cont.gridwidth = 2; // Ocupa el ancho total de los dos paneles superiores
-		panelContenido.add(panel_seguimiento, gbc_cont);
         add(panelContenido, BorderLayout.CENTER);  
 	}
 	
@@ -178,12 +238,23 @@ public class ConfiguracionNotificaciones extends JPanel{
 	    boton.setFocusPainted(false);
 	}
 	
+	private void formatoTabla(JTable tabla) {
+		tabla.setBackground(Color.WHITE);
+	    tabla.setForeground(Color.BLACK);
+	    tabla.setFont(new Font("SansSerif", Font.PLAIN, 10));
+	    tabla.setRowHeight(25);
+	    tabla.setGridColor(new Color(75, 135, 185));
+	    tabla.getTableHeader().setBackground(new Color(70, 130, 180));
+	    tabla.getTableHeader().setForeground(Color.WHITE);
+	    tabla.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
+	}
+	
 	
 	// método para asignar un controlador a los botones
 	public void setControlador(ActionListener c) {  
 		confirmarA.setActionCommand("CONFIRMAR_A");
 		confirmarV.setActionCommand("CONFIRMAR_V");
-		botonSeguirA.setActionCommand("SEGUIR_V");
+		botonSeguirA.setActionCommand("SEGUIR_A");
 		botonSeguirV.setActionCommand("SEGUIR_V");
 		
 		confirmarA.addActionListener(c);
@@ -202,17 +273,56 @@ public class ConfiguracionNotificaciones extends JPanel{
 	    return campoA.getText().trim();
 	}
 	
-	public void actualizarPantalla() {
-		
-		
-		campoA.setText("");
-	    campoV.setText("");
-	}
-	
 	// método que actualiza el valor de los campos
 	public void limpiarCampos() {
 	    campoA.setText("");
 	    campoV.setText("");
 	}
+	
+	public EstadoAvion getEstadoAvionInicio() {
+	    return (EstadoAvion) comboAvionInicio.getSelectedItem();
+	}
 
+	public EstadoAvion getEstadoAvionFin() {
+	    return (EstadoAvion) comboAvionFin.getSelectedItem();
+	}
+
+	public EstadoVuelo getEstadoVueloInicio() {
+	    return (EstadoVuelo) comboVueloInicio.getSelectedItem();
+	}
+
+	public EstadoVuelo getEstadoVueloFin() {
+	    return (EstadoVuelo) comboVueloFin.getSelectedItem();
+	}
+	
+	public void actualizarTablas() {
+		SkyManager sk = SkyManager.getInstance();
+		DefaultTableModel modeloTablaEstadosA = new DefaultTableModel(new Object[]{"Desde", "Hasta"}, 0);
+		DefaultTableModel modeloTablaEstadosV = new DefaultTableModel(new Object[]{"Desde", "Hasta"}, 0);
+		DefaultTableModel modeloTablaVuelos= new DefaultTableModel(new Object[]{"ID Vuelo", "Aerolínea", "Estado"}, 0);
+		DefaultTableModel modeloTablaAviones = new DefaultTableModel(new Object[]{"Matrícula", "Tipo", "Estado"}, 0);
+		Gestor gestor = (Gestor)sk.getUsuarioActual();
+		if (gestor == null) {
+			return;
+		}
+		
+		//Tabla estados vuelo
+		for (Map.Entry<EstadoVuelo, EstadoVuelo> e: gestor.getEstadosSeguidosVuelo()) {
+			modeloTablaEstadosV.addRow(new Object[]{e.getKey(), e.getValue()});
+		}
+		for (Map.Entry<EstadoAvion, EstadoAvion> e: gestor.getEstadosSeguidosAvion()) {
+			modeloTablaEstadosA.addRow(new Object[]{e.getKey(), e.getValue()});
+		}
+		for (Vuelo v: sk.vuelosSeguidos(gestor)) {
+			modeloTablaVuelos.addRow(new Object[]{v.getId(), v.getAerolinea().getId(), v.getEstVuelo()});
+		}
+		for (Avion v: sk.avionesSeguidos(gestor)) {
+			modeloTablaAviones.addRow(new Object[]{v.getMatricula(), v.getTipoAvion().getMarca()+" "+v.getTipoAvion().getModelo(), v.getEstadoAvion()});
+		}
+		
+		this.tablaAviones.setModel(modeloTablaAviones);
+		this.tablaEstadosA.setModel(modeloTablaEstadosA);
+		this.tablaEstadosV.setModel(modeloTablaEstadosV);
+		this.tablaVuelos.setModel(modeloTablaVuelos);
+	}
 }

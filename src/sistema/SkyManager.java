@@ -1129,7 +1129,7 @@ public class SkyManager implements Serializable {
 		LocalDateTime alternativaSalida = salida.minusHours(rangoNuevasHorasVuelo);
 		LocalDateTime alternativaLlegada = llegada.minusHours(rangoNuevasHorasVuelo);
 
-		while (((rangoNuevasHorasVuelo-i) > 0) && (horas.size()<2)) {
+		while (((rangoNuevasHorasVuelo-i) > 0) && (horas.size()<4)) {
 			v.setHoraLlegada(alternativaLlegada.plusHours(i));
 			v.setHoraSalida(alternativaSalida.plusHours(i));
 			if (this.getTerminalesDisponibles(v).isEmpty() == false) {
@@ -1144,7 +1144,7 @@ public class SkyManager implements Serializable {
 		alternativaLlegada = llegada.plusHours(rangoNuevasHorasVuelo);
 		i=0;
 		
-		while (((rangoNuevasHorasVuelo-i) > 0) && (horas.size()<4)) {
+		while (((rangoNuevasHorasVuelo-i) > 0) && (horas.size()<8)) {
 			v.setHoraLlegada(alternativaLlegada.minusHours(i));
 			v.setHoraSalida(alternativaSalida.minusHours(i));
 			if (this.getTerminalesDisponibles(v).isEmpty() == false) {
@@ -1159,6 +1159,36 @@ public class SkyManager implements Serializable {
 		v.setHoraSalida(salida);
 		
 		return horas;
+	}
+	
+	public ArrayList<Vuelo> vuelosSeguidos(Usuario u) {
+		ArrayList<Vuelo> vuelos = new ArrayList<>();
+		
+		for (Vuelo v: this.vuelos.values()) {
+			for (Usuario o: v.getObservers()) {
+				if (u.getDni().equals(o.getDni())) {
+					vuelos.add(v);
+				}
+			}
+		}
+		
+		return vuelos;
+	}
+	
+	public ArrayList<Avion> avionesSeguidos(Usuario u) {
+		ArrayList<Avion> aviones = new ArrayList<>();
+		
+		for (Aerolinea a: this.aerolineas.values()) {
+			for (Avion v: a.getAviones().values()) {
+				for (Usuario o: v.getObservers()) {
+					if (u.getDni().equals(o.getDni())) {
+						aviones.add(v);
+					}
+				}
+			}
+		}
+		
+		return aviones;
 	}
 	
 }

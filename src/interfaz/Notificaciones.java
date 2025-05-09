@@ -89,6 +89,7 @@ public class Notificaciones extends JPanel{
 		this.formatoBotones(botonConfiguracion);
 		botonConfiguracion.addActionListener(_ -> {
 			Aplicacion.getInstance().showConfiguracionNotificaciones();
+			Aplicacion.getInstance().getConfiguracionNotificaciones().actualizarTablas();
 		}) ;
 		
 	    panelInferior.add(botonConfiguracion, BorderLayout.CENTER);
